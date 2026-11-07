@@ -1,11 +1,8 @@
 package dev.alaindustrial.item.fluid;
 
 import java.util.Optional;
-import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
@@ -15,8 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -93,17 +88,5 @@ public class VacuumCapsuleItem extends Item {
 			CriteriaTriggers.FILLED_BUCKET.trigger(serverPlayer, new ItemStack(filled.getItem()));
 		}
 		return InteractionResult.SUCCESS.heldItemTransformedTo(result);
-	}
-
-	// MOD-498 — Item#appendHoverText is soft-deprecated by Mojang ("internal"), but it is the only hook an
-	// item has for its own tooltip lines: ItemStack#addDetailsToTooltip calls it, and vanilla itself
-	// overrides it in DiscFragmentItem, HangingEntityItem and SmithingTemplateItem. Data-component
-	// TooltipProviders cover data-driven components, not a usage hint the item states for itself.
-	@SuppressWarnings("deprecation")
-	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
-			Consumer<Component> adder, TooltipFlag flag) {
-		adder.accept(Component.translatable("item.alaindustrial.vacuum_capsule.hint")
-				.withStyle(ChatFormatting.GRAY));
 	}
 }

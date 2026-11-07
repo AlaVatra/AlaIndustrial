@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.core.world.ZonePreviewBlock;
 import dev.alaindustrial.block.entity.VacuumCollectorBlockEntity;
 import dev.alaindustrial.client.ServerBalance;
@@ -95,12 +96,10 @@ public class VacuumCollectorBlock extends AbstractMachineBlock
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.vacuum_collector.what",
-								MachineTooltipSpec.Tone.GRAY),
-						MachineTooltipSpec.stat("energy_input", ServerBalance::vacuumCollectorEuPerTick),
+				List.of(MachineTooltipSpec.stat("energy_input", ServerBalance::vacuumCollectorEuPerTick),
 						MachineTooltipSpec.plain("range", ServerBalance::vacuumCollectorRadius)),
 				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.vacuum_collector.pipes",
-								MachineTooltipSpec.Tone.GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.stat("vacuum_collector.pulse", ServerBalance::vacuumCollectorItemsPerPulse,
 								ServerBalance::vacuumCollectorPulseTicks),
 						MachineTooltipSpec.stat("buffer", ServerBalance::vacuumCollectorBuffer)));

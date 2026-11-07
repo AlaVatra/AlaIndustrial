@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.tool;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.compat.RightClickTransform;
 import dev.alaindustrial.item.energy.ItemEnergy;
 
@@ -166,6 +167,6 @@ public class ElectricHoeDiamondTipItem extends ElectricHoeItem {
 		// MOD-378: the tipped hoe waters every plot it tills; nothing in the vanilla UI hints at it, so the
 		// tooltip is the only place a player learns the upgrade does more than dig faster.
 		return super.toolTooltip().withAfterCharge(stack -> MachineTooltipSpec.text(
-				"tooltip.alaindustrial.electric_hoe_diamond_tip.irrigation", MachineTooltipSpec.Tone.AQUA));
+				"tooltip.alaindustrial.electric_hoe_diamond_tip.irrigation", TooltipRole.INFO));
 	}
 }

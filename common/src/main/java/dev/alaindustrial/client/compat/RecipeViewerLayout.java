@@ -1,5 +1,7 @@
 package dev.alaindustrial.client.compat;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,6 +69,29 @@ public final class RecipeViewerLayout {
 			return label;
 		}
 		return label + " · " + Math.round(chance * 100.0) + " %";
+	}
+
+	/** Lang key of the tooltip on a bonus-output slot, {@code "Chance: %s%%"} (MOD-960); JEI and REI both use it. */
+	public static final String SECONDARY_CHANCE_KEY = "jei.alaindustrial.secondary_chance";
+
+	/** Whether a bonus output's chance is stated on its slot: below 1 it is a gamble, at 1 it always drops. */
+	public static boolean showsSecondaryChance(double chance) {
+		return chance < 1.0;
+	}
+
+	/**
+	 * A chance below 1 as the percentage number of the bonus-slot tooltip: whole percent from 1 % up, never
+	 * rounded up to 100 (it is not certain), and two significant digits below 1 % so 0.0001 reads 0.01, not 0.
+	 */
+	public static String secondaryChancePercent(double chance) {
+		double percent = chance * 100.0;
+		if (percent >= 1.0) {
+			return Long.toString(Math.min(Math.round(percent), 99L));
+		}
+		if (percent <= 0.0) {
+			return "0";
+		}
+		return new BigDecimal(percent).round(new MathContext(2)).stripTrailingZeros().toPlainString();
 	}
 
 	static String formatSeconds(int ticks) {

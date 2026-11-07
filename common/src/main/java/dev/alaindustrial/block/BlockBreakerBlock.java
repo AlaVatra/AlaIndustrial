@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.BlockBreakerBlockEntity;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
@@ -141,11 +142,9 @@ public class BlockBreakerBlock extends AbstractMachineBlock implements HasMachin
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.block_breaker.what",
-								MachineTooltipSpec.Tone.GRAY),
-						MachineTooltipSpec.stat("energy_input", ServerBalance::blockBreakerEuPerTick)),
+				List.of(MachineTooltipSpec.stat("energy_input", ServerBalance::blockBreakerEuPerTick)),
 				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.block_breaker.tools",
-								MachineTooltipSpec.Tone.GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.stat("buffer", ServerBalance::blockBreakerBuffer)));
 	}
 }

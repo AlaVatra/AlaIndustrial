@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "redstone",
+	"key": {
+		"H": "minecraft:honeycomb",
+		"W": "#minecraft:planks",
+		"P": "alaindustrial:iron_plate"
+	},
+	"pattern": [
+		"WHW",
+		"PHP",
+		"WPW"
+	],
+	"result": {
+		"id": "alaindustrial:apiary_drone_hive"
+	}
+}

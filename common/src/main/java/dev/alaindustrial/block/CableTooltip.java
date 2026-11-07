@@ -1,15 +1,16 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.energy.CableType;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
-import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Tone;
 import java.util.List;
 
 /**
  * The hover tooltip of every cable grade (MOD-716), built from the grade itself so it can never drift from
- * the energy model: the tier line of its own voltage class (the gold cable is MV, the electrum one HV —
- * MOD-219), the segment buffer, the shock warning or the all-clear, and under [SHIFT] the loss per block.
+ * the energy model: the tier of its own voltage class (the gold cable is MV, the electrum one HV —
+ * MOD-219), the segment buffer, the shock warning or the all-clear, and under [SHIFT] the tier and the loss
+ * per block.
  *
  * <p>The numbers are the server's (MOD-761): the grade picks among the values read from {@code ServerBalance},
  * with the same picking the energy network applies to {@code Config}.
@@ -21,18 +22,19 @@ final class CableTooltip {
 
 	static MachineTooltipSpec of(CableType type) {
 		MachineTooltipSpec.Line safety = type.isInsulated()
-				? MachineTooltipSpec.text("tooltip.alaindustrial.cable_safe", Tone.GREEN)
-				: MachineTooltipSpec.text("tooltip.alaindustrial.cable_shock_warning", Tone.RED);
-		return new MachineTooltipSpec(null,
-				List.of(tierLine(type), MachineTooltipSpec.statValue("buffer", () -> shownBuffer(type)), safety),
+				? MachineTooltipSpec.text("tooltip.alaindustrial.cable_safe", TooltipRole.STATE_ON)
+				: MachineTooltipSpec.text("tooltip.alaindustrial.cable_shock_warning", TooltipRole.WARNING);
+		// The tier waits for [SHIFT], as on every block (MOD-958, the owner's style 09b).
+		return new MachineTooltipSpec(tier(type),
+				List.of(MachineTooltipSpec.statValue("buffer", () -> shownBuffer(type)), safety),
 				List.of(MachineTooltipSpec.statValue("cable_loss", () -> lossPercent(type))));
 	}
 
-	private static MachineTooltipSpec.Line tierLine(CableType type) {
+	private static MachineTooltipSpec.Tier tier(CableType type) {
 		return switch (type.tier()) {
-			case LV -> MachineTooltipSpec.Tier.LV.line();
-			case MV -> MachineTooltipSpec.Tier.MV.line();
-			case HV -> MachineTooltipSpec.Tier.HV.line();
+			case LV -> MachineTooltipSpec.Tier.LV;
+			case MV -> MachineTooltipSpec.Tier.MV;
+			case HV -> MachineTooltipSpec.Tier.HV;
 		};
 	}
 

@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "ملحق خلية النحل",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "ملحق خلية النحل",
+              "text": "برطمان زجاجي سلبي يُركَّب على جانب أو أعلى خلية نحل أو عش نحل عادي — يُظهر مستوى عسل الخلية ويكون مرسى طائرة النحّال المسيّرة."
+            },
+            {
+              "type": "recipe",
+              "title": "الوصفة",
+              "recipe_type": "تصنيع مرتب",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "مرشة",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "محطة المنحل",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "محطة المنحل",
+              "text": "محطة LV من كتلتين لأربع طائرات نحّال مسيّرة — تزور الخلايا التي سُجّلت ملحقاتها على خريطة المنحل ضمن 15 كتلة، وتأخذ العسل من الخلايا الممتلئة دون إزعاج النحل، وتصبّه في خزان المحطة."
+            },
+            {
+              "type": "stats",
+              "title": "المواصفات",
+              "lines": [
+                "الطاقة: 160 EU + 4 EU لكل كتلة",
+                "الاحتياطي: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "الوصفة",
+              "recipe_type": "تصنيع مرتب",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "أقراص اليود",
               "text": "وقاية من الإشعاع: قرص واحد يبطئ تراكم الجرعة إلى النصف لمدة 5 دقائق. لا يزيل جرعة أخذتها. يُصنع من رماد عشب البحر عبر الحوض الجلفاني والضاغط."
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "خريطة المنحل",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "خريطة المنحل",
+              "text": "قائمة تحمل حتى ثمانية ملحقات خلايا — انقر بالزر الأيمن على ملحق لتسجيله، ثم ضع الخريطة في محطة المنحل لتعرف طائراتها أي الخلايا تخدم."
+            },
+            {
+              "type": "recipe",
+              "title": "الوصفة",
+              "recipe_type": "تصنيع غير مرتب",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

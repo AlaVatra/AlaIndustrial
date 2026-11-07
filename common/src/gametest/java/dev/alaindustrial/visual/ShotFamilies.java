@@ -121,6 +121,16 @@ public final class ShotFamilies {
                             + "a card per reason (icon, title, what to do) over dim interference and nothing of the "
                             + "panel around it; mid-unfold the glass dark, then powering on; in an alarm, a red "
                             + "wash and rim; the signal bars, lamp and battery mark agree with the frame's label")},
+            new Object[] {"gui_apiary_drone_station", new Family(ShotGroup.GUI, List.of("R-GUI-01", "R-GUI-03"),
+                    "Apiary station (MOD-923): the energy bar at the left, the map slot over the comb slot, the four "
+                            + "drone bays in a cross with faded drone hints, the honey gauge at the right, the map's "
+                            + "rows in two columns under them and one status line in red ('No hive on top' on the "
+                            + "bare casing), all inside the panel above the inventory")},
+            new Object[] {"gui_apiary_map_", new Family(ShotGroup.GUI, List.of("R-GUI-01", "R-GUI-03"),
+                    "Apiary map list (MOD-923): one numbered row per written hive attachment with its coordinates, "
+                            + "the dimension only on a row from another one, a 'Cross out' button at the right of "
+                            + "every row inside the panel; an empty map shows its hint lines wrapped inside the "
+                            + "panel")},
             new Object[] {"gui_settlement_core_", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
                     "Settlement core (MOD-831, MOD-842): the energy bar on the left, the readout beside it "
                             + "(power state, radius, houses, workers, upkeep, owner; no tier row) inside the "

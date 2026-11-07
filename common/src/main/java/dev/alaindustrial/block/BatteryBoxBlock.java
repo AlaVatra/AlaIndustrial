@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.BatteryBoxBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -53,10 +54,9 @@ public class BatteryBoxBlock extends HorizontalMachineBlock implements HasMachin
 	/** Hover tooltip of this block's item (MOD-716, ADR-040). */
 	@Override
 	public MachineTooltipSpec machineTooltip() {
-		// The tier is a basic line here, after the capacity — it shows before [SHIFT] is pressed.
-		return new MachineTooltipSpec(null,
-				List.of(MachineTooltipSpec.stat("capacity", ServerBalance::batteryBoxBuffer),
-						MachineTooltipSpec.Tier.LV.line()),
-				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.battery_box_io", MachineTooltipSpec.Tone.GRAY)));
+		// The tier waits for [SHIFT], as on every block (MOD-958, the owner's style 09b).
+		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
+				List.of(MachineTooltipSpec.stat("capacity", ServerBalance::batteryBoxBuffer)),
+				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.battery_box_io", TooltipRole.INFO)));
 	}
 }

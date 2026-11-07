@@ -329,9 +329,7 @@ public class ReceptionCapsuleBlock extends HorizontalMachineBlock implements Has
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.reception_capsule.purpose",
-								MachineTooltipSpec.Tone.GRAY),
-						MachineTooltipSpec.stat("reception_capsule.eu_per_worker",
+				List.of(MachineTooltipSpec.stat("reception_capsule.eu_per_worker",
 								ServerBalance::capsuleEuPerWorker)),
 				List.of(MachineTooltipSpec.statValue("buffer", () -> 2L * ServerBalance.capsuleEuPerWorker()),
 						MachineTooltipSpec.plain("duration_ticks", ServerBalance::capsuleRestoreTicks)));

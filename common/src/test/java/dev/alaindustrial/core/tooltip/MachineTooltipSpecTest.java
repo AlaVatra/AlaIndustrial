@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Line;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Tier;
-import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Tone;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,6 +16,9 @@ import org.junit.jupiter.api.Test;
  * on/off, decided by each line's {@link MachineTooltipSpec.Shown} flag. These are the rules the four parallel
  * lists of the old {@code MachineTooltips} encoded by hand; the golden {@code MachineTooltipsGoldenTest} proves
  * the shipped descriptions reproduce them for every item, this pins the rules themselves.
+ *
+ * <p>Since MOD-958 (the owner's style "09b") the hint stays under [SHIFT] too, its key then white, the tier
+ * always waits for [SHIFT], a key line waits for it, a warning never does, and the purpose line comes first.
  */
 class MachineTooltipSpecTest {
 
@@ -33,15 +35,64 @@ class MachineTooltipSpecTest {
 	/** The standard machine: numbers before [SHIFT], tier and more numbers under it. */
 	private static final MachineTooltipSpec MACHINE = MachineTooltipSpec.processing(() -> 2, () -> 150, () -> 800);
 
+	private static final String DRAW = MachineTooltipSpec.STAT_DRAW;
+	private static final String OPERATION = MachineTooltipSpec.STAT_OPERATION;
+	private static final String OPEN = MachineTooltipSpec.KEY_OPEN_MACHINE;
+
 	@Test
 	void processingMachineInAllFourModes() {
-		assertEquals(List.of("tooltip.alaindustrial.energy_input", "tooltip.alaindustrial.duration_ticks", HOLD),
-				keys(MACHINE.lines(false, true)));
-		assertEquals(List.of("tooltip.alaindustrial.energy_input", "tooltip.alaindustrial.duration_ticks",
-				"tooltip.alaindustrial.tier_lv", "tooltip.alaindustrial.buffer", "tooltip.alaindustrial.energy_per_op"),
-				keys(MACHINE.lines(true, true)));
+		assertEquals(List.of(DRAW, OPERATION, HOLD), keys(MACHINE.lines(false, true)));
+		assertEquals(List.of(DRAW, OPERATION, "tooltip.alaindustrial.tier_lv", MachineTooltipSpec.STAT_BUFFER,
+				MachineTooltipSpec.STAT_PER_OPERATION, OPEN, HOLD), keys(MACHINE.lines(true, true)));
 		assertEquals(List.of(HOLD), keys(MACHINE.lines(false, false)));
-		assertEquals(List.of("tooltip.alaindustrial.tier_lv"), keys(MACHINE.lines(true, false)));
+		assertEquals(List.of("tooltip.alaindustrial.tier_lv", OPEN, HOLD), keys(MACHINE.lines(true, false)));
+	}
+
+	@Test
+	void theOperationIsInSecondsAndEveryFigureHasItsRoleAndUnit() {
+		Line draw = MACHINE.basic().get(0);
+		Line operation = MACHINE.basic().get(1);
+		assertEquals(TooltipRole.ENERGY, draw.role());
+		assertEquals(TooltipUnits.EU_PER_TICK, draw.unit());
+		assertEquals(TooltipRole.TIME, operation.role());
+		assertEquals(TooltipUnits.SECONDS, operation.unit());
+		assertEquals(new TooltipUnits.Decimal("7", "5"), operation.argValues()[0], "150 ticks are 7.5 s");
+		assertEquals(TooltipRole.KEY, MACHINE.detailed().get(2).role());
+	}
+
+	@Test
+	void theHintKnowsWhetherShiftIsHeldAndAlwaysDetailedDropsIt() {
+		List<Line> up = MACHINE.lines(false, true);
+		List<Line> held = MACHINE.lines(true, true);
+		assertArrayEquals(new Object[] {false}, up.get(up.size() - 1).argValues());
+		assertArrayEquals(new Object[] {true}, held.get(held.size() - 1).argValues());
+		assertEquals(TooltipRole.HINT, held.get(held.size() - 1).role());
+		List<String> always = keys(MACHINE.lines(false, true, true));
+		assertEquals(keys(held).subList(0, held.size() - 1), always, "always-detailed: everything, no hint");
+	}
+
+	@Test
+	void aWarningNeverWaitsForShiftAndAKeyAlwaysDoes() {
+		MachineTooltipSpec spec = new MachineTooltipSpec(null,
+				List.of(MachineTooltipSpec.action("tooltip.alaindustrial.k")),
+				List.of(new Line("tooltip.alaindustrial.w", List.of(), MachineTooltipSpec.Shown.ALWAYS, null,
+						TooltipRole.WARNING, null)));
+		assertEquals(List.of("tooltip.alaindustrial.w", HOLD), keys(spec.lines(false, true)),
+				"a warning shows without [SHIFT], the key line waits for it");
+		assertEquals(List.of("tooltip.alaindustrial.k", "tooltip.alaindustrial.w", HOLD), keys(spec.lines(true, true)));
+		MachineTooltipSpec keysOnly = new MachineTooltipSpec(null,
+				List.of(MachineTooltipSpec.action("tooltip.alaindustrial.k")), List.of());
+		assertEquals(List.of("tooltip.alaindustrial.k"), keys(keysOnly.lines(false, true)),
+				"a key line with nothing beside it shows without [SHIFT]");
+	}
+
+	@Test
+	void theTierLineCarriesItsTierAndItsColour() {
+		assertEquals(TooltipRole.TIER, Tier.HV.line().role());
+		assertArrayEquals(new Object[] {Tier.HV}, Tier.HV.line().argValues());
+		assertEquals(0xFF55FF, Tier.HV.rgb());
+		assertEquals(0x55FF55, Tier.LV.rgb());
+		assertEquals(Tier.MV.rgb(), Tier.LV.rgb());
 	}
 
 	@Test
@@ -56,17 +107,28 @@ class MachineTooltipSpecTest {
 
 	@Test
 	void labelLinesShowWithNumbersAndOnlyUnderShiftWithout() {
-		// The battery box shape: the tier is a basic line, a word line under [SHIFT].
+		// A word line among the basic lines (the cable's safety), a word line under [SHIFT].
 		MachineTooltipSpec box = new MachineTooltipSpec(null,
-				List.of(MachineTooltipSpec.stat("capacity", () -> 40000), Tier.LV.line()),
-				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.battery_box_io", Tone.GRAY)));
-		assertEquals(List.of("tooltip.alaindustrial.capacity", "tooltip.alaindustrial.tier_lv", HOLD),
+				List.of(MachineTooltipSpec.stat("capacity", () -> 40000),
+						MachineTooltipSpec.text("tooltip.alaindustrial.word", TooltipRole.STATE_ON)),
+				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.battery_box_io", TooltipRole.INFO)));
+		// The green word is a state (MOD-958): it stands above the figures.
+		assertEquals(List.of("tooltip.alaindustrial.word", "tooltip.alaindustrial.capacity", HOLD),
 				keys(box.lines(false, true)));
-		assertEquals(List.of("tooltip.alaindustrial.capacity", "tooltip.alaindustrial.tier_lv",
-				"tooltip.alaindustrial.battery_box_io"), keys(box.lines(true, true)));
+		assertEquals(List.of("tooltip.alaindustrial.word", "tooltip.alaindustrial.capacity",
+				"tooltip.alaindustrial.battery_box_io", HOLD), keys(box.lines(true, true)));
 		assertEquals(List.of(HOLD), keys(box.lines(false, false)));
-		assertEquals(List.of("tooltip.alaindustrial.tier_lv", "tooltip.alaindustrial.battery_box_io"),
+		assertEquals(List.of("tooltip.alaindustrial.word", "tooltip.alaindustrial.battery_box_io", HOLD),
 				keys(box.lines(true, false)));
+	}
+
+	@Test
+	void theBatteryBoxTierWaitsForShift() {
+		MachineTooltipSpec box = new MachineTooltipSpec(Tier.LV,
+				List.of(MachineTooltipSpec.stat("capacity", () -> 40000)), List.of());
+		assertEquals(List.of("tooltip.alaindustrial.capacity", HOLD), keys(box.lines(false, true)));
+		assertEquals(List.of("tooltip.alaindustrial.capacity", "tooltip.alaindustrial.tier_lv", HOLD),
+				keys(box.lines(true, true)));
 	}
 
 	@Test
@@ -76,7 +138,7 @@ class MachineTooltipSpecTest {
 				List.of(MachineTooltipSpec.plain("tank_mb", () -> 4000)),
 				List.of(MachineTooltipSpec.plain("range", () -> 4)));
 		assertEquals(List.of("tooltip.alaindustrial.tank_mb", HOLD), keys(sprinkler.lines(false, false)));
-		assertEquals(List.of("tooltip.alaindustrial.tank_mb", "tooltip.alaindustrial.range"),
+		assertEquals(List.of("tooltip.alaindustrial.tank_mb", "tooltip.alaindustrial.range", HOLD),
 				keys(sprinkler.lines(true, false)));
 		assertEquals(keys(sprinkler.lines(true, false)), keys(sprinkler.lines(true, true)));
 	}
@@ -85,8 +147,8 @@ class MachineTooltipSpecTest {
 	void noHintWhenShiftWouldShowNothingMore() {
 		// The Advanced Industrial Workbench shape: no tier, only always-shown notes, nothing behind [SHIFT].
 		MachineTooltipSpec bench = new MachineTooltipSpec(null,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.a", Tone.GRAY),
-						MachineTooltipSpec.note("tooltip.alaindustrial.b", Tone.GRAY)),
+				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.a", TooltipRole.INFO),
+						MachineTooltipSpec.note("tooltip.alaindustrial.b", TooltipRole.INFO)),
 				List.of());
 		List<String> both = List.of("tooltip.alaindustrial.a", "tooltip.alaindustrial.b");
 		assertEquals(both, keys(bench.lines(false, true)));
@@ -97,12 +159,13 @@ class MachineTooltipSpecTest {
 	@Test
 	void theHintAndTheTiersKeepTheirColours() {
 		Line hold = MACHINE.lines(false, true).get(2);
-		assertEquals(Tone.DARK_GRAY, hold.tone());
-		assertEquals(Tone.GREEN, Tier.LV.line().tone());
-		assertEquals(Tone.GREEN, Tier.MV.line().tone());
-		assertEquals(Tone.LIGHT_PURPLE, Tier.HV.line().tone());
+		assertEquals(HOLD, hold.key());
+		assertEquals(TooltipRole.HINT, hold.role());
+		assertEquals(Tier.LV.rgb(), Tier.MV.rgb());
+		assertEquals(0xFF55FF, Tier.HV.rgb());
 		assertEquals("tooltip.alaindustrial.tier_hv", Tier.HV.line().key());
-		assertEquals(Tone.GRAY, MachineTooltipSpec.stat("buffer", () -> 1).tone());
+		assertEquals(TooltipRole.ENERGY, MachineTooltipSpec.stat("buffer", () -> 1).role());
+		assertEquals(TooltipRole.INFO, MachineTooltipSpec.stat("not_styled", () -> 1).role());
 	}
 
 	@Test
@@ -111,7 +174,8 @@ class MachineTooltipSpecTest {
 				() -> 300);
 		assertEquals("gui.alaindustrial.incubator.mode.transform", mode.label());
 		assertEquals("tooltip.alaindustrial.duration_ticks", mode.key());
-		assertArrayEquals(new Object[] {300}, mode.argValues());
+		assertArrayEquals(new Object[] {new TooltipUnits.Decimal("15", null)}, mode.argValues(), "300 ticks are 15 s");
+		assertEquals(TooltipRole.TIME, mode.role());
 		assertEquals(MachineTooltipSpec.Shown.NUMBERS, mode.shown());
 	}
 

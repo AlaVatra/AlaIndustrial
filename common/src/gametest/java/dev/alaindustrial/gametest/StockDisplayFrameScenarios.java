@@ -2,6 +2,7 @@ package dev.alaindustrial.gametest;
 
 import dev.alaindustrial.entity.StockDisplayFrameEntity;
 import dev.alaindustrial.registry.ModContent;
+import dev.alaindustrial.registry.ModEntityTypes;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -67,9 +68,7 @@ public final class StockDisplayFrameScenarios {
 				frameAbs.getX() - behindAbs.getX(),
 				frameAbs.getY() - behindAbs.getY(),
 				frameAbs.getZ() - behindAbs.getZ());
-		@SuppressWarnings("unchecked")
-		EntityType<StockDisplayFrameEntity> type =
-				(EntityType<StockDisplayFrameEntity>) ModContent.STOCK_DISPLAY_FRAME.get();
+		EntityType<StockDisplayFrameEntity> type = ModEntityTypes.STOCK_DISPLAY_FRAME.type();
 		StockDisplayFrameEntity frame =
 				new StockDisplayFrameEntity(type, helper.getLevel(), frameAbs, facing);
 		if (!frame.survives()) {

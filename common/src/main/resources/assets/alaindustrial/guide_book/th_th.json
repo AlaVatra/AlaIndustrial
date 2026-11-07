@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "ตัวต่อรังผึ้ง",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "ตัวต่อรังผึ้ง",
+              "text": "โหลแก้วแบบพาสซีฟสำหรับติดด้านข้างหรือด้านบนของรังผึ้งหรือรังผึ้งธรรมชาติแบบวานิลลา — แสดงระดับน้ำผึ้งในรังและเป็นจุดจอดของโดรนเลี้ยงผึ้ง"
+            },
+            {
+              "type": "recipe",
+              "title": "สูตร",
+              "recipe_type": "การคราฟต์แบบมีรูปแบบ",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "สปริงเกลอร์",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "สถานีเลี้ยงผึ้ง",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "สถานีเลี้ยงผึ้ง",
+              "text": "สถานี LV สองบล็อกสำหรับโดรนเลี้ยงผึ้งสี่ลำ — โดรนบินไปยังรังที่มีตัวต่อจดไว้ในแผนที่ฟาร์มผึ้งภายใน 15 บล็อก เก็บน้ำผึ้งจากรังที่เต็มโดยไม่รบกวนผึ้ง แล้วเทลงถังของสถานี"
+            },
+            {
+              "type": "stats",
+              "title": "สถิติ",
+              "lines": [
+                "พลังงาน: 160 EU + 4 EU ต่อบล็อก",
+                "บัฟเฟอร์: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "สูตร",
+              "recipe_type": "การคราฟต์แบบมีรูปแบบ",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "เม็ดไอโอดีน",
               "text": "ป้องกันรังสีล่วงหน้า: หนึ่งเม็ดทำให้รังสีสะสมช้าลงครึ่งหนึ่งเป็นเวลา 5 นาที ไม่ลบปริมาณที่ได้รับแล้ว ทำจากเถ้าสาหร่ายเคลป์ผ่านอ่างชุบไฟฟ้าและเครื่องอัด"
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "แผนที่ฟาร์มผึ้ง",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "แผนที่ฟาร์มผึ้ง",
+              "text": "รายการตัวต่อรังผึ้งได้สูงสุดแปดอัน — คลิกขวาที่ตัวต่อเพื่อจดไว้ แล้วใส่แผนที่ลงในสถานีเลี้ยงผึ้ง เพื่อให้โดรนรู้ว่าต้องดูแลรังไหน"
+            },
+            {
+              "type": "recipe",
+              "title": "สูตร",
+              "recipe_type": "การคราฟต์แบบไม่มีรูปแบบ",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

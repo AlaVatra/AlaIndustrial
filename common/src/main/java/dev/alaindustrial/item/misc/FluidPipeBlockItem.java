@@ -1,5 +1,7 @@
 package dev.alaindustrial.item.misc;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.block.AdvancedFluidPipeBlock;
 import dev.alaindustrial.block.FluidPipeBlock;
 import dev.alaindustrial.block.ReinforcedFluidPipeBlock;
@@ -7,7 +9,6 @@ import dev.alaindustrial.block.ReinforcedSteamPipeBlock;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.fluid.PipeFamily;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -47,56 +48,33 @@ public class FluidPipeBlockItem extends BlockItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
+		// Style 09b (MOD-958): what the pipe carries is its purpose line; the wrench, the rate and the rules wait
+		// for [Shift].
 		boolean steam = getBlock() instanceof FluidPipeBlock pipe && pipe.family() == PipeFamily.STEAM;
 		boolean advanced = getBlock() instanceof AdvancedFluidPipeBlock;
-		if (advanced) {
-			// MOD-675: the second grade's player already knows what a fluid pipe does — one line says what
-			// this one adds; the rest waits behind Shift.
-			adder.accept(Component.translatable("item.alaindustrial.fluid_pipe_advanced.hint")
-					.withStyle(ChatFormatting.GOLD));
-		} else {
-			adder.accept(Component.translatable(steam
-							? "item.alaindustrial.steam_pipe.hint"
-							: "item.alaindustrial.fluid_pipe.hint")
-					.withStyle(ChatFormatting.GRAY));
-			adder.accept(Component.translatable("item.alaindustrial.fluid_pipe.hint2")
-					.withStyle(ChatFormatting.GRAY));
-		}
 		boolean reinforced = getBlock() instanceof ReinforcedFluidPipeBlock
 				|| getBlock() instanceof ReinforcedSteamPipeBlock;
+		ItemTooltip tooltip = new ItemTooltip();
 		if (reinforced) {
-			adder.accept(Component.translatable("item.alaindustrial.reinforced_fluid_pipe.hint")
-					.withStyle(ChatFormatting.DARK_AQUA));
+			tooltip.info("item.alaindustrial.reinforced_fluid_pipe.hint");
 		}
-		if (!TooltipKeys.shiftDown()) {
-			adder.accept(Component.translatable("tooltip.alaindustrial.hold_shift")
-					.withStyle(ChatFormatting.DARK_GRAY));
-			return;
-		}
-		// The grade's own segment (MOD-675) — read from the block, so each grade quotes its own knob.
 		int perTick = getBlock() instanceof FluidPipeBlock pipe
 				? pipe.segmentCapacity(ServerBalance.fluidPipeSegmentBuffer(),
 						ServerBalance.fluidPipeAdvancedSegmentBuffer())
 				: Math.max(1, ServerBalance.fluidPipeSegmentBuffer());
-		// Buckets per second, to one decimal: 50 mB/t → 1.0 B/s. Players think in buckets.
 		String bucketsPerSecond = String.format(java.util.Locale.ROOT, "%.1f", perTick * 20 / 1000.0D);
-		adder.accept(Component.translatable("item.alaindustrial.fluid_pipe.tech.rate",
-						perTick, bucketsPerSecond)
-				.withStyle(ChatFormatting.DARK_GRAY));
+		tooltip.detail(TooltipRole.FLUID, "item.alaindustrial.fluid_pipe.tech.rate", null, perTick, bucketsPerSecond);
 		if (advanced) {
-			// The advanced grade stops at what it adds: rate and the slowdown. Steam and the reactor are the
-			// basic and reinforced pipes' lines to say.
-			adder.accept(Component.translatable("item.alaindustrial.fluid_pipe_advanced.tech.slow")
-					.withStyle(ChatFormatting.DARK_GRAY));
-			return;
+			tooltip.detail(TooltipRole.INFO, "item.alaindustrial.fluid_pipe_advanced.tech.slow", null);
+		} else {
+			tooltip.detail(TooltipRole.INFO, steam
+							? "item.alaindustrial.steam_pipe.tech.family"
+							: "item.alaindustrial.fluid_pipe.tech.steam", null)
+					.detail(TooltipRole.INFO, reinforced
+							? "item.alaindustrial.reinforced_fluid_pipe.tech.reactor"
+							: "item.alaindustrial.fluid_pipe.tech.reactor", null)
+					.key("item.alaindustrial.fluid_pipe.hint2");
 		}
-		adder.accept(Component.translatable(steam
-						? "item.alaindustrial.steam_pipe.tech.family"
-						: "item.alaindustrial.fluid_pipe.tech.steam")
-				.withStyle(ChatFormatting.DARK_GRAY));
-		adder.accept(Component.translatable(reinforced
-						? "item.alaindustrial.reinforced_fluid_pipe.tech.reactor"
-						: "item.alaindustrial.fluid_pipe.tech.reactor")
-				.withStyle(ChatFormatting.DARK_GRAY));
+		tooltip.emit(adder);
 	}
 }

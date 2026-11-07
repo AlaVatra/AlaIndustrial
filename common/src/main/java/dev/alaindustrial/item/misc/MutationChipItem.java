@@ -1,11 +1,11 @@
 package dev.alaindustrial.item.misc;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.block.entity.IncubatorMode;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.machine.MachineRates;
-import java.util.Locale;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -37,23 +37,13 @@ public class MutationChipItem extends Item {
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
 		// Two short lines instead of one long one: tooltips are not wrapped by the game.
-		adder.accept(Component.translatable(
-				"item.alaindustrial.mutation_chip_" + mode.name().toLowerCase(Locale.ROOT) + ".hint")
-				.withStyle(ChatFormatting.GRAY));
-		adder.accept(Component.translatable("item.alaindustrial.mutation_chip.hint")
-				.withStyle(ChatFormatting.GRAY));
-		if (!TooltipKeys.shiftDown()) {
-			adder.accept(Component.translatable("tooltip.alaindustrial.hold_shift")
-					.withStyle(ChatFormatting.DARK_GRAY));
-			return;
-		}
+		// Style 09b (MOD-958): what this chip does is its purpose line; the incubator's numbers under [Shift].
+		ItemTooltip tooltip = new ItemTooltip().info("item.alaindustrial.mutation_chip.hint");
 		if (mode == IncubatorMode.DUPLICATE) {
-			adder.accept(Component.translatable("item.alaindustrial.mutation_chip.tech.chance_varies")
-					.withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.detail(TooltipRole.INFO, "item.alaindustrial.mutation_chip.tech.chance_varies", null);
 		} else {
 			long percent = Math.round(mode.shownBaseChance() * 100.0);
-			adder.accept(Component.translatable("item.alaindustrial.mutation_chip.tech.chance", percent)
-					.withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.detail(TooltipRole.INFO, "item.alaindustrial.mutation_chip.tech.chance", null, percent);
 		}
 		// Mirrors the block entity's own arithmetic so the numbers cannot drift from the machine.
 		// The server's numbers (MOD-695): a tooltip runs on the client, whose Config is its own file.
@@ -61,9 +51,9 @@ public class MutationChipItem extends Item {
 				ServerBalance.globalMachineSpeedMultiplier());
 		int ticks = ServerBalance.scaledDuration(mode.shownBaseDuration());
 		String seconds = String.format("%.0f", ticks / 20.0);
-		adder.accept(Component.translatable("item.alaindustrial.mutation_chip.tech.cycle",
-				seconds, (long) euPerTick * ticks).withStyle(ChatFormatting.DARK_GRAY));
-		adder.accept(Component.translatable("item.alaindustrial.mutation_chip.tech.miss")
-				.withStyle(ChatFormatting.DARK_GRAY));
+		tooltip.detail(TooltipRole.TIME, "item.alaindustrial.mutation_chip.tech.cycle", null, seconds,
+						(long) euPerTick * ticks)
+				.detail(TooltipRole.INFO, "item.alaindustrial.mutation_chip.tech.miss", null)
+				.emit(adder);
 	}
 }

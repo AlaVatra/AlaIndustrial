@@ -1,11 +1,11 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.core.acoustic.AbsorberTier;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Line;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Shown;
-import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Tone;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -180,13 +180,12 @@ public class SoundAbsorberBlock extends Block implements HasMachineTooltip {
 					: tier.minBlocks() + "–" + tier.maxBlocks();
 			ladder.add(new Line("tooltip.alaindustrial.sound_absorber.tier",
 					List.of(tier::name, () -> blocks, tier::radius, tier::dampeningPercent),
-					Tone.GRAY, Shown.ALWAYS, null));
+					Shown.ALWAYS, null, TooltipRole.INFO, null));
 		}
-		ladder.add(MachineTooltipSpec.note("tooltip.alaindustrial.sound_absorber.exempt", Tone.DARK_GRAY));
-		ladder.add(MachineTooltipSpec.note("tooltip.alaindustrial.sound_absorber.exempt2", Tone.DARK_GRAY));
+		ladder.add(MachineTooltipSpec.note("tooltip.alaindustrial.sound_absorber.exempt", TooltipRole.INFO));
+		ladder.add(MachineTooltipSpec.note("tooltip.alaindustrial.sound_absorber.exempt2", TooltipRole.INFO));
 		return new MachineTooltipSpec(null,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.sound_absorber.desc", Tone.GRAY),
-						MachineTooltipSpec.note("tooltip.alaindustrial.sound_absorber.desc2", Tone.GRAY)),
+				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.sound_absorber.desc2", TooltipRole.INFO)),
 				ladder);
 	}
 }

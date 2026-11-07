@@ -111,7 +111,8 @@ public final class BlueprintCatalog {
 			ReactorBuildBlueprints.DOOR_DRIVE,
 			FieldToolsBlueprints.WIND_GAUGE,
 			FieldToolsBlueprints.GARDEN_DRONE,
-			FieldToolsBlueprints.SOUL_VESSEL);
+			FieldToolsBlueprints.SOUL_VESSEL,
+			FieldToolsBlueprints.APIARY);
 
 	private BlueprintCatalog() {
 	}

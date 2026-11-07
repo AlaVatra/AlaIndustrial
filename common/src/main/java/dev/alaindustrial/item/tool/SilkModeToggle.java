@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.tool;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -89,6 +90,6 @@ public final class SilkModeToggle {
 	 */
 	public static Function<ItemStack, MachineTooltipSpec.@Nullable Line> tooltipLine(String prefix) {
 		return PoweredToolTooltip.toggle(SilkModeToggle::isSilkMode, prefix + ".silk_on",
-				MachineTooltipSpec.Tone.AQUA, prefix + ".silk_off");
+				TooltipRole.INFO, prefix + ".silk_off");
 	}
 }

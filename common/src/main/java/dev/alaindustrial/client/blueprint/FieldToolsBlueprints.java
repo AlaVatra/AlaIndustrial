@@ -17,6 +17,9 @@ public final class FieldToolsBlueprints {
 
 	private static final String CRAFTING_TABLE = "minecraft:crafting_table";
 	private static final String OAK_LEAVES = "minecraft:oak_leaves";
+	private static final String HIVE_ATTACHMENT = "alaindustrial:hive_attachment";
+	private static final String APIARY_STATION = "alaindustrial:apiary_drone_station";
+	private static final String APIARY_STATION_HIVE = "alaindustrial:apiary_drone_hive";
 
 	/**
 	 * The wind gauge made at a crafting table, then held against a short tower where the air is calm and
@@ -75,6 +78,70 @@ public final class FieldToolsBlueprints {
 							List.of(new ItemMotion("alaindustrial:soul_vessel", 0, true))),
 					new Step(repellerLine(repeller(MOB_REPELLER_MV, false, true), GOLD_CABLE), 0, 2,
 							List.of(Flow.energy(2, 0)), Verdict.GOOD, List.of())));
+
+	/**
+	 * The apiary (MOD-923): a hive attachment on top of a beehive, its jar showing the hive's honey; the same jar
+	 * in front of the hive's entrance, where it would lock the bees in; the two-block apiary station getting its
+	 * drone and the map the attachment was written on; the station powered, the full hive emptied by a drone
+	 * that flies the honey home; the honey piped out of the station's base into a tank while the combs come out.
+	 */
+	public static final BlueprintDef APIARY = new BlueprintDef("apiary",
+			List.of(HIVE_ATTACHMENT, APIARY_STATION, APIARY_STATION_HIVE, "alaindustrial:apiary_drone",
+					"alaindustrial:apiary_map"),
+			List.of(
+					new Step(List.of(beehive("2", null), jarOnTop("2", null)), 1, 1, -1, -1, Verdict.NONE),
+					new Step(List.of(beehive("2", null),
+							new Placement(HIVE_ATTACHMENT, 4, 0, 1, Map.of("facing", "south", "honey_level", "0"))),
+							1, 1, List.of(), Verdict.BAD, List.of()),
+					new Step(apiary(false, false), 2, 2, List.of(), Verdict.NONE,
+							List.of(new ItemMotion("alaindustrial:apiary_map", 1, true),
+									new ItemMotion("alaindustrial:apiary_drone", 3, true),
+									new ItemMotion("alaindustrial:apiary_map", 2, true))),
+					new Step(apiary(true, false), 3, 3,
+							List.of(Flow.energy(5, 2), Flow.item(1, 3, "alaindustrial:honey_bucket")), Verdict.GOOD,
+							List.of()),
+					new Step(apiary(true, true), 6, 4,
+							List.of(Flow.energy(5, 2), Flow.item(2, 7, "alaindustrial:honey_bucket")), Verdict.NONE,
+							List.of(new ItemMotion("minecraft:honeycomb", 2, false)))));
+
+	/** A vanilla beehive at (4, 0, 0), its entrance toward the viewer, at {@code level}, then {@code later}. */
+	private static Placement beehive(String level, String later) {
+		return new Placement("minecraft:beehive", 4, 0, 0, Map.of("facing", "south", "honey_level", level),
+				later == null ? Map.of() : Map.of("honey_level", later));
+	}
+
+	/** A hive attachment standing on top of the beehive, its jar at {@code level}, then {@code later}. */
+	private static Placement jarOnTop(String level, String later) {
+		return new Placement(HIVE_ATTACHMENT, 4, 1, 0, Map.of("facing", "up", "honey_level", level),
+				later == null ? Map.of() : Map.of("honey_level", later));
+	}
+
+	/**
+	 * The apiary rig: 0 beehive, 1 attachment, 2 station base, 3 station hive, then, when {@code powered}, 4 cable
+	 * and 5 generator (the full hive is emptied by the drone halfway through the step), and, when {@code piped},
+	 * 6 fluid pipe and 7 tank of honey.
+	 */
+	private static List<Placement> apiary(boolean powered, boolean piped) {
+		List<Placement> all = new ArrayList<>();
+		if (powered && !piped) {
+			all.add(beehive("5", "0"));
+			all.add(jarOnTop("5", "0"));
+		} else {
+			all.add(beehive(piped ? "0" : "2", null));
+			all.add(jarOnTop(piped ? "0" : "2", null));
+		}
+		all.add(new Placement(APIARY_STATION, 0, 0, 0, Map.of("facing", "south")));
+		all.add(new Placement(APIARY_STATION_HIVE, 0, 1, 0, Map.of("lit", Boolean.toString(powered))));
+		if (powered) {
+			all.add(cableOf(COPPER_CABLE, -1, 0, 0, "west", "east"));
+			all.add(generatorAt(-2));
+		}
+		if (piped) {
+			all.add(fluidPipeOf(FLUID_PIPE, 1, 0, 0, "west", "extract", "east", "insert"));
+			all.add(tankWith(2, 0, 0, "alaindustrial:honey"));
+		}
+		return all;
+	}
 
 	/** The crafting table every recipe of this group is made at. */
 	private static Placement table() {

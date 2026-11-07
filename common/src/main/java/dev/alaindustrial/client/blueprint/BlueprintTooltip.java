@@ -1,12 +1,15 @@
 package dev.alaindustrial.client.blueprint;
 
 import dev.alaindustrial.client.ModKeyMappings;
+import dev.alaindustrial.client.tooltip.TooltipRender;
+import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import java.util.List;
 import java.util.Optional;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 
@@ -21,7 +24,7 @@ public final class BlueprintTooltip {
 	/** A tooltip counts as "on screen" for this long after it was last built, in milliseconds. */
 	private static final long FRESH_MS = 250;
 	/** Segments of the hold-to-open bar. */
-	private static final int BAR = 24;
+	private static final int BAR = 12;
 
 	private static @Nullable BlueprintDef hovered;
 	private static long hoveredAt;
@@ -30,8 +33,9 @@ public final class BlueprintTooltip {
 	}
 
 	/**
-	 * Add the "[I] Blueprint · steps: 4" line when {@code stack} has a blueprint: bright with a NEW stamp until
-	 * the sheet has been opened, dark grey after; a filling bar while the key is being held.
+	 * Add the blueprint line when {@code stack} has a blueprint, in the owner's style "09b" (MOD-958): the
+	 * blueprint icon, "Hold [I]: blueprint, steps: 4" in grey with a NEW stamp until the sheet has been opened,
+	 * and a filling bar while the key is being held. The line goes above the hold-[SHIFT] hint, which stays last.
 	 */
 	public static void append(ItemStack stack, List<Component> lines) {
 		Optional<BlueprintDef> found = forStack(stack);
@@ -45,29 +49,34 @@ public final class BlueprintTooltip {
 			hoveredAt = System.currentTimeMillis();
 		}
 		float held = BlueprintHold.progress(def);
-		if (held > 0f) {
-			lines.add(progressLine(held));
-			return;
-		}
-		boolean viewed = BlueprintProgress.isViewed(def.id());
-		Component line = Component.translatable("blueprint.alaindustrial.tooltip",
-				ModKeyMappings.OPEN_BLUEPRINT.getTranslatedKeyMessage(), def.steps().size())
-				.withStyle(viewed ? ChatFormatting.DARK_GRAY : ChatFormatting.AQUA);
-		if (!viewed) {
-			line = Component.empty().append(line).append(" ")
-					.append(Component.translatable("blueprint.alaindustrial.tooltip.new")
-							.withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-		}
-		lines.add(line);
+		lines.add(hintIndex(lines), held > 0f ? progressLine(held) : line(def));
 	}
 
-	/** The hold-to-open bar: "Blueprint ||||||......" filling as the key is held. */
+	/** "Hold [I]: blueprint, steps: 4", the key grey, with the NEW stamp until the sheet has been opened. */
+	private static Component line(BlueprintDef def) {
+		MutableComponent line = TooltipRender.roleLine(TooltipRole.BLUEPRINT, "blueprint.alaindustrial.tooltip", null,
+				TooltipRender.keyName(ModKeyMappings.OPEN_BLUEPRINT.getTranslatedKeyMessage(), false),
+				def.steps().size());
+		if (!BlueprintProgress.isViewed(def.id())) {
+			line.append(" ").append(TooltipRender.stamp(Component.translatable("blueprint.alaindustrial.tooltip.new")));
+		}
+		return line;
+	}
+
+	/** The hold-to-open bar: "Opening blueprint" and a bar filling as the key is held. */
 	private static Component progressLine(float held) {
-		int filled = Math.round(held * BAR);
-		return Component.translatable("blueprint.alaindustrial.tooltip.opening").withStyle(ChatFormatting.AQUA)
-				.append(" ")
-				.append(Component.literal("|".repeat(filled)).withStyle(ChatFormatting.AQUA))
-				.append(Component.literal("|".repeat(BAR - filled)).withStyle(ChatFormatting.DARK_GRAY));
+		return TooltipRender.roleLine(TooltipRole.BLUEPRINT, "blueprint.alaindustrial.tooltip.opening", null)
+				.append(" ").append(TooltipRender.bar(Math.round(held * BAR), BAR));
+	}
+
+	/** Where the blueprint line goes: just above the hold-[SHIFT] hint, or at the end when there is none. */
+	private static int hintIndex(List<Component> lines) {
+		for (int i = lines.size() - 1; i >= 0; i--) {
+			if (MachineTooltipSpec.HOLD_SHIFT_KEY.equals(TooltipRender.lineKey(lines.get(i)))) {
+				return i;
+			}
+		}
+		return lines.size();
 	}
 
 	/** The blueprint of the item whose tooltip is on screen, if one was built just now. */

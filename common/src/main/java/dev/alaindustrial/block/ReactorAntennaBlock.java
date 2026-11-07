@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.ReactorAntennaBlockEntity;
 import dev.alaindustrial.core.structure.ReactorCasingPart;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
@@ -58,11 +59,11 @@ public class ReactorAntennaBlock extends ReactorShellBlock implements EntityBloc
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
 				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.reactor_antenna.alarm",
-						MachineTooltipSpec.Tone.GRAY)),
+						TooltipRole.INFO)),
 				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.reactor_antenna.alarm_stop",
-								MachineTooltipSpec.Tone.GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.text("tooltip.alaindustrial.reactor_antenna.alarm_silent",
-								MachineTooltipSpec.Tone.GRAY)));
+								TooltipRole.INFO)));
 	}
 
 	@Override

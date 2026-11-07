@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.ElectricMobTrapBlockEntity;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
@@ -94,13 +95,11 @@ public class ElectricMobTrapBlock extends AbstractMachineBlock
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.electric_mob_trap.what",
-								MachineTooltipSpec.Tone.GRAY),
-						MachineTooltipSpec.plain("range", ServerBalance::electricMobTrapRadius),
+				List.of(MachineTooltipSpec.plain("range", ServerBalance::electricMobTrapRadius),
 						MachineTooltipSpec.stat("electric_mob_trap.strike", ServerBalance::electricMobTrapDamage,
 								ServerBalance::electricMobTrapEuPerStrike)),
 				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.electric_mob_trap.pipes",
-								MachineTooltipSpec.Tone.GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.stat("buffer", ServerBalance::electricMobTrapBuffer)));
 	}
 }

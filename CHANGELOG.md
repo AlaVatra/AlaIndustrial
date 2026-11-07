@@ -1,17 +1,20 @@
 # Changelog
 
-## 0.1.230
+## 0.1.231
 
-<p><img alt="Ala Industrial Minecraft mod: machine upgrade panel with faint chip icons in empty slots and a tooltip naming the overclocker chips" src="https://raw.githubusercontent.com/AlaMine-Team-Org/AlaIndustrial/v0.1.230-mc26.3/release-media/v0.1.230-mc26.3/changelog.png" width="720"></p>
+<p><img alt="Ala Industrial Minecraft mod: a torch slingshot fires torches that stick to cave walls, with apiary station, tooltip and recipe tiles" src="https://raw.githubusercontent.com/AlaMine-Team-Org/AlaIndustrial/v0.1.231-mc26.3/release-media/v0.1.231-mc26.3/changelog.gif" width="720"></p>
 
-This update brings the fixes players asked for: machine recipes in REI everywhere, hints in empty upgrade slots and a blueprint sheet that closes properly.
+Torches now fly from a slingshot, and bumblebee drones bring your honey home.
+
+### New
+
+- **Torch slingshot.** Shoots any torch in an arc. A torch that lands on a floor or wall stays there, and a mob it hits catches fire.
+- **Apiary drone station.** Four bumblebee drones fly to full hives fitted with a honey jar, pump the honey and bring it home to the station's tank, with a comb now and then.
 
 ### Improved
 
-- **Data pack recipes.** Machine recipes load from data packs, so a pack can add, replace or remove them, and tests now cover it.
-- **Upgrade slot hints.** Empty slots of the upgrade panel show a faint icon of the chip that fits, and hovering one names the chips it takes.
+- **One tooltip style.** Every block and item tooltip now looks the same. Details show while holding Shift, and holding I over a machine opens its 3D blueprint.
 
 ### Bug Fixes
 
-- **REI everywhere.** Machine recipes now show up in REI in every build of the mod, with a tab for every machine, just like in JEI.
-- **Blueprint sheet closes.** The blueprint sheet now closes with Esc and with the inventory key, back to the screen it was opened from.
+- **Byproduct chance in custom recipes.** Recipes added by data packs or scripts now roll the chance of their secondary output, and recipe viewers show it.

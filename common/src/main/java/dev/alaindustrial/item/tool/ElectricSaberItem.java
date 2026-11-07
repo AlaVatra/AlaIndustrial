@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.tool;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.item.ToolConfig;
 import dev.alaindustrial.item.energy.EnergyBar;
 import dev.alaindustrial.item.energy.PoweredItem;
@@ -43,7 +44,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import dev.alaindustrial.client.ServerBalance;
-import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
 import dev.alaindustrial.item.energy.PoweredToolTooltip;
 import org.jspecify.annotations.Nullable;
 
@@ -390,7 +390,7 @@ public class ElectricSaberItem extends Item implements PoweredItem {
 		// off than empty. Damage and reach are real attribute modifiers, so vanilla prints them itself.
 		return PoweredToolTooltip.of("electric_saber", List.of(ServerBalance::electricSaberEuPerHit))
 				.withBeforeCharge(PoweredToolTooltip.toggle(ElectricSaberItem::isEnabled,
-						"tooltip.alaindustrial.electric_saber.state_on", MachineTooltipSpec.Tone.GREEN,
+						"tooltip.alaindustrial.electric_saber.state_on", TooltipRole.STATE_ON,
 						"tooltip.alaindustrial.electric_saber.state_off"))
 				.withDepleted(stack -> ItemEnergy.shownGet(stack) < ServerBalance.electricSaberEuPerHit());
 	}

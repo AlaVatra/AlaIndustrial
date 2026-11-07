@@ -6,15 +6,17 @@ import dev.alaindustrial.KnobSnapshot;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.energy.CableType;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
-import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Tone;
+import dev.alaindustrial.core.tooltip.MachineTooltipSpec.Tier;
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 /**
- * The cable grades' tooltip (MOD-716, ADR-040): the tier line follows the grade's own voltage class, the safety
- * line follows its sleeve, and the loss is the trimmed percentage the shipped tooltip has always printed.
+ * The cable grades' tooltip (MOD-716, ADR-040): the tier follows the grade's own voltage class and waits for
+ * [SHIFT] (MOD-958), the safety line follows its sleeve, and the loss is the trimmed percentage the shipped tooltip
+ * has always printed.
  */
 class CableTooltipTest {
 
@@ -29,30 +31,34 @@ class CableTooltipTest {
 	@Test
 	void bareCopperIsLvWithAShockWarning() {
 		MachineTooltipSpec spec = CableTooltip.of(CableType.COPPER);
-		assertEquals(List.of("tooltip.alaindustrial.tier_lv", "tooltip.alaindustrial.buffer",
-				"tooltip.alaindustrial.cable_shock_warning", "tooltip.alaindustrial.hold_shift"),
-				keys(spec.lines(false, true)));
-		assertEquals(Tone.RED, spec.basic().get(2).tone());
-		assertEquals(List.of("tooltip.alaindustrial.tier_lv", "tooltip.alaindustrial.cable_shock_warning"),
-				keys(spec.lines(true, false)));
+		assertEquals(List.of("tooltip.alaindustrial.buffer", "tooltip.alaindustrial.cable_shock_warning",
+				"tooltip.alaindustrial.hold_shift"), keys(spec.lines(false, true)));
+		assertEquals(TooltipRole.WARNING, spec.basic().get(1).role());
+		// The shock warning is a warning (MOD-958): it stands after the [SHIFT] details, never hidden by them.
+		assertEquals(List.of("tooltip.alaindustrial.buffer", "tooltip.alaindustrial.tier_lv",
+				"tooltip.alaindustrial.cable_loss", "tooltip.alaindustrial.cable_shock_warning",
+				"tooltip.alaindustrial.hold_shift"),
+				keys(spec.lines(true, true)));
+		assertEquals(List.of("tooltip.alaindustrial.tier_lv", "tooltip.alaindustrial.cable_shock_warning",
+				"tooltip.alaindustrial.hold_shift"), keys(spec.lines(true, false)));
 		assertEquals(List.of("tooltip.alaindustrial.hold_shift"), keys(spec.lines(false, false)));
 	}
 
 	@Test
 	void eachGradeNamesItsOwnTier() {
-		assertEquals("tooltip.alaindustrial.tier_mv", CableTooltip.of(CableType.GOLD).basic().get(0).key());
-		assertEquals("tooltip.alaindustrial.tier_hv",
-				CableTooltip.of(CableType.INSULATED_ELECTRUM).basic().get(0).key());
-		assertEquals(Tone.LIGHT_PURPLE, CableTooltip.of(CableType.ELECTRUM).basic().get(0).tone());
-		assertEquals(Tone.GREEN, CableTooltip.of(CableType.INSULATED_TIN).basic().get(2).tone());
+		assertEquals(Tier.LV, CableTooltip.of(CableType.COPPER).tier());
+		assertEquals(Tier.MV, CableTooltip.of(CableType.GOLD).tier());
+		assertEquals(Tier.HV, CableTooltip.of(CableType.INSULATED_ELECTRUM).tier());
+		assertEquals(Tier.HV, CableTooltip.of(CableType.ELECTRUM).tier());
+		assertEquals(TooltipRole.STATE_ON, CableTooltip.of(CableType.INSULATED_TIN).basic().get(1).role());
 		assertEquals("tooltip.alaindustrial.cable_safe",
-				CableTooltip.of(CableType.INSULATED_TIN).basic().get(2).key());
+				CableTooltip.of(CableType.INSULATED_TIN).basic().get(1).key());
 	}
 
 	@Test
 	void bufferAndLossComeFromTheGrade() {
 		MachineTooltipSpec spec = CableTooltip.of(CableType.TIN);
-		assertEquals(CableType.TIN.segmentBuffer(), spec.basic().get(1).argValues()[0]);
+		assertEquals(CableType.TIN.segmentBuffer(), spec.basic().get(0).argValues()[0]);
 		assertEquals(CableTooltip.lossPercent(CableType.TIN), spec.detailed().get(0).argValues()[0]);
 		assertEquals("tooltip.alaindustrial.cable_loss", spec.detailed().get(0).key());
 	}
@@ -75,7 +81,7 @@ class CableTooltipTest {
 			ServerBalance.receive(KnobSnapshot.of(Map.of("goldCableBuffer", 777, "goldCableLossPerBlock", 0.25,
 					"insulationLossMultiplier", 0.2)).encode());
 			MachineTooltipSpec spec = CableTooltip.of(CableType.INSULATED_GOLD);
-			assertEquals(777L, spec.basic().get(1).argValues()[0]);
+			assertEquals(777L, spec.basic().get(0).argValues()[0]);
 			assertEquals("5", CableTooltip.lossPercent(CableType.INSULATED_GOLD));
 		} finally {
 			ServerBalance.reset();

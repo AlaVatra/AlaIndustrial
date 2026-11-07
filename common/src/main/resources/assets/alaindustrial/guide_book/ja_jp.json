@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "巣箱アタッチメント",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "巣箱アタッチメント",
+              "text": "バニラの養蜂箱やミツバチの巣の側面か上面に付ける、動力のないガラス瓶 — 巣のハチミツの量を表示し、養蜂ドローンの係留口になる。"
+            },
+            {
+              "type": "recipe",
+              "title": "レシピ",
+              "recipe_type": "定形クラフト",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "スプリンクラー",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "養蜂ステーション",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "養蜂ステーション",
+              "text": "養蜂ドローン4機用の2ブロックのLVステーション — 15ブロック以内で養蜂場の地図に記入されたアタッチメントの巣を回り、ハチを怒らせずに満杯の巣からハチミツを取り、ステーションのタンクに注ぐ。"
+            },
+            {
+              "type": "stats",
+              "title": "ステータス",
+              "lines": [
+                "エネルギー: 160 EU + ブロック1個につき4 EU",
+                "バッファ: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "レシピ",
+              "recipe_type": "定形クラフト",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "ヨウ素錠",
               "text": "放射線の予防。1錠で5分間、線量がたまる速さが半分になる。すでに受けた線量は消えない。昆布の灰から電気めっき槽と圧縮機で作る。"
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "養蜂場の地図",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "養蜂場の地図",
+              "text": "巣箱アタッチメントを最大8個まで記す一覧 — アタッチメントを右クリックで記入し、地図を養蜂ステーションに入れると、ドローンがどの巣を担当するかが分かる。"
+            },
+            {
+              "type": "recipe",
+              "title": "レシピ",
+              "recipe_type": "不定形クラフト",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

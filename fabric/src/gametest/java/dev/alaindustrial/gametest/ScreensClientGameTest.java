@@ -162,6 +162,10 @@ public class ScreensClientGameTest implements FabricClientGameTest {
             new Screen("radiant_solar_panel", "radiant_solar_panel", "Mirror Concentrator"),
             new Screen("pump", "pump", "Pump"),
             new Screen("garden_drone_station", "garden_drone_station", "Garden Drone Station"),
+            // MOD-923: the apiary station's casing alone (the hive is not stacked): the frame captures «no hive» in
+            // red, the map and comb slots, the four bays in a cross with their drone hints, the empty honey gauge
+            // and the band where the map's rows go.
+            new Screen("apiary_drone_station", "apiary_drone_station", "Apiary Station"),
             new Screen("water_mill", "water_mill", "Water Mill"),
             new Screen("wind_mill", "wind_mill", "Wind Mill"),
             new Screen("high_altitude_wind_mill", "high_altitude_wind_mill", "High Altitude Wind Mill"),

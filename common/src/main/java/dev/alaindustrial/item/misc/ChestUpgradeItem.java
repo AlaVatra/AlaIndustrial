@@ -1,9 +1,9 @@
 package dev.alaindustrial.item.misc;
 
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.block.ChestUpgrade;
 import dev.alaindustrial.block.ChestUpgrades;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
@@ -55,11 +55,9 @@ public class ChestUpgradeItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		adder.accept(Component.translatable("tooltip.alaindustrial.chest_upgrade.hint", upgrade.sourceName())
-				.withStyle(ChatFormatting.GRAY));
-		adder.accept(Component.translatable("tooltip.alaindustrial.chest_upgrade.hint2")
-				.withStyle(ChatFormatting.GRAY));
-		adder.accept(Component.translatable("tooltip.alaindustrial.chest_upgrade.hint3")
-				.withStyle(ChatFormatting.GRAY));
+		new ItemTooltip().key("tooltip.alaindustrial.chest_upgrade.hint", upgrade.sourceName())
+				.info("tooltip.alaindustrial.chest_upgrade.hint2")
+				.info("tooltip.alaindustrial.chest_upgrade.hint3")
+				.emit(adder);
 	}
 }

@@ -1,12 +1,12 @@
 package dev.alaindustrial.item.misc;
 
-import dev.alaindustrial.client.tooltip.TooltipWrap;
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.registry.ModContent;
 import dev.alaindustrial.registry.ModDataComponents;
 import dev.alaindustrial.settlement.plan.PlanSheetRules;
 import java.util.List;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -114,28 +114,18 @@ public class TownHallPlanSheetItem extends Item {
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
 		PlanSheet sheet = sheetOf(stack);
-		// Short lines, one fact each: a tooltip never wraps by itself, so a long sentence runs across the screen.
+		ItemTooltip tooltip = new ItemTooltip();
 		if (sheet == null) {
-			TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.town_hall_plan_sheet.blank")
-					.withStyle(ChatFormatting.GRAY));
-			TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.town_hall_plan_sheet.blank_hint")
-					.withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.off("tooltip.alaindustrial.town_hall_plan_sheet.blank")
+					.info("tooltip.alaindustrial.town_hall_plan_sheet.blank_hint")
+					.emit(adder);
 			return;
 		}
-		TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.plan.style", shortStyleName(sheet.style()))
-				.withStyle(ChatFormatting.AQUA));
-		TooltipWrap.add(adder, Component.translatable(whereKey(sheet.sheet())).withStyle(ChatFormatting.GRAY));
-		TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.town_hall_plan_sheet.assemble")
-				.withStyle(ChatFormatting.DARK_GRAY));
-		TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.town_hall_plan_sheet.assemble_where")
-				.withStyle(ChatFormatting.DARK_GRAY));
-		// The recipe is a detail (owner, 2026-10-21): under [SHIFT], like the other items' details.
-		if (TooltipKeys.shiftDown()) {
-			TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.town_hall_plan_sheet.craftable")
-					.withStyle(ChatFormatting.GRAY));
-		} else {
-			TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.hold_shift")
-					.withStyle(ChatFormatting.DARK_GRAY));
-		}
+		tooltip.stat(TooltipRole.MODULE, "tooltip.alaindustrial.plan.style", null, shortStyleName(sheet.style()))
+				.info(whereKey(sheet.sheet()))
+				.info("tooltip.alaindustrial.town_hall_plan_sheet.assemble")
+				.info("tooltip.alaindustrial.town_hall_plan_sheet.assemble_where")
+				.detail(TooltipRole.INFO, "tooltip.alaindustrial.town_hall_plan_sheet.craftable", null)
+				.emit(adder);
 	}
 }

@@ -1,9 +1,11 @@
 package dev.alaindustrial.item.energy;
 
+import dev.alaindustrial.core.tooltip.TooltipUnits;
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.core.energy.EnergyTier;
 import dev.alaindustrial.registry.ModContent;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -60,10 +62,11 @@ public class CrystalBlankItem extends Item implements PoweredItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		adder.accept(Component.translatable("item.alaindustrial.crystal_blank.charge",
-				ItemEnergy.shownGet(stack), ItemEnergy.shownCapacity(stack)).withStyle(ChatFormatting.GRAY));
-		adder.accept(Component.translatable("item.alaindustrial.crystal_blank.hint")
-				.withStyle(ChatFormatting.YELLOW));
+		new ItemTooltip()
+				.stat(TooltipRole.ENERGY, ItemTooltip.STAT_CHARGE, TooltipUnits.EU, ItemEnergy.shownGet(stack),
+						ItemEnergy.shownCapacity(stack))
+				.note("item.alaindustrial.crystal_blank.hint")
+				.emit(adder);
 	}
 
 	// --- item bar: only the blank has one; the finished crystal is a plain item ---

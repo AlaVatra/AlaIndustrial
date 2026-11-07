@@ -186,8 +186,7 @@ public class DroneNestBlock extends AbstractMachineBlock implements HasMachineTo
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.drone_nest.purpose",
-						MachineTooltipSpec.Tone.GRAY)),
+				List.of(),
 				List.of());
 	}
 

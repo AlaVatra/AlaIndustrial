@@ -1,0 +1,7 @@
+{
+	"type": "alaindustrial:maceration",
+	"ingredient": "minecraft:dried_kelp_block",
+	"result": { "id": "minecraft:dried_kelp", "count": 9 },
+	"secondary_result": { "id": "minecraft:gravel", "count": 1, "chance": 0.0001 },
+	"energy": 300
+}

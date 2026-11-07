@@ -33,6 +33,8 @@ public class AlaProcessingDisplay extends BasicDisplay {
 	private final ModRecipes.Kind kind;
 	private final int energy;
 	private final double chance;
+	/** Chance of the bonus output, the second output entry (MOD-960); 1 when there is none or it always drops. */
+	private final double secondaryChance;
 
 	/** Build a display from a live recipe (the common case, used by the server-side filler). */
 	public AlaProcessingDisplay(AlaProcessingRecipe recipe) {
@@ -47,7 +49,8 @@ public class AlaProcessingDisplay extends BasicDisplay {
 	public AlaProcessingDisplay(AlaProcessingRecipe recipe, int energy) {
 		this(inputsOf(recipe),
 				outputsOf(recipe),
-				recipe.kind(), energy, recipe.chance());
+				recipe.kind(), energy, recipe.chance(),
+				recipe.secondaryResult().map(AlaProcessingRecipe.SecondaryOutput::chance).orElse(1.0));
 	}
 
 	/**
@@ -90,11 +93,17 @@ public class AlaProcessingDisplay extends BasicDisplay {
 	}
 
 	private AlaProcessingDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs,
-			ModRecipes.Kind kind, int energy, double chance) {
+			ModRecipes.Kind kind, int energy, double chance, double secondaryChance) {
 		super(inputs, outputs);
 		this.kind = kind;
 		this.energy = energy;
 		this.chance = chance;
+		this.secondaryChance = secondaryChance;
+	}
+
+	/** Chance the bonus output (the second output entry) drops per operation, 1 when it always does (MOD-960). */
+	public double secondaryChance() {
+		return secondaryChance;
 	}
 
 	/**
@@ -135,7 +144,10 @@ public class AlaProcessingDisplay extends BasicDisplay {
 		return SERIALIZER;
 	}
 
-	/** Round-trips a display as {inputs, outputs, kind id, energy, chance}; kind resolves back via id. */
+	/**
+	 * Round-trips a display as {inputs, outputs, kind id, energy, chance, secondary chance}; kind resolves back
+	 * via id.
+	 */
 	public static final DisplaySerializer<AlaProcessingDisplay> SERIALIZER = DisplaySerializer.of(
 			RecordCodecBuilder.mapCodec(instance -> instance.group(
 					EntryIngredient.codec().listOf().fieldOf("inputs").forGetter(BasicDisplay::getInputEntries),
@@ -147,7 +159,10 @@ public class AlaProcessingDisplay extends BasicDisplay {
 					// default is applied to it rather than a hard zero.
 					com.mojang.serialization.Codec.DOUBLE
 							.optionalFieldOf("chance", AlaProcessingRecipe.CHANCE_UNSET)
-							.forGetter(d -> d.chance)
+							.forGetter(d -> d.chance),
+					// MOD-960, optional for the same reason: an older display had no gamble on its bonus.
+					com.mojang.serialization.Codec.DOUBLE.optionalFieldOf("secondary_chance", 1.0)
+							.forGetter(d -> d.secondaryChance)
 			).apply(instance, AlaProcessingDisplay::fromParts)),
 			StreamCodec.composite(
 					EntryIngredient.streamCodec().apply(ByteBufCodecs.list()), BasicDisplay::getInputEntries,
@@ -155,10 +170,11 @@ public class AlaProcessingDisplay extends BasicDisplay {
 					ByteBufCodecs.STRING_UTF8, d -> d.kind.id(),
 					ByteBufCodecs.INT, d -> d.energy,
 					ByteBufCodecs.DOUBLE, d -> d.chance,
+					ByteBufCodecs.DOUBLE, d -> d.secondaryChance,
 					AlaProcessingDisplay::fromParts));
 
 	private static AlaProcessingDisplay fromParts(List<EntryIngredient> inputs, List<EntryIngredient> outputs,
-			String kindId, int energy, double chance) {
-		return new AlaProcessingDisplay(inputs, outputs, ModRecipes.byId(kindId), energy, chance);
+			String kindId, int energy, double chance, double secondaryChance) {
+		return new AlaProcessingDisplay(inputs, outputs, ModRecipes.byId(kindId), energy, chance, secondaryChance);
 	}
 }

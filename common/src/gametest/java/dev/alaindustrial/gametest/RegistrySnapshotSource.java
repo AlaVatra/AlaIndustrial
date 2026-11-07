@@ -12,13 +12,14 @@ final class RegistrySnapshotSource {
 	private RegistrySnapshotSource() {}
 
 	/**
-	 * Everything but the items: blocks, block-entity pairs, menus, fluids and the shared registries, plus the
-	 * {@code REMOVED} announcements, which are carried over verbatim — the command never writes one itself.
+	 * Everything but the items: blocks, entity types, block-entity pairs, menus, fluids and the shared registries,
+	 * plus the {@code REMOVED} announcements, which are carried over verbatim — the command never writes one itself.
 	 */
 	static String main(List<String> lines, List<String> removed) {
 		StringBuilder out = header("RegistrySnapshot",
-				"Blocks, block-entity → block pairs, menus, fluids and the shared registries (sounds, data\n"
-						+ " * components, effects, particles, criteria); the items are in {@link RegistrySnapshotItems}.");
+				"Blocks, entity types, block-entity → block pairs, menus, fluids and the shared registries\n"
+						+ " * (sounds, data components, effects, particles, criteria); the items are in\n"
+						+ " * {@link RegistrySnapshotItems}.");
 		out.append("\t/**\n")
 				.append("\t * {@code false} only in the hand-derived seed, which holds the composition without the block and\n")
 				.append("\t * item properties: the scenario then compares ids alone. The update command always writes {@code true}.\n")

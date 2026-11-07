@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "alaindustrial:block/apiary_drone_station"
+    },
+    "facing=east": {
+      "model": "alaindustrial:block/apiary_drone_station",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "alaindustrial:block/apiary_drone_station",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "alaindustrial:block/apiary_drone_station",
+      "y": 270
+    }
+  }
+}

@@ -1,10 +1,11 @@
 package dev.alaindustrial.item.misc;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.registry.ModDataComponents;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -68,13 +69,12 @@ public class SoulVesselItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		adder.accept(Component.translatable("item.alaindustrial.soul_vessel.flavor")
-				.withStyle(ChatFormatting.GRAY));
-		adder.accept(Component.translatable("item.alaindustrial.soul_vessel.souls",
-				kills(stack), ServerBalance.mobRepellerEvolveKillsHv()).withStyle(ChatFormatting.AQUA));
-		adder.accept(Component.translatable("item.alaindustrial.soul_vessel.thresholds",
-				ServerBalance.mobRepellerEvolveKillsMv(), ServerBalance.mobRepellerEvolveKillsHv())
-				.withStyle(ChatFormatting.DARK_GRAY));
+		// Style 09b (MOD-958): what it is for is its purpose line.
+		new ItemTooltip()
+				.info("item.alaindustrial.soul_vessel.souls", kills(stack), ServerBalance.mobRepellerEvolveKillsHv())
+				.detail(TooltipRole.INFO, "item.alaindustrial.soul_vessel.thresholds", null,
+						ServerBalance.mobRepellerEvolveKillsMv(), ServerBalance.mobRepellerEvolveKillsHv())
+				.emit(adder);
 	}
 
 	// --- item bar: soul fill in the soul-fire teal ---

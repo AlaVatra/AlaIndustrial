@@ -1,3 +1,4 @@
 #
-#Thu Oct 08 14:23:27 EEST 2026
+#Sat Nov 07 08:43:56 EET 2026
 no\ classes\ that\ reside\ in\ a\ package\ 'dev.alaindustrial.core..'\ should\ depend\ on\ classes\ that\ reside\ in\ any\ package\ ['dev.alaindustrial.block..',\ 'dev.alaindustrial.registry..'],\ because\ core\ is\ the\ lowest\ layer\ of\ game\ logic\ (coding.md\ \u00A73,\ ADR-039)\:\ a\ core\ class\ that\ names\ a\ block\ or\ the\ registry\ has\ to\ change\ for\ every\ new\ block,\ and\ drags\ the\ block\ layer\ into\ everything\ that\ only\ wanted\ the\ core.\ Declare\ an\ interface\ in\ core\ (CableNode,\ FluidPipeNode,\ StorageEndpoint,\ EnergyPortHost)\ and\ implement\ it\ in\ the\ block=1399736a-8760-44e3-b2e9-0ac215899f3d
+no\ classes\ that\ reside\ outside\ of\ package\ 'dev.alaindustrial.client..'\ should\ name\ net.minecraft.ChatFormatting\ in\ a\ tooltip\ body,\ because\ a\ tooltip\ line\ takes\ its\ colour\ from\ its\ role\ (docs/standards/tooltip-style.md,\ MOD-958)\:\ declare\ it\ through\ MachineTooltipSpec\ or\ ItemTooltip;\ TooltipRender\ maps\ the\ role=9eb19a75-9562-4deb-87b1-ee569eebc5a7

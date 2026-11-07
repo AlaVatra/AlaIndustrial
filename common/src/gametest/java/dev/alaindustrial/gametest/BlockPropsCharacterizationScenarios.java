@@ -47,6 +47,8 @@ public final class BlockPropsCharacterizationScenarios {
 
 	/** Every mod block that is not plain: {@code <id> push=<intent> ticks=<none|some|all>}, sorted by id. */
 	static final List<String> EXPECTED = List.of(
+			"apiary_drone_hive push=pinned ticks=none",
+			"apiary_drone_station push=pinned ticks=none",
 			"biofuel push=pops ticks=none",
 			"crystal_farm_door push=pops ticks=none",
 			"crystal_farm_floor push=pinned ticks=none",
@@ -56,6 +58,7 @@ public final class BlockPropsCharacterizationScenarios {
 			"enriched_uranium_torch push=pops ticks=none",
 			"enriched_uranium_wall_torch push=pops ticks=none",
 			"fuel_oil push=pops ticks=none",
+			"hive_attachment push=pops ticks=none",
 			"honey push=pops ticks=none",
 			"incubator_dome push=pinned ticks=none",
 			"irradiated_soil push=normal ticks=all",

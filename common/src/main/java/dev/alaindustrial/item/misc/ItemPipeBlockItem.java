@@ -3,9 +3,10 @@ package dev.alaindustrial.item.misc;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.block.ItemPipeBlock;
 import dev.alaindustrial.client.ServerBalance;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.core.item.PipeTier;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -42,22 +43,17 @@ public class ItemPipeBlockItem extends BlockItem {
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
 		String base = langBase();
-		// Two short lines instead of one long one: tooltips are not wrapped by the game.
-		adder.accept(Component.translatable(base + ".hint").withStyle(ChatFormatting.GRAY));
-		adder.accept(Component.translatable(base + ".hint2").withStyle(ChatFormatting.GRAY));
-		if (!TooltipKeys.shiftDown()) {
-			adder.accept(Component.translatable("tooltip.alaindustrial.hold_shift")
-					.withStyle(ChatFormatting.DARK_GRAY));
-			return;
-		}
+		// Style 09b (MOD-958): what the pipe is for is its purpose line; the wrench and the rate wait for [Shift].
 		int batch = Math.max(1, tier().itemsPerTransfer(ServerBalance.itemPipeItemsPerTransfer(),
 				ServerBalance.itemPipeAdvancedItemsPerTransfer()));
 		int interval = Math.max(1, ServerBalance.itemPipeTransferIntervalTicks());
 		// Throughput as items per second, one decimal: 2 items / 20 ticks reads as "2.0/s". Computed from
 		// the live config so a retuned server is described truthfully.
 		String perSecond = String.format("%.1f", batch * 20.0 / interval);
-		adder.accept(Component.translatable(base + ".tech.rate", batch, interval, perSecond)
-				.withStyle(ChatFormatting.DARK_GRAY));
+		new ItemTooltip()
+				.detail(TooltipRole.SPEED, base + ".tech.rate", null, batch, interval, perSecond)
+				.key(base + ".hint2")
+				.emit(adder);
 	}
 
 	/**

@@ -10,12 +10,10 @@ import dev.alaindustrial.core.item.ItemNetwork;
 import dev.alaindustrial.core.item.ItemNetworkManager;
 import dev.alaindustrial.core.item.PipeFaceMode;
 import dev.alaindustrial.core.item.PipeTier;
-import dev.alaindustrial.item.misc.TooltipKeys;
 import dev.alaindustrial.registry.ModContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -24,11 +22,8 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -1124,14 +1119,14 @@ public final class ItemPipeScenarios {
 		Identifier id = BuiltInRegistries.ITEM.getKey(item);
 		String base = "item." + id.getNamespace() + "." + id.getPath();
 
-		List<TranslatableContents> lines = tooltipLines(new ItemStack(item));
+		List<TranslatableContents> lines = TooltipLines.of(new ItemStack(item), true);
 		if (lines.isEmpty()) {
 			helper.fail(base + " produced no tooltip at all");
 			return false;
 		}
 		TranslatableContents rate = null;
 		for (TranslatableContents line : lines) {
-			if (!line.getKey().startsWith(base + ".")) {
+			if (!TooltipLines.isShared(line.getKey()) && !line.getKey().startsWith(base + ".")) {
 				helper.fail(base + " borrows another item's tooltip key: " + line.getKey());
 				return false;
 			}
@@ -1143,42 +1138,12 @@ public final class ItemPipeScenarios {
 			helper.fail(base + " shows no throughput line behind Shift");
 			return false;
 		}
-		Object shown = rate.getArgs().length > 0 ? rate.getArgs()[0] : null;
-		if (!Integer.valueOf(grade.itemsPerTransfer()).equals(shown)) {
+		String shown = TooltipLines.arg(rate, 0);
+		if (!String.valueOf(grade.itemsPerTransfer()).equals(shown)) {
 			helper.fail(base + " advertises " + shown + " items per transfer while this grade moves "
 					+ grade.itemsPerTransfer());
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * The item's OWN tooltip lines, read as if Shift were held.
-	 *
-	 * <p>{@code Item#appendHoverText} is soft-deprecated by vanilla but is the only hook that yields
-	 * what the item computes for itself — the reasoning already written down on
-	 * {@code AssemblerScenarios#tooltipLine}. The throughput line exists only behind Shift, so the
-	 * client hook is installed for the length of the read and restored in a {@code finally}: the three
-	 * items that branch on it (both pipes and the mutation chip) are read by no other scenario, so no
-	 * concurrent test can observe the flipped hook.
-	 */
-	@SuppressWarnings("deprecation")
-	private static List<TranslatableContents> tooltipLines(ItemStack stack) {
-		List<Component> raw = new ArrayList<>();
-		TooltipKeys.ClientHook previous = TooltipKeys.CLIENT;
-		try {
-			TooltipKeys.CLIENT = () -> true;
-			stack.getItem().appendHoverText(stack, Item.TooltipContext.EMPTY, TooltipDisplay.DEFAULT,
-					raw::add, TooltipFlag.NORMAL);
-		} finally {
-			TooltipKeys.CLIENT = previous;
-		}
-		List<TranslatableContents> out = new ArrayList<>();
-		for (Component line : raw) {
-			if (line.getContents() instanceof TranslatableContents translatable) {
-				out.add(translatable);
-			}
-		}
-		return out;
 	}
 }

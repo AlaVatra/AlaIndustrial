@@ -123,8 +123,11 @@ class MachineTooltipsGoldenTest {
 	void captureCoversMachinesToolsAndTheAnalyzer(MinecraftServer server) {
 		String all = String.join("\n", capture(server));
 		assertTrue(all.contains("tooltip.alaindustrial.energy_per_op"), "no machine detail line captured");
-		assertTrue(all.contains("tooltip.alaindustrial.electric_drill.charge"), "no powered-tool charge line captured");
-		assertTrue(all.contains("tooltip.alaindustrial.electric_drill_diamond_tip.silk_on"), "no silk mode captured");
+		// MOD-958: a powered tool's charge reads the label every item shares.
+		assertTrue(all.contains("tooltip.alaindustrial.electric_drill.usage")
+				&& all.contains("tooltip.alaindustrial.stat.charge"), "no powered-tool charge line captured");
+		// MOD-958: a long line is wrapped into literal pieces, so the silk mode is found by its text.
+		assertTrue(all.contains("Silk Touch: on"), "no silk mode captured");
 		assertTrue(all.contains("tooltip.alaindustrial.network_analyzer.flow"), "no analyzer scan captured");
 		assertTrue(all.contains("tooltip.alaindustrial.battery.stack_total"), "no battery stack line captured");
 	}

@@ -138,8 +138,7 @@ public class ChargingBedBlock extends Block implements HasMachineTooltip {
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(null,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.charging_bed.purpose",
-						MachineTooltipSpec.Tone.GRAY)),
+				List.of(),
 				List.of());
 	}
 

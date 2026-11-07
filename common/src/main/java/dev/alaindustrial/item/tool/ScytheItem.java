@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.tool;
 
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.block.KokSagyzBlock;
 import dev.alaindustrial.block.KokSagyzRoots;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -166,8 +166,7 @@ public class ScytheItem extends Item {
 			return;
 		}
 		long percent = Math.round(chance * 100.0);
-		adder.accept(Component.translatable("item.alaindustrial.scythe.bonus_seed_chance", percent)
-				.withStyle(ChatFormatting.GRAY));
+		new ItemTooltip().info("item.alaindustrial.scythe.bonus_seed_chance", percent).emit(adder);
 	}
 
 	@Override

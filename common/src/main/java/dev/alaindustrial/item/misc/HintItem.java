@@ -1,7 +1,8 @@
 package dev.alaindustrial.item.misc;
 
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
+import dev.alaindustrial.client.tooltip.TooltipRender;
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,8 +32,10 @@ public class HintItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		for (String key : hintKeys) {
-			adder.accept(Component.translatable(key).withStyle(ChatFormatting.GRAY));
+		// Style 09b (MOD-958): the hint is the item's purpose, its first line under the purpose icon.
+		for (int i = 0; i < hintKeys.length; i++) {
+			adder.accept(i == 0 ? TooltipRender.roleLine(TooltipRole.PURPOSE, hintKeys[i], null)
+					: TooltipRender.continuation(hintKeys[i]));
 		}
 	}
 }

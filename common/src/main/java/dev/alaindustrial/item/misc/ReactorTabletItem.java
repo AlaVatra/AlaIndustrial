@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.misc;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.ReactorAntennaMastBlock;
 import dev.alaindustrial.block.entity.ReactorAntennaBlockEntity;
 import dev.alaindustrial.block.entity.ReactorControllerBlockEntity;
@@ -185,18 +186,18 @@ public class ReactorTabletItem extends Item implements PoweredItem {
 		GlobalPos bound = stack.get(ModDataComponents.REACTOR_TABLET_LINK.get());
 		if (bound == null) {
 			return MachineTooltipSpec.text("tooltip.alaindustrial.reactor_tablet.unbound",
-					MachineTooltipSpec.Tone.GRAY);
+					TooltipRole.INFO);
 		}
 		BlockPos pos = bound.pos();
 		return new MachineTooltipSpec.Line("tooltip.alaindustrial.reactor_tablet.bound",
-				List.of(pos::getX, pos::getY, pos::getZ), MachineTooltipSpec.Tone.GRAY,
-				MachineTooltipSpec.Shown.ALWAYS, null);
+				List.of(pos::getX, pos::getY, pos::getZ), MachineTooltipSpec.Shown.ALWAYS, null, TooltipRole.INFO,
+				null);
 	}
 
 	/** How to bind, on a line of its own under "Not bound"; nothing once the tablet is bound. */
 	private static MachineTooltipSpec.@Nullable Line bindHint(ItemStack stack) {
 		return stack.has(ModDataComponents.REACTOR_TABLET_LINK.get()) ? null
 				: MachineTooltipSpec.text("tooltip.alaindustrial.reactor_tablet.unbound_hint",
-						MachineTooltipSpec.Tone.DARK_GRAY);
+						TooltipRole.INFO);
 	}
 }

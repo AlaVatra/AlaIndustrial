@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.tool;
 
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.core.environment.GeneratorConfig;
 import dev.alaindustrial.core.environment.SolarSky;
@@ -146,7 +147,6 @@ public class WindGaugeItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		adder.accept(Component.translatable("tooltip.alaindustrial.wind_gauge.usage")
-				.withStyle(ChatFormatting.GRAY));
+		new ItemTooltip().key("tooltip.alaindustrial.wind_gauge.usage").emit(adder);
 	}
 }

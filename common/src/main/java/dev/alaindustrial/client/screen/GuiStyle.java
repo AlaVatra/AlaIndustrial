@@ -1,5 +1,6 @@
 package dev.alaindustrial.client.screen;
 
+import dev.alaindustrial.core.style.AlaPalette;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
@@ -7,6 +8,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
  * model ({@link GuiGraphicsExtractor#fill}). The look is a light control-panel face with a bevel
  * and a single copper accent strip under the header (the signature element), recessed slots, and
  * an amber energy bar. Text stays dark for legibility on the light panel (matching vanilla labels).
+ *
+ * <p>The colours the tooltips share (energy, copper, the level and heat bars) are aliases of
+ * {@link AlaPalette} (MOD-958), so a screen and a tooltip cannot drift apart.
  */
 public final class GuiStyle {
 	private GuiStyle() {
@@ -18,9 +22,9 @@ public final class GuiStyle {
 	public static final int SLOT = 0xFF8B8B8B;
 	public static final int SLOT_EDGE = 0xFF373737;
 	public static final int TRACK = 0xFF373737;
-	public static final int ENERGY = 0xFFFF8A1E;
-	public static final int ENERGY_HI = 0xFFFFC15A;
-	public static final int COPPER = 0xFFB87333;
+	public static final int ENERGY = 0xFF000000 | AlaPalette.ENERGY;
+	public static final int ENERGY_HI = 0xFF000000 | AlaPalette.ENERGY_HI;
+	public static final int COPPER = 0xFF000000 | AlaPalette.COPPER;
 	public static final int TEXT = 0xFF3F3F3F;
 	public static final int TEXT_DIM = 0xFF6B6B6B;
 	/**
@@ -61,12 +65,12 @@ public final class GuiStyle {
 	public static final int MODEL_BACK_TOP = 0xFF1B1D24;
 	public static final int MODEL_BACK_BOTTOM = 0xFF0C0D12;
 	/** A level bar: its fill, its bright leading edge and its track. */
-	public static final int LEVEL_FILL = 0xFF57C7FF;
-	public static final int LEVEL_FILL_HI = 0xFFBFEBFF;
+	public static final int LEVEL_FILL = 0xFF000000 | AlaPalette.FLUID;
+	public static final int LEVEL_FILL_HI = 0xFF000000 | AlaPalette.FLUID_HI;
 	public static final int LEVEL_TRACK = 0xFF23262B;
 	/** A heat bar (the quarry's drill, MOD-952): its fill and its bright leading edge; the track is LEVEL_TRACK. */
-	public static final int HEAT_FILL = 0xFFE0582A;
-	public static final int HEAT_FILL_HI = 0xFFFFB27A;
+	public static final int HEAT_FILL = 0xFF000000 | AlaPalette.HEAT;
+	public static final int HEAT_FILL_HI = 0xFF000000 | AlaPalette.HEAT_HI;
 	/** Laid over the model of a closed record, so it reads as a photograph in a file. */
 	public static final int CLOSED_WASH = 0xB0707070;
 

@@ -130,6 +130,8 @@ public final class MenuScreenManifest {
 			screen(() -> ModContent.FERMENTER_MENU.get(), FermenterScreen::new),
 			screen(() -> ModContent.HONEY_CENTRIFUGE_MENU.get(), HoneyCentrifugeScreen::new),
 			screen(() -> ModContent.SPRINKLER_MENU.get(), SprinklerScreen::new),
+			screen(() -> ModContent.APIARY_MAP_MENU.get(), ApiaryMapScreen::new),
+			screen(() -> ModContent.APIARY_DRONE_STATION_MENU.get(), ApiaryDroneStationScreen::new),
 			screen(() -> ModContent.BATTERY_BOX_MENU.get(), BatteryBoxScreen::new),
 			screen(() -> ModContent.ENERGY_CONDENSER_MENU.get(), EnergyCondenserScreen::new),
 			screen(() -> ModContent.CESU_MENU.get(), CesuScreen::new),

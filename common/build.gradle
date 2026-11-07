@@ -400,6 +400,10 @@ pitest {
                      // (HoneyCentrifugeStatusTest).
                      'dev.alaindustrial.block.entity.HoneyCentrifugeStatus',
                      'dev.alaindustrial.block.entity.IncubatorStatus',
+                     // MOD-923: the apiary station's status line and the state of one row of its map list —
+                     // same shape, added WITH their L1 suites (ApiaryStationStatusTest, ApiaryEntryStatusTest).
+                     'dev.alaindustrial.block.entity.ApiaryStationStatus',
+                     'dev.alaindustrial.block.entity.ApiaryEntryStatus',
                      // MOD-950: the cells a formed quarry frame covers and where its drawn parts stand;
                      // added WITH its L1 suite (QuarryFrameLayoutTest).
                      'dev.alaindustrial.block.entity.quarry.QuarryFrameLayout',
@@ -497,6 +501,9 @@ pitest {
                      // classpath. Added here with the class rather than a release later. Its L1 suite
                      // is AlloyMatchTest.
                      'dev.alaindustrial.recipe.AlloyMatch',
+                     // MOD-960: the roll of a recipe's secondary output, lifted out of the machine so its
+                     // boundaries are pinned without Minecraft. Its L1 suite is SecondaryChanceTest.
+                     'dev.alaindustrial.recipe.SecondaryChance',
                      // MOD-204: Config's full L1 suite (ConfigFileTest + ConfigBalanceTest +
                      // ConfigSnapshotTest) killed all 157 mutants the class had then, so it rejoined
                      // the mutation run on equal footing with the rest of the core. It is plain-Gson
@@ -809,6 +816,9 @@ pitest {
             // MOD-787: the fake-player seam — its one method takes a ServerLevel and returns a ServerPlayer,
             // so L1 cannot call it; the both-lane block breaker scenarios break through it on each loader.
             'dev.alaindustrial.core.world.FakePlayers',
+            // MOD-871: the place-event seam — its one method takes a ServerLevel, a BlockPos and an Entity, so L1
+            // cannot call it; the both-lane slingshot scenarios and the NeoForge cancel scenario run through it.
+            'dev.alaindustrial.core.world.PlaceEvents',
             // MOD-802: the drop pull shared by the electromagnet and the vacuum collector — DropSeek moves an
             // Entity, StuckDropTracker keys its history on one; both are covered by the magnet and the vacuum
             // collector scenarios on both lanes.

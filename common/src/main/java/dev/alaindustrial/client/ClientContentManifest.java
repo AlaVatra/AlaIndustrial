@@ -14,6 +14,7 @@ import dev.alaindustrial.block.entity.ElectrumChestBlockEntity;
 import dev.alaindustrial.block.entity.EnergyCondenserBlockEntity;
 import dev.alaindustrial.block.entity.FluidTankBlockEntity;
 import dev.alaindustrial.block.entity.FluidTapBlockEntity;
+import dev.alaindustrial.block.entity.ApiaryDroneStationBlockEntity;
 import dev.alaindustrial.block.entity.GardenDroneStationBlockEntity;
 import dev.alaindustrial.block.entity.GoldChestBlockEntity;
 import dev.alaindustrial.block.entity.HighAltitudeWindMillBlockEntity;
@@ -51,11 +52,14 @@ import dev.alaindustrial.client.render.EnergyCondenserBlockEntityRenderer;
 import dev.alaindustrial.client.render.FluidPipeTint;
 import dev.alaindustrial.client.render.FluidTankBlockEntityRenderer;
 import dev.alaindustrial.client.render.FluidTapBlockEntityRenderer;
+import dev.alaindustrial.client.render.ApiaryDroneModel;
+import dev.alaindustrial.client.render.ApiaryStationRenderer;
 import dev.alaindustrial.client.render.GardenDroneBlockEntityRenderer;
 import dev.alaindustrial.client.render.HallSchematicRenderer;
 import dev.alaindustrial.client.render.IncubatorBlockEntityRenderer;
 import dev.alaindustrial.client.render.IncubatorDomeTint;
 import dev.alaindustrial.client.render.MobWheelBlockEntityRenderer;
+import dev.alaindustrial.client.render.ModChestBoatRenderer;
 import dev.alaindustrial.client.render.PiezoPlateTint;
 import dev.alaindustrial.client.render.PiezoPlateXray;
 import dev.alaindustrial.client.render.QuarryFrameRenderer;
@@ -64,6 +68,7 @@ import dev.alaindustrial.client.render.ReactorDoorBlockEntityRenderer;
 import dev.alaindustrial.client.render.RootInspection;
 import dev.alaindustrial.client.render.SoundAbsorberOverlay;
 import dev.alaindustrial.client.render.SprinklerHeadBlockEntityRenderer;
+import dev.alaindustrial.client.render.StockDisplayFrameRenderer;
 import dev.alaindustrial.client.render.TeleporterCapsuleDoorRenderer;
 import dev.alaindustrial.client.render.ThermalCentrifugeBlockEntityRenderer;
 import dev.alaindustrial.client.render.UpgradeTableBlockEntityRenderer;
@@ -74,11 +79,15 @@ import dev.alaindustrial.client.render.WorkstationBlockEntityRenderer;
 import dev.alaindustrial.client.render.entity.OilSlimeRenderer;
 import dev.alaindustrial.client.render.entity.ShiftWorkerModel;
 import dev.alaindustrial.client.render.entity.ShiftWorkerRenderer;
+import dev.alaindustrial.entity.ChestBoatVariants;
+import dev.alaindustrial.entity.TorchProjectile;
 import dev.alaindustrial.registry.ContentManifest;
 import dev.alaindustrial.registry.ModContent;
+import dev.alaindustrial.registry.ModEntityTypes;
 import dev.alaindustrial.registry.ModFluidsManifest;
 import dev.alaindustrial.registry.ModMobs;
 import dev.alaindustrial.registry.ModParticles;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -97,6 +106,8 @@ import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -106,6 +117,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -139,12 +151,8 @@ import org.jspecify.annotations.Nullable;
  * <p>MOD-706 added the key mappings ({@link #KEY_MAPPINGS}), the HUD layers ({@link #HUD_LAYERS}), the
  * fluid models ({@link #FLUID_MODELS}) and the particle providers ({@link #PARTICLE_PROVIDERS}), which both
  * client entry points used to list by hand — and which {@code loader_parity_check.py} could not see.
- * MOD-778 added the block outlines ({@link #BLOCK_OUTLINES}).
- *
- * <p><b>Deliberately NOT here</b> (it would cost more than it saves, and it is a single line): the
- * entity renderer for the Stock Display Frame — its handle ({@code ModEntities}/{@code ModEntitiesNeoForge})
- * is loader-specific and {@code ModContent}'s neutral slot is a wildcard {@code EntityType<?>}, so nothing
- * typed could be shared.
+ * MOD-778 added the block outlines ({@link #BLOCK_OUTLINES}); MOD-959 the renderers of the non-mob entities
+ * ({@link #ENTITY_RENDERERS}), next to the mob renderers.
  *
  * <p>Lives in the {@code client} package so it is only ever class-loaded on the physical client.
  */
@@ -153,15 +161,17 @@ public final class ClientContentManifest {
 	}
 
 	// ─────────────────────────────────────────────────────────────────────────────────────────
-	// Mob renderers (MOD-767)
+	// Entity renderers: mobs (MOD-767) and the other entities (MOD-959)
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 
 	/**
 	 * A loader's entity-renderer registration API, one generic method for the same reason as
-	 * {@link RendererRegistrar}: the entity type and the renderer keep their types to the call, no cast.
+	 * {@link RendererRegistrar}: the entity type and the renderer keep their types to the call, no cast. The type
+	 * may be a subtype of what the renderer draws ({@code EntityType<? extends T>}), as in both loaders' own APIs:
+	 * a chest boat is drawn by a renderer of every {@code AbstractBoat}.
 	 */
 	public interface EntityRendererRegistrar {
-		<T extends Entity> void register(EntityType<T> type, EntityRendererProvider<T> provider);
+		<T extends Entity> void register(EntityType<? extends T> type, EntityRendererProvider<T> provider);
 	}
 
 	/** One mob of {@code ModMobs} and the renderer that draws it; the type is resolved when bound. */
@@ -177,6 +187,54 @@ public final class ClientContentManifest {
 	public static final List<MobRendererDef<?>> MOB_RENDERERS = List.of(
 			new MobRendererDef<>(ModMobs.OIL_SLIME, OilSlimeRenderer::new),
 			new MobRendererDef<>(ModMobs.SHIFT_WORKER, ShiftWorkerRenderer::new));
+
+	/**
+	 * One non-mob entity of {@code ModEntityTypes} and the renderer that draws it; the type is resolved when bound.
+	 * {@code T} is what the renderer draws, the entity may be a subtype of it.
+	 */
+	public record EntityRendererDef<T extends Entity>(ModEntityTypes.EntityDef<? extends T> entity,
+			EntityRendererProvider<T> provider) {
+
+		/** Hands this pair to a loader's registration API (see {@link BlockEntityRendererDef#bindTo}). */
+		public void bindTo(EntityRendererRegistrar registrar) {
+			registrar.<T>register(entity.type(), provider);
+		}
+	}
+
+	/**
+	 * The renderer of every entity of {@code ModEntityTypes.ENTITIES}, in the same order; both loaders replay it.
+	 * Built and checked at class init: an entity with no renderer, or two, fails the client's startup on both
+	 * loaders instead of crashing the first time the entity comes into view.
+	 */
+	public static final List<EntityRendererDef<?>> ENTITY_RENDERERS = entityRenderers();
+
+	private static List<EntityRendererDef<?>> entityRenderers() {
+		List<EntityRendererDef<?>> defs = new ArrayList<>();
+		// MOD-066: the frame draws its count on its face, sign-text style.
+		defs.add(new EntityRendererDef<>(ModEntityTypes.STOCK_DISPLAY_FRAME, StockDisplayFrameRenderer::new));
+		// MOD-952: the body is invisible; the quarry controller draws the drill.
+		defs.add(new EntityRendererDef<>(ModEntityTypes.QUARRY_DRILL_BODY, NoopRenderer::new));
+		// MOD-785: vanilla boat model + the mod chest model, composed per wood × chest pair.
+		for (ChestBoatVariants.Variant variant : ChestBoatVariants.ALL) {
+			defs.add(new EntityRendererDef<AbstractBoat>(ModEntityTypes.chestBoat(variant),
+					context -> ModChestBoatRenderer.create(context, variant)));
+		}
+		// MOD-871: the slingshot's torch flies as its item icon, like a snowball; the trail is the entity's own.
+		defs.add(new EntityRendererDef<TorchProjectile>(ModEntityTypes.TORCH_PROJECTILE, ThrownItemRenderer::new));
+		List<String> drawn = new ArrayList<>();
+		for (EntityRendererDef<?> def : defs) {
+			drawn.add(def.entity().id());
+		}
+		List<String> declared = new ArrayList<>();
+		for (ModEntityTypes.EntityDef<?> def : ModEntityTypes.ENTITIES) {
+			declared.add(def.id());
+		}
+		if (!drawn.equals(declared)) {
+			throw new IllegalStateException("ClientContentManifest.ENTITY_RENDERERS must name every entity of"
+					+ " ModEntityTypes.ENTITIES once, in its order: renderers " + drawn + ", entities " + declared);
+		}
+		return List.copyOf(defs);
+	}
 
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 	// Block-entity renderers
@@ -290,6 +348,9 @@ public final class ClientContentManifest {
 			// not an entity.
 			renderer(ContentManifest.blockEntity("garden_drone_station", GardenDroneStationBlockEntity.class),
 					GardenDroneBlockEntityRenderer::new),
+			// MOD-923: the apiary station's four bumblebee drones and its honey column, drawn by the casing below.
+			renderer(ContentManifest.blockEntity("apiary_drone_station", ApiaryDroneStationBlockEntity.class),
+					ApiaryStationRenderer::new),
 			// MOD-858: the builder drone docked on its nest and in flight.
 			renderer(ContentManifest.blockEntity("drone_nest", DroneNestBlockEntity.class),
 					ConstructionDroneRenderer::new),
@@ -380,6 +441,7 @@ public final class ClientContentManifest {
 					WaterMillWheelBlockEntityRenderer::createLayer),
 			new ModelLayerDef(GardenDroneBlockEntityRenderer.MODEL_LAYER,
 					GardenDroneBlockEntityRenderer::createLayer),
+			new ModelLayerDef(ApiaryStationRenderer.DRONE_LAYER, ApiaryDroneModel::createLayer),
 			new ModelLayerDef(ThermalCentrifugeBlockEntityRenderer.MODEL_LAYER,
 					ThermalCentrifugeBlockEntityRenderer::createLayer),
 			new ModelLayerDef(SprinklerHeadBlockEntityRenderer.MODEL_LAYER,

@@ -425,4 +425,18 @@ public final class ToolConfig {
 			doc = "Seconds between repeats of the low-charge warning for a tool that stays below the threshold and"
 					+ " keeps spending (the jetpack repeats every second).")
 	public static int lowChargeWarnRepeatSeconds = 60;
+	// --- Slingshot (MOD-871, fires torches) ---
+	/** Speed of the torch at full draw, blocks per tick. A vanilla bow's full draw is 3.0 ({@code BowItem}); the
+	 * slingshot is a first-tier wooden weapon, so it flies a little slower and a little less far. */
+	@Knob(section = Section.TOOLS, min = 0.0, exclusive = true,
+			doc = "Speed of a torch fired from the slingshot at full draw, blocks per tick (a vanilla bow is 3.0).")
+	public static double slingshotMaxVelocity = 2.5;
+	/** Damage a torch deals to the mob it hits: half a heart, a little more than a snowball's nothing. */
+	@Knob(section = Section.TOOLS, min = 0.0, floorTo = 0.0,
+			doc = "Damage a torch fired from the slingshot deals to the mob it hits (1.0 = half a heart).")
+	public static double slingshotHitDamage = 1.0;
+	/** Seconds a mob hit by a slingshot torch burns; 0 switches the ignition off. */
+	@Knob(section = Section.TOOLS, min = 0.0, floorTo = 0.0,
+			doc = "Seconds a mob hit by a torch from the slingshot burns; 0 switches the ignition off.")
+	public static double slingshotIgniteSeconds = 3.0;
 }

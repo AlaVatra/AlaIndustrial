@@ -1,8 +1,10 @@
 package dev.alaindustrial.command.demo;
 
+import dev.alaindustrial.block.HiveAttachmentBlock;
 import dev.alaindustrial.block.UpgradeTableBlock;
 import dev.alaindustrial.block.WorkstationBlock;
 import dev.alaindustrial.block.entity.AlloySmelterBlockEntity;
+import dev.alaindustrial.block.entity.ApiaryDroneStationBlockEntity;
 import dev.alaindustrial.block.entity.CanningMachineBlockEntity;
 import dev.alaindustrial.block.entity.ComponentRepairBenchBlockEntity;
 import dev.alaindustrial.block.entity.FermenterBlockEntity;
@@ -16,12 +18,16 @@ import dev.alaindustrial.block.entity.ThermalCentrifugeBlockEntity;
 import dev.alaindustrial.block.entity.UpgradeTableBlockEntity;
 import dev.alaindustrial.block.entity.VulcanizerBlockEntity;
 import dev.alaindustrial.block.entity.WorkstationBlockEntity;
+import dev.alaindustrial.item.apiary.ApiaryMapItem;
 import dev.alaindustrial.registry.ModContent;
 import java.util.function.LongUnaryOperator;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -167,6 +173,23 @@ final class MachinesZone implements DemoZone {
 		w.set(86, 1, 24, ModContent.HONEY_CENTRIFUGE.get());
 		w.chargeBuffer(86, 1, 24);
 		w.fillSlot(86, 1, 24, HoneyCentrifugeBlockEntity.INPUT_SLOT, new ItemStack(Items.HONEYCOMB, 64));
+		// Hive attachment (MOD-923), two cells further along the edge: a full vanilla beehive, its entrance to the
+		// east, and the jar on its top showing level 5 - lit lid and green lamp. The hive is written first, or the jar
+		// would find no hive under it and pop off.
+		w.place(w.origin().offset(86, 1, 26), Blocks.BEEHIVE.defaultBlockState()
+				.setValue(BeehiveBlock.FACING, Direction.EAST).setValue(BeehiveBlock.HONEY_LEVEL, 5));
+		w.place(w.origin().offset(86, 2, 26), ModContent.HIVE_ATTACHMENT.get().defaultBlockState()
+				.setValue(HiveAttachmentBlock.FACING, Direction.UP).setValue(HiveAttachmentBlock.HONEY_LEVEL, 5));
+		// Apiary station (MOD-923), two cells west of that hive: the casing and its hive on top, one drone, the map
+		// with the jar on it, a full buffer - so the stand shows a drone flying to the full hive and back with honey.
+		w.placeFacing(84, 1, 26, ModContent.APIARY_DRONE_STATION.get(), Direction.NORTH);
+		w.set(84, 2, 26, ModContent.APIARY_DRONE_HIVE.get());
+		w.chargeBuffer(84, 1, 26);
+		w.fillSlot(84, 1, 26, ApiaryDroneStationBlockEntity.BAY_SLOT_START,
+				new ItemStack(ModContent.APIARY_DRONE.get()));
+		ItemStack apiaryMap = new ItemStack(ModContent.APIARY_MAP.get());
+		ApiaryMapItem.edit(apiaryMap, GlobalPos.of(w.level().dimension(), w.origin().offset(86, 2, 26)), false);
+		w.fillSlot(84, 1, 26, ApiaryDroneStationBlockEntity.MAP_SLOT, apiaryMap);
 		// Sprinkler (MOD-525): the tail of the same chain, and the one block here that takes no cable —
 		// so it is shown charged with solution instead, beside the farm plot rather than in the machine
 		// row. Its head only turns when the tank can pay, which is the whole readout it has.

@@ -3,6 +3,7 @@ package dev.alaindustrial.gametest;
 import com.mojang.serialization.Codec;
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.core.teleport.RemoteLog;
+import dev.alaindustrial.item.apiary.ApiaryMapPoints;
 import dev.alaindustrial.item.assembler.BlueprintPattern;
 import dev.alaindustrial.item.energy.PouchContents;
 import dev.alaindustrial.item.fluid.DistillationColumnContents;
@@ -27,6 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentType;
@@ -140,6 +142,10 @@ public final class DataComponentRoundTripScenarios {
 				new PlanSheet(Identifier.fromNamespaceAndPath("ala_town_test", "ruin"), 3));
 		s.put(ModDataComponents.RESTORATION_PLAN_ID, new RestorationPlan(Industrialization.id("desert"),
 				Industrialization.id("ala_town/desert/intact/town_hall")));
+		// MOD-923: two hives in two dimensions, so the order of the list and the dimension of each point both travel.
+		s.put(ModDataComponents.APIARY_MAP_POINTS_ID, new ApiaryMapPoints(List.of(
+				GlobalPos.of(Level.OVERWORLD, new BlockPos(5, 64, -7)),
+				GlobalPos.of(Level.NETHER, new BlockPos(-12, 40, 33)))));
 		return s;
 	}
 

@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.tool;
 
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.block.FluidPipeBlock;
 import dev.alaindustrial.block.ItemPipeBlock;
 import dev.alaindustrial.block.entity.FluidPipeBlockEntity;
@@ -161,6 +162,6 @@ public final class WrenchItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			java.util.function.Consumer<Component> adder, TooltipFlag flag) {
-		adder.accept(Component.translatable("item.alaindustrial.wrench.hint").withStyle(ChatFormatting.GRAY));
+		new ItemTooltip().key("item.alaindustrial.wrench.hint").emit(adder);
 	}
 }

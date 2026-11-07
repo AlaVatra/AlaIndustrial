@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.alaindustrial.client.AlaClientConfig;
 import dev.alaindustrial.client.tooltip.MachineTooltips;
+import dev.alaindustrial.client.tooltip.TooltipRender;
 import dev.alaindustrial.core.machine.MachineRates;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
+import dev.alaindustrial.core.tooltip.TooltipUnits;
 import dev.alaindustrial.registry.ModContent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +19,6 @@ import java.util.List;
 import java.util.function.Supplier;
 import dev.alaindustrial.junit.StopEphemeralServerBeforeFmlTeardown;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -46,9 +47,18 @@ class MachineTooltipsTest {
 		MachineTooltips.append(stack, lines, shiftDown);
 		List<String> keys = new ArrayList<>();
 		for (Component line : lines) {
-			keys.add(line.getContents() instanceof TranslatableContents t ? t.getKey() : line.getString());
+			// A style-09b line starts with its icon; its key is the first translatable part (MOD-958).
+			String key = TooltipRender.lineKey(line);
+			keys.add(key != null ? key : line.getString());
 		}
 		return keys;
+	}
+
+	private static final String HOLD = MachineTooltipSpec.HOLD_SHIFT_KEY;
+
+	/** The keys without the purpose line, which the hook adds from the lang file (MOD-958), not the description. */
+	private static List<String> withoutPurpose(List<String> keys) {
+		return keys.stream().filter(key -> !key.endsWith(".purpose")).toList();
 	}
 
 	/** A machine block item shows its stat lines + the "hold shift" hint when shift is up. */
@@ -56,24 +66,28 @@ class MachineTooltipsTest {
 	void macerator_basicTooltip_showsStatsAndShiftHint(MinecraftServer server) {
 		List<String> keys = tooltipKeys(new ItemStack(ModContent.MACERATOR.get()), false);
 		assertFalse(keys.isEmpty(), "macerator tooltip produced no lines (NeoForge tooltip provider missing?)");
-		assertTrue(keys.contains("tooltip.alaindustrial.energy_input"), "basic tooltip missing energy_input line");
+		assertTrue(keys.contains(MachineTooltipSpec.STAT_DRAW), "basic tooltip missing draw line");
+		assertEquals("tooltip.alaindustrial.macerator.purpose", keys.get(0), "the purpose line comes first (MOD-958)");
 		assertTrue(keys.contains("tooltip.alaindustrial.hold_shift"), "basic tooltip missing hold-shift hint");
 	}
 
-	/** Holding shift swaps the hint for the detailed lines (tier, per-op energy). */
+	/** Holding shift adds the detailed lines (tier, per-op energy); the hint stays, its key white (MOD-958). */
 	@Test
 	void macerator_detailedTooltip_onShift(MinecraftServer server) {
 		List<String> keys = tooltipKeys(new ItemStack(ModContent.MACERATOR.get()), true);
 		assertTrue(keys.contains("tooltip.alaindustrial.tier_lv"), "detailed tooltip missing tier line");
-		assertTrue(keys.contains("tooltip.alaindustrial.energy_per_op"), "detailed tooltip missing energy_per_op line");
-		assertFalse(keys.contains("tooltip.alaindustrial.hold_shift"), "shift-down must replace the hold-shift hint");
+		assertTrue(keys.contains(MachineTooltipSpec.STAT_PER_OPERATION), "detailed tooltip missing per-operation line");
+		assertEquals(HOLD, keys.get(keys.size() - 1), "the hint stays last under shift (MOD-958)");
 	}
 
 	/** The Network Analyzer tool shows its usage line (and the shift hint when no scan is stored). */
 	@Test
 	void networkAnalyzer_showsUsageLine(MinecraftServer server) {
-		List<String> keys = tooltipKeys(new ItemStack(ModContent.NETWORK_ANALYZER.get()), false);
-		assertTrue(keys.contains("tooltip.alaindustrial.network_analyzer.usage"),
+		// MOD-958: the right-clicks are a key line, which waits for [SHIFT] beside the mode line.
+		List<String> keys = tooltipKeys(new ItemStack(ModContent.NETWORK_ANALYZER.get()), true);
+		// A long line is wrapped into literal pieces (MOD-958): found by its key or by its text.
+		assertTrue(keys.contains("tooltip.alaindustrial.network_analyzer.usage")
+				|| keys.stream().anyMatch(key -> key.contains("Right-click a cable")),
 				"analyzer tooltip missing usage line");
 	}
 
@@ -104,7 +118,7 @@ class MachineTooltipsTest {
 		assertTrue(keys.contains("tooltip.alaindustrial.tier_lv"), "detailed tooltip missing tier line");
 		assertTrue(keys.contains("tooltip.alaindustrial.garden_drone_range"), "detailed tooltip missing range line");
 		assertTrue(keys.contains("tooltip.alaindustrial.capacity"), "detailed tooltip missing capacity line");
-		assertFalse(keys.contains("tooltip.alaindustrial.hold_shift"), "shift-down must replace the hold-shift hint");
+		assertTrue(keys.contains(HOLD), "the hint stays under shift, its key white (MOD-958)");
 	}
 
 	/**
@@ -118,7 +132,7 @@ class MachineTooltipsTest {
 		assertTrue(keys.contains("tooltip.alaindustrial.buffer"), "teleporter tooltip missing buffer line");
 		assertTrue(keys.contains("tooltip.alaindustrial.teleporter_io"),
 				"teleporter tooltip missing I/O line (block not admitted by isMachineBlock?)");
-		assertFalse(keys.contains("tooltip.alaindustrial.hold_shift"), "shift-down must replace the hold-shift hint");
+		assertTrue(keys.contains(HOLD), "the hint stays under shift, its key white (MOD-958)");
 	}
 
 	/**
@@ -134,7 +148,7 @@ class MachineTooltipsTest {
 			List<String> keys = tooltipKeys(new ItemStack(ModContent.GARDEN_DRONE_STATION.get()), true);
 			assertTrue(keys.contains("tooltip.alaindustrial.tier_lv"),
 					"non-numeric tooltip missing tier line (block absent from addNonNumericTooltip?)");
-			assertFalse(keys.contains("tooltip.alaindustrial.hold_shift"), "shift-down must replace the hold-shift hint");
+			assertTrue(keys.contains(HOLD), "the hint stays under shift, its key white (MOD-958)");
 		} finally {
 			AlaClientConfig.showEuNumbers = previous;
 		}
@@ -195,8 +209,11 @@ class MachineTooltipsTest {
 				Block block = handle.get();
 				ItemStack stack = new ItemStack(block);
 				List<String> up = tooltipKeys(stack, false);
-				assertEquals(List.of("tooltip.alaindustrial.hold_shift"), up,
-						block + " is not a gated machine block (shift-up tooltip is not the hold-shift hint)");
+				// Only the hint and, since MOD-958, a purpose line: no figure shows with EU numbers off.
+				assertEquals(HOLD, up.get(up.size() - 1),
+						block + " is not a gated machine block (shift-up tooltip does not end with the hint)");
+				assertTrue(up.subList(0, up.size() - 1).stream().allMatch(key -> key.endsWith(".purpose")),
+						block + " shows more than its purpose with EU numbers off: " + up);
 				List<String> down = tooltipKeys(stack, true);
 				if (down.isEmpty() || !hasTierLine(down)) {
 					failures.add(block + " -> " + down);
@@ -218,22 +235,24 @@ class MachineTooltipsTest {
 	@Test
 	void alloySmelter_hasTooltip(MinecraftServer server) {
 		ItemStack stack = new ItemStack(ModContent.ALLOY_SMELTER.get());
-		assertEquals(List.of("tooltip.alaindustrial.energy_input", "tooltip.alaindustrial.duration_ticks",
-				"tooltip.alaindustrial.hold_shift"), tooltipKeys(stack, false));
-		assertEquals(List.of("tooltip.alaindustrial.energy_input", "tooltip.alaindustrial.duration_ticks",
-				"tooltip.alaindustrial.tier_lv", "tooltip.alaindustrial.buffer", "tooltip.alaindustrial.energy_per_op"),
-				tooltipKeys(stack, true));
+		String purpose = "tooltip.alaindustrial.alloy_smelter.purpose";
+		assertEquals(List.of(purpose, MachineTooltipSpec.STAT_DRAW, MachineTooltipSpec.STAT_OPERATION, HOLD),
+				tooltipKeys(stack, false));
+		assertEquals(List.of(purpose, MachineTooltipSpec.STAT_DRAW, MachineTooltipSpec.STAT_OPERATION,
+				"tooltip.alaindustrial.tier_lv", MachineTooltipSpec.STAT_BUFFER, MachineTooltipSpec.STAT_PER_OPERATION,
+				MachineTooltipSpec.KEY_OPEN_MACHINE, HOLD), tooltipKeys(stack, true));
 		MachineTooltipSpec entry = spec(ModContent.ALLOY_SMELTER.get());
 		assertEquals(MachineRates.euPerTick(Config.alloySmelterEuPerTick, Config.globalMachineSpeedMultiplier),
 				entry.basic().get(0).argValues()[0],
-				"alloy smelter energy_input must quote its own draw, not the machine standard");
-		assertEquals(MachineRates.duration(Config.alloySmelterDuration,
-				Config.globalMachineSpeedMultiplier), entry.basic().get(1).argValues()[0],
-				"alloy smelter duration_ticks must quote its own duration");
+				"alloy smelter draw must quote its own draw, not the machine standard");
+		assertEquals(TooltipUnits.seconds(MachineRates.duration(Config.alloySmelterDuration,
+				Config.globalMachineSpeedMultiplier)), entry.basic().get(1).argValues()[0],
+				"alloy smelter operation must quote its own duration, in seconds");
 		boolean previous = AlaClientConfig.showEuNumbers;
 		AlaClientConfig.showEuNumbers = false;
 		try {
-			assertEquals(List.of("tooltip.alaindustrial.tier_lv"), tooltipKeys(stack, true));
+			assertEquals(List.of(purpose, "tooltip.alaindustrial.tier_lv", MachineTooltipSpec.KEY_OPEN_MACHINE, HOLD),
+					tooltipKeys(stack, true));
 		} finally {
 			AlaClientConfig.showEuNumbers = previous;
 		}
@@ -278,8 +297,8 @@ class MachineTooltipsTest {
 			ItemStack stack = new ItemStack(block);
 
 			List<String> up = new ArrayList<>(keysOf(entry.basic()));
-			up.add("tooltip.alaindustrial.hold_shift");
-			assertEquals(up, tooltipKeys(stack, false), block + " shift-up tooltip");
+			up.add(HOLD);
+			assertEquals(up, withoutPurpose(tooltipKeys(stack, false)), block + " shift-up tooltip");
 			assertTrue(up.size() > 1, block + " shift-up tooltip is only the hold-shift hint");
 
 			List<String> down = new ArrayList<>(keysOf(entry.basic()));
@@ -287,7 +306,8 @@ class MachineTooltipsTest {
 				down.add(entry.tier().line().key());
 			}
 			down.addAll(keysOf(entry.detailed()));
-			assertEquals(down, tooltipKeys(stack, true), block + " shift-down tooltip");
+			down.add(HOLD); // MOD-958: the hint stays under shift, its key white
+			assertEquals(down, withoutPurpose(tooltipKeys(stack, true)), block + " shift-down tooltip");
 			assertFalse(down.isEmpty(), block + " shift-down tooltip is empty");
 		}
 	}
@@ -301,7 +321,8 @@ class MachineTooltipsTest {
 			for (Supplier<Block> handle : CATALOG_BLOCKS) {
 				List<String> down = tooltipKeys(new ItemStack(handle.get()), true);
 				assertFalse(down.isEmpty(), handle.get() + " non-numeric shift tooltip is empty");
-				assertFalse(down.contains("tooltip.alaindustrial.energy_input"),
+				assertFalse(down.contains("tooltip.alaindustrial.energy_input")
+					|| down.contains(MachineTooltipSpec.STAT_DRAW),
 						handle.get() + " shows an EU figure with showEuNumbers off: " + down);
 			}
 		} finally {

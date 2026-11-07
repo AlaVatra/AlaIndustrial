@@ -1,8 +1,10 @@
 package dev.alaindustrial.item.fluid;
 
 import dev.alaindustrial.client.ServerBalance;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.core.tooltip.TooltipUnits;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -25,19 +27,17 @@ public final class FluidTankBlockItem extends BlockItem {
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
 		FluidTankContents contents = stack.get(dev.alaindustrial.registry.ModDataComponents.FLUID_TANK_CONTENTS.get());
-		if (contents == null) {
-			adder.accept(Component.translatable("tooltip.alaindustrial.fluid_tank.empty_capacity",
-							shownCapacity())
-					.withStyle(ChatFormatting.GRAY));
-			return;
-		}
 		// MOD-612 — the capacity comes from THIS item's block, never from the basic tank's knob. The
 		// mod has shipped a tier-2 tooltip describing tier 1 twice (advanced pipe 0.1.149, advanced
 		// magnet 0.1.148), both times because a number was written at the call site.
-		adder.accept(Component.translatable("tooltip.alaindustrial.fluid_tank.contents",
-						fluidName(contents), contents.amount(),
-						shownCapacity())
-				.withStyle(ChatFormatting.AQUA));
+		// Style 09b (MOD-958): under the purpose line, "<fluid> <amount> / <capacity> mB", an empty tank naming itself.
+		Component fluid = contents == null
+				? Component.translatable("tooltip.alaindustrial.fluid_tank.empty")
+				: fluidName(contents);
+		new ItemTooltip()
+				.stat(TooltipRole.FLUID, "tooltip.alaindustrial.fluid_tank.amount", TooltipUnits.MILLIBUCKETS,
+						fluid, contents == null ? 0 : contents.amount(), shownCapacity())
+				.emit(adder);
 	}
 
 	/**
