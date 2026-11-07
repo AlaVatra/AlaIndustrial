@@ -1,8 +1,11 @@
 package dev.alaindustrial.client.tooltip;
 
+import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.core.tooltip.TooltipUnits;
 import dev.alaindustrial.item.misc.MutationGrades;
 import dev.alaindustrial.mutation.MutationGrade;
 import dev.alaindustrial.item.tool.AnalyzerMode;
@@ -19,8 +22,10 @@ import dev.alaindustrial.registry.ModDataComponents;
 import java.util.List;
 import java.util.function.Function;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import dev.alaindustrial.client.AlaClientConfig;
@@ -46,11 +51,39 @@ public final class MachineTooltips {
 
 	/**
 	 * Append Ala Industrial tooltip lines for {@code stack} (machine stats or analyzer reading), then the
-	 * blueprint line when the item has a blueprint (MOD-797) — last, so it sits under the stats.
+	 * blueprint line when the item has a blueprint (MOD-797): under the stats, above the hold-[SHIFT] hint
+	 * (MOD-958), which stays the last line.
 	 */
 	public static void append(ItemStack stack, List<Component> lines, boolean shiftDown) {
+		// The name is the first line the game hands over; a list without it (a test) takes the purpose first.
+		int underName = Math.min(1, lines.size());
 		appendStats(stack, lines, shiftDown);
 		dev.alaindustrial.client.blueprint.BlueprintTooltip.append(stack, lines);
+		insertPurpose(stack, lines, underName);
+	}
+
+	/**
+	 * The purpose line of style 09b (MOD-958), right under the name (index {@code at}):
+	 * {@code tooltip.alaindustrial.<id>.purpose} of every item and block of the mod, shown when the language has
+	 * it. One place for blocks and items alike, so an item's own {@code appendHoverText} lines, which the game
+	 * adds before this hook runs, still come after it.
+	 */
+	private static void insertPurpose(ItemStack stack, List<Component> lines, int at) {
+		Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+		if (!Industrialization.MOD_ID.equals(id.getNamespace())) {
+			return;
+		}
+		String key = purposeKey(id.getPath());
+		if (!Language.getInstance().has(key)) {
+			return;
+		}
+		lines.addAll(at,
+				TooltipWrap.wrapStyled(TooltipRender.roleLine(TooltipRole.PURPOSE, key, null)));
+	}
+
+	/** The translation key of an item's purpose line: {@code tooltip.alaindustrial.<path>.purpose}. */
+	public static String purposeKey(String path) {
+		return "tooltip.alaindustrial." + path + ".purpose";
 	}
 
 	/**
@@ -80,29 +113,33 @@ public final class MachineTooltips {
 		}
 		boolean detailed = shiftDown || AlaClientConfig.alwaysDetailedTooltips;
 		if (stack.getItem() instanceof NetworkAnalyzerItem) {
-			addNetworkAnalyzerTooltip(stack, lines, detailed);
-			return;
-		}
-		if (stack.getItem() instanceof ShieldingPouchItem) {
-			addShieldingPouchTooltip(stack, lines, detailed);
+			analyzerTooltip(stack).emit(lines::add, shiftDown, AlaClientConfig.alwaysDetailedTooltips);
 			return;
 		}
 		if (stack.getItem() instanceof PouchItem) {
-			addPouchTooltip(stack, lines, detailed);
+			ItemTooltip tooltip = pouchTooltip(stack);
+			if (stack.getItem() instanceof ShieldingPouchItem) {
+				// The two lines that are the whole reason this tier exists (MOD-545).
+				String shielded = "tooltip.alaindustrial.shielding_pouch.shielded";
+				tooltip.state(true, shielded, shielded)
+						.note("tooltip.alaindustrial.shielding_pouch.not_a_suit");
+			}
+			tooltip.emit(lines::add, shiftDown, AlaClientConfig.alwaysDetailedTooltips);
 			return;
 		}
-		if (appendStorageCapacity(stack, lines, detailed)) {
+		if (storageSlots(stack) > 0) {
+			storageTooltip(stack).emit(lines::add, shiftDown, AlaClientConfig.alwaysDetailedTooltips);
 			return;
 		}
 		if (stack.getItem() instanceof BatteryItem) {
-			addBatteryTooltip(stack, lines);
+			batteryTooltip(stack).emit(lines::add, shiftDown, AlaClientConfig.alwaysDetailedTooltips);
 			return;
 		}
 		// A powered tool or wearable declares its own tooltip (MOD-716, ADR-040).
 		if (stack.getItem() instanceof PoweredItem powered) {
 			PoweredToolTooltip tool = powered.toolTooltip();
 			if (tool != null) {
-				addPoweredToolTooltip(stack, tool, lines);
+				poweredToolTooltip(stack, tool).emit(lines::add, shiftDown, AlaClientConfig.alwaysDetailedTooltips);
 				return;
 			}
 		}
@@ -113,23 +150,19 @@ public final class MachineTooltips {
 			return;
 		}
 		if (stack.is(ModContent.DRILL_COLUMN_MODULE.get())) {
-			addBoreModuleTooltip(lines, detailed, "drill_column_module");
+			boreModuleTooltip("drill_column_module").emit(lines::add, shiftDown, AlaClientConfig.alwaysDetailedTooltips);
 			return;
 		}
 		if (stack.is(ModContent.DRILL_ROW_MODULE.get())) {
-			addBoreModuleTooltip(lines, detailed, "drill_row_module");
-			return;
-		}
-		if (stack.is(ModContent.CORE_BARREL.get())) {
-			lines.add(Component.translatable("tooltip.alaindustrial.core_barrel.role")
-					.withStyle(ChatFormatting.GRAY));
+			boreModuleTooltip("drill_row_module").emit(lines::add, shiftDown, AlaClientConfig.alwaysDetailedTooltips);
 			return;
 		}
 		if (stack.getItem() instanceof BlockItem blockItem
 				&& blockItem.getBlock() instanceof HasMachineTooltip owner) {
-			for (MachineTooltipSpec.Line line : owner.machineTooltip().lines(detailed, AlaClientConfig.showEuNumbers)) {
+			for (MachineTooltipSpec.Line line : owner.machineTooltip().lines(shiftDown,
+					AlaClientConfig.alwaysDetailedTooltips, AlaClientConfig.showEuNumbers)) {
 				if (owner.wrapsTooltipLines()) {
-					lines.addAll(TooltipWrap.wrap(render(line)));
+					lines.addAll(TooltipWrap.wrapStyled(render(line)));
 				} else {
 					lines.add(render(line));
 				}
@@ -137,118 +170,51 @@ public final class MachineTooltips {
 		}
 	}
 
-	/** One described line as a chat component: {@code key(args)} in its colour, or {@code label — key(args)}. */
+	/** One described line as a chat component, through the one renderer of roles ({@link TooltipRender}). */
 	static Component render(MachineTooltipSpec.Line line) {
-		MutableComponent body = Component.translatable(line.key(), line.argValues());
-		if (line.label() == null) {
-			return body.withStyle(color(line.tone()));
-		}
-		return Component.translatable(line.label()).append(" \u2014 ").append(body).withStyle(color(line.tone()));
-	}
-
-	private static ChatFormatting color(MachineTooltipSpec.Tone tone) {
-		return switch (tone) {
-			case GRAY -> ChatFormatting.GRAY;
-			case DARK_GRAY -> ChatFormatting.DARK_GRAY;
-			case GREEN -> ChatFormatting.GREEN;
-			case RED -> ChatFormatting.RED;
-			case LIGHT_PURPLE -> ChatFormatting.LIGHT_PURPLE;
-			case AQUA -> ChatFormatting.AQUA;
-		};
+		return TooltipRender.line(line);
 	}
 
 	/**
-	 * Tooltip for the Network Analyzer tool. The usage line is always shown; the last scan (stored on the
-	 * item as {@link ModDataComponents#NETWORK_SCAN} the moment it is used) is replayed under [SHIFT] so
-	 * the reading persists in the inventory after the actionbar message fades (MOD-016). The active mode
-	 * (TRAVERSE / STOP_AT_STORAGE, MOD-047) is shown right under the usage line so the player always knows
-	 * which behaviour a cable scan will use.
+	 * The Network Analyzer (MOD-016, MOD-047) in style 09b (MOD-958): the active mode (TRAVERSE / STOP_AT_STORAGE)
+	 * always; the last scan, stored on the item the moment it is used, under [SHIFT], so the reading persists in
+	 * the inventory after the actionbar message fades; the right-clicks as a key line.
 	 */
-	private static void addNetworkAnalyzerTooltip(ItemStack stack, List<Component> lines, boolean shiftDown) {
-		lines.add(Component.translatable("tooltip.alaindustrial.network_analyzer.usage")
-				.withStyle(ChatFormatting.GRAY));
+	private static ItemTooltip analyzerTooltip(ItemStack stack) {
 		AnalyzerMode mode = stack.get(ModDataComponents.NETWORK_ANALYZER_MODE.get());
 		if (mode == null) {
 			mode = AnalyzerMode.TRAVERSE;
 		}
-		lines.add(Component.translatable("tooltip.alaindustrial.network_analyzer.mode_label",
-						Component.translatable("tooltip.alaindustrial.network_analyzer.mode." + mode.getSerializedName()))
-				.withStyle(ChatFormatting.AQUA));
+		ItemTooltip tooltip = new ItemTooltip().stat(TooltipRole.MODULE,
+				"tooltip.alaindustrial.network_analyzer.mode_label", null,
+				Component.translatable("tooltip.alaindustrial.network_analyzer.mode." + mode.getSerializedName()));
 		NetworkScanData scan = stack.get(ModDataComponents.NETWORK_SCAN.get());
-		if (scan == null) {
-			return;
+		if (scan != null) {
+			tooltip.detail(TooltipRole.INFO, "tooltip.alaindustrial.network_analyzer.last_scan", null)
+					.detail(TooltipRole.INFO, "tooltip.alaindustrial.network_analyzer.cables", null, scan.cables())
+					.detail(TooltipRole.INFO, "tooltip.alaindustrial.network_analyzer.endpoints", null,
+							scan.producers(), scan.consumers(), scan.storage())
+					.detail(TooltipRole.ENERGY, "tooltip.alaindustrial.network_analyzer.flow", null, scan.supply(),
+							scan.demand())
+					.detail(TooltipRole.ENERGY, "tooltip.alaindustrial.network_analyzer.moved", null, scan.moved());
 		}
-		if (shiftDown) {
-			lines.add(Component.translatable("tooltip.alaindustrial.network_analyzer.last_scan")
-					.withStyle(ChatFormatting.AQUA));
-			lines.add(Component.translatable("tooltip.alaindustrial.network_analyzer.cables", scan.cables())
-					.withStyle(ChatFormatting.GRAY));
-			lines.add(Component.translatable("tooltip.alaindustrial.network_analyzer.endpoints",
-					scan.producers(), scan.consumers(), scan.storage()).withStyle(ChatFormatting.GRAY));
-			lines.add(Component.translatable("tooltip.alaindustrial.network_analyzer.flow",
-					scan.supply(), scan.demand()).withStyle(ChatFormatting.GRAY));
-			lines.add(Component.translatable("tooltip.alaindustrial.network_analyzer.moved", scan.moved())
-					.withStyle(ChatFormatting.GRAY));
-		} else {
-			lines.add(Component.translatable("tooltip.alaindustrial.hold_shift")
-					.withStyle(ChatFormatting.DARK_GRAY));
-		}
+		return tooltip.key("tooltip.alaindustrial.network_analyzer.usage");
 	}
 
 	/**
-	 * Tooltip text for the Battery Pouch (MOD-052): usage, EU charge (red DEPLETED at 0 — the lock state
-	 * must be readable at a glance), tier. The contents grid and the weight bar are visual — see
-	 * {@code PouchClientTooltip} (bundle-style tooltip image, player request).
+	 * Capacity of the mod's storage blocks (MOD-600), under [SHIFT], in style 09b (MOD-958). A chest tier tells the
+	 * player nothing about its size until it is placed and opened, and the ladder runs from 36 to 108. <b>The
+	 * numbers come from the block entities themselves</b>, never from a literal here: a tooltip that states a
+	 * capacity the container does not have is worse than no tooltip.
 	 */
-	/**
-	 * Tooltip text for the Shielding Pouch (MOD-545): how to use it, and — the whole point of the
-	 * item — that it stops the radiation of what is inside without standing in for the suit.
-	 */
-	private static void addShieldingPouchTooltip(ItemStack stack, List<Component> lines, boolean detailed) {
-		// Everything the Battery Pouch says — it IS one, plus lead — and then the two lines that are
-		// the whole reason this tier exists. The charge keys are the base pouch's on purpose: the text
-		// is the same sentence about the same buffer, and a second copy would be one more string for
-		// every locale to drift on.
-		addPouchTooltip(stack, lines, detailed);
-		lines.add(Component.translatable("tooltip.alaindustrial.shielding_pouch.shielded")
-				.withStyle(ChatFormatting.GREEN));
-		lines.add(Component.translatable("tooltip.alaindustrial.shielding_pouch.not_a_suit")
-				.withStyle(ChatFormatting.YELLOW));
-	}
-
-	/**
-	 * Capacity of the mod's storage blocks, under [SHIFT] (MOD-600).
-	 *
-	 * <p>A chest tier tells the player nothing about its size until it is placed and opened, and the
-	 * ladder now runs from 36 to 108 — a difference worth knowing before you carry one home.
-	 *
-	 * <p><b>The numbers come from the block entities themselves</b>, never from a literal here: a
-	 * tooltip that states a capacity the container does not have is worse than no tooltip, and this is
-	 * exactly the kind of second copy that goes stale silently.
-	 *
-	 * @return whether this stack was one of the storage blocks (and the tooltip is therefore done)
-	 */
-	private static boolean appendStorageCapacity(ItemStack stack, List<Component> lines, boolean detailed) {
+	private static ItemTooltip storageTooltip(ItemStack stack) {
 		int slots = storageSlots(stack);
-		if (slots <= 0) {
-			return false;
-		}
-		if (!detailed) {
-			lines.add(Component.translatable("tooltip.alaindustrial.hold_shift")
-					.withStyle(ChatFormatting.DARK_GRAY));
-			return true;
-		}
-		lines.add(Component.translatable("tooltip.alaindustrial.storage_slots", slots)
-				.withStyle(ChatFormatting.GRAY));
-		if (stack.is(ModContent.STORAGE_MODULE_ITEM.get())) {
-			// A module's number is misleading on its own: touching modules pool into one warehouse.
-			lines.add(Component.translatable("tooltip.alaindustrial.storage_module_merges")
-					.withStyle(ChatFormatting.DARK_GRAY));
-		} else {
-			lines.add(Component.translatable("tooltip.alaindustrial.storage_slots_double", slots * 2)
-					.withStyle(ChatFormatting.DARK_GRAY));
-		}
-		return true;
+		ItemTooltip tooltip = new ItemTooltip().detail(TooltipRole.INFO, "tooltip.alaindustrial.storage_slots", null,
+				slots);
+		// A module's number is misleading on its own: touching modules pool into one warehouse.
+		return stack.is(ModContent.STORAGE_MODULE_ITEM.get())
+				? tooltip.detail(TooltipRole.INFO, "tooltip.alaindustrial.storage_module_merges", null)
+				: tooltip.detail(TooltipRole.INFO, "tooltip.alaindustrial.storage_slots_double", null, slots * 2);
 	}
 
 	/** Slots of the storage block behind {@code stack}, or 0 when it is not one of ours. */
@@ -277,80 +243,84 @@ public final class MachineTooltips {
 		return 0;
 	}
 
-	private static void addPouchTooltip(ItemStack stack, List<Component> lines, boolean detailed) {
-		// Two short list lines instead of one long sentence — long single-line tooltips stretch the
-		// box, and other locales run even longer (player feedback).
-			lines.add(Component.translatable("tooltip.alaindustrial.battery_pouch.usage_insert")
-					.withStyle(ChatFormatting.GRAY));
-		lines.add(Component.translatable("tooltip.alaindustrial.battery_pouch.usage_extract")
-				.withStyle(ChatFormatting.GRAY));
+	/**
+	 * The Battery Pouch (MOD-052) in style 09b (MOD-958): its charge, or the grey "depleted" (the lock state must be
+	 * readable at a glance), a warning when the charge runs low, and the two right-clicks under [Shift]. No tier
+	 * line: the pouch is a tier-less consumer item. The contents grid and the weight bar are visual — see
+	 * {@code PouchClientTooltip}. The Shielding Pouch IS one, plus lead: its charge keys are the base pouch's on
+	 * purpose (one sentence about the same buffer, not a second copy for every locale to drift on).
+	 */
+	private static ItemTooltip pouchTooltip(ItemStack stack) {
+		ItemTooltip tooltip = new ItemTooltip();
 		long eu = ItemEnergy.shownGet(stack);
 		long cap = ItemEnergy.shownCapacity(stack);
 		if (eu <= 0) {
-			lines.add(Component.translatable("tooltip.alaindustrial.battery_pouch.depleted")
-					.withStyle(ChatFormatting.RED));
+			tooltip.off("tooltip.alaindustrial.battery_pouch.depleted");
 		} else {
-			lines.add(Component.translatable("tooltip.alaindustrial.battery_pouch.charge", eu, cap)
-					.withStyle(ChatFormatting.GOLD));
+			tooltip.stat(TooltipRole.ENERGY, ItemTooltip.STAT_CHARGE, TooltipUnits.EU, eu, cap);
 			if (cap > 0 && eu * 10 < cap) {
-				lines.add(Component.translatable("tooltip.alaindustrial.battery_pouch.low_charge")
-						.withStyle(ChatFormatting.RED));
+				tooltip.warning("tooltip.alaindustrial.battery_pouch.low_charge");
 			}
 		}
-		// No tier line: the Battery Pouch is a tier-less consumer item; its charge state and item
-		// bar (LV gold) already convey everything the player needs.
+		return tooltip.key("tooltip.alaindustrial.battery_pouch.usage_insert")
+				.key("tooltip.alaindustrial.battery_pouch.usage_extract");
 	}
 
 	/**
-	 * Tooltip text for the Battery (MOD-083): what it is for, its charge, and — when the player is
-	 * holding more than one — what the whole stack is worth.
+	 * The Battery (MOD-083) in style 09b (MOD-958): its charge or "empty", what the whole stack is worth when the
+	 * player holds more than one, and the right-click under [Shift].
 	 *
 	 * <p>The stack line exists because the battery is the only powered item that stacks, and its charge is
 	 * stored per item: without it, sixteen full batteries would read as "2 000 EU" and the player would
 	 * have no way to see the 32 000 they are actually carrying.
 	 */
-	private static void addBatteryTooltip(ItemStack stack, List<Component> lines) {
-		lines.add(Component.translatable("tooltip.alaindustrial.battery.usage")
-				.withStyle(ChatFormatting.GRAY));
+	private static ItemTooltip batteryTooltip(ItemStack stack) {
+		ItemTooltip tooltip = new ItemTooltip();
 		long eu = ItemEnergy.shownGet(stack);
 		long cap = ItemEnergy.shownCapacity(stack);
 		if (eu <= 0) {
-			lines.add(Component.translatable("tooltip.alaindustrial.battery.depleted")
-					.withStyle(ChatFormatting.RED));
+			tooltip.off("tooltip.alaindustrial.battery.depleted");
 		} else {
-			lines.add(Component.translatable("tooltip.alaindustrial.battery.charge", eu, cap)
-					.withStyle(ChatFormatting.GOLD));
+			tooltip.stat(TooltipRole.ENERGY, ItemTooltip.STAT_CHARGE, TooltipUnits.EU, eu, cap);
 			if (stack.getCount() > 1) {
-				lines.add(Component.translatable("tooltip.alaindustrial.battery.stack_total",
-						stack.getCount(), ItemEnergy.shownStackGet(stack)).withStyle(ChatFormatting.DARK_GRAY));
+				tooltip.stat(TooltipRole.ENERGY, "tooltip.alaindustrial.battery.stack_total", null,
+						stack.getCount(), ItemEnergy.shownStackGet(stack));
 			}
 		}
+		return tooltip.key("tooltip.alaindustrial.battery.usage");
 	}
 
 	/**
-	 * A powered tool's tooltip (MOD-716): the usage line, its state lines, the charge — gold
-	 * {@code eu / capacity}, or the red "depleted" line once the item's own rule says it can no longer work —
-	 * then the state lines that follow the charge. No [SHIFT] gate: the charge is what a player checks.
+	 * A powered tool's tooltip (MOD-716) in style 09b (MOD-958): the price of one use (an energy figure; a tool
+	 * with no price says how it is used instead), its state lines, the charge {@code eu / capacity} with the shared
+	 * label, or a grey "depleted" once the item's own rule says it can no longer work. No [SHIFT] gate: the charge
+	 * is what a player checks; what the tool is for is its purpose line.
 	 */
-	private static void addPoweredToolTooltip(ItemStack stack, PoweredToolTooltip tooltip, List<Component> lines) {
-		lines.add(Component.translatable(tooltip.usageKey(), tooltip.usageValues()).withStyle(ChatFormatting.GRAY));
-		addStateLines(stack, tooltip.beforeCharge(), lines);
-		long eu = ItemEnergy.shownGet(stack);
-		long cap = ItemEnergy.shownCapacity(stack);
-		if (tooltip.depleted().test(stack)) {
-			lines.add(Component.translatable(tooltip.depletedKey()).withStyle(ChatFormatting.RED));
+	private static ItemTooltip poweredToolTooltip(ItemStack stack, PoweredToolTooltip tooltip) {
+		ItemTooltip out = new ItemTooltip();
+		Object[] usage = tooltip.usageValues();
+		if (usage.length > 0) {
+			out.stat(TooltipRole.ENERGY, tooltip.usageKey(), null, usage);
 		} else {
-			lines.add(Component.translatable(tooltip.chargeKey(), eu, cap).withStyle(ChatFormatting.GOLD));
+			out.info(tooltip.usageKey());
 		}
-		addStateLines(stack, tooltip.afterCharge(), lines);
+		addStateLines(stack, tooltip.beforeCharge(), out);
+		if (tooltip.depleted().test(stack)) {
+			out.off(tooltip.depletedKey());
+		} else {
+			out.stat(TooltipRole.ENERGY, ItemTooltip.STAT_CHARGE, TooltipUnits.EU, ItemEnergy.shownGet(stack),
+					ItemEnergy.shownCapacity(stack));
+		}
+		addStateLines(stack, tooltip.afterCharge(), out);
+		return out;
 	}
 
 	private static void addStateLines(ItemStack stack,
-			List<Function<ItemStack, MachineTooltipSpec.@Nullable Line>> states, List<Component> lines) {
+			List<Function<ItemStack, MachineTooltipSpec.@Nullable Line>> states, ItemTooltip out) {
 		for (Function<ItemStack, MachineTooltipSpec.@Nullable Line> state : states) {
 			MachineTooltipSpec.Line line = state.apply(stack);
 			if (line != null) {
-				lines.add(render(line));
+				out.described(line);
 			}
 		}
 	}
@@ -362,40 +332,24 @@ public final class MachineTooltips {
 	 * a gate, the mill's output depends on height/weather).
 	 */
 	private static void addRotorTooltip(List<Component> lines, boolean detailed) {
-		// Always-on line: what it does.
-		lines.add(Component.translatable("tooltip.alaindustrial.rotor_role")
-				.withStyle(ChatFormatting.GRAY));
-		// Base T1 output at full height (the cap), so a player can compare rotors without placing.
-		lines.add(tt("rotor_output", ServerBalance.windMillMaxEuPerTick()));
+		// What it does is its purpose line (MOD-958). Base T1 output at full height (the cap), so a player can
+		// compare rotors without placing.
+		lines.add(TooltipRender.roleLine(TooltipRole.ENERGY, "tooltip.alaindustrial.rotor_output", null,
+				ServerBalance.windMillMaxEuPerTick()));
 		if (detailed) {
 			lines.add(tier());
 		} else {
-			lines.add(Component.translatable("tooltip.alaindustrial.hold_shift")
-					.withStyle(ChatFormatting.DARK_GRAY));
+			lines.add(TooltipRender.hint(false));
 		}
 	}
 
-	private static void addBoreModuleTooltip(List<Component> lines, boolean detailed, String module) {
-		lines.add(Component.translatable("tooltip.alaindustrial." + module + ".role")
-				.withStyle(ChatFormatting.GRAY));
-		if (!detailed) {
-			lines.add(Component.translatable("tooltip.alaindustrial.hold_shift")
-					.withStyle(ChatFormatting.DARK_GRAY));
-			return;
-		}
-		lines.add(Component.translatable("tooltip.alaindustrial." + module + ".fitting")
-				.withStyle(ChatFormatting.GRAY));
-		lines.add(Component.translatable("tooltip.alaindustrial." + module + ".toggle")
-				.withStyle(ChatFormatting.GRAY));
-	}
-
-	private static Component tt(String key, Object value) {
-		return Component.translatable("tooltip.alaindustrial." + key, value)
-				.withStyle(ChatFormatting.GRAY);
+	/** A drill bore module: where it fits and how it is switched, under [SHIFT] (its role is its purpose). */
+	private static ItemTooltip boreModuleTooltip(String module) {
+		return new ItemTooltip().detail(TooltipRole.INFO, "tooltip.alaindustrial." + module + ".fitting", null)
+				.key("tooltip.alaindustrial." + module + ".toggle");
 	}
 
 	private static Component tier() {
-		return Component.translatable("tooltip.alaindustrial.tier_lv")
-				.withStyle(ChatFormatting.GREEN);
+		return TooltipRender.line(MachineTooltipSpec.Tier.LV.line());
 	}
 }

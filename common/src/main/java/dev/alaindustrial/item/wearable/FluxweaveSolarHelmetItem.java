@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.wearable;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.environment.SolarSky;
 import dev.alaindustrial.core.environment.SolarWearOutput;
@@ -9,7 +10,6 @@ import dev.alaindustrial.item.energy.ItemEnergy;
 import dev.alaindustrial.item.energy.WornSourceDistributor;
 import dev.alaindustrial.skill.SkillEnergy;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -108,10 +108,10 @@ public class FluxweaveSolarHelmetItem extends FluxweaveArmorItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		super.appendHoverText(stack, context, display, adder, flag);
-		adder.accept(Component.translatable("tooltip.alaindustrial.fluxweave_solar_helmet.output",
-				ServerBalance.fluxweaveSolarEuPerSecond()).withStyle(ChatFormatting.YELLOW));
-		adder.accept(Component.translatable("tooltip.alaindustrial.fluxweave_solar_helmet.limits")
-				.withStyle(ChatFormatting.GRAY));
+		fluxweaveTooltip(stack)
+				.stat(TooltipRole.ENERGY, "tooltip.alaindustrial.fluxweave_solar_helmet.output", null,
+						ServerBalance.fluxweaveSolarEuPerSecond())
+				.info("tooltip.alaindustrial.fluxweave_solar_helmet.limits")
+				.emit(adder);
 	}
 }

@@ -508,6 +508,20 @@ class ArchitectureRulesNegativeControl {
 		assertFalse(report.contains("ConfigKnobReader"), report);
 	}
 
+	/** MOD-958: the tooltip-colour condition fires on a tooltip body naming the enum, and only there. */
+	@Test
+	void tooltipColourConditionFailsOnTheTooltipBodyOnly() {
+		String report = evaluateExpectingViolation(noClasses().that().resideInAPackage(FIXTURE_PACKAGE)
+				.should(TooltipStyleRules.nameClassIn(FIXTURE_PACKAGE + ".ChatFormattingStandIn",
+						ArchitectureRules::isTooltipBody)));
+		assertTrue(report.contains("ChatFormattingStandIn.GRAY named in " + FIXTURE_PACKAGE
+				+ ".TooltipColourWriter.appendHoverText("), report);
+		assertTrue(report.contains("ChatFormattingStandIn.bold named in " + FIXTURE_PACKAGE
+				+ ".TooltipColourWriter.appendHoverText("), report);
+		assertFalse(report.contains("chatMessage"), report);
+		assertFalse(report.contains("TooltipRoleWriter"), report);
+	}
+
 	@Test
 	void eagerRegistrationConditionFailsOnStaticInitializerOnly() {
 		String report = evaluateExpectingViolation(classes()

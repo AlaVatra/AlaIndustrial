@@ -1,0 +1,136 @@
+{
+  "variants": {
+    "facing=down,honey_level=0": {
+      "model": "alaindustrial:block/hive_attachment_top_0",
+      "x": 180
+    },
+    "facing=down,honey_level=1": {
+      "model": "alaindustrial:block/hive_attachment_top_1",
+      "x": 180
+    },
+    "facing=down,honey_level=2": {
+      "model": "alaindustrial:block/hive_attachment_top_2",
+      "x": 180
+    },
+    "facing=down,honey_level=3": {
+      "model": "alaindustrial:block/hive_attachment_top_3",
+      "x": 180
+    },
+    "facing=down,honey_level=4": {
+      "model": "alaindustrial:block/hive_attachment_top_4",
+      "x": 180
+    },
+    "facing=down,honey_level=5": {
+      "model": "alaindustrial:block/hive_attachment_top_5",
+      "x": 180
+    },
+    "facing=up,honey_level=0": {
+      "model": "alaindustrial:block/hive_attachment_top_0"
+    },
+    "facing=up,honey_level=1": {
+      "model": "alaindustrial:block/hive_attachment_top_1"
+    },
+    "facing=up,honey_level=2": {
+      "model": "alaindustrial:block/hive_attachment_top_2"
+    },
+    "facing=up,honey_level=3": {
+      "model": "alaindustrial:block/hive_attachment_top_3"
+    },
+    "facing=up,honey_level=4": {
+      "model": "alaindustrial:block/hive_attachment_top_4"
+    },
+    "facing=up,honey_level=5": {
+      "model": "alaindustrial:block/hive_attachment_top_5"
+    },
+    "facing=north,honey_level=0": {
+      "model": "alaindustrial:block/hive_attachment_side_0",
+      "y": 270
+    },
+    "facing=north,honey_level=1": {
+      "model": "alaindustrial:block/hive_attachment_side_1",
+      "y": 270
+    },
+    "facing=north,honey_level=2": {
+      "model": "alaindustrial:block/hive_attachment_side_2",
+      "y": 270
+    },
+    "facing=north,honey_level=3": {
+      "model": "alaindustrial:block/hive_attachment_side_3",
+      "y": 270
+    },
+    "facing=north,honey_level=4": {
+      "model": "alaindustrial:block/hive_attachment_side_4",
+      "y": 270
+    },
+    "facing=north,honey_level=5": {
+      "model": "alaindustrial:block/hive_attachment_side_5",
+      "y": 270
+    },
+    "facing=south,honey_level=0": {
+      "model": "alaindustrial:block/hive_attachment_side_0",
+      "y": 90
+    },
+    "facing=south,honey_level=1": {
+      "model": "alaindustrial:block/hive_attachment_side_1",
+      "y": 90
+    },
+    "facing=south,honey_level=2": {
+      "model": "alaindustrial:block/hive_attachment_side_2",
+      "y": 90
+    },
+    "facing=south,honey_level=3": {
+      "model": "alaindustrial:block/hive_attachment_side_3",
+      "y": 90
+    },
+    "facing=south,honey_level=4": {
+      "model": "alaindustrial:block/hive_attachment_side_4",
+      "y": 90
+    },
+    "facing=south,honey_level=5": {
+      "model": "alaindustrial:block/hive_attachment_side_5",
+      "y": 90
+    },
+    "facing=west,honey_level=0": {
+      "model": "alaindustrial:block/hive_attachment_side_0",
+      "y": 180
+    },
+    "facing=west,honey_level=1": {
+      "model": "alaindustrial:block/hive_attachment_side_1",
+      "y": 180
+    },
+    "facing=west,honey_level=2": {
+      "model": "alaindustrial:block/hive_attachment_side_2",
+      "y": 180
+    },
+    "facing=west,honey_level=3": {
+      "model": "alaindustrial:block/hive_attachment_side_3",
+      "y": 180
+    },
+    "facing=west,honey_level=4": {
+      "model": "alaindustrial:block/hive_attachment_side_4",
+      "y": 180
+    },
+    "facing=west,honey_level=5": {
+      "model": "alaindustrial:block/hive_attachment_side_5",
+      "y": 180
+    },
+    "facing=east,honey_level=0": {
+      "model": "alaindustrial:block/hive_attachment_side_0"
+    },
+    "facing=east,honey_level=1": {
+      "model": "alaindustrial:block/hive_attachment_side_1"
+    },
+    "facing=east,honey_level=2": {
+      "model": "alaindustrial:block/hive_attachment_side_2"
+    },
+    "facing=east,honey_level=3": {
+      "model": "alaindustrial:block/hive_attachment_side_3"
+    },
+    "facing=east,honey_level=4": {
+      "model": "alaindustrial:block/hive_attachment_side_4"
+    },
+    "facing=east,honey_level=5": {
+      "model": "alaindustrial:block/hive_attachment_side_5"
+    }
+  }
+}

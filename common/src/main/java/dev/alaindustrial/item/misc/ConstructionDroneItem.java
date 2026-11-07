@@ -1,12 +1,12 @@
 package dev.alaindustrial.item.misc;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.client.ServerBalance;
-import dev.alaindustrial.client.tooltip.TooltipWrap;
 import dev.alaindustrial.registry.ModDataComponents;
 import dev.alaindustrial.registry.ModContent;
 import dev.alaindustrial.settlement.drone.DroneNestRules;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
@@ -94,11 +94,11 @@ public class ConstructionDroneItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.construction_drone.charge",
-				percent(shownCharge(stack), shownCapacity())).withStyle(ChatFormatting.AQUA));
-		TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.construction_drone.use")
-				.withStyle(ChatFormatting.GRAY));
-		TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.construction_drone.charges")
-				.withStyle(ChatFormatting.GRAY));
+		new ItemTooltip()
+				.stat(TooltipRole.ENERGY, "tooltip.alaindustrial.construction_drone.charge", null,
+						percent(shownCharge(stack), shownCapacity()))
+				.key("tooltip.alaindustrial.construction_drone.use")
+				.info("tooltip.alaindustrial.construction_drone.charges")
+				.emit(adder);
 	}
 }

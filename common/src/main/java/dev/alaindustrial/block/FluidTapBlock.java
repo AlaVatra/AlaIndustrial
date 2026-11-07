@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import com.mojang.serialization.MapCodec;
 import dev.alaindustrial.block.entity.FluidTapBlockEntity;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
@@ -205,10 +206,10 @@ public class FluidTapBlock extends BaseEntityBlock implements HasMachineTooltip 
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(null,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.fluid_tap.what", MachineTooltipSpec.Tone.GRAY)),
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.fluid_tap.use", MachineTooltipSpec.Tone.GRAY),
+				List.of(),
+				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.fluid_tap.use", TooltipRole.INFO),
 						MachineTooltipSpec.note("tooltip.alaindustrial.fluid_tap.redstone",
-								MachineTooltipSpec.Tone.GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.plain("tank_mb", () -> (int) FluidTapBlockEntity.CAPACITY_MB)));
 	}
 

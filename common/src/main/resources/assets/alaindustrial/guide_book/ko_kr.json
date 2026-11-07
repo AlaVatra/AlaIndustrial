@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "벌통 부착물",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "벌통 부착물",
+              "text": "바닐라 벌통이나 벌집의 옆면 또는 윗면에 붙이는 수동 유리병 — 벌통의 꿀 양을 보여 주고 양봉 드론의 도킹 지점이 된다."
+            },
+            {
+              "type": "recipe",
+              "title": "레시피",
+              "recipe_type": "정형 제작",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "살수기",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "양봉 스테이션",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "양봉 스테이션",
+              "text": "양봉 드론 네 대를 위한 2블록 LV 스테이션 — 드론은 15블록 안에서 양봉장 지도에 적힌 부착물이 있는 벌통을 찾아가, 벌을 화나게 하지 않고 가득 찬 벌통에서 꿀을 거둬 스테이션 탱크에 붓는다."
+            },
+            {
+              "type": "stats",
+              "title": "정보",
+              "lines": [
+                "에너지: 160 EU + 블록 1개당 4 EU",
+                "버퍼: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "레시피",
+              "recipe_type": "정형 제작",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "요오드정",
               "text": "방사능 예방: 한 알이 5분 동안 선량이 쌓이는 속도를 절반으로 줄입니다. 이미 받은 선량은 없애지 않습니다. 다시마 재로 전기 도금조와 압축기를 거쳐 만듭니다."
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "양봉장 지도",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "양봉장 지도",
+              "text": "벌통 부착물을 최대 여덟 개까지 적는 목록 — 부착물을 우클릭해 적은 뒤, 지도를 양봉 스테이션에 넣으면 드론이 어떤 벌통을 돌볼지 알게 된다."
+            },
+            {
+              "type": "recipe",
+              "title": "레시피",
+              "recipe_type": "무정형 제작",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

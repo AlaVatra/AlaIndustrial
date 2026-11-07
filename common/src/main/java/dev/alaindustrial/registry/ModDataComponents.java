@@ -66,6 +66,8 @@ public final class ModDataComponents {
 	/** MOD-941 — the reactor a tablet is bound to: dimension and controller position. */
 	public static final Identifier REACTOR_TABLET_LINK_ID = Industrialization.id("reactor_tablet_link");
 	public static final Identifier REACTOR_TABLET_ALARM_ID = Industrialization.id("reactor_tablet_alarm");
+	/** MOD-923 — the hive attachments an apiary map lists. */
+	public static final Identifier APIARY_MAP_POINTS_ID = Industrialization.id("apiary_map_points");
 	public static final Identifier TELEPORTER_LOG_ID = Industrialization.id("teleporter_log");
 	public static final Identifier FLUID_TANK_CONTENTS_ID = Industrialization.id("fluid_tank_contents");
 	public static final Identifier DISTILLATION_COLUMN_CONTENTS_ID = Industrialization.id("distillation_column_contents");
@@ -239,6 +241,10 @@ public final class ModDataComponents {
 	 */
 	public static Supplier<DataComponentType<net.minecraft.core.GlobalPos>> REACTOR_TABLET_LINK = () -> {
 		throw new IllegalStateException("ModDataComponents.REACTOR_TABLET_LINK read before its loader bound it");
+	};
+	/** The hive attachments an apiary map lists (MOD-923); synced so the map's screen reads it off the stack. */
+	public static Supplier<DataComponentType<dev.alaindustrial.item.apiary.ApiaryMapPoints>> APIARY_MAP_POINTS = () -> {
+		throw new IllegalStateException("ModDataComponents.APIARY_MAP_POINTS read before its loader bound it");
 	};
 	public static Supplier<DataComponentType<TeleportPoints>> TELEPORTER_POINTS = () -> {
 		throw new IllegalStateException("ModDataComponents.TELEPORTER_POINTS read before its loader bound it");
@@ -618,6 +624,14 @@ public final class ModDataComponents {
 				.build();
 	}
 
+	/** Build the {@code apiary_map_points} type both loaders register (MOD-923). */
+	public static DataComponentType<dev.alaindustrial.item.apiary.ApiaryMapPoints> createApiaryMapPoints() {
+		return DataComponentType.<dev.alaindustrial.item.apiary.ApiaryMapPoints>builder()
+				.persistent(dev.alaindustrial.item.apiary.ApiaryMapPoints.CODEC)
+				.networkSynchronized(dev.alaindustrial.item.apiary.ApiaryMapPoints.STREAM_CODEC)
+				.build();
+	}
+
 	/** Build the {@code reactor_tablet_link} type both loaders register (MOD-941): vanilla's own GlobalPos codecs. */
 	public static DataComponentType<net.minecraft.core.GlobalPos> createReactorTabletLink() {
 		return DataComponentType.<net.minecraft.core.GlobalPos>builder()
@@ -826,5 +840,7 @@ public final class ModDataComponents {
 			new ComponentDef<>(REACTOR_TABLET_LINK_ID, ModDataComponents::createReactorTabletLink,
 					c -> REACTOR_TABLET_LINK = c),
 			new ComponentDef<>(REACTOR_TABLET_ALARM_ID, ModDataComponents::createReactorTabletAlarm,
-					c -> REACTOR_TABLET_ALARM = c));
+					c -> REACTOR_TABLET_ALARM = c),
+			new ComponentDef<>(APIARY_MAP_POINTS_ID, ModDataComponents::createApiaryMapPoints,
+					c -> APIARY_MAP_POINTS = c));
 }

@@ -1,6 +1,7 @@
 package dev.alaindustrial.block;
 
 import com.mojang.serialization.MapCodec;
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.PiezoPlateBlockEntity;
 import dev.alaindustrial.block.entity.PiezoPlateGroup;
 import dev.alaindustrial.client.ServerBalance;
@@ -257,17 +258,17 @@ public class PiezoPlateBlock extends BasePressurePlateBlock
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		List<MachineTooltipSpec.Line> basic = new ArrayList<>();
-		basic.add(MachineTooltipSpec.note("tooltip.alaindustrial.piezo_plate_press", MachineTooltipSpec.Tone.GRAY));
+		basic.add(MachineTooltipSpec.note("tooltip.alaindustrial.piezo_plate_press", TooltipRole.INFO));
 		if (silent) {
 			basic.add(MachineTooltipSpec.note("tooltip.alaindustrial.silent_piezo_plate_quiet",
-					MachineTooltipSpec.Tone.DARK_GRAY));
+					TooltipRole.INFO));
 		}
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV, basic,
 				List.of(MachineTooltipSpec.stat("piezo_press", ServerBalance::piezoPlateLivingPressEu,
 								ServerBalance::piezoPlateObjectPressEu),
 						MachineTooltipSpec.note("tooltip.alaindustrial.piezo_plate_connect",
-								MachineTooltipSpec.Tone.DARK_GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.note("tooltip.alaindustrial.piezo_plate_wrench",
-								MachineTooltipSpec.Tone.DARK_GRAY)));
+								TooltipRole.INFO)));
 	}
 }

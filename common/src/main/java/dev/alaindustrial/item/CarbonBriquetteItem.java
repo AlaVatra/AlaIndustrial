@@ -1,9 +1,9 @@
 package dev.alaindustrial.item;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.client.ServerBalance;
-import java.util.List;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,12 +31,10 @@ public class CarbonBriquetteItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> lines, TooltipFlag flag) {
-		for (String key : List.of("item.alaindustrial.carbon_briquette.hint",
-				"item.alaindustrial.carbon_briquette.hint2")) {
-			lines.accept(Component.translatable(key).withStyle(ChatFormatting.GRAY));
-		}
-		lines.accept(Component.translatable("item.alaindustrial.carbon_briquette.press",
-				ServerBalance.ceramicPlatesFromPress(), ServerBalance.ceramicPressRedstoneCost())
-				.withStyle(ChatFormatting.DARK_GRAY));
+		// Style 09b (MOD-958): the first hint is the purpose line.
+		new ItemTooltip().info("item.alaindustrial.carbon_briquette.hint2")
+				.detail(TooltipRole.INFO, "item.alaindustrial.carbon_briquette.press", null,
+						ServerBalance.ceramicPlatesFromPress(), ServerBalance.ceramicPressRedstoneCost())
+				.emit(lines);
 	}
 }

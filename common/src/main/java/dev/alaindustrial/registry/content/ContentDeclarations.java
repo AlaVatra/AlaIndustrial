@@ -217,10 +217,12 @@ final class ContentDeclarations {
 				"item.alaindustrial." + id + ".hint2"), bind);
 	}
 
-	/** An overclocker chip of a fixed tier (MOD-393) — a hint item that also carries its step count. */
+	/**
+	 * An overclocker chip of a fixed tier (MOD-393): it carries its step count, and its tooltip states the two
+	 * factors that step count gives (MOD-958).
+	 */
 	static ItemDef overclockerChip(String id, int tier, Consumer<Supplier<Item>> bind) {
-		return item(id, p -> new OverclockerChipItem(p, tier, "item.alaindustrial." + id + ".hint",
-				"item.alaindustrial." + id + ".hint2"), bind);
+		return item(id, p -> new OverclockerChipItem(p, tier), bind);
 	}
 
 	/**

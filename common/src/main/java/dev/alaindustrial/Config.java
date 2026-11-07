@@ -4,6 +4,7 @@ import dev.alaindustrial.config.ConfigFile;
 import dev.alaindustrial.config.Knob;
 import dev.alaindustrial.config.KnobRegistry;
 import dev.alaindustrial.config.Section;
+import dev.alaindustrial.core.apiary.ApiaryConfig;
 import dev.alaindustrial.core.environment.GeneratorConfig;
 import dev.alaindustrial.core.radiation.RadiationConfig;
 import dev.alaindustrial.core.reactor.ReactorConfig;
@@ -25,7 +26,7 @@ import java.util.function.Supplier;
  * block, an edited one never does (ADR-033, which replaced ADR-013).
  *
  * <p>Knobs live in subsystem holders (ADR-034): {@code RadiationConfig}, {@code GeneratorConfig}, {@code ToolConfig},
- * {@code ReactorConfig}, {@code SettlementConfig}; {@link #REGISTRY} scans them with this class. The FILE is
+ * {@code ReactorConfig}, {@code SettlementConfig}, {@code ApiaryConfig}; {@link #REGISTRY} scans them. The FILE is
  * structured: since MOD-402 it carries a {@link dev.alaindustrial.config.ConfigSchema#VERSION} and groups its keys
  * into {@link Section}s, and the load layer ({@code dev.alaindustrial.config}) migrates an older file into the current
  * shape before reading it. Adding a knob never needs a migration; changing the file's shape does.
@@ -1547,7 +1548,7 @@ public final class Config {
 	 * must stay BELOW the declarations: entries capture compiled defaults; static init runs in source order.
 	 */
 	public static final KnobRegistry REGISTRY = KnobRegistry.scan(List.of(Config.class, RadiationConfig.class,
-			GeneratorConfig.class, ToolConfig.class, ReactorConfig.class, SettlementConfig.class));
+			GeneratorConfig.class, ToolConfig.class, ReactorConfig.class, SettlementConfig.class, ApiaryConfig.class));
 
 	/** Reads and writes {@code config/alaindustrial.json} for {@link #REGISTRY}. */
 	static final ConfigFile FILE = new ConfigFile(REGISTRY);

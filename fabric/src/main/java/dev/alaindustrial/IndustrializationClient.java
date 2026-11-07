@@ -1,8 +1,5 @@
 package dev.alaindustrial;
 
-import dev.alaindustrial.registry.ModEntities;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.NoopRenderer;
 import dev.alaindustrial.client.AlaClientConfig;
 import dev.alaindustrial.client.ClientContentManifest;
 import dev.alaindustrial.client.ClientPayloadManifest;
@@ -308,10 +305,7 @@ public class IndustrializationClient implements ClientModInitializer {
 	 * {@link ClientContentManifest} (MOD-403) — the same set the NeoForge client plays, so a renderer can
 	 * no longer exist on one loader only. The pair stays typed end to end through {@code RendererRegistrar},
 	 * so no cast is involved.
-	 *
-	 * <p>The entity renderer below stays here: its type handle is loader-specific ({@code ModEntities} vs
-	 * {@code ModEntitiesNeoForge}) and the neutral {@code ModContent} slot is a wildcard, so there is
-	 * nothing typed to share for one registration.
+	 * The entity renderers follow, replayed the same way from {@code MOB_RENDERERS} and {@code ENTITY_RENDERERS}.
 	 */
 	private void registerBlockEntityRenderers() {
 		ClientContentManifest.RendererRegistrar registrar = new ClientContentManifest.RendererRegistrar() {
@@ -345,30 +339,22 @@ public class IndustrializationClient implements ClientModInitializer {
 			ModelLayerRegistry.registerModelLayer(def.location(), def.definition()::get);
 		}
 
-		// Stock Display Frame (MOD-066): the mod's first entity renderer. Vanilla EntityRenderers.register
-		// is the path Fabric's own docs recommend (their EntityRendererRegistry is a thin legacy wrapper).
-		net.minecraft.client.renderer.entity.EntityRenderers.register(
-				dev.alaindustrial.registry.ModEntities.STOCK_DISPLAY_FRAME,
-				dev.alaindustrial.client.render.StockDisplayFrameRenderer::new);
-		EntityRenderers.register(ModEntities.QUARRY_DRILL_BODY, NoopRenderer::new); // MOD-952: drawn by the quarry
-		// Chest boats (MOD-785): vanilla boat model + the mod chest model, composed per wood × chest pair.
-		for (dev.alaindustrial.entity.ChestBoatVariants.Variant variant
-				: dev.alaindustrial.entity.ChestBoatVariants.ALL) {
-			net.minecraft.client.renderer.entity.EntityRenderers.register(
-					dev.alaindustrial.registry.ModEntities.CHEST_BOATS.get(variant.id()),
-					context -> dev.alaindustrial.client.render.ModChestBoatRenderer.create(context, variant));
-		}
-		// The mobs (MOD-767), replayed from the shared ClientContentManifest.MOB_RENDERERS.
-		ClientContentManifest.EntityRendererRegistrar mobs = new ClientContentManifest.EntityRendererRegistrar() {
+		// The mobs (MOD-767) and the other entities (MOD-959), replayed from the shared ClientContentManifest. Vanilla
+		// EntityRenderers.register is the path Fabric's own docs recommend (their EntityRendererRegistry is a thin
+		// legacy wrapper).
+		ClientContentManifest.EntityRendererRegistrar entities = new ClientContentManifest.EntityRendererRegistrar() {
 			@Override
 			public <T extends net.minecraft.world.entity.Entity> void register(
-					net.minecraft.world.entity.EntityType<T> type,
+					net.minecraft.world.entity.EntityType<? extends T> type,
 					net.minecraft.client.renderer.entity.EntityRendererProvider<T> provider) {
 				net.minecraft.client.renderer.entity.EntityRenderers.register(type, provider);
 			}
 		};
 		for (ClientContentManifest.MobRendererDef<?> def : ClientContentManifest.MOB_RENDERERS) {
-			def.bindTo(mobs);
+			def.bindTo(entities);
+		}
+		for (ClientContentManifest.EntityRendererDef<?> def : ClientContentManifest.ENTITY_RENDERERS) {
+			def.bindTo(entities);
 		}
 	}
 }

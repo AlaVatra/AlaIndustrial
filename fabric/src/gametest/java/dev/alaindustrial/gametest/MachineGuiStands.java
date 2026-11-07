@@ -136,6 +136,9 @@ public final class MachineGuiStands {
         TeleporterRemoteGuiStand.shootRandom(context);
         TeleporterRemoteGuiStand.shootLog(context);
 
+        // ── Apiary Map — the list full with a Nether row, and empty with its hint (MOD-923) ──
+        ApiaryMapGuiStand.shoot(context);
+
         // ── Machines without custom screens (one shot each) ──────────────────────────
         shootMenu(context, "gui_moonlit_solar_panel", ModContent.MOONLIT_SOLAR_PANEL_MENU.get(), "Moonlit Solar Panel");
 

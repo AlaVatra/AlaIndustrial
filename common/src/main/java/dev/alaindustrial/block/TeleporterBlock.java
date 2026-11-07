@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.TeleporterBlockEntity;
 import dev.alaindustrial.menu.TeleporterStationMenu;
 import net.minecraft.core.BlockPos;
@@ -349,6 +350,6 @@ public class TeleporterBlock extends HorizontalMachineBlock implements CableArmR
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.HV,
 				List.of(MachineTooltipSpec.stat("buffer", ServerBalance::teleporterBuffer)),
-				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.teleporter_io", MachineTooltipSpec.Tone.GRAY)));
+				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.teleporter_io", TooltipRole.INFO)));
 	}
 }

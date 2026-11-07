@@ -37,8 +37,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.GameType;
@@ -723,7 +721,7 @@ public final class AssemblerScenarios {
 					+ java.util.Arrays.toString(args));
 			return;
 		}
-		if (!Integer.valueOf(4).equals(args[1])) {
+		if (!"4".equals(TooltipLines.arg(line, 1))) {
 			helper.fail("the tooltip should carry the count 4, got " + args[1]);
 			return;
 		}
@@ -1164,22 +1162,13 @@ public final class AssemblerScenarios {
 		return false;
 	}
 
-	/** Tooltip line {@code index} of {@code stack}, or {@code null} when it is not a translatable one. */
-	// MOD-498 — Item#appendHoverText is soft-deprecated by vanilla ("internal, go through the stack"),
-	// but it is the only hook that yields an item's OWN tooltip lines, which is exactly what this
-	// assertion reads: ItemStack#addDetailsToTooltip calls it, and vanilla itself overrides it in
-	// DiscFragmentItem / HangingEntityItem / SmithingTemplateItem. Data-component TooltipProviders cover
-	// data-driven components, not text an item computes for itself, so they cannot replace it here.
-	@SuppressWarnings("deprecation")
+	/**
+	 * Translatable line {@code index} of {@code stack}'s own tooltip, or {@code null} when there is none: read
+	 * through {@link TooltipLines}, which finds a style-09b line's label behind its icon (MOD-958).
+	 */
 	private static TranslatableContents tooltipLine(ItemStack stack, int index) {
-		List<Component> lines = new ArrayList<>();
-		stack.getItem().appendHoverText(stack, Item.TooltipContext.EMPTY, TooltipDisplay.DEFAULT,
-				lines::add, TooltipFlag.NORMAL);
-		if (index >= lines.size()) {
-			return null;
-		}
-		return lines.get(index).getContents() instanceof TranslatableContents translatable
-				? translatable : null;
+		List<TranslatableContents> lines = TooltipLines.of(stack, false);
+		return index < lines.size() ? lines.get(index) : null;
 	}
 
 	/** The stick blueprint as the machine itself would write it — layout plus the cached result. */

@@ -11,6 +11,7 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
@@ -75,7 +76,15 @@ public class AlaProcessingCategory implements DisplayCategory<AlaProcessingDispl
 		List<Integer> outputXs = RecipeViewerLayout.outputXs(display.getOutputEntries().size());
 		for (int i = 0; i < outputXs.size(); i++) {
 			Point point = new Point(bounds.getX() + outputXs.get(i), bounds.getY() + RecipeViewerLayout.SLOT_Y);
-			widgets.add(Widgets.createSlot(point).entries(display.getOutputEntries().get(i)).markOutput());
+			EntryIngredient entries = display.getOutputEntries().get(i);
+			// MOD-960: the bonus output (the second entry) states its chance in the tooltip when it is a gamble,
+			// the same line JEI shows.
+			if (i == 1 && RecipeViewerLayout.showsSecondaryChance(display.secondaryChance())) {
+				Component line = Component.translatable(RecipeViewerLayout.SECONDARY_CHANCE_KEY,
+						RecipeViewerLayout.secondaryChancePercent(display.secondaryChance()));
+				entries = entries.map(stack -> stack.copy().tooltip(line));
+			}
+			widgets.add(Widgets.createSlot(point).entries(entries).markOutput());
 		}
 
 		// EU cost + intrinsic time, and the success chance where the operation is a gamble (the

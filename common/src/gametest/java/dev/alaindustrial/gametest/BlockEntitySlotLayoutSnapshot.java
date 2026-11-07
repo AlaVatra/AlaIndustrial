@@ -24,6 +24,7 @@ final class BlockEntitySlotLayoutSnapshot {
 	static final List<String> LINES = List.of(
 			"advanced_industrial_workbench: size=10 upgrades=- battery=- menu=yes overclockable=no batteryFed=no",
 			"alloy_smelter: size=9 upgrades=4 battery=8 menu=yes overclockable=yes batteryFed=yes",
+			"apiary_drone_station: size=6 upgrades=- battery=- menu=yes overclockable=no batteryFed=no",
 			"assembler: size=14 upgrades=10 battery=- menu=yes overclockable=yes batteryFed=no",
 			"battery_box: size=6 upgrades=2 battery=- menu=yes overclockable=no batteryFed=no",
 			"block_breaker: size=5 upgrades=1 battery=- menu=yes overclockable=no batteryFed=no",

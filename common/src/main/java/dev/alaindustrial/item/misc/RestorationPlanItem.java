@@ -1,11 +1,11 @@
 package dev.alaindustrial.item.misc;
 
-import dev.alaindustrial.client.tooltip.TooltipWrap;
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.registry.ModContent;
 import dev.alaindustrial.registry.ModDataComponents;
 import java.util.List;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -42,21 +42,21 @@ public class RestorationPlanItem extends Item {
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
 		RestorationPlan plan = planOf(stack);
+		ItemTooltip tooltip = new ItemTooltip();
 		if (plan == null) {
-			TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.restoration_plan.empty")
-					.withStyle(ChatFormatting.GRAY));
-			TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.restoration_plan.empty_hint")
-					.withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.off("tooltip.alaindustrial.restoration_plan.empty")
+					.info("tooltip.alaindustrial.restoration_plan.empty_hint")
+					.emit(adder);
 			return;
 		}
-		TooltipWrap.add(adder, Component.translatableWithFallback(
-				"tooltip.alaindustrial.restoration_plan.building." + plan.building(), plan.building())
-				.withStyle(ChatFormatting.AQUA));
-		TooltipWrap.add(adder, Component.translatable("tooltip.alaindustrial.plan.style",
-				TownHallPlanSheetItem.shortStyleName(plan.style())).withStyle(ChatFormatting.GRAY));
+		tooltip.stat(TooltipRole.MODULE, "tooltip.alaindustrial.restoration_plan.building", null,
+						Component.translatableWithFallback(
+								"tooltip.alaindustrial.restoration_plan.building." + plan.building(), plan.building()))
+				.info("tooltip.alaindustrial.plan.style", TownHallPlanSheetItem.shortStyleName(plan.style()));
 		for (String key : useKeys()) {
-			TooltipWrap.add(adder, Component.translatable(key).withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.key(key);
 		}
+		tooltip.emit(adder);
 	}
 
 	/** The tooltip's lines on what to do with the plan. */

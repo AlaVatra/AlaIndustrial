@@ -170,6 +170,9 @@ final class MachineCapabilitySnapshot {
 			"sprinkler: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=0 mute=0 stats=0"
 					+ " oc=0/0 rate=2 dur=200 evolve=-1/-1",
 			"sprinkler keys: -EvolveProgress -EvolveChip",
+			"apiary_drone_station: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=0 mute=0"
+					+ " stats=0 oc=0/0 rate=2 dur=200 evolve=-1/-1",
+			"apiary_drone_station keys: -EvolveProgress -EvolveChip",
 			"mob_repeller: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=1 mute=1 stats=1"
 					+ " oc=0/0 rate=2 dur=200 evolve=-1/-1",
 			"mob_repeller keys: -EvolveProgress -EvolveChip",

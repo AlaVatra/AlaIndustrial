@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.wearable;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.item.ToolConfig;
 import dev.alaindustrial.item.energy.EnergyBar;
 import dev.alaindustrial.item.energy.PoweredItem;
@@ -261,6 +262,6 @@ public class EnergyPackItem extends Item implements PoweredItem {
 	public PoweredToolTooltip toolTooltip() {
 		// Two short usage lines, not one long sentence: the equipment tooltip already carries the armour block.
 		return PoweredToolTooltip.of("energy_pack", List.of()).withBeforeCharge(stack -> MachineTooltipSpec.text(
-				"tooltip.alaindustrial.energy_pack.usage_charges", MachineTooltipSpec.Tone.GRAY));
+				"tooltip.alaindustrial.energy_pack.usage_charges", TooltipRole.INFO));
 	}
 }

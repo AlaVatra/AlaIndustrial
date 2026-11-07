@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.tool;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
 import dev.alaindustrial.item.energy.PoweredToolTooltip;
@@ -38,8 +39,8 @@ final class DrillTooltips {
 			return null;
 		}
 		return DrillBore.isColumnEnabled(stack)
-				? MachineTooltipSpec.text(PREFIX + "electric_drill.column_on", MachineTooltipSpec.Tone.AQUA)
-				: MachineTooltipSpec.text(PREFIX + "electric_drill.column_off", MachineTooltipSpec.Tone.GRAY);
+				? MachineTooltipSpec.text(PREFIX + "electric_drill.column_on", TooltipRole.INFO)
+				: MachineTooltipSpec.text(PREFIX + "electric_drill.column_off", TooltipRole.INFO);
 	}
 
 	/** MOD-821: the row bore, on or off — shown only once installed, like the column line. */
@@ -48,7 +49,7 @@ final class DrillTooltips {
 			return null;
 		}
 		return DrillBore.isRowEnabled(stack)
-				? MachineTooltipSpec.text(PREFIX + "electric_drill.row_on", MachineTooltipSpec.Tone.AQUA)
-				: MachineTooltipSpec.text(PREFIX + "electric_drill.row_off", MachineTooltipSpec.Tone.GRAY);
+				? MachineTooltipSpec.text(PREFIX + "electric_drill.row_on", TooltipRole.INFO)
+				: MachineTooltipSpec.text(PREFIX + "electric_drill.row_off", TooltipRole.INFO);
 	}
 }

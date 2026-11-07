@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.SolarPanelBlockEntity;
 import dev.alaindustrial.core.environment.SolarSky;
 import net.minecraft.core.BlockPos;
@@ -40,6 +41,6 @@ public class SolarPanelBlock extends AbstractSolarPanelBlock implements HasMachi
 				List.of(MachineTooltipSpec.stat("solar_day", ServerBalance::solarEuPerTick),
 						MachineTooltipSpec.stat("solar_night", () -> 0),
 						MachineTooltipSpec.text("tooltip.alaindustrial.solar_chip_hint",
-								MachineTooltipSpec.Tone.DARK_GRAY)));
+								TooltipRole.INFO)));
 	}
 }

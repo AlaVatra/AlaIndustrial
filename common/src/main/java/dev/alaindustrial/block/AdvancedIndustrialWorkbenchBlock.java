@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.AdvancedIndustrialWorkbenchBlockEntity;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
@@ -87,10 +88,8 @@ public class AdvancedIndustrialWorkbenchBlock extends Block implements EntityBlo
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(null,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.advanced_industrial_workbench",
-								MachineTooltipSpec.Tone.GRAY),
-						MachineTooltipSpec.note("tooltip.alaindustrial.advanced_industrial_workbench.pipes",
-								MachineTooltipSpec.Tone.GRAY)),
+				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.advanced_industrial_workbench.pipes",
+								TooltipRole.INFO)),
 				List.of());
 	}
 

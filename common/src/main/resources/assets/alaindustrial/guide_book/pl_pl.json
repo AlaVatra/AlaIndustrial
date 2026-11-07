@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "Nakładka na ul",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Nakładka na ul",
+              "text": "Pasywny szklany słoik na bok lub górę zwykłego ula albo gniazda pszczół — pokazuje poziom miodu w ulu i służy jako przystań drona pasiecznego."
+            },
+            {
+              "type": "recipe",
+              "title": "Przepis",
+              "recipe_type": "Wytwarzanie wg wzoru",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "Zraszacz",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "Stacja pasieczna",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Stacja pasieczna",
+              "text": "Dwublokowa stacja LV na cztery drony pasieczne — odwiedzają ule, których nakładki są zapisane na mapie pasieki w promieniu 15 bloków, zabierają miód z pełnych uli, nie niepokojąc pszczół, i wlewają go do zbiornika stacji."
+            },
+            {
+              "type": "stats",
+              "title": "Statystyki",
+              "lines": [
+                "Energia: 160 EU + 4 EU na blok",
+                "Bufor: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Przepis",
+              "recipe_type": "Wytwarzanie wg wzoru",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "Tabletki jodowe",
               "text": "Profilaktyka promieniowania: jedna tabletka przez 5 minut spowalnia o połowę narastanie dawki. Nie usuwa już przyjętej dawki. Robi się je z popiołu z wodorostów w wannie galwanicznej i kompresorze."
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "Mapa pasieki",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Mapa pasieki",
+              "text": "Lista do ośmiu nakładek na ul — kliknij nakładkę prawym przyciskiem, by ją zapisać, a potem włóż mapę do stacji pasiecznej, by jej drony wiedziały, które ule obsługiwać."
+            },
+            {
+              "type": "recipe",
+              "title": "Przepis",
+              "recipe_type": "Wytwarzanie bez wzoru",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

@@ -3,6 +3,7 @@ package dev.alaindustrial.client;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.KnobSnapshot;
+import dev.alaindustrial.core.apiary.ApiaryConfig;
 import dev.alaindustrial.core.environment.GeneratorConfig;
 import dev.alaindustrial.core.machine.MachineRates;
 import dev.alaindustrial.item.ToolConfig;
@@ -665,6 +666,30 @@ public final class ServerBalance {
 
 	public static int capsuleRestoreTicks() {
 		return current.intValue("capsuleRestoreTicks", SettlementConfig.capsuleRestoreTicks);
+	}
+
+	public static int apiaryStationBuffer() {
+		return current.intValue("apiaryStationBuffer", ApiaryConfig.apiaryStationBuffer);
+	}
+
+	public static int apiaryDroneLaunchEu() {
+		return current.intValue("apiaryDroneLaunchEu", ApiaryConfig.apiaryDroneLaunchEu);
+	}
+
+	public static int apiaryDroneEuPerBlock() {
+		return current.intValue("apiaryDroneEuPerBlock", ApiaryConfig.apiaryDroneEuPerBlock);
+	}
+
+	public static int apiaryDockTicks() {
+		return current.intValue("apiaryDockTicks", ApiaryConfig.apiaryDockTicks);
+	}
+
+	public static int apiaryPourTicks() {
+		return current.intValue("apiaryPourTicks", ApiaryConfig.apiaryPourTicks);
+	}
+
+	public static int apiaryStationRange() {
+		return current.intValue("apiaryStationRange", ApiaryConfig.apiaryStationRange);
 	}
 
 	public static int settlementCoreBuffer() {

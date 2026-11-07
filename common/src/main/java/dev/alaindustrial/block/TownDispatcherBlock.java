@@ -113,8 +113,7 @@ public class TownDispatcherBlock extends LitMachineBlock implements HasMachineTo
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.town_dispatcher.purpose",
-						MachineTooltipSpec.Tone.GRAY)),
+				List.of(),
 				List.of());
 	}
 

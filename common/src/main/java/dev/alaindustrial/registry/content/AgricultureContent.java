@@ -13,26 +13,33 @@ import static dev.alaindustrial.registry.content.ContentDeclarations.plain;
 import static dev.alaindustrial.registry.content.ContentDeclarations.registeredItem;
 import static dev.alaindustrial.registry.content.TabEntries.show;
 
+import dev.alaindustrial.block.ApiaryDroneHiveBlock;
+import dev.alaindustrial.block.ApiaryDroneStationBlock;
 import dev.alaindustrial.block.CrystalFarmControllerBlock;
 import dev.alaindustrial.block.CrystalFarmDoorBlock;
 import dev.alaindustrial.block.CrystalFarmShellBlock;
 import dev.alaindustrial.block.CrystalSeedbedBlock;
 import dev.alaindustrial.block.GardenDroneStationBlock;
+import dev.alaindustrial.block.HiveAttachmentBlock;
 import dev.alaindustrial.block.IncubatorBlock;
 import dev.alaindustrial.block.IncubatorDomeBlock;
 import dev.alaindustrial.block.KokSagyzBlock;
 import dev.alaindustrial.block.KokSagyzRootBlock;
 import dev.alaindustrial.block.SprinklerBlock;
 import dev.alaindustrial.block.TrellisBlock;
+import dev.alaindustrial.block.entity.ApiaryDroneStationBlockEntity;
 import dev.alaindustrial.block.entity.CrystalFarmControllerBlockEntity;
 import dev.alaindustrial.block.entity.GardenDroneStationBlockEntity;
 import dev.alaindustrial.block.entity.IncubatorBlockEntity;
 import dev.alaindustrial.block.entity.KokSagyzRootBlockEntity;
 import dev.alaindustrial.block.entity.SprinklerBlockEntity;
 import dev.alaindustrial.compat.LineBlockProps;
+import dev.alaindustrial.item.apiary.ApiaryMapItem;
 import dev.alaindustrial.item.misc.AntiradBarItem;
 import dev.alaindustrial.item.misc.ChewingGumItem;
 import dev.alaindustrial.item.misc.ReinforcedBoneMealItem;
+import dev.alaindustrial.menu.ApiaryDroneStationMenu;
+import dev.alaindustrial.menu.ApiaryMapMenu;
 import dev.alaindustrial.menu.GardenDroneStationMenu;
 import dev.alaindustrial.menu.IncubatorMenu;
 import dev.alaindustrial.menu.SprinklerMenu;
@@ -45,6 +52,7 @@ import dev.alaindustrial.registry.CreativeTabContent.Sink;
 import dev.alaindustrial.registry.ModBlockProperties;
 import dev.alaindustrial.registry.ModContent;
 import java.util.List;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 
@@ -156,6 +164,25 @@ public final class AgricultureContent {
 			// MOD-525: base plus mast, so the shape is far from a full cube — noOcclusion is mandatory
 			// or it would cull its neighbours' faces as if a solid block stood there (R-PHY-05).
 			machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL).noOcclusion()), s -> ModContent.SPRINKLER = s);
+	// MOD-923 — the hive attachment: a glass jar on a beehive's side or top, the apiary drones' dock. Not a full
+	// cube, so noOcclusion (R-PHY-05); a piston pops it like a torch, since it only makes sense against its hive;
+	// scheduled ticks only (the drain's self-restore), never random ones.
+	public static final BlockDef<HiveAttachmentBlock> HIVE_ATTACHMENT = block("hive_attachment",
+			HiveAttachmentBlock::new,
+			machine(p -> LineBlockProps.popsOnPush(p).strength(2.0f, 3.0f).sound(SoundType.GLASS).noOcclusion()),
+			s -> ModContent.HIVE_ATTACHMENT = s);
+	// MOD-923 — the apiary station: the casing below (a full machine block, every face a port) and the hive above (the
+	// four drone pads inside the block, no block entity, not a full cube, so noOcclusion — R-PHY-05). A piston must
+	// move neither half away from the other, so both are pinned.
+	public static final BlockDef<ApiaryDroneStationBlock> APIARY_DRONE_STATION = block("apiary_drone_station",
+			ApiaryDroneStationBlock::new,
+			machine(p -> LineBlockProps.pinnedAgainstPistons(p).strength(3.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.APIARY_DRONE_STATION = s);
+	public static final BlockDef<ApiaryDroneHiveBlock> APIARY_DRONE_HIVE = block("apiary_drone_hive",
+			ApiaryDroneHiveBlock::new,
+			machine(p -> LineBlockProps.pinnedAgainstPistons(p).strength(3.0f, 6.0f).sound(SoundType.METAL)
+					.noOcclusion()),
+			s -> ModContent.APIARY_DRONE_HIVE = s);
 
 	/** This domain's blocks, in declaration order — collected since {@code beginBlocks()} above. */
 	private static final List<BlockDef<?>> BLOCKS = endBlocks();
@@ -203,7 +230,14 @@ public final class AgricultureContent {
 			blockItem("crystal_farm_controller", s -> ModContent.CRYSTAL_FARM_CONTROLLER_ITEM = s),
 			blockItem("crystal_seedbed", s -> ModContent.CRYSTAL_SEEDBED_ITEM = s),
 			blockItem("garden_drone_station", s -> ModContent.GARDEN_DRONE_STATION_ITEM = s),
-			plain("garden_drone", s -> ModContent.GARDEN_DRONE = s));
+			plain("garden_drone", s -> ModContent.GARDEN_DRONE = s),
+			// MOD-923 — the apiary: the jar on a hive, and the map that lists the jars for a station.
+			blockItem("hive_attachment", s -> ModContent.HIVE_ATTACHMENT_ITEM = s),
+			item("apiary_map", p -> new ApiaryMapItem(p.stacksTo(1)), s -> ModContent.APIARY_MAP = s),
+			// MOD-923 — the station's two halves are two items (owner, item 15); the bumblebee drone stacks to one.
+			blockItem("apiary_drone_station", s -> ModContent.APIARY_DRONE_STATION_ITEM = s),
+			blockItem("apiary_drone_hive", s -> ModContent.APIARY_DRONE_HIVE_ITEM = s),
+			item("apiary_drone", p -> new Item(p.stacksTo(1)), s -> ModContent.APIARY_DRONE = s));
 
 	/*
 	 * Block entities named by a constant because code outside the list refers to the entry itself
@@ -227,14 +261,21 @@ public final class AgricultureContent {
 			blockEntity("crystal_farm_controller", CrystalFarmControllerBlockEntity.class,
 					CrystalFarmControllerBlockEntity::new, s -> ModContent.CRYSTAL_FARM_CONTROLLER_BE = s,
 					CRYSTAL_FARM_CONTROLLER),
-			SPRINKLER_BE);
+			SPRINKLER_BE,
+			// MOD-923: the apiary station's casing; the hive above it has no block entity.
+			blockEntity("apiary_drone_station", ApiaryDroneStationBlockEntity.class, ApiaryDroneStationBlockEntity::new,
+					s -> ModContent.APIARY_DRONE_STATION_BE = s, APIARY_DRONE_STATION));
 
 	private static final List<MenuDef<?>> MENUS = List.of(
 			menu("incubator", IncubatorMenu::new, s -> ModContent.INCUBATOR_MENU = s),
 			// MOD-525 — the sprinkler: one gauge and a container pair, the mod's smallest machine menu.
 			menu("sprinkler", SprinklerMenu::new, s -> ModContent.SPRINKLER_MENU = s),
 			menu("garden_drone_station", GardenDroneStationMenu::new,
-					s -> ModContent.GARDEN_DRONE_STATION_MENU = s));
+					s -> ModContent.GARDEN_DRONE_STATION_MENU = s),
+			// MOD-923 — the apiary map's list: no slots, read from the hand.
+			menu("apiary_map", ApiaryMapMenu::new, s -> ModContent.APIARY_MAP_MENU = s),
+			// MOD-923 — the apiary station: map, four bays, combs, the tank and the map's rows.
+			menu("apiary_drone_station", ApiaryDroneStationMenu::new, s -> ModContent.APIARY_DRONE_STATION_MENU = s));
 
 	/** Everything this domain declares; {@link dev.alaindustrial.registry.ContentManifest#DOMAINS} joins it in. */
 	public static final Domain DOMAIN = new Domain("Agriculture", BLOCKS, ITEMS, BLOCK_ENTITIES, MENUS);
@@ -259,6 +300,12 @@ public final class AgricultureContent {
 		// MOD-525: the sprinkler belongs with the farm blocks, not with the machines — it takes
 		// no cable and its whole job is the plot around it.
 		show(out, ModContent.SPRINKLER_ITEM);
+		// MOD-923 — the apiary: the jar for a hive and the map that lists the jars, after the garden drone.
+		show(out, ModContent.HIVE_ATTACHMENT_ITEM);
+		show(out, ModContent.APIARY_MAP);
+		show(out, ModContent.APIARY_DRONE_STATION_ITEM);
+		show(out, ModContent.APIARY_DRONE_HIVE_ITEM);
+		show(out, ModContent.APIARY_DRONE);
 	}
 
 	/**

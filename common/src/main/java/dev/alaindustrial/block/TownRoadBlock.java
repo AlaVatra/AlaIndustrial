@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.TownRoadBlockEntity;
 import dev.alaindustrial.core.energy.NetworkManager;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
@@ -238,9 +239,8 @@ public class TownRoadBlock extends AbstractMachineBlock implements HasMachineToo
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.town_road.purpose",
-						MachineTooltipSpec.Tone.GRAY)),
-				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.town_road.wire", MachineTooltipSpec.Tone.GRAY)));
+				List.of(),
+				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.town_road.wire", TooltipRole.INFO)));
 	}
 
 	/** Its lines are whole sentences: broken to the width of a vanilla description (R4-3). */

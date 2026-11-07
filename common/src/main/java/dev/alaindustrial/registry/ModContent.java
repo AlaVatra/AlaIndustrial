@@ -69,7 +69,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -241,6 +240,9 @@ public final class ModContent {
 	/** Honey Centrifuge (MOD-924) — spins combs, bottles and honey blocks into liquid honey. */
 	public static Supplier<Block> HONEY_CENTRIFUGE = unbound("HONEY_CENTRIFUGE");
 	public static Supplier<Block> SPRINKLER = unbound("SPRINKLER");
+	public static Supplier<Block> HIVE_ATTACHMENT = unbound("HIVE_ATTACHMENT");
+	public static Supplier<Block> APIARY_DRONE_STATION = unbound("APIARY_DRONE_STATION");
+	public static Supplier<Block> APIARY_DRONE_HIVE = unbound("APIARY_DRONE_HIVE");
 	/** Thermal Centrifuge (MOD-424) — redstone-started, heated from below; doubles a dust a second time. */
 	public static Supplier<Block> THERMAL_CENTRIFUGE = unbound("THERMAL_CENTRIFUGE");
 
@@ -743,6 +745,8 @@ public final class ModContent {
 	public static Supplier<Item> ELECTRIC_SABER = unbound("ELECTRIC_SABER");
 	// Electric Bow (MOD-363) — the line's ranged weapon: EU per shot, degrades to a plain bow when flat.
 	public static Supplier<Item> ELECTRIC_BOW = unbound("ELECTRIC_BOW");
+	// Slingshot (MOD-871) — a wooden first-tier weapon that fires torches, which land as placed torches.
+	public static Supplier<Item> SLINGSHOT = unbound("SLINGSHOT");
 	// Electromagnet (MOD-132) — EU item in any inventory slot that draws loose drops toward the carrier.
 	public static Supplier<Item> ELECTROMAGNET = unbound("ELECTROMAGNET");
 	public static Supplier<Item> ELECTROMAGNET_ADVANCED = unbound("ELECTROMAGNET_ADVANCED");
@@ -925,11 +929,6 @@ public final class ModContent {
 	public static Supplier<Item> INSULATED_LEGGINGS = unbound("INSULATED_LEGGINGS");
 	public static Supplier<Item> INSULATED_BOOTS = unbound("INSULATED_BOOTS");
 
-	// --- Entity types ---
-	// Stock Display Frame (MOD-066) — the mod's first entity: an ItemFrame subclass that counts the
-	// container behind it. See docs/blocks/utility/stock_display_frame.md.
-	public static Supplier<EntityType<?>> STOCK_DISPLAY_FRAME = unbound("STOCK_DISPLAY_FRAME");
-
 	// --- Block items ---
 	public static Supplier<BlockItem> GENERATOR_ITEM = unbound("GENERATOR_ITEM");
 	public static Supplier<BlockItem> GEOTHERMAL_GENERATOR_ITEM = unbound("GEOTHERMAL_GENERATOR_ITEM");
@@ -1056,6 +1055,11 @@ public final class ModContent {
 	public static Supplier<BlockItem> GARDEN_DRONE_STATION_ITEM = unbound("GARDEN_DRONE_STATION_ITEM");
 	/** The drone itself — an item that lives in the station's dock slot (MOD-277). */
 	public static Supplier<Item> GARDEN_DRONE = unbound("GARDEN_DRONE");
+	public static Supplier<BlockItem> HIVE_ATTACHMENT_ITEM = unbound("HIVE_ATTACHMENT_ITEM");
+	public static Supplier<Item> APIARY_MAP = unbound("APIARY_MAP");
+	public static Supplier<BlockItem> APIARY_DRONE_STATION_ITEM = unbound("APIARY_DRONE_STATION_ITEM");
+	public static Supplier<BlockItem> APIARY_DRONE_HIVE_ITEM = unbound("APIARY_DRONE_HIVE_ITEM");
+	public static Supplier<Item> APIARY_DRONE = unbound("APIARY_DRONE");
 	public static Supplier<BlockItem> FLUID_TANK_ITEM = unbound("FLUID_TANK_ITEM");
 	public static Supplier<BlockItem> FLUID_TANK_ADVANCED_ITEM = unbound("FLUID_TANK_ADVANCED_ITEM");
 	public static Supplier<BlockItem> TIN_ORE_ITEM = unbound("TIN_ORE_ITEM");
@@ -1279,6 +1283,7 @@ public final class ModContent {
 	public static Supplier<BlockEntityType<?>> INCUBATOR_BE = unbound("INCUBATOR_BE");
 	public static Supplier<BlockEntityType<?>> PUMP_BE = unbound("PUMP_BE");
 	public static Supplier<BlockEntityType<?>> GARDEN_DRONE_STATION_BE = unbound("GARDEN_DRONE_STATION_BE");
+	public static Supplier<BlockEntityType<?>> APIARY_DRONE_STATION_BE = unbound("APIARY_DRONE_STATION_BE");
 	public static Supplier<BlockEntityType<?>> FLUID_TANK_BE = unbound("FLUID_TANK_BE");
 	public static Supplier<BlockEntityType<?>> IRON_CHEST_BE = unbound("IRON_CHEST_BE");
 	public static Supplier<BlockEntityType<?>> STORAGE_MODULE_BE = unbound("STORAGE_MODULE_BE");
@@ -1336,6 +1341,9 @@ public final class ModContent {
 	public static Supplier<MenuType<FermenterMenu>> FERMENTER_MENU = unbound("FERMENTER_MENU");
 	public static Supplier<MenuType<HoneyCentrifugeMenu>> HONEY_CENTRIFUGE_MENU = unbound("HONEY_CENTRIFUGE_MENU");
 	public static Supplier<MenuType<SprinklerMenu>> SPRINKLER_MENU = unbound("SPRINKLER_MENU");
+	public static Supplier<MenuType<dev.alaindustrial.menu.ApiaryMapMenu>> APIARY_MAP_MENU = unbound("APIARY_MAP_MENU");
+	public static Supplier<MenuType<dev.alaindustrial.menu.ApiaryDroneStationMenu>> APIARY_DRONE_STATION_MENU =
+			unbound("APIARY_DRONE_STATION_MENU");
 	/** Thermal Centrifuge readout (MOD-424): rotor spin-up gauge + the status line for its three gates. */
 	public static Supplier<MenuType<ThermalCentrifugeMenu>> THERMAL_CENTRIFUGE_MENU =
 			unbound("THERMAL_CENTRIFUGE_MENU");

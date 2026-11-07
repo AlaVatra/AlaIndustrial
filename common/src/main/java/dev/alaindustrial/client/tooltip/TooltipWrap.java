@@ -2,9 +2,12 @@ package dev.alaindustrial.client.tooltip;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.TranslatableContents;
 
 /**
@@ -41,6 +44,62 @@ public final class TooltipWrap {
 		for (String part : balanced(text, MAX_UNITS)) {
 			out.add(Component.literal(part).setStyle(line.getStyle()));
 		}
+		return out;
+	}
+
+	/**
+	 * {@code line} as it is shown, its colours kept piece by piece (MOD-958): a style-09b line has a coloured
+	 * icon, a grey label, white values and a copper unit, and {@link #wrap} would paint all of it in the colour
+	 * of its root, the icon. Breaks where {@link #wrap} breaks; a line whose translation key the running language
+	 * does not know is left whole.
+	 */
+	public static List<Component> wrapStyled(Component line) {
+		String key = TooltipRender.lineKey(line);
+		if (key != null && !Language.getInstance().has(key)) {
+			return List.of(line);
+		}
+		List<Style> styles = new ArrayList<>();
+		StringBuilder text = new StringBuilder();
+		line.visit((style, piece) -> {
+			text.append(piece);
+			for (int i = 0; i < piece.length(); i++) {
+				styles.add(style);
+			}
+			return Optional.empty();
+		}, Style.EMPTY);
+		if (units(text) <= MAX_UNITS) {
+			return List.of(line);
+		}
+		List<Component> out = new ArrayList<>();
+		int cursor = 0;
+		for (String part : balanced(text.toString(), MAX_UNITS)) {
+			while (cursor < text.length() && text.charAt(cursor) == ' ') {
+				cursor++;
+			}
+			out.add(styledSlice(text, styles, cursor, cursor + part.length()));
+			cursor += part.length();
+		}
+		return out;
+	}
+
+	/**
+	 * The characters {@code from..to} of {@code text}, one literal per run of one style; a slice of one style is
+	 * that literal alone, exactly what {@link #wrap} makes of a one-colour line.
+	 */
+	private static Component styledSlice(CharSequence text, List<Style> styles, int from, int to) {
+		List<Component> runs = new ArrayList<>();
+		int start = from;
+		for (int i = from + 1; i <= to; i++) {
+			if (i == to || !styles.get(i).equals(styles.get(start))) {
+				runs.add(Component.literal(text.subSequence(start, i).toString()).setStyle(styles.get(start)));
+				start = i;
+			}
+		}
+		if (runs.size() == 1) {
+			return runs.get(0);
+		}
+		MutableComponent out = Component.empty();
+		runs.forEach(out::append);
 		return out;
 	}
 

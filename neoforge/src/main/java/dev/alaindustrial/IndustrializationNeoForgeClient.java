@@ -292,10 +292,7 @@ public final class IndustrializationNeoForgeClient {
 	 * <p>Verified pattern (neoforge 26.2.0.67): {@code event.registerBlockEntityRenderer(type,
 	 * factory)} where {@code factory} is a {@code BlockEntityRendererProvider<T, S>}. The pair stays typed
 	 * end to end through {@code RendererRegistrar}, so no cast is involved.
-	 *
-	 * <p>The entity renderer below stays here: its type handle is loader-specific
-	 * ({@code ModEntitiesNeoForge}) and the neutral {@code ModContent} slot is a wildcard, so there is
-	 * nothing typed to share for one registration.
+	 * The entity renderers follow, replayed the same way from {@code MOB_RENDERERS} and {@code ENTITY_RENDERERS}.
 	 */
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		ClientContentManifest.RendererRegistrar registrar = new ClientContentManifest.RendererRegistrar() {
@@ -314,33 +311,20 @@ public final class IndustrializationNeoForgeClient {
 				: ClientContentManifest.BLOCK_ENTITY_RENDERERS) {
 			def.bindTo(registrar);
 		}
-		// Stock Display Frame (MOD-066): the mod's first entity renderer — NeoForge counterpart to
-		// the Fabric EntityRenderers.register call in IndustrializationClient.
-		event.registerEntityRenderer(
-				dev.alaindustrial.registry.neoforge.ModEntitiesNeoForge.STOCK_DISPLAY_FRAME.get(),
-				dev.alaindustrial.client.render.StockDisplayFrameRenderer::new);
-		// The quarry's drill body (MOD-952) is invisible: the controller draws the drill.
-		event.registerEntityRenderer(
-				dev.alaindustrial.registry.neoforge.ModEntitiesNeoForge.QUARRY_DRILL_BODY.get(),
-				net.minecraft.client.renderer.entity.NoopRenderer::new);
-		// Chest boats (MOD-785) — counterpart to the Fabric registration in IndustrializationClient.
-		for (dev.alaindustrial.entity.ChestBoatVariants.Variant variant
-				: dev.alaindustrial.entity.ChestBoatVariants.ALL) {
-			event.registerEntityRenderer(
-					dev.alaindustrial.registry.neoforge.ModEntitiesNeoForge.CHEST_BOATS.get(variant.id()).get(),
-					context -> dev.alaindustrial.client.render.ModChestBoatRenderer.create(context, variant));
-		}
-		// The mobs (MOD-767), replayed from the shared ClientContentManifest.MOB_RENDERERS.
-		ClientContentManifest.EntityRendererRegistrar mobs = new ClientContentManifest.EntityRendererRegistrar() {
+		// The mobs (MOD-767) and the other entities (MOD-959), replayed from the shared ClientContentManifest.
+		ClientContentManifest.EntityRendererRegistrar entities = new ClientContentManifest.EntityRendererRegistrar() {
 			@Override
 			public <T extends net.minecraft.world.entity.Entity> void register(
-					net.minecraft.world.entity.EntityType<T> type,
+					net.minecraft.world.entity.EntityType<? extends T> type,
 					net.minecraft.client.renderer.entity.EntityRendererProvider<T> provider) {
 				event.registerEntityRenderer(type, provider);
 			}
 		};
 		for (ClientContentManifest.MobRendererDef<?> def : ClientContentManifest.MOB_RENDERERS) {
-			def.bindTo(mobs);
+			def.bindTo(entities);
+		}
+		for (ClientContentManifest.EntityRendererDef<?> def : ClientContentManifest.ENTITY_RENDERERS) {
+			def.bindTo(entities);
 		}
 	}
 

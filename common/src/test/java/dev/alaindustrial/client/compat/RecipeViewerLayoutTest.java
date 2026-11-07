@@ -45,4 +45,17 @@ class RecipeViewerLayoutTest {
 		assertEquals("400 EU · 10 s",
 				RecipeViewerLayout.withChance(RecipeViewerLayout.costLabel(400, 200), -1.0));
 	}
+
+	/** MOD-960: the bonus-slot tooltip states a gamble only, and never shows a real chance as 0 or 100. */
+	@Test
+	void secondaryChanceIsStatedOnlyBelowOneAndNeverRoundedToCertainty() {
+		org.junit.jupiter.api.Assertions.assertFalse(RecipeViewerLayout.showsSecondaryChance(1.0));
+		org.junit.jupiter.api.Assertions.assertTrue(RecipeViewerLayout.showsSecondaryChance(0.25));
+		assertEquals("25", RecipeViewerLayout.secondaryChancePercent(0.25));
+		assertEquals("1", RecipeViewerLayout.secondaryChancePercent(0.01));
+		assertEquals("99", RecipeViewerLayout.secondaryChancePercent(0.999));
+		assertEquals("0.5", RecipeViewerLayout.secondaryChancePercent(0.005));
+		assertEquals("0.01", RecipeViewerLayout.secondaryChancePercent(0.0001));
+		assertEquals("0", RecipeViewerLayout.secondaryChancePercent(0.0));
+	}
 }

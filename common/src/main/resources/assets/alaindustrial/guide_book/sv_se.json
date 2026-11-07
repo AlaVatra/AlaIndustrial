@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "Kupa-tillsats",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Kupa-tillsats",
+              "text": "En passiv glasburk för sidan eller toppen av en vanlig bikupa eller ett bibo — den visar kupans honungsnivå och är biodlardrönarens dockningsplats."
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Formad tillverkning",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "Spridare",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "Biodlarstation",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Biodlarstation",
+              "text": "En två block hög LV-station för fyra biodlardrönare — de besöker kuporna vars tillsatser står på bigårdskartan inom 15 block, tar honungen ur fulla kupor utan att störa bina och häller den i stationens tank."
+            },
+            {
+              "type": "stats",
+              "title": "Statistik",
+              "lines": [
+                "Energi: 160 EU + 4 EU per block",
+                "Buffert: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Formad tillverkning",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "Jodtabletter",
               "text": "Strålningsskydd i förväg: en tablett halverar i 5 minuter hur snabbt dosen byggs upp. Tar inte bort en dos du redan har. Görs av kelpaska via galvaniska badet och kompressorn."
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "Bigårdskarta",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Bigårdskarta",
+              "text": "En lista för upp till åtta kupa-tillsatser — högerklicka på en tillsats för att skriva upp den och sätt sedan kartan i en biodlarstation så att drönarna vet vilka kupor de ska sköta."
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Formlös tillverkning",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

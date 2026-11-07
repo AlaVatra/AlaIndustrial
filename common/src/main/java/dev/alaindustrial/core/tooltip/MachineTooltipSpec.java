@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
+import dev.alaindustrial.core.style.AlaPalette;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -23,13 +24,18 @@ import org.jspecify.annotations.Nullable;
  *   <li>{@link Shown#LABEL} — a word, not a number (a tier, a safety warning, a hint): shown with numbers
  *       on, and with numbers off only under [SHIFT], so the plain tooltip stays the bare hint.</li>
  * </ul>
- * Without [SHIFT] the visible {@code basic} lines are followed by the hold-[SHIFT] hint (only when [SHIFT]
- * would add a line); under it they are
- * followed by the tier line (when {@link #tier} is set) and the visible {@code detailed} lines.
+ * The visible lines are laid out by {@link TooltipLayout} (MOD-958, the owner's style "09b"): the {@code basic}
+ * lines, and under [SHIFT] the tier line (when {@link #tier} is set)
+ * and the visible {@code detailed} lines; a line with a {@link TooltipRole} goes to its role's slot (a key action
+ * waits for [SHIFT], a warning never hides). Last comes the hold-[SHIFT] hint, only when [SHIFT] would add a
+ * line, with its key white while [SHIFT] is held, and never for a player who asked for details always.
+ *
+ * <p>Every line has a {@link Line#role} and is drawn in style 09b: the role's icon, a grey label, white values and
+ * a copper unit ({@link Line#unit}); the client's {@code TooltipRender} is the one place a role becomes a colour.
  *
  * <p>Minecraft-free on purpose: the arguments are live suppliers (the block passes {@code ServerBalance}
- * reads, so a dedicated server's balance is what the player reads), the colours are {@link Tone}s the client
- * maps to chat formatting. That keeps the mode rules above on the L1 lane ({@code MachineTooltipSpecTest}).
+ * reads, so a dedicated server's balance is what the player reads), the colours are roles. That keeps the mode
+ * rules above on the L1 lane ({@code MachineTooltipSpecTest}).
  *
  * @param tier     the tier line shown after the basic lines under [SHIFT], or null for a block that names its
  *                 tier elsewhere (in its basic lines) or takes no EU at all
@@ -49,42 +55,49 @@ public record MachineTooltipSpec(@Nullable Tier tier, List<Line> basic, List<Lin
 		detailed = List.copyOf(detailed);
 	}
 
-	/** Colour of a line; the client maps each to the chat formatting of the same name. */
-	public enum Tone {
-		GRAY, DARK_GRAY, GREEN, RED, LIGHT_PURPLE, AQUA
-	}
-
 	/** When a line is visible — see the class javadoc. */
 	public enum Shown {
 		NUMBERS, ALWAYS, LABEL
 	}
 
-	/** Voltage class of the tier line; key and colour are those every tooltip of the mod has always used. */
+	/**
+	 * Voltage class of the tier line: {@code "<icon> Tier LV"}, the label grey and the class name and the icon in
+	 * the tier's colour (LV and MV green, HV purple, as every tooltip of the mod has always shown them). The line's
+	 * one argument is the tier itself, which the client writes as its name in that colour.
+	 */
 	public enum Tier {
-		LV("tooltip.alaindustrial.tier_lv", Tone.GREEN),
-		MV("tooltip.alaindustrial.tier_mv", Tone.GREEN),
-		HV("tooltip.alaindustrial.tier_hv", Tone.LIGHT_PURPLE);
+		LV("tooltip.alaindustrial.tier_lv", AlaPalette.GOOD),
+		MV("tooltip.alaindustrial.tier_mv", AlaPalette.GOOD),
+		HV("tooltip.alaindustrial.tier_hv", AlaPalette.TIER_HV);
 
 		private final String key;
-		private final Tone tone;
+		private final int rgb;
 
-		Tier(String key, Tone tone) {
+		Tier(String key, int rgb) {
 			this.key = key;
-			this.tone = tone;
+			this.rgb = rgb;
+		}
+
+		/** The tier's colour, {@code 0xRRGGBB}: its icon and its name on the tier line. */
+		public int rgb() {
+			return rgb;
 		}
 
 		/** The tier line itself, as {@link #lines} places it. */
 		public Line line() {
-			return new Line(key, List.of(), tone, Shown.LABEL, null);
+			return new Line(key, List.of(() -> this), Shown.LABEL, null, TooltipRole.TIER, null);
 		}
 	}
 
 	/**
-	 * One tooltip line: a full translation key with its live arguments, its colour and when it shows. With a
-	 * {@code label} the line reads {@code <label> — <key(args)>} (the incubator's per-mode durations): the
-	 * label is the coloured root and the stat its uncoloured sibling.
+	 * One tooltip line in style 09b (MOD-958): a full translation key with its live arguments, when it shows, and
+	 * its role — the icon in the role's colour, the key's text grey, each argument white (a number grouped, a
+	 * {@link TooltipUnits.Decimal} with the language's decimal mark), and the {@code unit} key, when set, as a
+	 * copper word at the end. With a {@code label} the line reads {@code <icon> <label> <value> <unit>} (the
+	 * incubator's per-mode durations).
 	 */
-	public record Line(String key, List<Supplier<?>> args, Tone tone, Shown shown, @Nullable String label) {
+	public record Line(String key, List<Supplier<?>> args, Shown shown, @Nullable String label, TooltipRole role,
+			@Nullable String unit) {
 		public Line {
 			args = List.copyOf(args);
 		}
@@ -99,47 +112,85 @@ public record MachineTooltipSpec(@Nullable Tier tier, List<Line> basic, List<Lin
 		}
 	}
 
-	/** A grey numeric line {@code tooltip.alaindustrial.<key>(value)}, hidden with EU numbers off. */
+	/**
+	 * A numeric line {@code tooltip.alaindustrial.<key>(value)}, hidden with EU numbers off. A key of
+	 * {@link StatStyles} takes its role and unit from there (MOD-958); any other is an info line.
+	 */
 	public static Line stat(String key, IntSupplier value) {
-		return new Line(STAT_PREFIX + key, List.of(value::getAsInt), Tone.GRAY, Shown.NUMBERS, null);
+		return styled(key, value::getAsInt, Shown.NUMBERS, null);
 	}
 
 	/**
-	 * A grey numeric line whose argument is not an {@code int}: a {@code long} buffer, or a figure already
+	 * A numeric line whose argument is not an {@code int}: a {@code long} buffer, or a figure already
 	 * formatted as text (a percentage). The value keeps its own type, as the chat component receives it.
 	 */
 	public static Line statValue(String key, Supplier<?> value) {
-		return new Line(STAT_PREFIX + key, List.of(value), Tone.GRAY, Shown.NUMBERS, null);
+		return styled(key, value, Shown.NUMBERS, null);
 	}
 
-	/** A grey line with two arguments, hidden with EU numbers off. */
+	private static Line styled(String key, Supplier<?> value, Shown shown, @Nullable String label) {
+		StatStyles.Style style = StatStyles.of(key);
+		if (style == null) {
+			return new Line(STAT_PREFIX + key, List.of(value), shown, label, TooltipRole.INFO, null);
+		}
+		return new Line(STAT_PREFIX + key, List.of(() -> StatStyles.shown(style, value.get())), shown, label,
+				style.role(), style.unit());
+	}
+
+	/** A line with two arguments, hidden with EU numbers off; its role from {@link StatStyles}, else info. */
 	public static Line stat(String key, Supplier<?> first, Supplier<?> second) {
-		return new Line(STAT_PREFIX + key, List.of(first, second), Tone.GRAY, Shown.NUMBERS, null);
+		StatStyles.Style style = StatStyles.of(key);
+		return new Line(STAT_PREFIX + key, List.of(first, second), Shown.NUMBERS, null,
+				style == null ? TooltipRole.INFO : style.role(), style == null ? null : style.unit());
 	}
 
 	/** A grey line that is not an energy figure (a tank size, a range): shown in every mode. */
 	public static Line plain(String key, IntSupplier value) {
-		return new Line(STAT_PREFIX + key, List.of(value::getAsInt), Tone.GRAY, Shown.ALWAYS, null);
+		return styled(key, value::getAsInt, Shown.ALWAYS, null);
 	}
 
-	/** A line of words with no argument, shown like a tier line ({@link Shown#LABEL}). */
-	public static Line text(String fullKey, Tone tone) {
-		return new Line(fullKey, List.of(), tone, Shown.LABEL, null);
+	/** A line of words with no argument in {@code role}, shown like a tier line ({@link Shown#LABEL}). */
+	public static Line text(String fullKey, TooltipRole role) {
+		return new Line(fullKey, List.of(), Shown.LABEL, null, role, null);
 	}
 
-	/** A line of words with no argument shown in every mode ({@link Shown#ALWAYS}). */
-	public static Line note(String fullKey, Tone tone) {
-		return new Line(fullKey, List.of(), tone, Shown.ALWAYS, null);
-	}
-
-	/** {@code <labelKey> — tooltip.alaindustrial.<key>(value)} in grey, hidden with EU numbers off. */
-	public static Line labelled(String labelKey, String key, IntSupplier value) {
-		return new Line(STAT_PREFIX + key, List.of(value::getAsInt), Tone.GRAY, Shown.NUMBERS, labelKey);
+	/** A line of words with no argument in {@code role}, shown in every mode ({@link Shown#ALWAYS}). */
+	public static Line note(String fullKey, TooltipRole role) {
+		return new Line(fullKey, List.of(), Shown.ALWAYS, null, role, null);
 	}
 
 	/**
-	 * The standard processing machine (LV): draw and duration without [SHIFT]; buffer and the energy of one
-	 * operation under it. The per-operation figure is {@code euPerTick * duration}, computed live.
+	 * A figure in style 09b (MOD-958): {@code <icon> <key(value)> <unit>}, hidden with EU numbers off.
+	 *
+	 * @param fullKey the label's translation key, its one argument the value
+	 * @param unitKey the unit's key ({@link TooltipUnits}), or null for a value that carries its own
+	 */
+	public static Line stat(TooltipRole role, String fullKey, @Nullable String unitKey, Supplier<?> value) {
+		return new Line(fullKey, List.of(value), Shown.NUMBERS, null, role, unitKey);
+	}
+
+	/** {@link #stat(TooltipRole, String, String, Supplier)} for a figure that is not an energy one: every mode. */
+	public static Line fact(TooltipRole role, String fullKey, @Nullable String unitKey, Supplier<?> value) {
+		return new Line(fullKey, List.of(value), Shown.ALWAYS, null, role, unitKey);
+	}
+
+	/** A key action in style 09b ("Right-click: open the machine"): waits for [SHIFT] like every key line. */
+	public static Line action(String fullKey) {
+		return new Line(fullKey, List.of(), Shown.ALWAYS, null, TooltipRole.KEY, null);
+	}
+
+	/**
+	 * A figure under a label of its own, hidden with EU numbers off: the incubator's per-mode durations. A key of
+	 * {@link StatStyles} takes its role and unit from there; it reads {@code <icon> <label> <value> <unit>}.
+	 */
+	public static Line labelled(String labelKey, String key, IntSupplier value) {
+		return styled(key, value::getAsInt, Shown.NUMBERS, labelKey);
+	}
+
+	/**
+	 * The standard processing machine (LV), in style 09b (MOD-958): draw and the operation's length in seconds
+	 * without [SHIFT]; buffer, the energy of one operation and the right-click under it. The per-operation figure
+	 * is {@code euPerTick * duration}, computed live.
 	 */
 	public static MachineTooltipSpec processing(IntSupplier euPerTick, IntSupplier duration, IntSupplier buffer) {
 		return processing(Tier.LV, euPerTick, duration, buffer);
@@ -150,42 +201,77 @@ public record MachineTooltipSpec(@Nullable Tier tier, List<Line> basic, List<Lin
 			IntSupplier buffer) {
 		return new MachineTooltipSpec(tier,
 				List.of(stat("energy_input", euPerTick), stat("duration_ticks", duration)),
-				List.of(stat("buffer", buffer),
-						stat("energy_per_op", () -> euPerTick.getAsInt() * duration.getAsInt())));
+				List.of(stat("buffer", buffer), stat("energy_per_op", () -> euPerTick.getAsInt() * duration.getAsInt()),
+						action(KEY_OPEN_MACHINE)));
+	}
+
+	/** Labels of the figures every machine shares (styled by {@link StatStyles}). */
+	public static final String STAT_DRAW = "tooltip.alaindustrial.energy_input";
+	public static final String STAT_OPERATION = "tooltip.alaindustrial.duration_ticks";
+	public static final String STAT_BUFFER = "tooltip.alaindustrial.buffer";
+	public static final String STAT_PER_OPERATION = "tooltip.alaindustrial.energy_per_op";
+	/** The key line of a machine with a screen. */
+	public static final String KEY_OPEN_MACHINE = "tooltip.alaindustrial.key.open_machine";
+
+	/**
+	 * The lines a player sees: {@code detailed} is [SHIFT] held, {@code numbers} is the client's
+	 * {@code showEuNumbers}. The same as {@link #lines(boolean, boolean, boolean)} for a player who has not asked
+	 * for details always.
+	 */
+	public List<Line> lines(boolean detailed, boolean numbers) {
+		return lines(detailed, false, numbers);
 	}
 
 	/**
-	 * The lines a player sees: {@code detailed} is [SHIFT] held (or the client's always-detailed option),
-	 * {@code numbers} is the client's {@code showEuNumbers}. A non-detailed list ends with the
-	 * hold-[SHIFT] hint when [SHIFT] would show more, and without it when it would not.
+	 * The lines a player sees, the hold-[SHIFT] hint last when [SHIFT] would show more (see the class javadoc).
+	 * The hint's one argument is whether [SHIFT] is held: the client writes the key white then, grey otherwise.
+	 *
+	 * @param shiftHeld      whether [SHIFT] is held
+	 * @param alwaysDetailed the client's always-detailed option: everything shows and the hint never does
+	 * @param numbers        the client's {@code showEuNumbers}
 	 */
-	public List<Line> lines(boolean detailed, boolean numbers) {
-		List<Line> out = new ArrayList<>();
-		addVisible(basic, detailed, numbers, out);
-		if (!detailed) {
-			// The hint promises more: a block that [SHIFT] would not extend shows no hint.
-			if (lines(true, numbers).size() > out.size()) {
-				out.add(new Line(HOLD_SHIFT_KEY, List.of(), Tone.DARK_GRAY, Shown.ALWAYS, null));
-			}
-			return out;
+	public List<Line> lines(boolean shiftHeld, boolean alwaysDetailed, boolean numbers) {
+		List<Line> collapsed = visible(false, numbers);
+		List<Line> expanded = visible(true, numbers);
+		List<Line> out = new ArrayList<>(shiftHeld || alwaysDetailed ? expanded : collapsed);
+		TooltipLayout.Hint hint = TooltipLayout.hint(collapsed.size(), expanded.size(), shiftHeld, alwaysDetailed);
+		if (hint != TooltipLayout.Hint.NONE) {
+			boolean held = hint == TooltipLayout.Hint.KEY_HELD;
+			out.add(new Line(HOLD_SHIFT_KEY, List.of(() -> held), Shown.ALWAYS, null, TooltipRole.HINT, null));
 		}
-		if (tier != null) {
-			out.add(tier.line());
-		}
-		addVisible(this.detailed, true, numbers, out);
 		return out;
 	}
 
-	private static void addVisible(List<Line> lines, boolean detailed, boolean numbers, List<Line> out) {
-		for (Line line : lines) {
-			boolean visible = switch (line.shown()) {
-				case NUMBERS -> numbers;
-				case ALWAYS -> true;
-				case LABEL -> numbers || detailed;
-			};
-			if (visible) {
-				out.add(line);
+	private List<Line> visible(boolean detailed, boolean numbers) {
+		List<TooltipLayout.Placed<Line>> placed = new ArrayList<>();
+		for (Line line : basic) {
+			if (isVisible(line, detailed, numbers)) {
+				placed.add(new TooltipLayout.Placed<>(line.role().defaultSlot(), line));
 			}
 		}
+		if (tier != null) {
+			placed.add(new TooltipLayout.Placed<>(TooltipLayout.Slot.TIER, tier.line()));
+		}
+		for (Line line : this.detailed) {
+			if (isVisible(line, true, numbers)) {
+				placed.add(new TooltipLayout.Placed<>(detailSlot(line), line));
+			}
+		}
+		return TooltipLayout.arrange(placed, detailed);
+	}
+
+	/** A [SHIFT] line keeps a slot of its own (a key, a module, a warning); every other one is a detail. */
+	private static TooltipLayout.Slot detailSlot(Line line) {
+		TooltipLayout.Slot slot = line.role().defaultSlot();
+		return slot.underShift() || slot == TooltipLayout.Slot.WARNING || slot == TooltipLayout.Slot.NOTE
+				? slot : TooltipLayout.Slot.DETAIL;
+	}
+
+	private static boolean isVisible(Line line, boolean detailed, boolean numbers) {
+		return switch (line.shown()) {
+			case NUMBERS -> numbers;
+			case ALWAYS -> true;
+			case LABEL -> numbers || detailed;
+		};
 	}
 }

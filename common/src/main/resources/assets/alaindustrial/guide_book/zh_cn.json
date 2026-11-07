@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "蜂箱附件",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "蜂箱附件",
+              "text": "装在原版蜂箱或蜂巢侧面或顶面的被动玻璃罐——显示蜂箱的蜂蜜量，并作为养蜂无人机的停靠口。"
+            },
+            {
+              "type": "recipe",
+              "title": "配方",
+              "recipe_type": "有序合成",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "喷灌器",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "养蜂站",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "养蜂站",
+              "text": "可容纳四架养蜂无人机的两格高 LV 站——无人机飞往 15 格内、附件已记在养蜂场地图上的蜂箱，在不惊扰蜜蜂的情况下从满蜂箱取蜜，并倒入站内储罐。"
+            },
+            {
+              "type": "stats",
+              "title": "属性",
+              "lines": [
+                "能量：160 EU + 每个方块 4 EU",
+                "缓冲：4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "配方",
+              "recipe_type": "有序合成",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "碘片",
               "text": "辐射预防：一片药在 5 分钟内让剂量累积速度减半。不会清除已有剂量。用海带灰经电镀槽和压缩机制成。"
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "养蜂场地图",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "养蜂场地图",
+              "text": "最多记录八个蜂箱附件的清单——右键附件即可记下，再把地图放进养蜂站，告诉无人机该照看哪些蜂箱。"
+            },
+            {
+              "type": "recipe",
+              "title": "配方",
+              "recipe_type": "无序合成",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

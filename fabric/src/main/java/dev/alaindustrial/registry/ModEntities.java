@@ -1,10 +1,6 @@
 package dev.alaindustrial.registry;
 
 import dev.alaindustrial.Industrialization;
-import dev.alaindustrial.entity.ChestBoatVariants;
-import dev.alaindustrial.entity.ModChestBoat;
-import dev.alaindustrial.entity.QuarryDrillBody;
-import dev.alaindustrial.entity.StockDisplayFrameEntity;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityType;
@@ -14,67 +10,25 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobCategory;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Central registration for all Industrialization entity types (Fabric, eager — same idiom as
- * {@code ModBlockEntities}/{@code ModMenus}). First entity: the Stock Display Frame (MOD-066).
- *
- * <p>Builder values mirror vanilla {@code EntityTypes.ITEM_FRAME} (verified against the decompiled
- * 26.2 source): {@code MobCategory.MISC}, {@code sized(0.5, 0.5)}, {@code eyeHeight(0)},
- * {@code clientTrackingRange(10)}, {@code updateInterval(Integer.MAX_VALUE)} — the frame never
- * moves, and dirty {@code SynchedEntityData} (the stock count) syncs immediately regardless of the
- * update interval. The count text is drawn flat on the frame face by the renderer (sign-text
- * idiom), so no NAME_TAG attachment tweaks are needed.
+ * Fabric replay of the mod's entity types (eager — same idiom as {@code ModBlockEntities}/{@code ModMenus}). Nothing
+ * here declares an entity: the non-mob types are {@link ModEntityTypes#ENTITIES} (MOD-959), built by their shared
+ * {@code EntityDef.build()}, and the mobs are {@link ModMobs#MOBS}; NeoForge's {@code ModEntitiesNeoForge} replays
+ * the same two lists in the same order.
  */
 public final class ModEntities {
 	private ModEntities() {
 	}
 
-	public static final EntityType<StockDisplayFrameEntity> STOCK_DISPLAY_FRAME = register(
-			"stock_display_frame",
-			EntityType.Builder.<StockDisplayFrameEntity>of(StockDisplayFrameEntity::new, MobCategory.MISC)
-					.noLootTable()
-					.sized(0.5F, 0.5F)
-					.eyeHeight(0.0F)
-					.clientTrackingRange(10)
-					.updateInterval(Integer.MAX_VALUE));
-
-	/**
-	 * The quarry's drill body (MOD-952): an invisible solid box the quarry moves with its drill every tick, never
-	 * saved, never summoned, sized by its synced data; updated every tick so the box follows the drawn drill.
-	 */
-	public static final EntityType<QuarryDrillBody> QUARRY_DRILL_BODY = register("quarry_drill_body",
-			EntityType.Builder.<QuarryDrillBody>of(QuarryDrillBody::new, MobCategory.MISC)
-					.noLootTable()
-					.noSummon()
-					.noSave()
-					.fireImmune()
-					.sized(1.0F, 1.0F)
-					.clientTrackingRange(10)
-					.updateInterval(1));
-
-	/**
-	 * The chest boats (MOD-785), one entity type per wood × chest pair of {@link ChestBoatVariants#ALL},
-	 * keyed by id in table order. Builder values are vanilla {@code EntityTypes.OAK_CHEST_BOAT}'s (verified
-	 * against the decompiled 26.3 source; the chest raft's are the same): size 1.375 × 0.5625, eye height
-	 * 0.5625, tracking 10.
-	 */
-	public static final Map<String, EntityType<ModChestBoat>> CHEST_BOATS = registerChestBoats();
-
-	private static Map<String, EntityType<ModChestBoat>> registerChestBoats() {
-		Map<String, EntityType<ModChestBoat>> types = new LinkedHashMap<>();
-		for (ChestBoatVariants.Variant variant : ChestBoatVariants.ALL) {
-			types.put(variant.id(), register(variant.id(),
-					EntityType.Builder.<ModChestBoat>of(variant::create, MobCategory.MISC)
-							.noLootTable()
-							.sized(1.375F, 0.5625F)
-							.eyeHeight(0.5625F)
-							.clientTrackingRange(10)));
+	// The non-mob types first, then the mobs: static initialisers run in source order, and this is the order both
+	// loaders register in.
+	static {
+		for (ModEntityTypes.EntityDef<?> def : ModEntityTypes.ENTITIES) {
+			Registry.register(BuiltInRegistries.ENTITY_TYPE, def.resourceKey(), def.build());
 		}
-		return Map.copyOf(types);
 	}
 
 	/**
@@ -109,7 +63,7 @@ public final class ModEntities {
 	private static boolean initialised;
 
 	/**
-	 * Bind the eager-registered types into the loader-neutral {@link ModContent} facade, add the mobs' spawns.
+	 * Register the types (the class load does it) and add the mobs' natural spawns.
 	 *
 	 * <p>Idempotent (MOD-840): the entrypoint calls it, and so does {@code ModItems} as a class-load trigger
 	 * before it builds the spawn eggs. {@code BiomeModifications.addSpawn} appends without deduplication, so a
@@ -120,7 +74,6 @@ public final class ModEntities {
 			return;
 		}
 		initialised = true;
-		ModContent.STOCK_DISPLAY_FRAME = () -> STOCK_DISPLAY_FRAME;
 		// Natural spawns of the mobs (MOD-767): the NeoForge counterpart is the add_spawns biome modifier JSON. A mob
 		// without one (the shift worker, MOD-832) never appears on its own.
 		for (ModMobs.MobDef<?> def : ModMobs.MOBS) {

@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_honeycomb": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:honeycomb"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_honeycomb"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "alaindustrial:apiary_map"
+    ]
+  }
+}

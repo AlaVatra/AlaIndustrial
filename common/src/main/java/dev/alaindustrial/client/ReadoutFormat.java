@@ -1,5 +1,6 @@
 package dev.alaindustrial.client;
 
+import dev.alaindustrial.core.tooltip.TooltipUnits;
 import java.util.Locale;
 
 /**
@@ -57,9 +58,12 @@ public final class ReadoutFormat {
 		return tenths == 0L ? "<0.1" : (tenths / 10L) + "." + (tenths % 10L);
 	}
 
-	/** The exact figure with thousands separators, for the tooltip behind a {@link #compact} reading. */
+	/**
+	 * The exact figure with thousands separators, for the tooltip behind a {@link #compact} reading: the one
+	 * grouping every tooltip uses (MOD-958, {@link TooltipUnits#grouped}).
+	 */
 	public static String exact(long value) {
-		return String.format(Locale.ROOT, "%,d", value).replace(',', ' ');
+		return TooltipUnits.grouped(value);
 	}
 
 	/**

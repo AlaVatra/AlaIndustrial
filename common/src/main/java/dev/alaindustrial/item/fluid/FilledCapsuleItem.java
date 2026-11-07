@@ -1,7 +1,8 @@
 package dev.alaindustrial.item.fluid;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -161,7 +162,6 @@ public class FilledCapsuleItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		adder.accept(Component.translatable("item.alaindustrial.filled_vacuum_capsule.amount")
-				.withStyle(ChatFormatting.GRAY));
+		new ItemTooltip().stat(TooltipRole.FLUID, "item.alaindustrial.filled_vacuum_capsule.amount", null).emit(adder);
 	}
 }

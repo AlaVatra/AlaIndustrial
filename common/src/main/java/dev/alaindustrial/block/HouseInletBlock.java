@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.HouseInletBlockEntity;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
@@ -98,10 +99,9 @@ public class HouseInletBlock extends HorizontalMachineBlock implements HasMachin
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.house_inlet.purpose",
-						MachineTooltipSpec.Tone.GRAY)),
+				List.of(),
 				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.house_inlet.outer_face",
-								MachineTooltipSpec.Tone.GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.statValue("buffer", () -> HouseInletBlockEntity.BUFFER)));
 	}
 

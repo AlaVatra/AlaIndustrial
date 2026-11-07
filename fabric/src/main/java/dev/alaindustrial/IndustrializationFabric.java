@@ -122,6 +122,8 @@ public class IndustrializationFabric implements ModInitializer {
 		ItemEnergyBridge.install(new FabricItemEnergyBridge());
 		// MOD-787: the fake player the block breaker breaks through, so claim mods can refuse it.
 		dev.alaindustrial.core.world.FakePlayers.install(new dev.alaindustrial.core.fabric.FabricFakePlayers());
+		// MOD-871: a slingshot torch is placed by its projectile; Fabric API has no place event to ask.
+		dev.alaindustrial.core.world.PlaceEvents.install(new dev.alaindustrial.core.fabric.FabricPlaceEvents());
 		// MOD-107: install the item-fluid bridge seam, so a machine's own slots can exchange a bucket with
 		// whatever fluid container sits in them — vanilla bucket, our capsule, or another mod's cell — via
 		// FluidStorage.ITEM, without common code importing Fabric Transfer types.

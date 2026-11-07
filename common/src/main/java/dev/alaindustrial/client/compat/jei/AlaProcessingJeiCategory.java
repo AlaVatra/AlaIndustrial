@@ -91,11 +91,19 @@ final class AlaProcessingJeiCategory implements IRecipeCategory<RecipeHolder<Ala
 				.setOutputSlotBackground()
 				.add(recipe.result());
 		// MOD-537: the optional bonus output gets its own slot; the two-slot row already exists for
-		// the alloy smelter, so the geometry needs no widening.
-		recipe.secondaryResult().ifPresent(secondary -> builder
-				.addOutputSlot(RecipeViewerLayout.outputXs(2).get(1), RecipeViewerLayout.SLOT_Y)
-				.setOutputSlotBackground()
-				.add(secondary.stack()));
+		// the alloy smelter, so the geometry needs no widening. MOD-960: a bonus that is a gamble says so
+		// in the slot's tooltip, the same line REI shows.
+		recipe.secondaryResult().ifPresent(secondary -> {
+			IRecipeSlotBuilder slot = builder
+					.addOutputSlot(RecipeViewerLayout.outputXs(2).get(1), RecipeViewerLayout.SLOT_Y)
+					.setOutputSlotBackground()
+					.add(secondary.stack());
+			if (RecipeViewerLayout.showsSecondaryChance(secondary.chance())) {
+				Component line = Component.translatable(RecipeViewerLayout.SECONDARY_CHANCE_KEY,
+						RecipeViewerLayout.secondaryChancePercent(secondary.chance()));
+				slot.addRichTooltipCallback((view, tooltip) -> tooltip.add(line));
+			}
+		});
 	}
 
 	@Override

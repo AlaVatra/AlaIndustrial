@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
 import java.util.List;
@@ -176,12 +177,11 @@ public class ReactorAlarmLampBlock extends Block implements HasMachineTooltip {
 	@Override
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(null,
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.reactor_alarm_lamp.purpose",
-						MachineTooltipSpec.Tone.GRAY)),
+				List.of(),
 				List.of(MachineTooltipSpec.text("tooltip.alaindustrial.reactor_alarm_lamp.reactor",
-								MachineTooltipSpec.Tone.GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.text("tooltip.alaindustrial.reactor_alarm_lamp.antenna",
-								MachineTooltipSpec.Tone.GRAY)));
+								TooltipRole.INFO)));
 	}
 
 	@Override

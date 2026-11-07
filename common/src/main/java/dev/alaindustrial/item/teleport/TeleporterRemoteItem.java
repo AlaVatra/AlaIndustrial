@@ -1,5 +1,6 @@
 package dev.alaindustrial.item.teleport;
 
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.block.entity.TeleporterBlockEntity;
 import dev.alaindustrial.menu.TeleporterRemoteMenu;
 import dev.alaindustrial.registry.ModDataComponents;
@@ -140,13 +141,13 @@ public class TeleporterRemoteItem extends Item {
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
 		TeleportPoints points = stack.getOrDefault(ModDataComponents.TELEPORTER_POINTS.get(), TeleportPoints.EMPTY);
+		ItemTooltip tooltip = new ItemTooltip();
 		if (points.isEmpty()) {
-			adder.accept(Component.translatable("tooltip.alaindustrial.teleporter_remote.unbound")
-					.withStyle(ChatFormatting.GRAY));
-			return;
+			tooltip.off("tooltip.alaindustrial.teleporter_remote.unbound");
+		} else {
+			tooltip.info("tooltip.alaindustrial.teleporter_remote.count", points.size());
 		}
-		adder.accept(Component.translatable("tooltip.alaindustrial.teleporter_remote.count", points.size())
-				.withStyle(ChatFormatting.GRAY));
+		tooltip.emit(adder);
 	}
 
 	/**

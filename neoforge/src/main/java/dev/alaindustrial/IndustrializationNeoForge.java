@@ -113,8 +113,9 @@ public final class IndustrializationNeoForge {
 		// MOD-084: install the item-energy bridge seam, so the worn Energy Pack can charge other mods'
 		// powered items through Capabilities.Energy.ITEM without common code importing NeoForge types.
 		ItemEnergyBridge.install(new dev.alaindustrial.core.neoforge.NeoForgeItemEnergyBridge());
-		// MOD-787: the fake player the block breaker breaks through, so claim mods can refuse it.
+		// MOD-787, MOD-871: the breaker's fake player and a slingshot torch's place event, so claim mods can refuse.
 		dev.alaindustrial.core.world.FakePlayers.install(new dev.alaindustrial.core.neoforge.NeoForgeFakePlayers());
+		dev.alaindustrial.core.world.PlaceEvents.install(new dev.alaindustrial.core.neoforge.NeoForgePlaceEvents());
 		// MOD-107: install the item-fluid bridge seam, so a machine's own slots can exchange a bucket with
 		// whatever fluid container sits in them — vanilla bucket, our capsule, or another mod's cell — via
 		// Capabilities.Fluid.ITEM, without common code importing NeoForge transfer types.
@@ -209,7 +210,6 @@ public final class IndustrializationNeoForge {
 		// fire, is intentional (see ModContent). Must run after .register(modBus) above.
 		dev.alaindustrial.registry.neoforge.ModFluidsNeoForge.init();
 		ModBlocksNeoForge.init();
-		dev.alaindustrial.registry.neoforge.ModEntitiesNeoForge.init();
 		ModItemsNeoForge.init();
 		ModBlockEntitiesNeoForge.init();
 		ModMenusNeoForge.init();

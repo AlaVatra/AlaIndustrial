@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.MobWheelBlockEntity;
 import dev.alaindustrial.core.tooltip.HasMachineTooltip;
 import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
@@ -186,9 +187,9 @@ public class MobWheelControllerBlock extends HorizontalMachineBlock implements H
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
 				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.mob_wheel_no_buffer",
-								MachineTooltipSpec.Tone.DARK_GRAY),
+								TooltipRole.INFO),
 						MachineTooltipSpec.note("tooltip.alaindustrial.mob_wheel_recolour",
-								MachineTooltipSpec.Tone.DARK_GRAY)),
+								TooltipRole.INFO)),
 				List.of());
 	}
 }

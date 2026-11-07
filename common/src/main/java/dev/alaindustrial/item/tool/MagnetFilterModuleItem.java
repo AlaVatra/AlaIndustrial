@@ -1,7 +1,8 @@
 package dev.alaindustrial.item.tool;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,15 +27,14 @@ public class MagnetFilterModuleItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
+		// Style 09b (MOD-958): what it is for is its purpose line; then the filter's settings and where it goes.
 		String base = getDescriptionId();
-		adder.accept(Component.translatable(base + ".flavor").withStyle(ChatFormatting.GRAY));
 		MagnetFilter filter = MagnetFilter.of(stack);
-		adder.accept(Component.translatable(filter.allowList() ? base + ".mode_allow" : base + ".mode_deny")
-				.withStyle(ChatFormatting.DARK_AQUA));
-		adder.accept(Component.translatable(base + ".match_" + filter.match().key())
-				.withStyle(ChatFormatting.DARK_AQUA));
-		adder.accept(Component.translatable(base + ".entries", filter.filled(), MagnetFilter.CELLS)
-				.withStyle(ChatFormatting.DARK_GRAY));
-		adder.accept(Component.translatable(base + ".hint").withStyle(ChatFormatting.DARK_GRAY));
+		new ItemTooltip()
+				.stat(TooltipRole.MODULE, filter.allowList() ? base + ".mode_allow" : base + ".mode_deny", null)
+				.stat(TooltipRole.MODULE, base + ".match_" + filter.match().key(), null)
+				.info(base + ".entries", filter.filled(), MagnetFilter.CELLS)
+				.key(base + ".hint")
+				.emit(adder);
 	}
 }

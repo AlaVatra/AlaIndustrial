@@ -118,6 +118,9 @@ public final class NeoForgeGameTests {
 				BonemealEventScenarios::handledByAnotherModSpendsNothing);
 		registerTest(event, "reinforced_bone_meal_event_denied", 40, true,
 				BonemealEventScenarios::deniedByAnotherModSpendsNothing);
+		// MOD-871: a slingshot torch against BlockEvent.EntityPlaceEvent, which only NeoForge has.
+		registerTest(event, "slingshot_place_event_cancelled_drops_torch", 40, true,
+				SlingshotPlaceEventScenarios::cancelledPlaceEventDropsTheTorch);
 
 		// MOD-193: the MOD-115 furnace family, which ran on Fabric only. The sided WorldlyContainer path
 		// (top=input, side=fuel, bottom=result) is exactly where this loader differed: Fabric's

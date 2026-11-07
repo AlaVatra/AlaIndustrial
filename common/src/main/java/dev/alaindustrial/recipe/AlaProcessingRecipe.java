@@ -51,9 +51,10 @@ import net.minecraft.world.level.Level;
  *                   is deterministic and ignores it.
  * @param secondaryResult optional second item output (MOD-537): a bonus stack the operation drops
  *                   alongside {@link #result}, e.g. macerator grit. Absent means "no secondary".
- *                   The single-output-slot machines merge it into the SAME slot as the primary, so
- *                   a shipped secondary must stack with the primary result — the schema allows any
- *                   item and the machine stalls with OUTPUT_BLOCKED on a non-stacking one.
+ *                   Only the single-output-slot machines pay it: one that stacks with the primary
+ *                   merges into the same slot, any other item is ejected on top of the machine, and
+ *                   its {@link SecondaryOutput#chance} is rolled on completion by {@link SecondaryChance}
+ *                   (MOD-960).
  */
 public record AlaProcessingRecipe(ModRecipes.Kind kind, List<Ingredient> ingredients, List<Integer> inputCounts,
 		ItemStackTemplate result, int energy, double chance, Optional<SecondaryOutput> secondaryResult)

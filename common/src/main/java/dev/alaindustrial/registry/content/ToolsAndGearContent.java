@@ -36,6 +36,7 @@ import dev.alaindustrial.item.tool.MagnetItem;
 import dev.alaindustrial.item.tool.MagnetTier;
 import dev.alaindustrial.item.tool.NetworkAnalyzerItem;
 import dev.alaindustrial.item.tool.ScytheTiers;
+import dev.alaindustrial.item.tool.SlingshotItem;
 import dev.alaindustrial.item.tool.WindGaugeItem;
 import dev.alaindustrial.item.tool.WrenchItem;
 import dev.alaindustrial.item.wearable.EnergyPackItem;
@@ -254,6 +255,9 @@ public final class ToolsAndGearContent {
 			scythe(ScytheTiers.TEMPERED_IRON, s -> ModContent.SCYTHE_TEMPERED_IRON = s),
 			scythe(ScytheTiers.DIAMOND, s -> ModContent.SCYTHE_DIAMOND = s),
 			scythe(ScytheTiers.NETHERITE, s -> ModContent.SCYTHE_NETHERITE = s),
+			// Slingshot (MOD-871): a wooden first-tier weapon that fires torches, which land as placed torches.
+			item("slingshot", p -> new SlingshotItem(SlingshotItem.slingshotProperties(p)),
+					s -> ModContent.SLINGSHOT = s),
 			// Forge Hammer (MOD-078): pre-machine hand tool — ingot + hammer on the grid → plate; the hammer
 			// stays and loses 1 durability per plate. The craft-remainder hook has a different signature on
 			// each loader, so the CLASS is loader-supplied (HammerItemFabric / HammerItemNeoForge) while the
@@ -284,6 +288,8 @@ public final class ToolsAndGearContent {
 		show(out, ModContent.GEIGER_COUNTER);
 		show(out, ModContent.TELEPORTER_REMOTE);
 		show(out, ModContent.GUIDE_BOOK);
+		// MOD-871 — the torch slingshot: no charge, so it sits with the hand tools.
+		show(out, ModContent.SLINGSHOT);
 	}
 
 	/** 7b - powered gear: the electric tools, then what carries charge for them. */

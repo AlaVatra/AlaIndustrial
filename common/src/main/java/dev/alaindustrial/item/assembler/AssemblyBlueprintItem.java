@@ -1,9 +1,10 @@
 package dev.alaindustrial.item.assembler;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.registry.ModDataComponents;
 import net.minecraft.core.component.DataComponents;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -136,24 +137,21 @@ public class AssemblyBlueprintItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
+		ItemTooltip tooltip = new ItemTooltip();
 		if (!isRecorded(stack)) {
-			adder.accept(Component.translatable("tooltip.alaindustrial.assembly_blueprint.blank")
-					.withStyle(ChatFormatting.GRAY));
+			tooltip.info("tooltip.alaindustrial.assembly_blueprint.blank").emit(adder);
 			return;
 		}
 		ItemStack result = resultOf(stack);
 		if (result.isEmpty()) {
-			adder.accept(Component.translatable("tooltip.alaindustrial.assembly_blueprint.recorded")
-					.withStyle(ChatFormatting.AQUA));
+			tooltip.stat(TooltipRole.MODULE, "tooltip.alaindustrial.assembly_blueprint.recorded", null);
 		} else {
-			adder.accept(Component.translatable("tooltip.alaindustrial.assembly_blueprint.result",
-					result.getHoverName(), result.getCount()).withStyle(ChatFormatting.AQUA));
+			tooltip.stat(TooltipRole.MODULE, "tooltip.alaindustrial.assembly_blueprint.result", null,
+					result.getHoverName(), result.getCount());
 		}
-		// Only when it is on: an extra grey line under every blueprint in the chest would cost more than
-		// it tells, and off is the default state anyway.
 		if (substitutes(stack)) {
-			adder.accept(Component.translatable("tooltip.alaindustrial.assembly_blueprint.substitute")
-					.withStyle(ChatFormatting.GRAY));
+			tooltip.info("tooltip.alaindustrial.assembly_blueprint.substitute");
 		}
+		tooltip.emit(adder);
 	}
 }

@@ -1,5 +1,8 @@
 package dev.alaindustrial.item.wearable;
 
+import dev.alaindustrial.core.tooltip.TooltipUnits;
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.item.ToolConfig;
 import dev.alaindustrial.item.energy.EnergyBar;
 import dev.alaindustrial.item.energy.PoweredItem;
@@ -11,7 +14,6 @@ import dev.alaindustrial.skill.SkillEnergy;
 import dev.alaindustrial.item.material.ModArmorMaterials;
 import dev.alaindustrial.registry.ModDataComponents;
 import java.util.function.Consumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
@@ -358,18 +360,21 @@ public class FluxweaveArmorItem extends Item implements PoweredItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
 			Consumer<Component> adder, TooltipFlag flag) {
-		long charge = ItemEnergy.shownGet(stack);
-		long capacity = ItemEnergy.shownCapacity(stack);
-		long percent = capacity > 0 ? charge * 100L / capacity : 0L;
-		adder.accept(Component.translatable("tooltip.alaindustrial.fluxweave.charge",
-				charge, capacity, percent + "%").withStyle(ChatFormatting.GOLD));
+		fluxweaveTooltip(stack).emit(adder);
+	}
+
+	/**
+	 * Style 09b (MOD-958): the step assist's state on the leggings, the charge {@code eu / capacity} with no
+	 * percentage. The solar helmet adds its own lines to this.
+	 */
+	protected ItemTooltip fluxweaveTooltip(ItemStack stack) {
+		ItemTooltip tooltip = new ItemTooltip();
 		if (armorType() == ArmorType.LEGGINGS) {
-			boolean on = isStepAssistEnabled(stack);
-			adder.accept(Component.translatable(on
-					? "tooltip.alaindustrial.fluxweave.step_assist_on"
-					: "tooltip.alaindustrial.fluxweave.step_assist_off")
-					.withStyle(on ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+			tooltip.state(isStepAssistEnabled(stack), "tooltip.alaindustrial.fluxweave.step_assist_on",
+					"tooltip.alaindustrial.fluxweave.step_assist_off");
 		}
+		return tooltip.stat(TooltipRole.ENERGY, ItemTooltip.STAT_CHARGE, TooltipUnits.EU, ItemEnergy.shownGet(stack),
+				ItemEnergy.shownCapacity(stack));
 	}
 
 	// --- item bar shows the EU charge in the LV tier colour ------------------------------------------

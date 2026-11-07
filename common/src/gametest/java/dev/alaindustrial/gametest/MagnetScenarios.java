@@ -3,6 +3,7 @@ package dev.alaindustrial.gametest;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.item.ToolConfig;
 import dev.alaindustrial.item.energy.ItemEnergy;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
 import dev.alaindustrial.item.tool.MagnetItem;
 import dev.alaindustrial.registry.ModContent;
 import dev.alaindustrial.registry.ModDataComponents;
@@ -13,11 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -365,7 +362,9 @@ public final class MagnetScenarios {
 	 * and called itself an item magnet while it collected experience — the lines were built from the
 	 * literal {@code item.alaindustrial.electromagnet.*} prefix and from {@code ToolConfig.magnetRange},
 	 * both of which belong to the BASIC grade. The keys now come from the item's own description id,
-	 * which is why this test asserts on the id rather than on any text.
+	 * which is why this test asserts on the id rather than on any text. Since MOD-958 the reach and the tariffs are
+	 * shared style labels shown under [Shift]: the scenario reads the tooltip with [Shift] held, skips the shared
+	 * labels in the id check and asserts the reach's VALUE.
 	 *
 	 * @implements TC-MAGNET-002-CON01 — the tooltip keys follow the item, not a typed-in prefix.
 	 */
@@ -373,58 +372,37 @@ public final class MagnetScenarios {
 		ItemStack advanced = new ItemStack(ModContent.ELECTROMAGNET_ADVANCED.get());
 		String base = advanced.getItem().getDescriptionId();
 
-		List<TranslatableContents> lines = tooltipLines(advanced);
+		List<TranslatableContents> lines = TooltipLines.of(advanced, true);
 		if (lines.isEmpty()) {
 			helper.fail("the advanced magnet produced no tooltip at all");
 			return;
 		}
 		for (TranslatableContents line : lines) {
-			if (!line.getKey().startsWith(base + ".")) {
+			if (!TooltipLines.isShared(line.getKey()) && !line.getKey().startsWith(base + ".")) {
 				helper.fail("the advanced magnet's tooltip borrows another item's key: " + line.getKey());
 				return;
 			}
 		}
 
-		TranslatableContents desc = lines.stream()
-				.filter(line -> line.getKey().equals(base + ".desc"))
+		TranslatableContents reach = lines.stream()
+				.filter(line -> line.getKey().equals(ItemTooltip.STAT_RANGE))
 				.findFirst().orElse(null);
-		if (desc == null) {
-			helper.fail("the advanced magnet's tooltip has no description line");
+		if (reach == null) {
+			helper.fail("the advanced magnet's tooltip has no radius line under [Shift]");
 			return;
 		}
-		Object shown = desc.getArgs().length > 0 ? desc.getArgs()[0] : null;
-		if (!Integer.valueOf(MagnetTier.ADVANCED.range()).equals(shown)) {
+		String shown = TooltipLines.arg(reach, 0);
+		if (!String.valueOf(MagnetTier.ADVANCED.range()).equals(shown)) {
 			helper.fail("the tooltip advertises radius " + shown + " while the magnet pulls from "
 					+ MagnetTier.ADVANCED.range());
 		}
 
 		boolean mentionsExperience = lines.stream()
-				.anyMatch(line -> line.getKey().equals(base + ".experience"));
+				.anyMatch(line -> line.getKey().equals(ItemTooltip.STAT_PER_ORB));
 		if (!mentionsExperience) {
 			helper.fail("a grade that pulls experience must say so in its tooltip");
 		}
 		helper.succeed();
-	}
-
-	/**
-	 * The item's OWN tooltip lines, as translatable contents.
-	 *
-	 * <p>{@code Item#appendHoverText} is soft-deprecated by vanilla but is the only hook that yields
-	 * what the item computes for itself — the same reasoning already written down on
-	 * {@code AssemblerScenarios#tooltipLine}.
-	 */
-	@SuppressWarnings("deprecation")
-	private static List<TranslatableContents> tooltipLines(ItemStack stack) {
-		List<Component> raw = new ArrayList<>();
-		stack.getItem().appendHoverText(stack, Item.TooltipContext.EMPTY, TooltipDisplay.DEFAULT,
-				raw::add, TooltipFlag.NORMAL);
-		List<TranslatableContents> out = new ArrayList<>();
-		for (Component line : raw) {
-			if (line.getContents() instanceof TranslatableContents translatable) {
-				out.add(translatable);
-			}
-		}
-		return out;
 	}
 
 	/**

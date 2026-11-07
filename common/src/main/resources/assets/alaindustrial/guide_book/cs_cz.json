@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "Nástavec na úl",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Nástavec na úl",
+              "text": "Pasivní skleněná sklenice na bok nebo vršek vanilkového úlu či včelího hnízda — ukazuje, kolik je v úlu medu, a slouží jako přístaviště včelařského dronu."
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Výroba podle vzoru",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "Zavlažovač",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "Včelařská stanice",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Včelařská stanice",
+              "text": "Dvoubloková LV stanice pro čtyři včelařské drony — létají k úlům, jejichž nástavce jsou zapsané na mapě včelína do 15 bloků, berou med z plných úlů, aniž by vyrušily včely, a vlévají ho do nádrže stanice."
+            },
+            {
+              "type": "stats",
+              "title": "Parametry",
+              "lines": [
+                "Energie: 160 EU + 4 EU za blok",
+                "Zásobník: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Výroba podle vzoru",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "Jodové tablety",
               "text": "Prevence záření: jedna tableta na 5 minut zpomalí nabírání dávky na polovinu. Už nabranou dávku nesníží. Vyrábí se z popele z chaluh v galvanické lázni a kompresoru."
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "Mapa včelína",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Mapa včelína",
+              "text": "Seznam až osmi nástavců na úl — pravým kliknutím na nástavec ho zapíšete, pak mapu vložte do včelařské stanice a její drony budou vědět, které úly obsluhovat."
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Výroba bez vzoru",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

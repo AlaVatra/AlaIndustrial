@@ -6,6 +6,7 @@ import dev.alaindustrial.core.energy.EnergyTier;
 import dev.alaindustrial.core.machine.MachineRates;
 import dev.alaindustrial.recipe.AlaProcessingRecipe;
 import dev.alaindustrial.recipe.ProcessingRecipeInput;
+import dev.alaindustrial.recipe.SecondaryChance;
 import dev.alaindustrial.registry.ModRecipes;
 import java.util.function.IntSupplier;
 import net.minecraft.core.BlockPos;
@@ -97,29 +98,37 @@ public abstract class AbstractProcessingMachineBlockEntity extends MachineBlockE
 	 *     plus inulin) cannot share the single slot, so it is ejected on top of the machine — hoppers
 	 *     and pipes collect it from there. A dedicated second output slot is a deliberate stage-2
 	 *     question (guayule's crumbs + resin will want it); stage 1 ships the eject path.
+	 * @param secondaryChance probability the {@code secondary} is actually paid on completion (MOD-960), rolled
+	 *     there by {@link SecondaryChance}; 1 means always. Room in the output slot is still reserved for the
+	 *     secondary on every operation, because the roll happens only once the operation completes.
 	 */
-	public record RecipeSolution(int energy, ItemStack result, ItemStack secondary, int inputCount) {
+	public record RecipeSolution(int energy, ItemStack result, ItemStack secondary, double secondaryChance,
+			int inputCount) {
 		/**
 		 * A solution consuming one item per operation — the shape of every recipe but the batch ones,
 		 * and the form the Electric Furnace's vanilla fallback builds.
 		 */
 		public RecipeSolution(int energy, ItemStack result) {
-			this(energy, result, ItemStack.EMPTY, 1);
+			this(energy, result, ItemStack.EMPTY, 1.0, 1);
 		}
 
 		/** A batch solution with no secondary output. */
 		public RecipeSolution(int energy, ItemStack result, int inputCount) {
-			this(energy, result, ItemStack.EMPTY, inputCount);
+			this(energy, result, ItemStack.EMPTY, 1.0, inputCount);
 		}
 
 		/** No recipe matched — equivalent to "nothing to do this tick". */
 		public static RecipeSolution empty() {
-			return new RecipeSolution(0, ItemStack.EMPTY, ItemStack.EMPTY, 1);
+			return new RecipeSolution(0, ItemStack.EMPTY, ItemStack.EMPTY, 1.0, 1);
 		}
 
-		/** A mod {@link AlaProcessingRecipe} matched — carries its EU cost, result stack and batch size. */
+		/**
+		 * A mod {@link AlaProcessingRecipe} matched — carries its EU cost, result stack, bonus output with its
+		 * chance, and batch size.
+		 */
 		public static RecipeSolution of(AlaProcessingRecipe recipe) {
 			return new RecipeSolution(recipe.energy(), recipe.resultStack(), recipe.secondaryResultStack(),
+					recipe.secondaryResult().map(AlaProcessingRecipe.SecondaryOutput::chance).orElse(1.0),
 					recipe.inputCount(0));
 		}
 
@@ -199,7 +208,9 @@ public abstract class AbstractProcessingMachineBlockEntity extends MachineBlockE
 					addOutput(OUTPUT_SLOT, solution.result());
 					// MOD-537: a stacking bonus merges into the same output slot; a different item cannot
 					// share the single slot, so the machine pays it out on top of itself (hopper-collectable).
-					if (!solution.secondary().isEmpty()) {
+					// MOD-960: the recipe's chance is rolled here, once per completed operation.
+					if (!solution.secondary().isEmpty()
+							&& SecondaryChance.granted(solution.secondaryChance(), level.getRandom()::nextDouble)) {
 						if (solution.secondary().getItem() == solution.result().getItem()) {
 							addOutput(OUTPUT_SLOT, solution.secondary());
 						} else {
@@ -245,8 +256,10 @@ public abstract class AbstractProcessingMachineBlockEntity extends MachineBlockE
 	/**
 	 * Whether the single output slot can absorb the primary result AND the optional secondary
 	 * (MOD-537) in one operation. A stacking secondary must fit under the slot cap together with
-	 * the primary; a NON-stacking secondary never blocks work — it is ejected on top of the machine
-	 * on completion instead of sharing the slot (see the payout site for the reasoning).
+	 * the primary, whatever its chance (MOD-960): the roll comes only at completion, so the room is held
+	 * conservatively rather than letting a lucky roll overflow the slot; a NON-stacking secondary never blocks
+	 * work — it is ejected on top of the machine on completion instead of sharing the slot (see the payout site
+	 * for the reasoning).
 	 */
 	private boolean canOutputWithSecondary(ItemStack primary, ItemStack secondary) {
 		if (!canOutput(OUTPUT_SLOT, primary)) {

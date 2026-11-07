@@ -1,5 +1,6 @@
 package dev.alaindustrial.block;
 
+import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.UpgradeTableBlockEntity;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
@@ -302,10 +303,8 @@ public class UpgradeTableBlock extends HorizontalMachineBlock implements HasMach
 	public MachineTooltipSpec machineTooltip() {
 		return new MachineTooltipSpec(MachineTooltipSpec.Tier.LV,
 				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.upgrade_table.assemble",
-						MachineTooltipSpec.Tone.GRAY)),
-				List.of(MachineTooltipSpec.note("tooltip.alaindustrial.upgrade_table.purpose",
-								MachineTooltipSpec.Tone.GRAY),
-						// What the table really runs with no overclocker in it: the same speed knob the machine
+						TooltipRole.INFO)),
+				List.of(// What the table really runs with no overclocker in it: the same speed knob the machine
 						// applies through ProcessingCycle, so a retuned server does not show the base 8 EU/t.
 						MachineTooltipSpec.stat("upgrade_table.cost",
 								() -> OverclockMath.euPerTick(ServerBalance.upgradeTableEuPerTick(),

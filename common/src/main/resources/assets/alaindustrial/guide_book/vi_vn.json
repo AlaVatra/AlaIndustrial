@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "Đầu gắn tổ ong",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Đầu gắn tổ ong",
+              "text": "Một hũ thủy tinh thụ động gắn vào cạnh hoặc mặt trên của tổ ong nuôi hay tổ ong tự nhiên vanilla — nó hiện mức mật của tổ và là chỗ neo đậu của drone nuôi ong."
+            },
+            {
+              "type": "recipe",
+              "title": "Công thức",
+              "recipe_type": "Chế tạo định hình",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "Vòi phun tưới",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "Trạm nuôi ong",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Trạm nuôi ong",
+              "text": "Trạm LV cao hai khối cho bốn drone nuôi ong — chúng bay tới những tổ có đầu gắn được ghi trên bản đồ trại ong trong phạm vi 15 khối, lấy mật từ tổ đầy mà không làm phiền đàn ong và rót vào bồn của trạm."
+            },
+            {
+              "type": "stats",
+              "title": "Thông số",
+              "lines": [
+                "Năng lượng: 160 EU + 4 EU mỗi khối",
+                "Bộ đệm: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Công thức",
+              "recipe_type": "Chế tạo định hình",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "Viên i-ốt",
               "text": "Phòng phóng xạ: một viên làm liều tích lũy chậm đi một nửa trong 5 phút. Không xóa liều đã nhiễm. Làm từ tro tảo bẹ qua bể mạ điện và máy nén."
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "Bản đồ trại ong",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Bản đồ trại ong",
+              "text": "Danh sách tối đa tám đầu gắn tổ ong — nhấp chuột phải vào một đầu gắn để ghi lại, rồi đặt bản đồ vào trạm nuôi ong để drone của trạm biết phải phục vụ những tổ nào."
+            },
+            {
+              "type": "recipe",
+              "title": "Công thức",
+              "recipe_type": "Chế tạo không định hình",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },

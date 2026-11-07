@@ -1,6 +1,10 @@
 package dev.alaindustrial.item.tool;
 
 import dev.alaindustrial.client.ServerBalance;
+import dev.alaindustrial.client.tooltip.ItemTooltip;
+import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.core.tooltip.TooltipUnits;
 import dev.alaindustrial.item.ToolConfig;
 import dev.alaindustrial.item.energy.EnergyBar;
 import dev.alaindustrial.item.energy.PoweredItem;
@@ -413,7 +417,7 @@ public class MagnetItem extends Item implements ModuleHost, PoweredItem {
 		}
 	}
 
-	// --- tooltip: short lines — a flavor line, on/off state, the EU charge, and the tariff/range ---
+	// --- tooltip, style 09b (MOD-958): purpose, on/off, charge; under [SHIFT] tier, reach, tariffs, modules, keys ---
 
 	// MOD-498 — soft-deprecated by vanilla, but still the only hook an item has for tooltip lines it
 	// computes itself: ItemStack#addDetailsToTooltip calls it, and vanilla overrides it in DiscFragmentItem,
@@ -428,29 +432,28 @@ public class MagnetItem extends Item implements ModuleHost, PoweredItem {
 		// tooltip claimed five blocks while it pulled from nine, and called itself an item magnet while
 		// it was collecting experience (MOD-580, found in play).
 		String base = getDescriptionId();
-		adder.accept(Component.translatable(base + ".flavor").withStyle(ChatFormatting.GRAY));
-		boolean enabled = isEnabled(stack);
-		adder.accept(Component.translatable(enabled ? base + ".state_on" : base + ".state_off")
-				.withStyle(enabled ? ChatFormatting.GREEN : ChatFormatting.GRAY));
-		adder.accept(Component.translatable(base + ".charge",
-				ItemEnergy.shownGet(stack), ItemEnergy.shownCapacity(stack)).withStyle(ChatFormatting.GOLD));
 		// Numbers come from the tier for the same reason: ToolConfig.magnetRange is the BASIC grade's knob. The
 		// tooltip is drawn on the client, so the tier picks among the server's numbers (MOD-761).
 		int range = tier.pick(ServerBalance.magnetRange(), ServerBalance.magnetAdvancedRange());
 		int euPerItem = tier.pick(ServerBalance.magnetEuPerItem(), ServerBalance.magnetAdvancedEuPerItem());
 		int euPerOrb = tier.euPerOrb(ServerBalance.magnetAdvancedEuPerOrb());
-		adder.accept(Component.translatable(base + ".desc", range, euPerItem)
-				.withStyle(ChatFormatting.DARK_GRAY));
+		ItemTooltip tooltip = new ItemTooltip()
+				.state(isEnabled(stack), base + ".state_on", base + ".state_off")
+				.stat(TooltipRole.ENERGY, ItemTooltip.STAT_CHARGE, TooltipUnits.EU,
+						ItemEnergy.shownGet(stack), ItemEnergy.shownCapacity(stack))
+				.tier(MachineTooltipSpec.Tier.LV)
+				.detail(TooltipRole.RANGE, ItemTooltip.STAT_RANGE, TooltipUnits.BLOCKS, range)
+				.detail(TooltipRole.ENERGY, ItemTooltip.STAT_PER_ITEM, TooltipUnits.EU, euPerItem);
 		if (euPerOrb > 0) {
-			adder.accept(Component.translatable(base + ".experience", euPerOrb)
-					.withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.detail(TooltipRole.ENERGY, ItemTooltip.STAT_PER_ORB, TooltipUnits.EU, euPerOrb);
 		}
 		// MOD-592: what is fitted, by name, so the tooltip answers "does this one have a filter".
 		for (ItemStack module : ItemModules.fitted(stack)) {
-			adder.accept(Component.literal(" + ").append(module.getHoverName()).withStyle(ChatFormatting.DARK_AQUA));
+			tooltip.module(module.getHoverName());
 		}
-		adder.accept(Component.translatable(base + ".open_hint",
-				tier.moduleSlots()).withStyle(ChatFormatting.DARK_GRAY));
+		tooltip.key("tooltip.alaindustrial.key.magnet_screen", tier.moduleSlots())
+				.key("tooltip.alaindustrial.key.toggle_on_off")
+				.emit(adder);
 	}
 
 	// --- item bar shows the EU charge in the LV tier colour (numbers are in the tooltip) ---

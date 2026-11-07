@@ -31,6 +31,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -44,15 +46,17 @@ import net.minecraft.world.level.material.MapColor;
  * reference in {@link RegistrySnapshot} and {@link RegistrySnapshotItems}.
  *
  * <p><b>What it replaces.</b> The composition of the registries — which blocks, items, block-entity →
- * block pairs, menus, fluids, sounds, data components, effects, particles and criteria exist — used to be
- * held by hand-kept counters in {@code docs/tools/content/loader_parity_check.py} and
+ * block pairs, menus, fluids, sounds, data components, effects, particles and criteria exist (entity types
+ * since MOD-959) — used to be held by hand-kept counters in {@code docs/tools/content/loader_parity_check.py} and
  * {@code menu_screen_parity_check.py}. A counter cannot see one id replaced by another, and it reads the
  * source text, not what the loader actually registered. This scenario asks the live registry of the loader
  * it runs on and compares every line: a missing and an added id are both named.
  *
  * <p><b>One line per fact, sorted.</b> {@code block <id> <properties>} for every block, {@code item <id>
- * <properties>}, {@code block_entity <type>:<block>} for every block a type is valid for, and
- * {@code <registry> <id>} for the rest. Sorting makes a reordered manifest change nothing; the two orders
+ * <properties>}, {@code entity_type <id> <properties>} for every entity type (MOD-959, the builder values: an
+ * entity registered on one loader only, or built differently there, is named on the lane that has it),
+ * {@code block_entity <type>:<block>} for every block a type is valid for, and {@code <registry> <id>} for the
+ * rest. Sorting makes a reordered manifest change nothing; the two orders
  * the manifest itself calls load-bearing are asserted separately.
  *
  * <p><b>A block's properties</b> (MOD-741; format in {@link RegistrySnapshotBlockLine}) are those of its
@@ -200,6 +204,9 @@ public final class RegistrySnapshotScenarios {
 				}
 			}
 		}
+		for (Identifier id : modKeys(BuiltInRegistries.ENTITY_TYPE)) {
+			lines.add(entityLine(id));
+		}
 		for (Map.Entry<String, Registry<?>> section : ID_SECTIONS.entrySet()) {
 			for (Identifier id : modKeys(section.getValue())) {
 				lines.add(section.getKey() + " " + id.getPath());
@@ -241,6 +248,28 @@ public final class RegistrySnapshotScenarios {
 				state.liquid(),
 				block.getLootTable().map(key -> key.identifier().toString()).orElse("none"))
 				.toLine();
+	}
+
+	/**
+	 * An entity type's line (MOD-959): the values its {@code EntityType.Builder} chain set — category, size, eye
+	 * height, client tracking range, update interval, whether it is saved and summonable, fire immunity, whether it
+	 * may exist in Peaceful and its loot table. Built from the shared {@code ModEntityTypes}/{@code ModMobs} lists on
+	 * both loaders, so a line that differs between the lanes names the loader that drifted.
+	 */
+	private static String entityLine(Identifier id) {
+		EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getValue(id);
+		EntityDimensions size = type.getDimensions();
+		return "entity_type " + id.getPath()
+				+ " category=" + type.getCategory()
+				+ " size=" + size.width() + "x" + size.height()
+				+ " eye=" + size.eyeHeight()
+				+ " tracking=" + type.clientTrackingRange()
+				+ " interval=" + type.updateInterval()
+				+ " save=" + yesNo(type.canSerialize())
+				+ " summon=" + yesNo(type.canSummon())
+				+ " fireimmune=" + yesNo(type.fireImmune())
+				+ " peaceful=" + yesNo(type.isAllowedInPeaceful())
+				+ " loot=" + type.getDefaultLootTable().map(key -> key.identifier().toString()).orElse("none");
 	}
 
 	/** The constant's name, or {@code id<N>} for a colour no {@code MapColor} constant holds. */

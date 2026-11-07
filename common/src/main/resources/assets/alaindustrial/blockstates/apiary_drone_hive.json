@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "alaindustrial:block/apiary_drone_hive"
+    },
+    "lit=true": {
+      "model": "alaindustrial:block/apiary_drone_hive_lit"
+    }
+  }
+}

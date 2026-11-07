@@ -1,16 +1,20 @@
 package dev.alaindustrial.gametest;
 
+import dev.alaindustrial.block.entity.MaceratorBlockEntity;
 import dev.alaindustrial.recipe.AlaProcessingRecipe;
 import dev.alaindustrial.recipe.PolymerizingRecipe;
 import dev.alaindustrial.recipe.ProcessingRecipeInput;
+import dev.alaindustrial.registry.ModContent;
 import dev.alaindustrial.registry.ModRecipes;
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -19,6 +23,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
 
 /**
  * Recipes written by a pack author (MOD-953): the machine recipes are plain data-pack JSON, so a pack that ships
@@ -40,12 +45,88 @@ public final class RecipeDatapackScenarios {
 				RosterEntry.of(RecipeDatapackScenarios::packFluidFamilyIsRead,
 						"recipe_datapack_polymerizing_read"),
 				RosterEntry.of(RecipeDatapackScenarios::falseLoadConditionKeepsARecipeOut,
-						"recipe_datapack_false_condition_not_loaded"));
+						"recipe_datapack_false_condition_not_loaded"),
+				RosterEntry.of(RecipeDatapackScenarios::certainSecondaryDropsEveryOperation,
+						"recipe_datapack_secondary_chance_one_always_drops"),
+				RosterEntry.of(RecipeDatapackScenarios::tinySecondaryChanceAlmostNeverDrops,
+						"recipe_datapack_secondary_chance_tiny_never_drops"));
 
 		private Roster() {}
 	}
 
 	private RecipeDatapackScenarios() {
+	}
+
+	/** Where the macerator of the secondary-chance scenarios stands, relative to the test origin. */
+	private static final BlockPos MACERATOR = new BlockPos(1, 2, 1);
+
+	/** Operations each secondary-chance scenario runs. */
+	private static final int OPERATIONS = 4;
+
+	/** Ticks the macerator is driven at most; one operation takes far fewer, so running out means it stalled. */
+	private static final int TICK_CAP = OPERATIONS * 2000;
+
+	/**
+	 * Run {@link #OPERATIONS} macerations of {@code input} through a real macerator and return how many
+	 * {@code bonus} items it ejected on top of itself, or {@code -1} after failing the test when the operations
+	 * did not all complete (a vacuous zero must not pass). The machine is driven by direct {@code serverTick}
+	 * calls with its buffer topped up every tick, so the result depends only on the recipe and the roll.
+	 */
+	private static int bonusAfterOperations(GameTestHelper helper, Item input, Item result, Item bonus) {
+		MaceratorBlockEntity mac = AlaGameTestHelper.place(helper, MACERATOR, ModContent.MACERATOR.get(),
+				MaceratorBlockEntity.class);
+		mac.setItem(MaceratorBlockEntity.INPUT_SLOT, new ItemStack(input, OPERATIONS));
+		for (int tick = 0; tick < TICK_CAP && !mac.getItem(MaceratorBlockEntity.INPUT_SLOT).isEmpty(); tick++) {
+			mac.getEnergyStorage().setAmountUntracked(8000);
+			AlaGameTestHelper.drive(mac, helper, 1);
+		}
+		ItemStack out = mac.getItem(MaceratorBlockEntity.OUTPUT_SLOT);
+		if (!out.is(result) || out.getCount() != 9 * OPERATIONS) {
+			helper.fail("the macerator must finish " + OPERATIONS + " operations of the pack recipe, output is "
+					+ out);
+			return -1;
+		}
+		AABB around = new AABB(helper.absolutePos(MACERATOR)).inflate(2.0);
+		return helper.getLevel().getEntitiesOfClass(ItemEntity.class, around, entity -> entity.getItem().is(bonus))
+				.stream().mapToInt(entity -> entity.getItem().getCount()).sum();
+	}
+
+	/**
+	 * A bonus output with {@code "chance": 1.0} drops on every operation: the roll never withholds a certain bonus.
+	 * The bonus is another item than the result, so the macerator ejects it on top of itself (MOD-537).
+	 *
+	 * @implements MOD-960 — a secondary output with chance 1 is paid on every completed operation.
+	 */
+	public static void certainSecondaryDropsEveryOperation(GameTestHelper helper) {
+		int bonus = bonusAfterOperations(helper, Items.HAY_BLOCK, Items.WHEAT, Items.GRAVEL);
+		if (bonus < 0) {
+			return;
+		}
+		if (bonus != OPERATIONS) {
+			helper.fail("chance 1.0 must eject 1 gravel per operation, " + OPERATIONS + " in all; got " + bonus);
+			return;
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * A bonus output with {@code "chance": 0.0001} is rolled, not paid every time: over four operations it drops
+	 * nothing. Before MOD-960 the chance was read and ignored, so this ejected four gravel. The false-red rate of
+	 * this check is 1 - 0.9999^4, about 1 run in 2500.
+	 *
+	 * @implements MOD-960 — the secondary output's chance is rolled on completion.
+	 */
+	public static void tinySecondaryChanceAlmostNeverDrops(GameTestHelper helper) {
+		int bonus = bonusAfterOperations(helper, Items.DRIED_KELP_BLOCK, Items.DRIED_KELP, Items.GRAVEL);
+		if (bonus < 0) {
+			return;
+		}
+		if (bonus != 0) {
+			helper.fail("chance 0.0001 must practically never drop; " + OPERATIONS + " operations ejected " + bonus
+					+ " gravel, so the chance is not rolled");
+			return;
+		}
+		helper.succeed();
 	}
 
 	private static ResourceKey<Recipe<?>> fixture(String path) {

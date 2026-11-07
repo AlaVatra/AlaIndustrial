@@ -84,6 +84,7 @@ final class BlockEntityDisplayNameSnapshot {
 			"incubator @incubator: block.alaindustrial.incubator",
 			"garden_drone_station @garden_drone_station: block.alaindustrial.garden_drone_station",
 			"sprinkler @sprinkler: block.alaindustrial.sprinkler",
+			"apiary_drone_station @apiary_drone_station: block.alaindustrial.apiary_drone_station",
 			"mob_repeller @mob_repeller: block.alaindustrial.mob_repeller",
 			"mob_repeller_mv @mob_repeller_mv: block.alaindustrial.mob_repeller_mv",
 			"mob_repeller_hv @mob_repeller_hv: block.alaindustrial.mob_repeller_hv",

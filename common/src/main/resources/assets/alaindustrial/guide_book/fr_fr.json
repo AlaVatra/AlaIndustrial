@@ -3321,6 +3321,36 @@
           ]
         },
         {
+          "id": "hive_attachment",
+          "title": "Embout de ruche",
+          "icon": "alaindustrial:hive_attachment",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Embout de ruche",
+              "text": "Un bocal en verre passif à poser sur le côté ou le dessus d'une ruche ou d'un nid d'abeilles vanilla — il montre le niveau de miel de la ruche et sert de point d'amarrage au drone apicole."
+            },
+            {
+              "type": "recipe",
+              "title": "Recette",
+              "recipe_type": "Fabrication façonnée",
+              "grid": [
+                "",
+                "minecraft:honeycomb",
+                "",
+                "alaindustrial:iron_plate",
+                "minecraft:glass_pane",
+                "alaindustrial:iron_plate",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:hive_attachment",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "sprinkler",
           "title": "Asperseur",
           "icon": "alaindustrial:sprinkler",
@@ -3346,6 +3376,44 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:sprinkler",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "apiary_drone_station",
+          "title": "Station apicole",
+          "icon": "alaindustrial:apiary_drone_station",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Station apicole",
+              "text": "Une station LV de deux blocs pour quatre drones apicoles — ils visitent les ruches dont les embouts figurent sur la carte du rucher, jusqu'à 15 blocs, prennent le miel des ruches pleines sans déranger les abeilles et le versent dans le réservoir de la station."
+            },
+            {
+              "type": "stats",
+              "title": "Statistiques",
+              "lines": [
+                "Énergie : 160 EU + 4 EU par bloc",
+                "Tampon : 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recette",
+              "recipe_type": "Fabrication façonnée",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:fluid_tank",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:apiary_drone_station",
               "result_count": 1
             }
           ]
@@ -6418,6 +6486,36 @@
               "type": "text",
               "title": "Comprimés d'iode",
               "text": "Prévention des radiations : un comprimé divise par deux pendant 5 minutes la vitesse d'accumulation de la dose. N'enlève pas la dose déjà reçue. Fait de cendre de varech via le bain galvanique et le compresseur."
+            }
+          ]
+        },
+        {
+          "id": "apiary_map",
+          "title": "Carte du rucher",
+          "icon": "alaindustrial:apiary_map",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Carte du rucher",
+              "text": "Une liste de jusqu'à huit embouts de ruche — clic droit sur un embout pour l'inscrire, puis placez la carte dans une station apicole pour indiquer à ses drones quelles ruches servir."
+            },
+            {
+              "type": "recipe",
+              "title": "Recette",
+              "recipe_type": "Fabrication non façonnée",
+              "grid": [
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:paper",
+                "minecraft:honeycomb",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:apiary_map",
+              "result_count": 1
             }
           ]
         },
