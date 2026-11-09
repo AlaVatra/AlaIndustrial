@@ -99,7 +99,7 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Publish updated data to Pages
+      - name: Publish updated data
         # A push made with GITHUB_TOKEN does not start other workflows, so the
         # deploy has to be asked for explicitly — workflow_dispatch is one of the
         # few events that token may raise.
@@ -118,7 +118,9 @@ jobs:
             head=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha)
             if [ "$head" = "$PUSHED_SHA" ]; then
               gh workflow run pages-deploy.yml --ref main
-              echo "dispatched deploy for $PUSHED_SHA"
+              # The site is served from its own server; GitHub Pages stays as the fallback copy.
+              gh workflow run deploy-wiki.yml --ref main
+              echo "dispatched deploys for $PUSHED_SHA"
               exit 0
             fi
             echo "main still reads $head, waiting for $PUSHED_SHA ($attempt/15)"
