@@ -163,6 +163,13 @@ test {
     maxHeapSize = '1g'
 }
 
+// MOD-962 — BiomeModifierTableTest also compares the Forge biome modifiers, so they are an input of this lane
+// (otherwise an edited Forge file leaves :neoforge:test UP-TO-DATE). Guarded: the mc/26.2 line has no forge/.
+def forgeBiomeModifiers = file('../forge/src/main/resources/data/alaindustrial/forge/biome_modifier')
+if (forgeBiomeModifiers.isDirectory()) {
+    tasks.named('test') { inputs.dir(forgeBiomeModifiers) }
+}
+
 // MOD-506 — same mechanism as the Fabric lane, see fabric/build.gradle: the game-test world is
 // disposable, but nothing ever deleted it, so every run piled another world on top of the last one.
 // Wiped BEFORE the run (`dependsOn`, not `finalizedBy`) for the same reason: the world of a run that

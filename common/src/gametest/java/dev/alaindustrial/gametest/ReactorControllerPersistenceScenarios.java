@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
@@ -235,10 +236,21 @@ public final class ReactorControllerPersistenceScenarios {
 		return fresh;
 	}
 
-	/** Every top-level key with its tag type, sorted. */
+	/**
+	 * Top-level keys a mod loader itself writes into a block entity's save, not the mod (MOD-962): Forge's
+	 * {@code ForgeCaps} for every block entity with an attached capability provider, the data-attachment compounds
+	 * of NeoForge and Fabric when an attachment is set. They are left out of the key list, so it stays one list for
+	 * every loader; every other key, and the whole tag in the round trip's equality, is still compared.
+	 */
+	static final Set<String> LOADER_OWNED_KEYS = Set.of("ForgeCaps", "neoforge:attachments", "fabric:attachments");
+
+	/** Every top-level key of the mod with its tag type, sorted; {@link #LOADER_OWNED_KEYS} left out. */
 	private static List<String> keys(CompoundTag tag) {
 		List<String> keys = new ArrayList<>();
 		for (String key : tag.keySet()) {
+			if (LOADER_OWNED_KEYS.contains(key)) {
+				continue;
+			}
 			keys.add(key + ":" + tag.get(key).getType().getName());
 		}
 		keys.sort(null);

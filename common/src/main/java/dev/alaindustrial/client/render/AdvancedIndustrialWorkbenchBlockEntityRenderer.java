@@ -34,7 +34,8 @@ import org.jspecify.annotations.Nullable;
  */
 public final class AdvancedIndustrialWorkbenchBlockEntityRenderer implements
 		BlockEntityRenderer<AdvancedIndustrialWorkbenchBlockEntity,
-				AdvancedIndustrialWorkbenchBlockEntityRenderer.State> {
+				AdvancedIndustrialWorkbenchBlockEntityRenderer.State>,
+			RenderBoxProvider<AdvancedIndustrialWorkbenchBlockEntity> {
 
 	/** Centre of a grid cell on the top face, per row/column index: three equal cells across the 16 px top. */
 	private static final float CELL_STEP = 0.25F;

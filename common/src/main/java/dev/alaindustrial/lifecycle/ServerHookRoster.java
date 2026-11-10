@@ -1,5 +1,6 @@
 package dev.alaindustrial.lifecycle;
 
+import dev.alaindustrial.attachment.PlayerDataCarryOver;
 import dev.alaindustrial.block.CableDyeing;
 import dev.alaindustrial.block.OilLiquidBlock;
 import dev.alaindustrial.block.entity.TownDispatcherBlockEntity;
@@ -141,6 +142,10 @@ public final class ServerHookRoster {
 
 	/** A player joined the server — in this order, so the greeting never precedes the book. */
 	public static final List<Consumer<ServerPlayer>> PLAYER_JOIN = List.of(
+			// MOD-962: the player's mod data from the loader-neutral copy (or another loader's key) into this
+			// loader's store, first, so every later hook reads it; the connection exists now, so the store's
+			// sync reaches the client.
+			PlayerDataCarryOver::applyOnJoin,
 			// MOD-067: the Guide Book on first join (once per player; SavedData ledger).
 			GuideBookGiver::giveIfNeeded,
 			// MOD-596: greet the world, once per world.

@@ -2,10 +2,11 @@ package dev.alaindustrial;
 
 import dev.alaindustrial.client.AlaClientConfig;
 import dev.alaindustrial.client.ClientContentManifest;
+import dev.alaindustrial.client.ClientSetup;
 import dev.alaindustrial.client.screen.AlaConfigScreen;
 import dev.alaindustrial.client.ModKeyMappings;
 import dev.alaindustrial.client.tooltip.MachineTooltips;
-import dev.alaindustrial.client.neoforge.NeoForgeCableGhost;
+import dev.alaindustrial.client.render.CableGhostGizmos;
 import dev.alaindustrial.client.neoforge.NeoForgeNetworkVisualization;
 import dev.alaindustrial.registry.ModPlayerAttachments;
 import dev.alaindustrial.registry.neoforge.ModAttachmentsNeoForge;
@@ -58,15 +59,9 @@ public final class IndustrializationNeoForgeClient {
 		Industrialization.LOGGER.info("Industrialization (NeoForge client) initialized.");
 	}
 
-	/**
-	 * Initialises the client config screen state, the item tint sources, the blueprint's
-	 * product item-model type (MOD-275) and the config-screen factory. The two render hooks add
-	 * themselves to vanilla late-bound registries, so the call sites are identical on both loaders.
-	 */
+	/** Initialises the client config screen state and the config-screen factory. */
 	private void initClientConfig(ModContainer container) {
 		AlaClientConfig.init(FMLPaths.CONFIGDIR.get());
-		dev.alaindustrial.client.render.ModItemTintSources.register();
-		dev.alaindustrial.client.render.BlueprintResultItemModel.register();
 		container.registerExtensionPoint(IConfigScreenFactory.class,
 				(modContainer, parent) -> new AlaConfigScreen(parent));
 	}
@@ -75,7 +70,7 @@ public final class IndustrializationNeoForgeClient {
 	 * Registers every client-side listener in the original order. The order interleaves mod-bus
 	 * registrations (menu screens, particle providers, tooltip factories, renderers, layer definitions,
 	 * key mappings, GUI layers) with game-bus registrations (item tooltips, world overlays, client tick,
-	 * disconnect cleanup) and the two static client hooks (machine hum, tooltip keys). MOD-137 kept it as
+	 * disconnect cleanup) and the one-off client setup steps (ClientSetup.STEPS). MOD-137 kept it as
 	 * one method to preserve that order; MOD-706 cut it into three consecutive slices called in that same
 	 * order, so no registration moved across another.
 	 */
@@ -86,7 +81,7 @@ public final class IndustrializationNeoForgeClient {
 	}
 
 	/**
-	 * The first slice of {@link #registerClientEvents}: menu screens, root-soil models, the oil fog, fluid
+	 * The first slice of {@link #registerClientEvents}: menu screens, root-soil models, the client setup steps, fluid
 	 * models and particles, block tints, the pouch tooltip, block-entity renderers and model layers.
 	 */
 	private void registerContentListeners(IEventBus modBus) {
@@ -94,11 +89,16 @@ public final class IndustrializationNeoForgeClient {
 		dev.alaindustrial.client.neoforge.NeoForgeRootSoilModels.init();
 		modBus.addListener(dev.alaindustrial.client.neoforge.NeoForgeRootSoilModels::onBake);
 		modBus.addListener(dev.alaindustrial.client.neoforge.NeoForgePiezoPlateModels::onBake);
-		// MOD-248: the submerged-in-oil look (screen overlay + near-black fog). Both halves live in
-		// common/ behind a client mixin, because Fabric has no fog/screen-effect API and one
-		// implementation must serve both loaders. NeoForge's IClientFluidTypeExtensions overlay hook
-		// IS invoked since 26.2.0.67 but is deliberately left unregistered — see OilScreenEffects.
-		dev.alaindustrial.client.OilFogEnvironment.install();
+		// MOD-962: the one-off client setup calls (item tints, oil fog, machine hum, ...), the list Fabric replays
+		// in onInitializeClient. FMLClientSetupEvent runs in ClientModLoader.finish(), before Minecraft starts
+		// the first resource reload, so the item-model codecs are in place when the models are parsed;
+		// enqueueWork puts the loop on the render thread. MOD-248: NeoForge's IClientFluidTypeExtensions
+		// overlay hook is deliberately left unregistered for the oil fog - see OilScreenEffects.
+		modBus.addListener((net.neoforged.fml.event.lifecycle.FMLClientSetupEvent event) -> event.enqueueWork(() -> {
+			for (ClientSetup.Step step : ClientSetup.STEPS) {
+				step.run().run();
+			}
+		}));
 		registerFluidModelsAndParticles(modBus);
 		// MOD-118: the incubator dome takes the colour of the glass it was built from — the mod's
 		// first block colour provider. Verified pattern (neoforge-26.2.0.67):
@@ -157,13 +157,8 @@ public final class IndustrializationNeoForgeClient {
 		});
 	}
 
-	/** The second slice of {@link #registerClientEvents}: client hooks, item tooltips and world overlays. */
+	/** The second slice of {@link #registerClientEvents}: item tooltips and world overlays. */
 	private void registerClientHooks() {
-		// Install the client-side machine-hum manager (looping ambient sound). Counterpart to the Fabric
-		// IndustrializationClient call; this @Mod class is dist=CLIENT, so it runs only on the physical client.
-		dev.alaindustrial.client.sound.MachineHumClientHook.register();
-		// MOD-108: answers "is Shift held" for item tooltips (the pipe shows its numbers behind Shift).
-		dev.alaindustrial.client.tooltip.TooltipKeysClientHook.register();
 		// Hover tooltips for machine block items + the Network Analyzer. Counterpart to the Fabric
 		// ItemTooltipCallback in IndustrializationClient; the content is loader-neutral in MachineTooltips.
 		// ItemTooltipEvent fires on the game bus (client only), so it goes on NeoForge.EVENT_BUS.
@@ -176,7 +171,7 @@ public final class IndustrializationNeoForgeClient {
 		// NetworkOverlayRenderer (MOD-033/MOD-060). The cable ghost stays on the vanilla per-tick gizmo
 		// API: a static block-shaped preview gains nothing from per-frame submission.
 		NeoForge.EVENT_BUS.addListener(NeoForgeNetworkVisualization::onSubmitCustomGeometry);
-		NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> NeoForgeCableGhost.tick());
+		NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> CableGhostGizmos.tick());
 		// MOD-778: the shared block outlines. LOWEST so every other listener has had its say (and added its
 		// custom renderers) before the outline is decided.
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, IndustrializationNeoForgeClient::replaceBlockOutline);

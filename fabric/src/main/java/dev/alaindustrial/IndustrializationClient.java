@@ -3,6 +3,7 @@ package dev.alaindustrial;
 import dev.alaindustrial.client.AlaClientConfig;
 import dev.alaindustrial.client.ClientContentManifest;
 import dev.alaindustrial.client.ClientPayloadManifest;
+import dev.alaindustrial.client.ClientSetup;
 import dev.alaindustrial.client.tooltip.MachineTooltips;
 import dev.alaindustrial.client.ModKeyMappings;
 import dev.alaindustrial.registry.ModAttachments;
@@ -35,9 +36,11 @@ public class IndustrializationClient implements ClientModInitializer {
 		dev.alaindustrial.client.PiezoPlateModels.init();
 		initClientConfig();
 		registerFluidRendering();
-		// MOD-248: the submerged-in-oil look. Loader-neutral (a client mixin + a vanilla fog
-		// environment in common/), so NeoForge calls the very same install().
-		dev.alaindustrial.client.OilFogEnvironment.install();
+		// MOD-962: the one-off client setup calls (item tints, oil fog, machine hum, ...), the list NeoForge
+		// replays in its client setup. Still inside client init, so before the first resource reload.
+		for (ClientSetup.Step step : ClientSetup.STEPS) {
+			step.run().run();
+		}
 		registerMenuScreens();
 		registerTooltips();
 		registerHudAndKeys();
@@ -111,15 +114,9 @@ public class IndustrializationClient implements ClientModInitializer {
 		}
 	}
 
-	/**
-	 * Initialises the client config screen state, the item tint sources and the blueprint's
-	 * product item-model type (MOD-275). Both render hooks add themselves to a vanilla late-bound
-	 * registry, so they only have to be in place before the first resource reload parses the models.
-	 */
+	/** Initialises the client config screen state. */
 	private void initClientConfig() {
 		AlaClientConfig.init(FabricLoader.getInstance().getConfigDir());
-		dev.alaindustrial.client.render.ModItemTintSources.register();
-		dev.alaindustrial.client.render.BlueprintResultItemModel.register();
 	}
 
 	/**
@@ -251,13 +248,10 @@ public class IndustrializationClient implements ClientModInitializer {
 		}
 	}
 
-	/** Installs the world-overlay / client-hook singletons (network viz, cable preview, hum, tooltip keys). */
+	/** Installs the world-overlay singletons (network viz, cable preview) and the profile button. */
 	private void registerClientHooks() {
 		dev.alaindustrial.client.NetworkVisualizationClient.init();
 		dev.alaindustrial.client.CablePlacementPreview.init();
-		dev.alaindustrial.client.sound.MachineHumClientHook.register();
-		// MOD-108: answers "is Shift held" for item tooltips (the pipe shows its numbers behind Shift).
-		dev.alaindustrial.client.tooltip.TooltipKeysClientHook.register();
 		// MOD-133: add the profile button to the survival inventory screen (creative uses a different
 		// screen class, so this instanceof already excludes it). No injected mixin — a Fabric screen event.
 		net.fabricmc.fabric.api.client.screen.v1.ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {

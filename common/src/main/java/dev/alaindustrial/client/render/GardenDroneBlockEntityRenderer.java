@@ -53,7 +53,8 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  */
 public final class GardenDroneBlockEntityRenderer<T extends GardenDroneStationBlockEntity>
-		implements BlockEntityRenderer<T, GardenDroneBlockEntityRenderer.State> {
+		implements BlockEntityRenderer<T, GardenDroneBlockEntityRenderer.State>,
+			RenderBoxProvider<T> {
 
 	public static final ModelLayerLocation MODEL_LAYER =
 			new ModelLayerLocation(Industrialization.id("garden_drone"), "main");

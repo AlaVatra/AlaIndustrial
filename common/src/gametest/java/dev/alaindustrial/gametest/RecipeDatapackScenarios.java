@@ -276,8 +276,9 @@ public final class RecipeDatapackScenarios {
 	}
 
 	/**
-	 * Two otherwise identical recipes carry BOTH loaders' condition keys ({@code neoforge:conditions} and
-	 * {@code fabric:load_conditions}); the loader reads its own key and ignores the other. The true one loads, which
+	 * Two otherwise identical recipes carry EVERY loader's condition key ({@code neoforge:conditions},
+	 * {@code fabric:load_conditions} and Forge's {@code forge:condition}); the loader reads its own key and ignores
+	 * the others. The true one loads, which
 	 * proves the key parses (a mistyped condition would drop both); the false one must not.
 	 *
 	 * @implements MOD-953 — a false load condition removes a recipe, which is how a pack disables one of ours.

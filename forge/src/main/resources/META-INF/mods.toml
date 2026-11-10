@@ -1,0 +1,34 @@
+modLoader = "javafml"
+loaderVersion = "${forge_loader_version_range}"
+license = "${license}"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${version}"
+displayName = "Ala Industrial"
+credits = "${credits}"
+authors = "${mod_author}"
+displayURL = "https://alalab.work"
+description = '''${description}'''
+# MinecraftForge has no iconFile key: the mod-list image is logoFile. NeoForge is the opposite since 26.2 —
+# do not copy keys between the two files.
+logoFile = "assets/alaindustrial/icon-128.png"
+logoBlur = true
+
+# Forge marks a dependency with mandatory=true; NeoForge's type="required" is not a key here.
+[[dependencies.${mod_id}]]
+modId = "forge"
+mandatory = true
+versionRange = "[${forge_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+mandatory = true
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+# No [[mixins]] block: Forge does not read one. The mixin configs are named by the MixinConfigs attribute of
+# the jar manifest, set in forge/build.gradle.

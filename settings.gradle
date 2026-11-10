@@ -134,3 +134,10 @@ includeBuild('build-logic')
 include('common')
 include('fabric')
 include('neoforge')
+// MinecraftForge (MOD-962): the third loader, part of `build` and `verifyAll` like the other two.
+// Included only where the module exists: the mc/26.2 line has no `forge/` directory, and an include without
+// the directory would break that build. Emergency opt-out, e.g. while the Forge toolchain is unreachable:
+// -PwithoutForge.
+if (file('forge/build.gradle').isFile() && !gradle.startParameter.projectProperties.containsKey('withoutForge')) {
+    include('forge')
+}

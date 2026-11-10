@@ -39,7 +39,8 @@ import org.jspecify.annotations.Nullable;
  * On a cell it stands on top of it — on the block it takes away, or over the empty cell it fills.
  */
 public final class ConstructionDroneRenderer
-		implements BlockEntityRenderer<DroneNestBlockEntity, ConstructionDroneRenderer.State> {
+		implements BlockEntityRenderer<DroneNestBlockEntity, ConstructionDroneRenderer.State>,
+			RenderBoxProvider<DroneNestBlockEntity> {
 
 	private static final CubeMesh BODY = new CubeMesh(ConstructionDroneGeometry.BODY, 0.0F);
 	private static final CubeMesh[] ROTORS = {

@@ -1,7 +1,8 @@
 # Installed into the PUBLIC repo at: .github/workflows/test.yml
-# Continuous test coverage: compiles all modules (common + fabric + neoforge),
-# runs the JUnit unit tests (via `build`) and the in-world game tests on BOTH
-# loaders (:fabric:runGameTest + :neoforge:runGameTests). Runs on branch pushes,
+# Continuous test coverage: compiles all modules (common + fabric + neoforge, + forge on the
+# Minecraft 26.3 line, where the tree carries forge/), runs the JUnit unit tests (via `build`) and the
+# in-world game tests on EVERY loader of the tree (:fabric:runGameTest + :neoforge:runGameTests
+# + :forge:runGameTests where forge/ exists). Runs on branch pushes,
 # pull requests, weekly on a schedule (that run is what refreshes the Gradle cache)
 # and on demand. Two kinds of double run are excluded: tags go to release.yml, which
 # runs the same tests before publishing, and release COMMITS on main are skipped by
@@ -51,7 +52,8 @@ jobs:
       github.event_name != 'push' ||
       !startsWith(github.event.head_commit.message, 'Release v')
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # Forge's build and game-test lane add about 7 minutes on the 26.3 line.
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,13 +94,15 @@ jobs:
           fi
           ./gradlew build --no-daemon --stacktrace $EXTRA
 
-      - name: Game tests (both loaders, in-world behaviour)
+      - name: Game tests (every loader, in-world behaviour)
         env:
           RELEASE_CHECK: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           EXTRA=""
           [ "$RELEASE_CHECK" != true ] || EXTRA="--no-build-cache"
-          ./gradlew :fabric:runGameTest :neoforge:runGameTests --no-daemon --stacktrace $EXTRA
+          LANES=(:fabric:runGameTest :neoforge:runGameTests)
+          [ ! -f forge/build.gradle ] || LANES+=(:forge:runGameTests)
+          ./gradlew "${LANES[@]}" --no-daemon --stacktrace $EXTRA
 
       # MOD-678: release.yml takes these very jars for the tag on this commit instead of building and
       # game-testing the same tree a third time (~5 min per line). Kept three days: a release follows
@@ -108,8 +112,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-jars
+          # The Forge pattern matches nothing on a line without Forge; release.yml then expects no Forge jar.
           path: |
             fabric/build/libs/alaindustrial-fabric-*.jar
             neoforge/build/libs/alaindustrial-neoforge-*.jar
+            forge/build/libs/alaindustrial-forge-*.jar
           retention-days: 3
           if-no-files-found: error

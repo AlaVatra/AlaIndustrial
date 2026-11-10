@@ -1,12 +1,8 @@
 package dev.alaindustrial;
 
 import dev.alaindustrial.command.AlaCommand;
-import dev.alaindustrial.loot.BonusChest;
-import dev.alaindustrial.loot.DrillTemplateLoot;
-import dev.alaindustrial.loot.StructureLoot;
-import dev.alaindustrial.loot.Trellis;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.storage.loot.LootTable;
+import dev.alaindustrial.loot.BonusChestEnabledCondition;
+import dev.alaindustrial.loot.LootInjections;
 import dev.alaindustrial.core.energy.EnergyLookup;
 import dev.alaindustrial.core.energy.EnergyTransactions;
 import dev.alaindustrial.core.fluid.FluidLookup;
@@ -19,6 +15,7 @@ import dev.alaindustrial.core.fabric.FabricItemFluidBridge;
 import dev.alaindustrial.core.fabric.FabricItemLookup;
 import dev.alaindustrial.item.energy.ItemEnergyBridge;
 import dev.alaindustrial.item.fluid.ItemFluidBridge;
+import dev.alaindustrial.lifecycle.CommonSetup;
 import dev.alaindustrial.lifecycle.ServerHookRoster;
 import dev.alaindustrial.network.ModPayloads;
 import dev.alaindustrial.network.NetworkDispatcher;
@@ -45,12 +42,12 @@ import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.recipe.v1.sync.RecipeSynchronization;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
@@ -91,8 +88,11 @@ public class IndustrializationFabric implements ModInitializer {
 		registerNetworkPayloads();
 		registerServerLifecycle();
 		registerGameplayHooks();
-		registerStructureLoot();
 		registerCommands();
+		// MOD-962: the one-off setup calls (dispenser behaviours, ...), the list NeoForge replays in its common setup.
+		for (CommonSetup.Step step : CommonSetup.STEPS) {
+			step.run().run();
+		}
 
 		Industrialization.LOGGER.info("Industrialization initialized.");
 	}
@@ -219,12 +219,6 @@ public class IndustrializationFabric implements ModInitializer {
 		// MOD-238: Fabric transfer-API attributes of the ModFluidsManifest entries that declare them —
 		// today crude oil only (viscosity 3000); the others keep the API defaults (MOD-728).
 		dev.alaindustrial.registry.ModFluids.registerTransferAttributes();
-		// MOD-238: dispenser support for the filled oil bucket (the empty-bucket pickup behaviour is
-		// generic in vanilla and already worked; emptying is registered per item and was missing).
-		dev.alaindustrial.item.fluid.OilBucketDispenseBehavior.register();
-		// MOD-535: forgiving dispenser equipping for the shielding suit — vanilla only accepts an
-		// entity standing INSIDE the single facing block, which a wandering villager keeps leaving.
-		dev.alaindustrial.item.wearable.SuitDispenseBehavior.register();
 		ModRecipes.init();
 		// MOD-543: opt every recipe serializer of the mod into fabric-api's recipe sync. Vanilla 26.x
 		// syncs only display-capable vanilla recipes to clients, so on a dedicated server the synced
@@ -264,14 +258,16 @@ public class IndustrializationFabric implements ModInitializer {
 	 * Registers the Industrialist POI + profession (MOD-062). PoiHelper both registers the PoiType
 	 * and fills the internal blockstate→POI map the acquisition system queries (a bare
 	 * Registry.register would leave that map empty — verified 26.2). The profession record itself is
-	 * loader-neutral ({@link dev.alaindustrial.registry.ModProfessions#createIndustrialist()}).
+	 * loader-neutral ({@link dev.alaindustrial.registry.ModProfessions#createIndustrialist()}), and so is its
+	 * job-site block ({@link dev.alaindustrial.registry.ModProfessions#POI_BLOCK}), read back from the registry.
 	 */
 	private void registerVillagerProfession() {
 		net.fabricmc.fabric.api.object.builder.v1.world.poi.PoiHelper.register(
 				dev.alaindustrial.registry.ModProfessions.INDUSTRIALIST_POI.identifier(),
 				dev.alaindustrial.registry.ModProfessions.POI_MAX_TICKETS,
 				dev.alaindustrial.registry.ModProfessions.POI_VALID_RANGE,
-				ModBlocks.INDUSTRIAL_WORKBENCH);
+				BuiltInRegistries.BLOCK.getOptional(Industrialization.id(
+						dev.alaindustrial.registry.ModProfessions.POI_BLOCK.id())).orElseThrow());
 		Registry.register(
 				net.minecraft.core.registries.BuiltInRegistries.VILLAGER_PROFESSION,
 				dev.alaindustrial.registry.ModProfessions.INDUSTRIALIST,
@@ -425,11 +421,22 @@ public class IndustrializationFabric implements ModInitializer {
 		UseBlockCallback.EVENT.register((player, level, hand, hit) ->
 				ServerHookRoster.onUseBlock(level, player, hand, hit));
 
-		// MOD-119: inject the mod's starter items into the vanilla bonus chest. Adds one pool that
-		// references the shared sub-table alaindustrial:inject/bonus_chest (item list + balance live there);
-		// vanilla pools are untouched. Gated on Config.bonusChestEnabled here (NeoForge gates the same flag
-		// via the alaindustrial:bonus_chest_enabled loot condition on its Global Loot Modifier). source.isBuiltin()
-		// skips user datapacks that replace the bonus chest, respecting their override.
+		// MOD-962 (step 2c): every injected loot pool is one row of LootInjections.INJECTIONS, the table
+		// NeoForge's loot_modifiers/*.json are written from. Each row adds ONE pool to its target that rolls a
+		// shared mod sub-table once (item list + balance live there, so both loaders read one number); vanilla
+		// pools are untouched.
+		// - Every row extends the table of its id whatever its source (built-in, a datapack, another mod), as
+		//   the NeoForge add_table modifiers and the Forge global loot modifier do: they match by id alone, so
+		//   source.isBuiltin() is not asked here either (ADR-054: one game on three loaders).
+		// - The bonus chest (MOD-119) is gated by the alaindustrial:bonus_chest_enabled loot condition on the
+		//   injected pool, so Config.bonusChestEnabled is read when the chest is rolled - the same moment
+		//   NeoForge and Forge read it, and a config change needs no /reload. The drill template (MOD-534) has
+		//   no gate: it is the only route to the drill's top tier. The structure chests' switch is a loot
+		//   condition inside their sub-table, read when a chest is rolled.
+		// - Cotton seeds (MOD-280): short and tall grass get DIFFERENT sub-tables, because tall grass is a
+		//   two-block plant whose table is evaluated once per half; its sub-table carries vanilla's
+		//   half/partner guards and the shears rule (an injected pool rolls independently of vanilla's). See
+		//   Trellis.SEEDS_FROM_TALL_GRASS.
 		//
 		// MOD-226 (26.3): two signature changes in this block, both forced by vanilla.
 		// 1. A nested reference is a Holder<LootTable>, not a ResourceKey — loot tables became a
@@ -443,56 +450,17 @@ public class IndustrializationFabric implements ModInitializer {
 		//    ContextIntProviders.exactly(int). One roll is already LootPool.Builder's default, but
 		//    it is stated rather than inherited, exactly as before.
 		LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
-			if (source.isBuiltin()
-					&& key == BuiltInLootTables.SPAWN_BONUS_CHEST
-					&& Config.bonusChestEnabled) {
-				tableBuilder.withPool(LootPool.lootPool()
+			for (LootInjections.Injection injection : LootInjections.INJECTIONS) {
+				if (!injection.target().equals(key)) {
+					continue;
+				}
+				LootPool.Builder pool = LootPool.lootPool()
 						.setRolls(ContextIntProviders.exactly(1))
-						.add(NestedLootTable.lootTableReference(registries.getOrThrow(BonusChest.INJECT_TABLE))));
-			}
-			// MOD-534: the drill's smithing template, in the same four bastion chest tables vanilla puts
-			// its own netherite template in. Same shape as the bonus chest above — one added pool
-			// referencing a shared sub-table, vanilla pools untouched — and the drop chance lives in that
-			// sub-table, so both loaders read one number. NeoForge points four add_table modifiers at the
-			// same key. No config gate: unlike the bonus chest, this is the only route to a gameplay
-			// item, and switching it off would strand the drill's top tier behind nothing.
-			if (source.isBuiltin() && DrillTemplateLoot.BASTION_TABLES.contains(key)) {
-				tableBuilder.withPool(LootPool.lootPool()
-						.setRolls(ContextIntProviders.exactly(1))
-						.add(NestedLootTable.lootTableReference(
-								registries.getOrThrow(DrillTemplateLoot.INJECT_TABLE))));
-			}
-			// MOD-280: cotton seeds from grass, the way wheat seeds are found. Same shape as above — one
-			// added pool referencing a shared sub-table, vanilla pools untouched — and the shears rule
-			// lives inside that sub-table, because this pool rolls independently of vanilla's.
-			//
-			// Short and tall grass get DIFFERENT sub-tables: tall grass is a two-block plant whose table
-			// is evaluated once per half, so its sub-table carries vanilla's half/partner guards to stay
-			// at one payout. See Trellis.SEEDS_FROM_TALL_GRASS.
-			ResourceKey<LootTable> seedTable = source.isBuiltin() ? Trellis.GRASS_TABLES.get(key) : null;
-			if (seedTable != null) {
-				tableBuilder.withPool(LootPool.lootPool()
-						.setRolls(ContextIntProviders.exactly(1))
-						.add(NestedLootTable.lootTableReference(registries.getOrThrow(seedTable))));
-			}
-		});
-	}
-
-	/**
-	 * MOD-942: early-game mod items in mineshaft, dungeon and village-toolsmith chests. The same shape as
-	 * the injections above — one added pool referencing a shared sub-table, vanilla pools untouched — with
-	 * two deliberate differences. There is no {@code source.isBuiltin()}: a table a datapack or another
-	 * mod replaced gets the pool too, as a NeoForge {@code add_table} modifier does. And there is no config
-	 * check here: {@code structureLootEnabled} is a loot condition on the sub-table's pool, read when a
-	 * chest is rolled.
-	 */
-	private void registerStructureLoot() {
-		LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
-			ResourceKey<LootTable> structureTable = StructureLoot.INJECTIONS.get(key);
-			if (structureTable != null) {
-				tableBuilder.withPool(LootPool.lootPool()
-						.setRolls(ContextIntProviders.exactly(1))
-						.add(NestedLootTable.lootTableReference(registries.getOrThrow(structureTable))));
+						.add(NestedLootTable.lootTableReference(registries.getOrThrow(injection.table())));
+				if (injection.bonusChestGate()) {
+					pool.when(Holder.direct(BonusChestEnabledCondition.INSTANCE));
+				}
+				tableBuilder.withPool(pool);
 			}
 		});
 	}

@@ -1,0 +1,8 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.alaindustrial.mixin.client.forge",
+	"compatibilityLevel": "JAVA_21",
+	"client": ["LevelExtractorMixin", "LevelRendererMixin", "RootModelDataMixin", "TerrainParticleMixin"],
+	"injectors": {"defaultRequire": 1}
+}

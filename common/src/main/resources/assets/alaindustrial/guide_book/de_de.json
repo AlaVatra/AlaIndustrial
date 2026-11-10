@@ -6851,6 +6851,36 @@
           ]
         },
         {
+          "id": "slingshot",
+          "title": "Steinschleuder",
+          "icon": "alaindustrial:slingshot",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Steinschleuder",
+              "text": "Eine hölzerne Steinschleuder, die Fackeln im Bogen verschießt — die Fackel bleibt dort, wo sie trifft, auf dem Boden oder an der Wand; sie wird wie ein Bogen gespannt und braucht keine Energie."
+            },
+            {
+              "type": "recipe",
+              "title": "Rezept",
+              "recipe_type": "Geformtes Handwerk",
+              "grid": [
+                "minecraft:stick",
+                "minecraft:string",
+                "minecraft:stick",
+                "",
+                "minecraft:stick",
+                "",
+                "",
+                "minecraft:stick",
+                ""
+              ],
+              "result_id": "alaindustrial:slingshot",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "soul_vessel",
           "title": "Seelengefäß",
           "icon": "alaindustrial:soul_vessel",

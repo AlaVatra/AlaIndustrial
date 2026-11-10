@@ -1,21 +1,21 @@
 package dev.alaindustrial.registry;
 
-import dev.alaindustrial.worldgen.AbandonedLabFeature;
-import dev.alaindustrial.worldgen.OilGeyserFeature;
-import dev.alaindustrial.worldgen.OilLakeFeature;
-import dev.alaindustrial.worldgen.OilLakeFilter;
-import dev.alaindustrial.worldgen.town.AlaTownTypes;
+import com.mojang.serialization.MapCodec;
 import java.util.function.Predicate;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
 /**
  * Central registration for worldgen injection. The configured/placed feature JSON is data-driven
- * ({@code data/alaindustrial/worldgen/...}); this class registers the mod's feature and placement-modifier
- * types and wires the placed features into biomes by replaying the shared table
+ * ({@code data/alaindustrial/worldgen/...}); this class replays the shared worldgen type lists
+ * ({@link ModWorldgenTypes}) and wires the placed features into biomes by replaying the shared table
  * {@link WorldgenInjections#INJECTIONS} (MOD-708).
  */
 public final class ModWorldGen {
@@ -23,26 +23,20 @@ public final class ModWorldGen {
 	}
 
 	public static void init() {
-		// MOD-238 audit: alaindustrial:oil_lake_filter, the placement modifier that keeps oil features
-		// out of villages/mineshafts/Ancient Cities. Registered before any datapack load, because the
-		// oil placed features name it and an unknown modifier type fails parsing. The same applies to
-		// the three feature types (MOD-248, MOD-513): an unknown "type" in a feature is a parse error.
-		//
-		// MOD-226 (26.3): what goes into these two registries is the MapCodec, not an instance. Both
-		// PLACEMENT_MODIFIER_TYPE and the NEW FEATURE_TYPE are Registry<MapCodec<? extends X>> — a
-		// feature is now its own configuration (a record decoded from data/<ns>/worldgen/feature/),
-		// and BuiltInRegistries.FEATURE holds those decoded instances rather than the types. Verified
-		// against the 26.3 sources: Feature.DIRECT_CODEC dispatches on BuiltInRegistries.FEATURE_TYPE,
-		// PlacementModifier.CODEC on BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.
-		Registry.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, OilLakeFilter.ID, OilLakeFilter.CODEC);
-		Registry.register(BuiltInRegistries.FEATURE_TYPE, OilLakeFeature.ID, OilLakeFeature.CODEC);
-		Registry.register(BuiltInRegistries.FEATURE_TYPE, OilGeyserFeature.ID, OilGeyserFeature.CODEC);
-		Registry.register(BuiltInRegistries.FEATURE_TYPE, AbandonedLabFeature.ID, AbandonedLabFeature.CODEC);
-		// MOD-830: the ALA town — its structure type (a town file's "type") and the lab piece's type (written
-		// into saved chunks). Both must exist before the datapack and before the first saved town is read.
-		Registry.register(BuiltInRegistries.STRUCTURE_TYPE, AlaTownTypes.STRUCTURE_TYPE_ID,
-				AlaTownTypes.STRUCTURE_TYPE);
-		Registry.register(BuiltInRegistries.STRUCTURE_PIECE, AlaTownTypes.LAB_PIECE_ID, AlaTownTypes.LAB_PIECE);
+		// MOD-962: the placement-modifier, feature, structure and piece types are the shared lists of
+		// ModWorldgenTypes (the registration deadline and the MapCodec note live in its javadoc).
+		for (ModWorldgenTypes.Entry<MapCodec<? extends PlacementModifier>> e : ModWorldgenTypes.PLACEMENT_MODIFIERS) {
+			Registry.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, e.id(), e.value().get());
+		}
+		for (ModWorldgenTypes.Entry<MapCodec<? extends Feature>> e : ModWorldgenTypes.FEATURE_TYPES) {
+			Registry.register(BuiltInRegistries.FEATURE_TYPE, e.id(), e.value().get());
+		}
+		for (ModWorldgenTypes.Entry<StructureType<?>> e : ModWorldgenTypes.STRUCTURE_TYPES) {
+			Registry.register(BuiltInRegistries.STRUCTURE_TYPE, e.id(), e.value().get());
+		}
+		for (ModWorldgenTypes.Entry<StructurePieceType> e : ModWorldgenTypes.STRUCTURE_PIECES) {
+			Registry.register(BuiltInRegistries.STRUCTURE_PIECE, e.id(), e.value().get());
+		}
 		// MOD-708: which placed feature goes into which biomes at which step is the shared table
 		// WorldgenInjections.INJECTIONS; NeoForge's biome modifier files are written from the same rows.
 		for (WorldgenInjections.Injection injection : WorldgenInjections.INJECTIONS) {

@@ -53,8 +53,8 @@ import org.jspecify.annotations.Nullable;
  * <p>The item reaches the client for free: {@code MachineBlockEntity#getUpdateTag} ships the whole
  * inventory, so {@code displayedStack()} is valid client-side without a packet of our own.
  */
-public final class IncubatorBlockEntityRenderer
-		implements BlockEntityRenderer<IncubatorBlockEntity, IncubatorBlockEntityRenderer.State> {
+public final class IncubatorBlockEntityRenderer implements RenderBoxProvider<IncubatorBlockEntity>,
+		BlockEntityRenderer<IncubatorBlockEntity, IncubatorBlockEntityRenderer.State> {
 
 	/**
 	 * Centre of the dome chamber, measured from the base block's own origin.

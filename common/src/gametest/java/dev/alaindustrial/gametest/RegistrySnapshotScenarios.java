@@ -31,6 +31,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -176,12 +177,44 @@ public final class RegistrySnapshotScenarios {
 				+ " javadoc and review the diff; the full capture is in the log.");
 	}
 
+	/**
+	 * The same check without a {@link GameTestHelper} and without the update command, for a lane with no gametest
+	 * runner yet (the Forge registry probe, MOD-962): what is wrong, or an empty string when the live registries
+	 * match the reference.
+	 */
+	public static String mismatch(ServerLevel level, BlockPos probe) {
+		List<String> invariants = new ArrayList<>();
+		checkLoadBearingOrder(invariants);
+		checkEveryEntryIsHeld(invariants);
+		invariants.addAll(checkRemovedSection(RegistrySnapshot.REMOVED));
+		List<String> actual = capture(level, probe);
+		invariants.addAll(removedButRegistered(RegistrySnapshot.REMOVED, actual));
+		if (!invariants.isEmpty()) {
+			return "MOD-699: " + String.join("; ", invariants);
+		}
+		List<String> expected = new ArrayList<>(RegistrySnapshot.LINES);
+		expected.addAll(RegistrySnapshotItems.LINES);
+		String difference = difference(expected, RegistrySnapshot.PROPERTIES_CAPTURED ? actual : keysOnly(actual));
+		if (!difference.isEmpty()) {
+			logCapture("the registries no longer match the reference", actual);
+		}
+		return difference;
+	}
+
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 	// Capture
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 
 	/** Every line of this loader's snapshot, sorted. */
 	static List<String> capture(GameTestHelper helper) {
+		return capture(helper.getLevel(), helper.absolutePos(PROBE));
+	}
+
+	/**
+	 * Every line of this loader's snapshot, sorted, read in {@code level}; {@code probe} is where a block's destroy
+	 * speed is asked. Public for a lane with no gametest runner yet (the Forge registry probe, MOD-962).
+	 */
+	public static List<String> capture(ServerLevel level, BlockPos probe) {
 		Set<String> loaderItems = new TreeSet<>();
 		for (ContentManifest.ItemDef def : ContentManifest.ITEMS) {
 			if (def.factory() == null) {
@@ -191,7 +224,7 @@ public final class RegistrySnapshotScenarios {
 		List<Identifier> blocks = modKeys(BuiltInRegistries.BLOCK);
 		List<String> lines = new ArrayList<>();
 		for (Identifier id : blocks) {
-			lines.add(blockLine(helper, id));
+			lines.add(blockLine(level, probe, id));
 		}
 		for (Identifier id : modKeys(BuiltInRegistries.ITEM)) {
 			lines.add(itemLine(id, loaderItems.contains(id.getPath())));
@@ -221,7 +254,7 @@ public final class RegistrySnapshotScenarios {
 	// exist on Fabric; liquid() is deprecated in vanilla too, with no replacement. Each no-argument form returns the
 	// very Properties field Fabric reads, which is what the reference pins — the method reads and does nothing else.
 	@SuppressWarnings("deprecation")
-	private static String blockLine(GameTestHelper helper, Identifier id) {
+	private static String blockLine(ServerLevel level, BlockPos probe, Identifier id) {
 		Block block = BuiltInRegistries.BLOCK.getValue(id);
 		BlockState state = block.defaultBlockState();
 		int lightMax = 0;
@@ -230,7 +263,7 @@ public final class RegistrySnapshotScenarios {
 		}
 		return new RegistrySnapshotBlockLine(
 				id.getPath(),
-				state.getDestroySpeed(helper.getLevel(), helper.absolutePos(PROBE)),
+				state.getDestroySpeed(level, probe),
 				state.requiresCorrectToolForDrops(),
 				state.getLightEmission(),
 				lightMax,
@@ -299,7 +332,7 @@ public final class RegistrySnapshotScenarios {
 	 * The class both loaders share for a {@code loaderItem}: the nearest one up the hierarchy that is not a
 	 * loader's own. A loader may register the shared class itself while the other registers a subclass of it
 	 * (the electric hoe and shovel on the 26.2 line), so "the superclass" answers differently per lane; the
-	 * loader classes are told apart by their {@code Fabric} / {@code NeoForge} name suffix.
+	 * loader classes are told apart by their {@code Fabric} / {@code Forge} name suffix ({@code NeoForge} included).
 	 */
 	private static Class<?> sharedClass(Class<?> type) {
 		Class<?> shared = type;
@@ -311,7 +344,7 @@ public final class RegistrySnapshotScenarios {
 
 	private static boolean isLoaderClass(Class<?> type) {
 		String name = type.getSimpleName();
-		return name.endsWith("Fabric") || name.endsWith("NeoForge");
+		return name.endsWith("Fabric") || name.endsWith("Forge");
 	}
 
 	/** The simple name, walking up past anonymous classes so the line never depends on their numbering. */

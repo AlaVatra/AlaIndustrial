@@ -8,9 +8,9 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 /**
  * The two registry entries of the ALA town (MOD-830), declared once for both loaders: the structure type
  * {@code alaindustrial:ala_town} the town's structure files name, and the piece type
- * {@code alaindustrial:ala_town_lab} its saved chunks name. Fabric registers them in {@code ModWorldGen}, NeoForge
- * through the {@code DeferredRegister}s of {@code ModWorldGenNeoForge} — the same objects, so a saved town reads
- * back on either loader.
+ * {@code alaindustrial:ala_town_lab} its saved chunks name. Both are rows of the shared
+ * {@code ModWorldgenTypes.STRUCTURE_TYPES} / {@code STRUCTURE_PIECES} lists that every loader replays (MOD-962) —
+ * the same objects, so a saved town reads back on any loader.
  *
  * <p>Both ids go into saved chunks: they are not renamed after the first release (ADR-050).
  */

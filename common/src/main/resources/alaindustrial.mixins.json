@@ -13,7 +13,8 @@
     "NearestAttackableTargetGoalAccessor",
     "TargetGoalAccessor",
     "TrapDoorBlockAccessor",
-    "FenceGateBlockAccessor"
+    "FenceGateBlockAccessor",
+    "ServerPlayerDataCarryOverMixin"
   ],
   "client": [
     "client.RootInspectionStateMixin",

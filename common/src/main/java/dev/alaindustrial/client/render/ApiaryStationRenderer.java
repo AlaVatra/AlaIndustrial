@@ -49,7 +49,8 @@ import org.jspecify.annotations.Nullable;
  * culls a block entity, so {@link #shouldRenderOffScreen} is what keeps a far drone drawn there.
  */
 public final class ApiaryStationRenderer
-		implements BlockEntityRenderer<ApiaryDroneStationBlockEntity, ApiaryStationRenderer.State> {
+		implements BlockEntityRenderer<ApiaryDroneStationBlockEntity, ApiaryStationRenderer.State>,
+			RenderBoxProvider<ApiaryDroneStationBlockEntity> {
 
 	public static final ModelLayerLocation DRONE_LAYER =
 			new ModelLayerLocation(Industrialization.id("apiary_drone"), "main");

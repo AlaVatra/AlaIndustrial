@@ -8,7 +8,7 @@ dated YESTERDAY — the counters it reads are exactly what that day closed with.
 Sources:
 
   * Modrinth  — public API, no key: project totals, followers and per-version
-                downloads (the latter give the Fabric / NeoForge split).
+                downloads (the latter give the Fabric / NeoForge / Forge split).
   * CurseForge — the counters CurseForge's own site serves for every file of the
                 project, summed (MOD-749; keyless); then the official API when
                 CURSEFORGE_API_KEY is set (header x-api-key, a Core API key from the
@@ -62,7 +62,7 @@ CF_PAGE_SIZE = 50
 
 MODRINTH_ID = "ACLWFBlU"
 CURSEFORGE_ID = 1597723
-UA = "Ma3auka/AlaIndustrial-stats (+https://github.com/AlaMine-Team-Org/AlaIndustrial)"
+UA = "Ma3auka/AlaIndustrial-stats (+https://github.com/AlaVatra/AlaIndustrial)"
 TIMEOUT = 30
 
 # What a source that did not answer raises. URLError covers only a failure to CONNECT:
@@ -492,7 +492,8 @@ def main() -> int:
         totals["followers"] = modrinth["followers"]
         totals["version"] = modrinth["version"]
         totals["loaders"] = {"fabric": loaders.get("fabric", 0),
-                             "neoforge": loaders.get("neoforge", 0)}
+                             "neoforge": loaders.get("neoforge", 0),
+                             "forge": loaders.get("forge", 0)}
 
     stamp = (datetime.datetime.now(datetime.timezone.utc)
              .replace(microsecond=0).isoformat().replace("+00:00", "Z"))

@@ -48,7 +48,8 @@ import org.jspecify.annotations.Nullable;
  * block sheet's cutout, depth and mipmaps; a standalone texture would bleed a white edge.
  */
 public final class MobWheelBlockEntityRenderer
-		implements BlockEntityRenderer<MobWheelBlockEntity, MobWheelBlockEntityRenderer.State> {
+		implements BlockEntityRenderer<MobWheelBlockEntity, MobWheelBlockEntityRenderer.State>,
+			RenderBoxProvider<MobWheelBlockEntity> {
 
 	private static final float PIXEL = 1.0F / 16.0F;
 

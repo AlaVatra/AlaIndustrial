@@ -1,8 +1,7 @@
 package dev.alaindustrial.client.neoforge;
 
 import dev.alaindustrial.client.render.NetworkOverlayRenderer;
-import dev.alaindustrial.client.render.ConcentratorSchematicRenderer;
-import dev.alaindustrial.client.render.ZonePreviewRenderer;
+import dev.alaindustrial.client.ClientContentManifest;
 import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
 
 /**
@@ -32,30 +31,9 @@ public final class NeoForgeNetworkVisualization {
 	/** Game-bus listener: submit this frame's overlay geometry. Registered in
 	 * {@code IndustrializationNeoForgeClient}. */
 	public static void onSubmitCustomGeometry(SubmitCustomGeometryEvent event) {
-		NetworkOverlayRenderer.submitFrame(event.getSubmitNodeCollector(),
-				event.getLevelRenderState().cameraRenderState);
-		// MOD-278: the personal repeller dome rides the same frame point (see ZonePreviewRenderer).
-		ZonePreviewRenderer.submitFrame(event.getSubmitNodeCollector(),
-				event.getLevelRenderState().cameraRenderState);
-
-		// MOD-603: the concentrator's assembly schematic rides the same frame point — it is a
-		// per-frame read of the world in front of the player, with no state of its own.
-		ConcentratorSchematicRenderer.submitFrame(event.getSubmitNodeCollector(),
-				event.getLevelRenderState().cameraRenderState);
-		// MOD-764: the wrench's x-ray of piezo plates rides the same frame point.
-		dev.alaindustrial.client.render.PiezoPlateXray.submitFrame(event.getSubmitNodeCollector(),
-				event.getLevelRenderState().cameraRenderState);
-		// MOD-804: the sound absorbers' zones under the wrench, and the focused group's HUD line.
-		dev.alaindustrial.client.render.SoundAbsorberOverlay.submitFrame(event.getSubmitNodeCollector(),
-				event.getLevelRenderState().cameraRenderState);
-		// MOD-843: a settlement's border, for the player who pressed "show borders" in its core's screen.
-		dev.alaindustrial.client.render.SettlementBorderOverlay.submitFrame(event.getSubmitNodeCollector(),
-				event.getLevelRenderState().cameraRenderState);
-		// MOD-857 (round 2): the town hall's schematic, for the player who turned it on in its core's screen.
-		dev.alaindustrial.client.render.HallSchematicOverlay.submitFrame(event.getSubmitNodeCollector(),
-				event.getLevelRenderState().cameraRenderState);
-		// MOD-890: the block in the way of the town's work, after «show it» in its core's screen.
-		dev.alaindustrial.client.render.ObstructionHighlight.submitFrame(event.getSubmitNodeCollector(),
-				event.getLevelRenderState().cameraRenderState);
+		for (ClientContentManifest.WorldOverlay overlay : ClientContentManifest.WORLD_OVERLAYS) {
+			overlay.submitFrame(event.getSubmitNodeCollector(),
+					event.getLevelRenderState().cameraRenderState);
+		}
 	}
 }

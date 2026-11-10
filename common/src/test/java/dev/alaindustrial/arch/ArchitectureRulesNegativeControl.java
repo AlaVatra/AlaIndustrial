@@ -11,6 +11,7 @@ import static dev.alaindustrial.arch.ArchitectureRules.readBalanceKnobsFromConfi
 import static dev.alaindustrial.arch.ArchitectureRules.startsAnotherManifestInitialiser;
 import static dev.alaindustrial.arch.ArchitectureRules.useUnorderedCollections;
 import static dev.alaindustrial.arch.ArchitectureRules.writeAKnobField;
+import static dev.alaindustrial.arch.RenderBoxRules.provideTheRenderBox;
 import static dev.alaindustrial.arch.TranslucentSheetRules.callTheDepthWritingSheet;
 import static dev.alaindustrial.arch.VersionedApiRules.callAFacadeOnlyMember;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +33,7 @@ import dev.alaindustrial.Config;
 import dev.alaindustrial.arch.TranslucentSheetRules.AllowedSite;
 import dev.alaindustrial.arch.VersionedApiRules.FacadeOnlyMember;
 import dev.alaindustrial.client.ServerBalance;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -190,7 +192,7 @@ class ArchitectureRulesNegativeControl {
 	void everyFacadeOfTheVersionedApiRuleCallsOneOfItsMembers() {
 		Map<String, List<FacadeOnlyMember>> byFacade = new TreeMap<>();
 		for (FacadeOnlyMember member : VersionedApiRules.FACADE_ONLY_MEMBERS) {
-			byFacade.computeIfAbsent(member.facade(), facade -> new java.util.ArrayList<>()).add(member);
+			byFacade.computeIfAbsent(member.facade(), facade -> new ArrayList<>()).add(member);
 		}
 		assertEquals(Set.of("dev.alaindustrial.compat.Bonemeal", "dev.alaindustrial.compat.ServerDrops",
 				"dev.alaindustrial.compat.client.Poses"), byFacade.keySet());
@@ -784,5 +786,55 @@ class ArchitectureRulesNegativeControl {
 		}
 		assertTrue(stale.isEmpty(), "ClientBalanceReachRules.ACCEPTED/PENDING name paths no client code reaches any"
 				+ " more — remove them: " + stale);
+	}
+
+	/**
+	 * MOD-962 — {@code renderersDrawingPastTheirBlockProvideTheirRenderBox}: the condition flags a renderer that
+	 * overrides {@code shouldRenderOffScreen} (in itself or in a superclass) or is named as drawing past its cell, and
+	 * has no box interface; it lets the twins with the interface, an in-cell renderer and a non-renderer with the same
+	 * method name through. Stand-ins play {@code BlockEntityRenderer} and {@code RenderBoxProvider}.
+	 */
+	@Test
+	void renderBoxConditionFlagsRenderersDrawingPastTheirBlockWithoutTheInterface() {
+		String box = FIXTURE_PACKAGE + ".renderbox.";
+		String report = evaluateExpectingViolation(classes()
+				.that().resideInAPackage(FIXTURE_PACKAGE + ".renderbox")
+				.should(provideTheRenderBox(box + "StandInRenderer", box + "StandInRenderBox",
+						Set.of(box + "PastCellWithoutBox", box + "PastCellWithBox"))));
+		assertTrue(report.contains(box + "OffScreenWithoutBox draws past its block (overrides"), report);
+		assertTrue(report.contains(box + "InheritedOffScreenWithoutBox draws past its block (overrides"),
+				report);
+		assertTrue(report.contains(box + "PastCellWithoutBox draws past its block (named in"), report);
+		List<String> cleanTwins = List.of("OffScreenWithBox ", "PastCellWithBox ", "InCellRenderer",
+				"OffScreenNonRenderer");
+		for (String clean : cleanTwins) {
+			assertFalse(report.contains(box + clean), clean + " must not be flagged: " + report);
+		}
+	}
+
+	/**
+	 * MOD-962 — the floor of the render-box rule: on the production import the detection finds every renderer known to
+	 * override {@code shouldRenderOffScreen} and every one named as drawing past its cell, so a green run is not a
+	 * green run over nothing ({@code BlockEntityRenderer} is only a name on this lane, never loaded).
+	 */
+	@Test
+	void renderBoxRuleReachesTheRenderersItGuards() {
+		List<String> unseen = new ArrayList<>();
+		for (String name : RenderBoxRules.KNOWN_OFF_SCREEN) {
+			if (!productionClasses.contain(name) || !RenderBoxRules.drawsPastItsBlock(productionClasses.get(name),
+					RenderBoxRules.RENDERER, Set.of())) {
+				unseen.add(name);
+			}
+		}
+		for (String name : RenderBoxRules.DRAWS_PAST_ITS_CELL) {
+			if (!productionClasses.contain(name)
+					|| !productionClasses.get(name).isAssignableTo(RenderBoxRules.RENDERER)) {
+				unseen.add(name);
+			}
+		}
+		assertTrue(unseen.isEmpty(), "the render-box rule does not reach " + unseen + " - the renderer was renamed, "
+				+ "stopped overriding " + RenderBoxRules.OFF_SCREEN + ", or the import no longer sees "
+				+ RenderBoxRules.RENDERER + "; update RenderBoxRules.KNOWN_OFF_SCREEN / DRAWS_PAST_ITS_CELL");
+		assertTrue(productionClasses.contain(RenderBoxRules.PROVIDER), RenderBoxRules.PROVIDER + " is gone");
 	}
 }

@@ -37,7 +37,8 @@ import org.jspecify.annotations.Nullable;
  * draws nothing.
  */
 public final class HallSchematicRenderer
-		implements BlockEntityRenderer<SettlementCoreBlockEntity, HallSchematicRenderer.State> {
+		implements BlockEntityRenderer<SettlementCoreBlockEntity, HallSchematicRenderer.State>,
+			RenderBoxProvider<SettlementCoreBlockEntity> {
 
 	/** Farther than this from the core, the renderer is not asked at all; the ghosts' own limit is shorter. */
 	private static final int VIEW_DISTANCE = 256;

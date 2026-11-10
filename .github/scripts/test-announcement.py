@@ -64,6 +64,8 @@ for order in ([LINE_263, LINE_262], [LINE_262, LINE_263]):
     check("links both", "v0.1.183-mc26.3+fabric" not in post["downloads"]
           and "0.1.183-mc26.3+fabric" in post["downloads"] and "0.1.183-mc26.2+neoforge" in post["downloads"],
           post["downloads"])
+    check("forge on its line only", "0.1.183-mc26.3+forge" in post["downloads"]
+          and "mc26.2+forge" not in post["downloads"], post["downloads"])
     check("media leader", post["media_tag"] == "v0.1.183-mc26.3", post["media_tag"])
     check("url leader", post["url"].endswith("/releases/tag/v0.1.183-mc26.3"), post["url"])
 

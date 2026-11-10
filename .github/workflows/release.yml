@@ -1,18 +1,20 @@
 # Installed into the PUBLIC repo at: .github/workflows/release.yml
 # Triggered by pushing a release tag `vX.Y.Z-mc26.3` or `vX.Y.Z-mc26.2` (the axis-free
-# `vX.Y.Z` form remains valid only for the historical 26.2 releases). Builds BOTH loaders (Fabric + NeoForge),
-# publishes TWO files to CurseForge and TWO versions to Modrinth (one per
-# loader) with a MARKDOWN changelog, and creates one GitHub Release carrying
-# both jars.
+# `vX.Y.Z` form remains valid only for the historical 26.2 releases). Builds every loader of the line,
+# publishes one file per loader to CurseForge and one version per loader to Modrinth with a MARKDOWN
+# changelog, and creates one GitHub Release carrying every jar:
+#   * Minecraft 26.3: Fabric + NeoForge + Forge, six marketplace publications;
+#   * Minecraft 26.2: Fabric + NeoForge, four. A 26.2 tree that carries forge/ is refused, and so is a 26.3
+#     tree that does not.
 #
 # Why a direct API curl (not mc-publish/itsmeow) for CurseForge: mc-publish does
 # NOT send CurseForge's `changelogType`, so the Markdown never renders; itsmeow's
 # output→input hop collapses newlines. We POST to the upload API with
 # `jq --rawfile` (preserves newlines) + changelogType=markdown. mc-publish is kept
 # only for the GitHub Release. Each file's displayName carries its loader in
-# brackets, e.g. "... v0.1.5 [Fabric]" / "... v0.1.5 [NeoForge]".
-# Modrinth uses separate version numbers per loader (`X.Y.Z+fabric` and
-# `X.Y.Z+neoforge`) so Fabric API remains a Fabric-only required dependency.
+# brackets, e.g. "... v0.1.5 [Fabric]" / "... v0.1.5 [NeoForge]" / "... [Forge]".
+# Modrinth uses separate version numbers per loader (`X.Y.Z+fabric`, `X.Y.Z+neoforge`,
+# `X.Y.Z+forge`) so Fabric API remains a Fabric-only required dependency.
 name: Release
 
 on:
@@ -24,7 +26,7 @@ on:
   # could not be started at all — the only trigger was the one thing that was broken.
   # Dispatching with the TAG as the ref bypasses webhook delivery and reproduces a
   # tag run exactly:
-  #   gh workflow run release.yml -R AlaMine-Team-Org/AlaIndustrial --ref vX.Y.Z
+  #   gh workflow run release.yml -R AlaVatra/AlaIndustrial --ref vX.Y.Z
   # (UI: Run workflow -> "Use workflow from" -> Tags tab -> vX.Y.Z).
   # GitHub resolves the workflow FILE from the dispatched ref, so a tag offers that
   # Tags entry only if its own tree already carries this trigger — i.e. every tag cut
@@ -40,6 +42,15 @@ on:
         required: false
         type: string
         default: ''
+      publish_forge:
+        description: >-
+          Publish the Forge jar to Modrinth and CurseForge (Minecraft 26.3 only). Untick it for a run whose
+          Forge file is uploaded by hand: the jar is still built, checked and attached to the GitHub Release,
+          and publish-ids.json marks it as uploaded by hand. A tag push has no inputs; there the repository
+          variable PUBLISH_FORGE=false does the same. Either one set to false turns Forge off.
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: write   # needed to create the GitHub Release
@@ -66,15 +77,20 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Standard release mode. Keep this explicit so accidental one-loader releases
-  # cannot happen by editing individual upload steps. Emergency single-loader
-  # repairs should use a separate, deliberate workflow.
-  PUBLISH_LOADERS: both
+  # Standard release mode: every loader of the line. Keep this explicit so accidental one-loader
+  # releases cannot happen by editing individual upload steps. Emergency single-loader repairs should
+  # use a separate, deliberate workflow. The one switch is Forge's (the publish_forge input or the
+  # PUBLISH_FORGE repository variable): its file can be uploaded by hand while the others go from here.
+  PUBLISH_LOADERS: all
+  # The Minecraft lines that ship a Forge jar. Keep in step with FORGE_LINES in verify-artifacts.py.
+  FORGE_LINES: '26.3'
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # Forge adds a third build and a third game-test lane on the 26.3 line (about 7 more minutes when the
+    # jars are not reused from the pre-tag check).
+    timeout-minutes: 75
     outputs:
       tag: ${{ steps.rel.outputs.tag }}
     steps:
@@ -119,6 +135,7 @@ jobs:
           MC=$(sed -n 's/^minecraft_version=//p' gradle.properties | tr -d '\r')
           VERSION=$(sed -n 's/^version=//p' gradle.properties | tr -d '\r')
           NF=$(sed -n 's/^neoforge_version=//p' gradle.properties | tr -d '\r')
+          FG=$(sed -n 's/^forge_version=//p' gradle.properties | tr -d '\r')
           [[ "$MC" == 26.2 || "$MC" == 26.3 ]] || { echo "::error::unsupported Minecraft $MC"; exit 1; }
           [[ "$VERSION" == "$RELEASE_VERSION" ]] || { echo "::error::tag and project version differ"; exit 1; }
           [[ "$RELEASE_TAG" == "v$VERSION-mc$MC" || ( "$MC" == 26.2 && "$RELEASE_TAG" == "v$VERSION" ) ]] || { echo "::error::tag and Minecraft version differ"; exit 1; }
@@ -127,6 +144,19 @@ jobs:
           TYPE=release
           [[ "$NF" != *-beta* ]] || TYPE=beta
           echo "neoforge_type=$TYPE" >> "$GITHUB_OUTPUT"
+          # Forge: on its lines only, and then the module must be in the tree; elsewhere it must not be.
+          FORGE=false
+          for L in $FORGE_LINES; do [[ "$L" != "$MC" ]] || FORGE=true; done
+          if [[ "$FORGE" == true ]]; then
+            [[ -f forge/build.gradle ]] || { echo "::error::Minecraft $MC ships Forge, but forge/build.gradle is missing"; exit 1; }
+            [[ -n "$FG" ]] || { echo "::error::Minecraft $MC ships Forge, but gradle.properties has no forge_version"; exit 1; }
+          else
+            [[ ! -e forge ]] || { echo "::error::Minecraft $MC does not ship Forge, but the tree carries forge/"; exit 1; }
+          fi
+          echo "forge=$FORGE" >> "$GITHUB_OUTPUT"
+          TYPE=release
+          [[ "$FG" != *-beta* ]] || TYPE=beta
+          echo "forge_type=$TYPE" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK 25
         uses: actions/setup-java@v4
@@ -149,15 +179,33 @@ jobs:
 
       - name: Release mode guard
         id: mode
+        env:
+          FORGE: ${{ steps.game.outputs.forge }}
+          # Empty on a tag push (no inputs there); 'true' / 'false' on a dispatch.
+          DISPATCH_FORGE: ${{ github.event.inputs.publish_forge }}
+          # Repository variable, empty unless set: the only switch a tag push can see.
+          REPO_FORGE: ${{ vars.PUBLISH_FORGE }}
         run: |
+          for value in "$DISPATCH_FORGE" "$REPO_FORGE"; do
+            case "$value" in ''|true|false) ;; *) echo "::error::publish_forge / PUBLISH_FORGE must be true or false (got '$value')"; exit 1 ;; esac
+          done
+          # Off wins: a recovery dispatch with the default input must not undo a variable set to false.
+          FORGE_SWITCH=true
+          [ "$DISPATCH_FORGE" != false ] && [ "$REPO_FORGE" != false ] || FORGE_SWITCH=false
           case "${PUBLISH_LOADERS}" in
-            both)
+            all)
+              PUBLISH_FORGE=false
+              [ "$FORGE" != true ] || PUBLISH_FORGE="$FORGE_SWITCH"
               echo "publish_fabric=true" >> "$GITHUB_OUTPUT"
               echo "publish_neoforge=true" >> "$GITHUB_OUTPUT"
-              echo "Release mode: both loaders"
+              echo "publish_forge=$PUBLISH_FORGE" >> "$GITHUB_OUTPUT"
+              echo "Release mode: every loader of the line (Forge on this line: $FORGE, published here: $PUBLISH_FORGE)"
+              if [ "$FORGE" = true ] && [ "$PUBLISH_FORGE" = false ]; then
+                echo "::notice::Forge is switched off for this run: upload the Forge jar of the GitHub Release to Modrinth and CurseForge by hand"
+              fi
               ;;
             *)
-              echo "::error::PUBLISH_LOADERS must be 'both' for the standard release workflow (got '${PUBLISH_LOADERS}')"
+              echo "::error::PUBLISH_LOADERS must be 'all' for the standard release workflow (got '${PUBLISH_LOADERS}')"
               exit 1
               ;;
           esac
@@ -167,8 +215,8 @@ jobs:
       - name: Cleanliness gate
         run: bash .github/scripts/scan-clean.sh .
 
-      # One root build compiles all modules (common + fabric + neoforge) and runs
-      # the Fabric server gametests as part of :fabric:build.
+      # One root build compiles all modules (common + fabric + neoforge, + forge where settings.gradle
+      # includes it) and runs the Fabric server gametests as part of :fabric:build.
       #
       # ALA_BUILD_TIME stamps the real publish time into the released jar. A local build has no such
       # variable and falls back to the HEAD commit date on purpose: the stamp has to be a function of
@@ -191,6 +239,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
+          FORGE: ${{ steps.game.outputs.forge }}
         run: |
           SHA="$(git rev-parse HEAD)"
           RUN="$(gh run list -R "$REPO" --workflow test.yml --event workflow_dispatch --status success \
@@ -206,9 +255,20 @@ jobs:
             echo "reused=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          # A run made before this line shipped Forge kept no Forge jar: build here rather than publish
+          # an incomplete set.
+          if [ "$FORGE" = true ] && [ -z "$(find /tmp/verified -name 'alaindustrial-forge-*.jar')" ]; then
+            echo "::warning::Tests run $RUN on $SHA kept no Forge jar - building here"
+            echo "reused=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           mkdir -p fabric/build/libs neoforge/build/libs
           find /tmp/verified -name 'alaindustrial-fabric-*.jar'   -exec cp {} fabric/build/libs/ \;
           find /tmp/verified -name 'alaindustrial-neoforge-*.jar' -exec cp {} neoforge/build/libs/ \;
+          if [ "$FORGE" = true ]; then
+            mkdir -p forge/build/libs
+            find /tmp/verified -name 'alaindustrial-forge-*.jar' -exec cp {} forge/build/libs/ \;
+          fi
           echo "reusing the jars of Tests run $RUN (commit $SHA)"
           echo "reused=true" >> "$GITHUB_OUTPUT"
 
@@ -218,19 +278,25 @@ jobs:
           export ALA_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M)"
           ./gradlew build --no-daemon --stacktrace --no-build-cache
 
-      # In-world behaviour tests for BOTH loaders must pass before a release ships.
-      # :fabric:runGameTest = Fabric server gametests; :neoforge:runGameTests =
-      # NeoForge gameTestServer world tests. Required tests gate the build; tests
-      # marked optional (unfinished features) only warn.
-      - name: Game tests (both loaders)
+      # In-world behaviour tests for EVERY loader of the line must pass before a release ships.
+      # :fabric:runGameTest = Fabric server gametests; :neoforge:runGameTests = NeoForge
+      # gameTestServer world tests; :forge:runGameTests = Forge's game-test server (26.3 only).
+      # Required tests gate the build; tests marked optional (unfinished features) only warn.
+      - name: Game tests (every loader)
         if: steps.reuse.outputs.reused != 'true'
-        run: ./gradlew :fabric:runGameTest :neoforge:runGameTests --no-daemon --stacktrace --no-build-cache
+        env:
+          FORGE: ${{ steps.game.outputs.forge }}
+        run: |
+          LANES=(:fabric:runGameTest :neoforge:runGameTests)
+          [ "$FORGE" != true ] || LANES+=(:forge:runGameTests)
+          ./gradlew "${LANES[@]}" --no-daemon --stacktrace --no-build-cache
 
-      # Resolve BOTH production jars and validate them before any upload. Guards:
+      # Resolve EVERY production jar of the line and validate them before any upload. Guards:
       #  1. each jar exists and is non-empty,
       #  2. the version in each filename matches the tag (catches a stale jar),
       #  3. each jar actually carries its loader's metadata — so the [Fabric] /
-      #     [NeoForge] label can never be pinned to the wrong artifact.
+      #     [NeoForge] / [Forge] label can never be pinned to the wrong artifact,
+      #  4. the set of jars is the line's own: Forge on 26.3, no Forge on 26.2.
       - name: Resolve & validate artifacts
         id: meta
         env:
@@ -239,32 +305,46 @@ jobs:
           # would be executed as source. Same reason the tag is read from env one step above.
           RELEASE_VERSION: ${{ steps.rel.outputs.version }}
           MC: ${{ steps.game.outputs.minecraft }}
+          FORGE: ${{ steps.game.outputs.forge }}
         run: |
           VERSION="$RELEASE_VERSION"
           FABRIC_JAR="fabric/build/libs/alaindustrial-fabric-$MC-$VERSION.jar"
           NEOFORGE_JAR="neoforge/build/libs/alaindustrial-neoforge-$MC-$VERSION.jar"
-          for f in "$FABRIC_JAR" "$NEOFORGE_JAR"; do
+          FORGE_JAR=""
+          [ "$FORGE" != true ] || FORGE_JAR="forge/build/libs/alaindustrial-forge-$MC-$VERSION.jar"
+          for f in "$FABRIC_JAR" "$NEOFORGE_JAR" $FORGE_JAR; do
             [ -s "$f" ] || { echo "::error::missing or empty jar: $f"; exit 1; }
+            case "$f" in *"-$VERSION.jar") ;; *) echo "::error::jar version != $VERSION ($f)"; exit 1;; esac
           done
-          case "$FABRIC_JAR"   in *"-$VERSION.jar") ;; *) echo "::error::fabric jar version != $VERSION ($FABRIC_JAR)"; exit 1;; esac
-          case "$NEOFORGE_JAR" in *"-$VERSION.jar") ;; *) echo "::error::neoforge jar version != $VERSION ($NEOFORGE_JAR)"; exit 1;; esac
+          FORGE_ARGS=()
+          [ -z "$FORGE_JAR" ] || FORGE_ARGS=(--forge "$FORGE_JAR")
           python .github/scripts/verify-artifacts.py \
             --version "$VERSION" --minecraft "$MC" \
             --fabric "$FABRIC_JAR" \
             --neoforge "$NEOFORGE_JAR" \
+            "${FORGE_ARGS[@]}" \
             --output release-manifest.json
           # SHA-512 next to the SHA-256: Modrinth reports sha1 and sha512 for every file, so this
           # is the hash a post-release check can compare a Modrinth file against.
           jq --arg fabric "$(sha512sum "$FABRIC_JAR" | cut -d' ' -f1)" \
              --arg neoforge "$(sha512sum "$NEOFORGE_JAR" | cut -d' ' -f1)" \
-             '.artifacts |= map(.sha512 = (if .loader == "fabric" then $fabric else $neoforge end))' \
+             --arg forge "$([ -z "$FORGE_JAR" ] || sha512sum "$FORGE_JAR" | cut -d' ' -f1)" \
+             '.artifacts |= map(.sha512 = ({fabric: $fabric, neoforge: $neoforge, forge: $forge}[.loader]))' \
              release-manifest.json > release-manifest.tmp
           mv release-manifest.tmp release-manifest.json
           echo "version=$VERSION"          >> "$GITHUB_OUTPUT"
           echo "fabric_jar=$FABRIC_JAR"     >> "$GITHUB_OUTPUT"
           echo "neoforge_jar=$NEOFORGE_JAR" >> "$GITHUB_OUTPUT"
+          echo "forge_jar=$FORGE_JAR"       >> "$GITHUB_OUTPUT"
+          # The GitHub Release attachments, one path per line.
+          {
+            echo "files<<FILES_END"
+            printf '%s\n' "$FABRIC_JAR" "$NEOFORGE_JAR" $FORGE_JAR release-manifest.json publish-ids.json
+            echo "FILES_END"
+          } >> "$GITHUB_OUTPUT"
           echo "Fabric:   $FABRIC_JAR"
           echo "NeoForge: $NEOFORGE_JAR"
+          echo "Forge:    ${FORGE_JAR:-not on Minecraft $MC}"
 
       # Exclude the obsolete legacy version group; ambiguous matches fail before uploads.
       - name: Resolve CurseForge loader IDs
@@ -272,6 +352,9 @@ jobs:
         env:
           CF_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           MC: ${{ steps.game.outputs.minecraft }}
+          # Only when this run uploads Forge: with Forge switched off for a hand upload, a CurseForge list
+          # without a single "Forge" entry must not stop the Fabric and NeoForge uploads.
+          FORGE: ${{ steps.mode.outputs.publish_forge }}
         run: |
           [ -n "$CF_TOKEN" ] || { echo "::error::CURSEFORGE_TOKEN missing"; exit 1; }
           curl -sSf --retry 5 --retry-delay 15 --connect-timeout 20 --max-time 180 \
@@ -281,10 +364,16 @@ jobs:
           [[ "$MC_ID" =~ ^[0-9]+$ && "$NEOFORGE_ID" =~ ^[0-9]+$ ]] || exit 1
           echo "minecraft_id=$MC_ID" >> "$GITHUB_OUTPUT"
           echo "neoforge_id=$NEOFORGE_ID" >> "$GITHUB_OUTPUT"
+          # The Forge loader entry, matched by its exact name ("NeoForge" is a different entry).
+          if [ "$FORGE" = true ]; then
+            FORGE_ID=$(jq -er '[.[] | select(.name == "Forge")] | if length == 1 then .[0].id else error("ambiguous loader") end' cf_versions.json)
+            [[ "$FORGE_ID" =~ ^[0-9]+$ ]] || exit 1
+            echo "forge_id=$FORGE_ID" >> "$GITHUB_OUTPUT"
+          fi
 
       # Modrinth project ACLWFBlU (slug: ala-industrial). We publish separate
       # versions per loader because Modrinth dependencies are version-level, not
-      # file-level: Fabric requires Fabric API, NeoForge does not.
+      # file-level: Fabric requires Fabric API, NeoForge and Forge do not.
       - name: Check Modrinth upload targets
         id: modrinth
         env:
@@ -295,13 +384,16 @@ jobs:
           VERSION="$RELEASE_VERSION"
           versions=$(curl -sSf --retry 5 --retry-delay 15 --retry-all-errors --connect-timeout 20 --max-time 180 \
             "https://api.modrinth.com/v2/project/ACLWFBlU/version" \
-            -H "User-Agent: AlaMine-Team-Org/AlaIndustrial-release/1.0")
+            -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0")
           fabric_exists=$(printf '%s' "$versions" | jq -r --arg v "$VERSION+fabric" 'any(.[]; .version_number == $v)')
           neoforge_exists=$(printf '%s' "$versions" | jq -r --arg v "$VERSION+neoforge" 'any(.[]; .version_number == $v)')
+          forge_exists=$(printf '%s' "$versions" | jq -r --arg v "$VERSION+forge" 'any(.[]; .version_number == $v)')
           echo "fabric_exists=$fabric_exists" >> "$GITHUB_OUTPUT"
           echo "neoforge_exists=$neoforge_exists" >> "$GITHUB_OUTPUT"
+          echo "forge_exists=$forge_exists" >> "$GITHUB_OUTPUT"
           echo "Modrinth Fabric target $VERSION+fabric exists: $fabric_exists"
           echo "Modrinth NeoForge target $VERSION+neoforge exists: $neoforge_exists"
+          echo "Modrinth Forge target $VERSION+forge exists: $forge_exists"
 
       - name: Publish Fabric to Modrinth
         id: mr_fabric
@@ -339,7 +431,7 @@ jobs:
             code=$(curl -sS --connect-timeout 20 --max-time 180 -o modrinth_resp.json -w '%{http_code}' -X POST \
               "https://api.modrinth.com/v2/version" \
               -H "Authorization: $MODRINTH_TOKEN" \
-              -H "User-Agent: AlaMine-Team-Org/AlaIndustrial-release/1.0" \
+              -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0" \
               --form-string "data=$data" \
               -F "fabric_file=@$JAR")
             if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
@@ -391,7 +483,7 @@ jobs:
             code=$(curl -sS --connect-timeout 20 --max-time 180 -o modrinth_resp.json -w '%{http_code}' -X POST \
               "https://api.modrinth.com/v2/version" \
               -H "Authorization: $MODRINTH_TOKEN" \
-              -H "User-Agent: AlaMine-Team-Org/AlaIndustrial-release/1.0" \
+              -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0" \
               --form-string "data=$data" \
               -F "neoforge_file=@$JAR")
             if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
@@ -405,6 +497,60 @@ jobs:
             [ "$attempt" -lt 5 ] && sleep 15
           done
           echo "::error::Modrinth NeoForge upload failed after 5 attempts (last HTTP $code). Response body above."
+          exit 1
+
+      # Forge: the 26.3 line only. No required dependency: the jar needs only Forge and Minecraft
+      # (forge/src/main/resources/META-INF/mods.toml).
+      - name: Publish Forge to Modrinth
+        id: mr_forge
+        if: steps.mode.outputs.publish_forge == 'true' && steps.modrinth.outputs.forge_exists != 'true'
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          VERSION: ${{ steps.game.outputs.identity }}
+          MC: ${{ steps.game.outputs.minecraft }}
+          RELEASE_TYPE: ${{ steps.game.outputs.forge_type }}
+          JAR: ${{ steps.meta.outputs.forge_jar }}
+        run: |
+          data=$(jq -n \
+            --rawfile changelog CHANGELOG.md \
+            --arg project "ACLWFBlU" \
+            --arg mc "$MC" \
+            --arg release_type "$RELEASE_TYPE" \
+            --arg version "$VERSION+forge" \
+            --arg name "Ala Industrial $VERSION [Forge]" \
+            '{
+              name: $name,
+              version_number: $version,
+              changelog: $changelog,
+              dependencies: [],
+              game_versions: [$mc],
+              version_type: $release_type,
+              loaders: ["forge"],
+              featured: false,
+              status: "listed",
+              project_id: $project,
+              file_parts: ["forge_file"],
+              primary_file: "forge_file",
+              environment: "client_and_server"
+            }')
+          for attempt in 1 2 3 4 5; do
+            code=$(curl -sS --connect-timeout 20 --max-time 180 -o modrinth_resp.json -w '%{http_code}' -X POST \
+              "https://api.modrinth.com/v2/version" \
+              -H "Authorization: $MODRINTH_TOKEN" \
+              -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0" \
+              --form-string "data=$data" \
+              -F "forge_file=@$JAR")
+            if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+              echo "Modrinth Forge upload OK (HTTP $code)"
+              cat modrinth_resp.json
+              echo "id=$(jq -r '.id // empty' modrinth_resp.json)" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "::warning::Modrinth Forge upload attempt $attempt failed with HTTP $code; body:"
+            cat modrinth_resp.json || true
+            [ "$attempt" -lt 5 ] && sleep 15
+          done
+          echo "::error::Modrinth Forge upload failed after 5 attempts (last HTTP $code). Response body above."
           exit 1
 
       # Best-effort public index check before hitting the CurseForge upload API.
@@ -424,7 +570,7 @@ jobs:
           # so this scales no matter how many releases accumulate.
           curl -sSf --retry 5 --retry-delay 15 --retry-all-errors --connect-timeout 20 --max-time 180 \
             "https://api.cfwidget.com/minecraft/mc-mods/1597723" \
-            -H "User-Agent: AlaMine-Team-Org/AlaIndustrial-release/1.0" \
+            -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0" \
             -o cfwidget.json
           python - "$VERSION" <<'PY' > cf_targets.env
           import json, sys
@@ -439,6 +585,7 @@ jobs:
               return f"Ala Industrial v{version} [{loader}]" in names
           print(f"fabric_exists={str(has('Fabric')).lower()}")
           print(f"neoforge_exists={str(has('NeoForge')).lower()}")
+          print(f"forge_exists={str(has('Forge')).lower()}")
           PY
           cat cf_targets.env >> "$GITHUB_OUTPUT"
           # Read the echo values back from OUR file, not from $GITHUB_OUTPUT: the Modrinth step
@@ -446,10 +593,11 @@ jobs:
           # Modrinth's answer while CurseForge's own value sat further down.
           echo "CurseForge Fabric target $VERSION exists: $(grep '^fabric_exists=' cf_targets.env | cut -d= -f2)"
           echo "CurseForge NeoForge target $VERSION exists: $(grep '^neoforge_exists=' cf_targets.env | cut -d= -f2)"
+          echo "CurseForge Forge target $VERSION exists: $(grep '^forge_exists=' cf_targets.env | cut -d= -f2)"
 
-      # Two CurseForge uploads, one per loader, as SEPARATE steps so a partial
-      # failure (one loader up, the other down) is unambiguous in the job log and
-      # you re-run only what failed. Same changelog for both.
+      # One CurseForge upload per loader, as SEPARATE steps so a partial
+      # failure (one loader up, another down) is unambiguous in the job log and
+      # you re-run only what failed. Same changelog for every loader.
       - name: Publish Fabric to CurseForge
         id: cf_fabric
         if: steps.mode.outputs.publish_fabric == 'true' && steps.curseforge.outputs.fabric_exists != 'true'
@@ -529,13 +677,52 @@ jobs:
           echo "::error::CurseForge NeoForge upload failed after 5 attempts (last HTTP $code). Response body above."
           exit 1
 
+      - name: Publish Forge to CurseForge
+        id: cf_forge
+        if: steps.mode.outputs.publish_forge == 'true' && steps.curseforge.outputs.forge_exists != 'true'
+        env:
+          CF_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          JAR: ${{ steps.meta.outputs.forge_jar }}
+          FORGE_ID: ${{ steps.loaders.outputs.forge_id }}
+          RELEASE_TYPE: ${{ steps.game.outputs.forge_type }}
+          MC_ID: ${{ steps.loaders.outputs.minecraft_id }}
+          DISPLAY_NAME: Ala Industrial ${{ steps.rel.outputs.tag }} [Forge]
+        run: |
+          metadata=$(jq -n \
+            --rawfile changelog CHANGELOG.md \
+            --arg name "$DISPLAY_NAME" \
+            --argjson mc "$MC_ID" \
+            --arg release_type "$RELEASE_TYPE" \
+            --argjson fg "$FORGE_ID" \
+            '{changelog: $changelog, changelogType: "markdown", displayName: $name, gameVersions: [$mc, $fg, 9638, 9639], releaseType: $release_type}')
+          # $mc = this line's Minecraft version and $fg = Forge (both resolved above),
+          # 9638 = Client, 9639 = Server (the "environment group", see the Fabric step).
+          for attempt in 1 2 3 4 5; do
+            code=$(curl -sS --connect-timeout 20 --max-time 180 -o cf_resp.json -w '%{http_code}' -X POST \
+              "https://minecraft.curseforge.com/api/projects/1597723/upload-file" \
+              -H "X-Api-Token: $CF_TOKEN" \
+              --form-string "metadata=$metadata" \
+              -F "file=@$JAR")
+            if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+              echo "CurseForge Forge upload OK (HTTP $code)"
+              cat cf_resp.json
+              echo "file_id=$(jq -r '.id // empty' cf_resp.json)" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "::warning::CurseForge Forge upload attempt $attempt failed with HTTP $code; body:"
+            cat cf_resp.json || true
+            [ "$attempt" -lt 5 ] && sleep 15
+          done
+          echo "::error::CurseForge Forge upload failed after 5 attempts (last HTTP $code). Response body above."
+          exit 1
+
       # A machine-readable record of what this run published, attached to the GitHub Release so
       # a post-release check can ask each marketplace about exactly these files instead of
       # scanning listings. Only public identifiers and hashes; nothing from a response body.
       # A target skipped because it already existed is still named: Modrinth by looking its
       # version up by version_number, CurseForge as "preexisting" (its upload token cannot list
       # files). Never fails the release over bookkeeping: a missing id is written as null and
-      # the check falls back to the listing for that loader.
+      # the check falls back to the listing for that loader. A line without Forge records no forge keys.
       - name: Record publication ids
         env:
           TAG: ${{ steps.rel.outputs.tag }}
@@ -544,14 +731,18 @@ jobs:
           MR_NEOFORGE_ID: ${{ steps.mr_neoforge.outputs.id }}
           CF_FABRIC_ID: ${{ steps.cf_fabric.outputs.file_id }}
           CF_NEOFORGE_ID: ${{ steps.cf_neoforge.outputs.file_id }}
+          MR_FORGE_ID: ${{ steps.mr_forge.outputs.id }}
+          CF_FORGE_ID: ${{ steps.cf_forge.outputs.file_id }}
+          PUBLISH_FORGE: ${{ steps.mode.outputs.publish_forge }}
           FABRIC_JAR: ${{ steps.meta.outputs.fabric_jar }}
           NEOFORGE_JAR: ${{ steps.meta.outputs.neoforge_jar }}
+          FORGE_JAR: ${{ steps.meta.outputs.forge_jar }}
         run: |
           modrinth_id() {  # $1 = id from the upload step (empty when skipped), $2 = version_number
             if [[ "$1" =~ ^[A-Za-z0-9]{8}$ ]]; then printf '%s' "$1"; return; fi
             curl -sSf --retry 5 --retry-delay 10 --retry-all-errors --connect-timeout 20 --max-time 60 \
               "https://api.modrinth.com/v2/project/ACLWFBlU/version" \
-              -H "User-Agent: AlaMine-Team-Org/AlaIndustrial-release/1.0" \
+              -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0" \
               | jq -r --arg v "$2" '[.[] | select(.version_number == $v) | .id][0] // empty' \
               || true
           }
@@ -579,18 +770,35 @@ jobs:
               curseforge: {fabric: $cff, neoforge: $cfn},
               sha256: {fabric: $sf, neoforge: $sn}
             }' > publish-ids.json
+          if [ -n "$FORGE_JAR" ]; then
+            MG="$(modrinth_id "$MR_FORGE_ID" "$VERSION+forge")"
+            # Forge switched off for this run: its files are uploaded by hand, so nothing here is evidence
+            # that they exist. by_hand tells the post-release check to look for the hand-uploaded files.
+            BY_HAND=false
+            CFG="$(cf_entry "$CF_FORGE_ID")"
+            if [ "$PUBLISH_FORGE" != true ]; then
+              BY_HAND=true
+              CFG="$(jq -n '{fileId: null, by_hand: true}')"
+            elif [[ -z "$MG" ]]; then
+              echo "::warning::the Modrinth Forge version id could not be resolved; recorded as null"
+            fi
+            jq --arg mg "$MG" --arg mgv "$VERSION+forge" \
+               --argjson cfg "$CFG" --argjson by_hand "$BY_HAND" \
+               --arg sg "$(sha256sum "$FORGE_JAR" | cut -d' ' -f1)" \
+               '.modrinth.forge = ({id: (if $mg == "" then null else $mg end), version_number: $mgv}
+                                   + (if $by_hand then {by_hand: true} else {} end))
+                | .curseforge.forge = $cfg | .sha256.forge = $sg' \
+               publish-ids.json > publish-ids.tmp
+            mv publish-ids.tmp publish-ids.json
+          fi
           cat publish-ids.json
 
-      # One GitHub Release carrying BOTH loader jars. mc-publish renders Markdown
+      # One GitHub Release carrying every loader jar of the line. mc-publish renders Markdown
       # fine on GitHub.
       - name: Create GitHub Release
         uses: Kira-NT/mc-publish@v3.3.0
         with:
-          files: |
-            ${{ steps.meta.outputs.fabric_jar }}
-            ${{ steps.meta.outputs.neoforge_jar }}
-            release-manifest.json
-            publish-ids.json
+          files: ${{ steps.meta.outputs.files }}
           name: Ala Industrial ${{ steps.rel.outputs.tag }}
           version: ${{ steps.rel.outputs.tag }}
           version-type: ${{ steps.game.outputs.neoforge_type }}

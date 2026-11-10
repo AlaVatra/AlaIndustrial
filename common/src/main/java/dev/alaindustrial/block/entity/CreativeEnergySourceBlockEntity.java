@@ -232,6 +232,13 @@ public class CreativeEnergySourceBlockEntity extends MachineBlockEntity implemen
 		if (target.isEmpty()) {
 			return;
 		}
+		// MOD-962: a blank that arrives already full takes no energy, so finish it before the budget check.
+		ItemStack alreadyFull = CrystalBlankItem.promote(target);
+		if (!alreadyFull.isEmpty()) {
+			setItem(CHARGE_SLOT, alreadyFull);
+			setChanged();
+			return;
+		}
 		long rate = ItemEnergy.inputRate(target) * target.getCount();
 		long budget = Math.min(ItemEnergy.stackRoom(target), rate);
 		if (budget <= 0) {

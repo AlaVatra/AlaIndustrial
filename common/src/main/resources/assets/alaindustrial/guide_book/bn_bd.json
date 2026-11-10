@@ -6851,6 +6851,36 @@
           ]
         },
         {
+          "id": "slingshot",
+          "title": "গুলতি",
+          "icon": "alaindustrial:slingshot",
+          "pages": [
+            {
+              "type": "text",
+              "title": "গুলতি",
+              "text": "কাঠের একটি গুলতি, যা বাঁকা পথে মশাল ছোড়ে — মশাল যেখানে লাগে সেখানেই বসে যায়, মেঝেতে বা দেয়ালে; ধনুকের মতো টানতে হয় এবং কোনো শক্তি লাগে না।"
+            },
+            {
+              "type": "recipe",
+              "title": "রেসিপি",
+              "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+              "grid": [
+                "minecraft:stick",
+                "minecraft:string",
+                "minecraft:stick",
+                "",
+                "minecraft:stick",
+                "",
+                "",
+                "minecraft:stick",
+                ""
+              ],
+              "result_id": "alaindustrial:slingshot",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "soul_vessel",
           "title": "আত্মার পাত্র",
           "icon": "alaindustrial:soul_vessel",

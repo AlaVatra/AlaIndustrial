@@ -55,17 +55,21 @@ import dev.alaindustrial.client.render.FluidTapBlockEntityRenderer;
 import dev.alaindustrial.client.render.ApiaryDroneModel;
 import dev.alaindustrial.client.render.ApiaryStationRenderer;
 import dev.alaindustrial.client.render.GardenDroneBlockEntityRenderer;
+import dev.alaindustrial.client.render.HallSchematicOverlay;
 import dev.alaindustrial.client.render.HallSchematicRenderer;
 import dev.alaindustrial.client.render.IncubatorBlockEntityRenderer;
 import dev.alaindustrial.client.render.IncubatorDomeTint;
 import dev.alaindustrial.client.render.MobWheelBlockEntityRenderer;
 import dev.alaindustrial.client.render.ModChestBoatRenderer;
+import dev.alaindustrial.client.render.NetworkOverlayRenderer;
+import dev.alaindustrial.client.render.ObstructionHighlight;
 import dev.alaindustrial.client.render.PiezoPlateTint;
 import dev.alaindustrial.client.render.PiezoPlateXray;
 import dev.alaindustrial.client.render.QuarryFrameRenderer;
 import dev.alaindustrial.client.render.RadiantSolarPanelBlockEntityRenderer;
 import dev.alaindustrial.client.render.ReactorDoorBlockEntityRenderer;
 import dev.alaindustrial.client.render.RootInspection;
+import dev.alaindustrial.client.render.SettlementBorderOverlay;
 import dev.alaindustrial.client.render.SoundAbsorberOverlay;
 import dev.alaindustrial.client.render.SprinklerHeadBlockEntityRenderer;
 import dev.alaindustrial.client.render.StockDisplayFrameRenderer;
@@ -76,6 +80,7 @@ import dev.alaindustrial.client.render.WarehouseShelfBlockEntityRenderer;
 import dev.alaindustrial.client.render.WaterMillWheelBlockEntityRenderer;
 import dev.alaindustrial.client.render.WindMillRotorBlockEntityRenderer;
 import dev.alaindustrial.client.render.WorkstationBlockEntityRenderer;
+import dev.alaindustrial.client.render.ZonePreviewRenderer;
 import dev.alaindustrial.client.render.entity.OilSlimeRenderer;
 import dev.alaindustrial.client.render.entity.ShiftWorkerModel;
 import dev.alaindustrial.client.render.entity.ShiftWorkerRenderer;
@@ -102,12 +107,14 @@ import net.minecraft.client.model.object.chest.ChestModel;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -152,7 +159,8 @@ import org.jspecify.annotations.Nullable;
  * fluid models ({@link #FLUID_MODELS}) and the particle providers ({@link #PARTICLE_PROVIDERS}), which both
  * client entry points used to list by hand — and which {@code loader_parity_check.py} could not see.
  * MOD-778 added the block outlines ({@link #BLOCK_OUTLINES}); MOD-959 the renderers of the non-mob entities
- * ({@link #ENTITY_RENDERERS}), next to the mob renderers.
+ * ({@link #ENTITY_RENDERERS}), next to the mob renderers; MOD-962 the per-frame world overlays
+ * ({@link #WORLD_OVERLAYS}).
  *
  * <p>Lives in the {@code client} package so it is only ever class-loaded on the physical client.
  */
@@ -702,6 +710,39 @@ public final class ClientContentManifest {
 			blockOutline(ConcentratorOutline::shape),
 			// MOD-803: the station or either glass cell of an assembled teleporter outlines the whole capsule.
 			blockOutline(TeleporterCapsuleOutline::shape));
+
+	// ─────────────────────────────────────────────────────────────────────────────────────────
+	// World overlays (MOD-962)
+	// ─────────────────────────────────────────────────────────────────────────────────────────
+
+	/**
+	 * One per-frame world overlay: the loader-neutral {@code (SubmitNodeCollector, CameraRenderState)} pair both
+	 * loaders hand over at the same frame point (Fabric {@code LevelRenderEvents.AFTER_TRANSLUCENT_FEATURES},
+	 * NeoForge {@code SubmitCustomGeometryEvent}).
+	 */
+	@FunctionalInterface
+	public interface WorldOverlay {
+		void submitFrame(SubmitNodeCollector collector, CameraRenderState camera);
+	}
+
+	/** Every per-frame world overlay, in drawing order; both loaders replay it from their own frame hook. */
+	public static final List<WorldOverlay> WORLD_OVERLAYS = List.of(
+			// MOD-016, MOD-033: the Network Analyzer's highlight.
+			NetworkOverlayRenderer::submitFrame,
+			// MOD-278: the personal repeller dome (see ZonePreviewRenderer).
+			ZonePreviewRenderer::submitFrame,
+			// MOD-603: the concentrator's assembly schematic, a per-frame read of the world in front of the player.
+			ConcentratorSchematicRenderer::submitFrame,
+			// MOD-764: the wrench's x-ray of piezo plates.
+			PiezoPlateXray::submitFrame,
+			// MOD-804: the sound absorbers' zones under the wrench, and the focused group's HUD line.
+			SoundAbsorberOverlay::submitFrame,
+			// MOD-843: a settlement's border, for the player who pressed "show borders" in its core's screen.
+			SettlementBorderOverlay::submitFrame,
+			// MOD-857 (round 2): the town hall's schematic, for the player who turned it on in its core's screen.
+			HallSchematicOverlay::submitFrame,
+			// MOD-890: the block in the way of the town's work, after "show it" in its core's screen.
+			ObstructionHighlight::submitFrame);
 
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 	// Picture-in-picture renderers (MOD-797)

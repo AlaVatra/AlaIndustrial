@@ -40,7 +40,7 @@ public final class GuideBookScreen extends Screen {
 	private static final int GUTTER = 22;   // left space for a list-row icon
 	private static final int HEADER_BG = 0xFF000000; // black title bar
 	private static final int TITLE_COLOR = 0xFFF4F4F4; // light title on the black bar
-	private static final String WIKI_BASE = "https://alamine-team-org.github.io/AlaIndustrial/";
+	private static final String WIKI_BASE = "https://wiki.alaindustrial.org/";
 
 	private final Book book;
 	private int tab = 0;

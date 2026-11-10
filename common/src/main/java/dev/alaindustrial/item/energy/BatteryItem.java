@@ -85,6 +85,15 @@ public class BatteryItem extends Item implements PoweredItem {
 		long move = Math.min(Math.min(ItemEnergy.get(battery), ItemEnergy.room(target)),
 				ToolConfig.batteryTransferPerUse);
 		if (move <= 0) {
+			// MOD-962: a blank already full needs no charge to finish — the pour finishes it instead of failing.
+			ItemStack alreadyFull = CrystalBlankItem.promote(target);
+			if (!alreadyFull.isEmpty()) {
+				if (level instanceof ServerLevel) {
+					player.setItemInHand(hand == InteractionHand.MAIN_HAND
+							? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND, alreadyFull);
+				}
+				return InteractionResult.SUCCESS;
+			}
 			if (player instanceof ServerPlayer serverPlayer) {
 				serverPlayer.sendSystemMessage(
 						Component.translatable("item.alaindustrial.battery.nothing_to_move")

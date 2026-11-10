@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.fabric.loom) apply false
     // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
     alias(libs.plugins.neoforge.moddev) apply false
+    // https://plugins.gradle.org/plugin/net.minecraftforge.gradle — MinecraftForge, the third loader (MOD-962)
+    alias(libs.plugins.forge.gradle) apply false
 }
 
 // Repo validators (OKF docs, assets, balance, traceability, tasks, status, i18n, changelog) wired

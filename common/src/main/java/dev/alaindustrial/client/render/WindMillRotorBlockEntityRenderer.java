@@ -32,7 +32,8 @@ import org.jspecify.annotations.Nullable;
 
 /** Renders the visible wooden rotor in front of wind mill blocks. */
 public final class WindMillRotorBlockEntityRenderer<T extends MachineBlockEntity>
-		implements BlockEntityRenderer<T, WindMillRotorBlockEntityRenderer.State> {
+		implements BlockEntityRenderer<T, WindMillRotorBlockEntityRenderer.State>,
+			RenderBoxProvider<T> {
 	/**
 	 * One sprite per rotor grade (MOD-385), so the player reads a farm's upgrade level off the blades
 	 * from a distance instead of having to open every mill. All three live on the same block atlas, so

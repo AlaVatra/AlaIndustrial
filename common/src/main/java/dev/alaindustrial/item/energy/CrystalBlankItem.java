@@ -7,10 +7,16 @@ import dev.alaindustrial.core.energy.EnergyTier;
 import dev.alaindustrial.registry.ModContent;
 import java.util.function.Consumer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The chargeable half of an EU crystal (MOD-504): a blank that fills up once and is then gone.
@@ -26,6 +32,11 @@ import net.minecraft.world.item.component.TooltipDisplay;
  * mod's storage. {@link #promote} is the shared decision ("is this blank finished, and what does it
  * become"), and each charging site applies it to its own container. The sites are listed in the OKF
  * spec and covered by a gametest per path, because a missed one is a blank that silently stays a blank.
+ *
+ * <p><b>The one swap done here</b> (MOD-962) is in a player's inventory: {@link #inventoryTick} finishes a
+ * full blank the player carries. It catches every blank that filled up somewhere unable to swap it — a
+ * foreign charger on Forge, whose {@code IEnergyStorage} cannot replace the stack, or a hand-held path of
+ * {@code PlayerEuDistributor} with no slot index — the moment a player holds it.
  */
 public class CrystalBlankItem extends Item implements PoweredItem {
 	private final CrystalTier tier;
@@ -54,6 +65,28 @@ public class CrystalBlankItem extends Item implements PoweredItem {
 			return ItemStack.EMPTY;
 		}
 		return new ItemStack(ModContent.crystal(blank.tier).get(), stack.getCount());
+	}
+
+	/**
+	 * A full blank in a player's inventory becomes its crystal (MOD-962). Vanilla hands the stack, not its
+	 * slot index, so the slot is found by identity; the search runs only once the blank is full.
+	 */
+	@Override
+	public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+		if (!(entity instanceof Player player)) {
+			return;
+		}
+		ItemStack finished = promote(stack);
+		if (finished.isEmpty()) {
+			return;
+		}
+		Inventory inventory = player.getInventory();
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
+			if (inventory.getItem(i) == stack) {
+				inventory.setItem(i, finished);
+				return;
+			}
+		}
 	}
 
 	// MOD-498 — Item#appendHoverText carries a vanilla soft-deprecation marker but is still the only hook

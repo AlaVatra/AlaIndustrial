@@ -1,0 +1,9 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.alaindustrial.mixin.forge",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": ["BaseContainerItemCapabilityMixin", "CropGrowthSoilMixin", "CropSoilTagMixin", "FluidTypeLookupMixin",
+			"PlayerlessUseMixin"],
+	"injectors": {"defaultRequire": 1}
+}

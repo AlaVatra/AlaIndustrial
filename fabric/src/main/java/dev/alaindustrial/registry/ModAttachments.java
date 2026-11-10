@@ -67,7 +67,7 @@ public final class ModAttachments {
 
 	private static <T> void bindStore(ModPlayerAttachments.PlayerAttachmentDef<T> def) {
 		AttachmentType<T> type = type(def);
-		def.bindStore().accept(new PlayerAttachmentAccessor<>() {
+		def.bind(new PlayerAttachmentAccessor<>() {
 			@Override
 			public T get(ServerPlayer player) {
 				// getAttachedOrCreate installs the default on a read; getAttachedOrElse does not (MOD-483).

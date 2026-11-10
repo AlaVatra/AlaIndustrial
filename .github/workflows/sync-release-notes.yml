@@ -51,7 +51,7 @@ jobs:
           versions=$(curl -sSf --retry 5 --retry-delay 15 --retry-all-errors \
             --connect-timeout 20 --max-time 180 \
             "https://api.modrinth.com/v2/project/ACLWFBlU/version" \
-            -H "User-Agent: AlaMine-Team-Org/AlaIndustrial-release/1.0")
+            -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0")
           for loader in fabric neoforge; do
             id=$(printf '%s' "$versions" | jq -r --arg v "$VERSION+$loader" \
               'map(select(.version_number == $v)) | .[0].id // ""')
@@ -62,18 +62,35 @@ jobs:
             echo "${loader}_id=$id" >> "$GITHUB_OUTPUT"
             echo "Found $VERSION+$loader -> $id"
           done
+          # Forge ships on the 26.3 line only. A 26.3 version published before the line shipped Forge has
+          # no +forge version, so its absence there is a notice, not an error.
+          case "$VERSION" in
+            *-mc26.3)
+              id=$(printf '%s' "$versions" | jq -r --arg v "$VERSION+forge" \
+                'map(select(.version_number == $v)) | .[0].id // ""')
+              if [ -n "$id" ]; then
+                echo "forge_id=$id" >> "$GITHUB_OUTPUT"
+                echo "Found $VERSION+forge -> $id"
+              else
+                echo "::notice::no Modrinth version $VERSION+forge (released before Forge) — Fabric and NeoForge only"
+              fi
+              ;;
+          esac
 
       - name: Update Modrinth changelogs
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           FABRIC_ID: ${{ steps.ids.outputs.fabric_id }}
           NEOFORGE_ID: ${{ steps.ids.outputs.neoforge_id }}
+          FORGE_ID: ${{ steps.ids.outputs.forge_id }}
         run: |
           [ -n "$MODRINTH_TOKEN" ] || { echo "::error::MODRINTH_TOKEN secret is missing"; exit 1; }
           # --rawfile, not an output hop: passing multi-line text through GitHub Actions
           # output->input collapses newlines, which is the bug that broke changelog rendering once.
           data=$(jq -n --rawfile changelog CHANGELOG.md '{changelog: $changelog}')
-          for pair in "Fabric:$FABRIC_ID" "NeoForge:$NEOFORGE_ID"; do
+          PAIRS=("Fabric:$FABRIC_ID" "NeoForge:$NEOFORGE_ID")
+          [ -z "$FORGE_ID" ] || PAIRS+=("Forge:$FORGE_ID")
+          for pair in "${PAIRS[@]}"; do
             name="${pair%%:*}"; id="${pair##*:}"
             ok=""
             for attempt in 1 2 3 4 5; do
@@ -82,7 +99,7 @@ jobs:
                 "https://api.modrinth.com/v2/version/$id" \
                 -H "Authorization: $MODRINTH_TOKEN" \
                 -H "Content-Type: application/json" \
-                -H "User-Agent: AlaMine-Team-Org/AlaIndustrial-release/1.0" \
+                -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0" \
                 --data "$data")
               if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
                 echo "Modrinth $name notes updated (HTTP $code)"
@@ -112,12 +129,15 @@ jobs:
           VERSION: ${{ inputs.version }}
           FABRIC_ID: ${{ steps.ids.outputs.fabric_id }}
           NEOFORGE_ID: ${{ steps.ids.outputs.neoforge_id }}
+          FORGE_ID: ${{ steps.ids.outputs.forge_id }}
         run: |
           want=$(wc -w < CHANGELOG.md)
-          for pair in "Fabric:$FABRIC_ID" "NeoForge:$NEOFORGE_ID"; do
+          PAIRS=("Fabric:$FABRIC_ID" "NeoForge:$NEOFORGE_ID")
+          [ -z "$FORGE_ID" ] || PAIRS+=("Forge:$FORGE_ID")
+          for pair in "${PAIRS[@]}"; do
             name="${pair%%:*}"; id="${pair##*:}"
             got=$(curl -sSf "https://api.modrinth.com/v2/version/$id" \
-              -H "User-Agent: AlaMine-Team-Org/AlaIndustrial-release/1.0" \
+              -H "User-Agent: AlaVatra/AlaIndustrial-release/1.0" \
               | jq -r '.changelog' | wc -w)
             echo "$name: $got words live (expected ~$want)"
             [ "$got" -eq "$want" ] || echo "::warning::$name word count differs — check by eye"

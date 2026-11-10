@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
  *
  * <p>Each loader turns an entry into a vanilla {@code FunctionGameTestInstance}: the body goes into
  * {@code TEST_FUNCTION} under {@link #testId(Lane)}, the instance into {@code TEST_INSTANCE} under the
- * same key ({@code ScenarioRosterFabric}, {@code ScenarioRosterNeoForge}).
+ * same key ({@code ScenarioRosterFabric}, {@code ScenarioRosterNeoForge}, {@code ScenarioRosterForge}).
  *
  * <p><b>Ids.</b> {@link #name()} is the NeoForge id path ({@code alaindustrial:<name>}). A scenario that
  * had a hand-written Fabric wrapper keeps that wrapper's id through {@link #fabricId(String, String)};
@@ -43,8 +43,8 @@ public record RosterEntry(
 		Rotation rotation,
 		boolean required) {
 
-	/** The two gametest lanes. */
-	public enum Lane { FABRIC, NEOFORGE }
+	/** The gametest lanes; FORGE exists on the 26.3 line only (MOD-962). */
+	public enum Lane { FABRIC, NEOFORGE, FORGE }
 
 	/** Parameters that may differ between the lanes; {@code structure == null} is the lane default. */
 	public record LaneParams(int maxTicks, boolean skyAccess, @Nullable Identifier structure) {}
@@ -131,9 +131,16 @@ public record RosterEntry(
 		return new RosterEntry(name, body, fabricId, fabric, neoForge, environment, rotation, required);
 	}
 
-	/** The lane's parameters. */
+	/**
+	 * The lane's parameters. Forge runs the NeoForge lane's parameters (same rig
+	 * {@code alaindustrial:gametest_rig}, same empty environments, same ids, ADR-053); a third column would be a
+	 * third copy to drift.
+	 */
 	public LaneParams params(Lane lane) {
-		return lane == Lane.FABRIC ? fabric : neoForge;
+		return switch (lane) {
+			case FABRIC -> fabric;
+			case NEOFORGE, FORGE -> neoForge;
+		};
 	}
 
 	/** The key of this test in {@code TEST_FUNCTION} and {@code TEST_INSTANCE} on {@code lane}. */
