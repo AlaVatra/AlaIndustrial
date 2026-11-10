@@ -2,6 +2,8 @@ package dev.alaindustrial.registry;
 
 import com.google.common.collect.ImmutableSet;
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.block.IndustrialWorkbenchBlock;
+import dev.alaindustrial.registry.content.ProcessingContent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import java.util.Optional;
 import net.minecraft.core.RegistryAccess;
@@ -38,6 +40,10 @@ public final class ModProfessions {
 
 	public static final ResourceKey<VillagerProfession> INDUSTRIALIST =
 			ResourceKey.create(Registries.VILLAGER_PROFESSION, Industrialization.id("industrialist"));
+
+	/** The Industrialist's job-site block: every state of it is the POI, on every loader (MOD-962). */
+	public static final ContentManifest.BlockDef<IndustrialWorkbenchBlock> POI_BLOCK =
+			ProcessingContent.INDUSTRIAL_WORKBENCH;
 
 	// Vanilla job-site POI shape: one villager per workbench, matched at exact range.
 	public static final int POI_MAX_TICKETS = 1;

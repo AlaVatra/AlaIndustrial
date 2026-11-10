@@ -65,8 +65,8 @@ import org.jspecify.annotations.Nullable;
  * the pad silhouette. UVs are world-aligned (the sprite is sampled at the plate's own coordinates), so
  * the grain continues across the seam instead of restarting in every cell.
  */
-public final class CableAccessoryBlockEntityRenderer
-		implements BlockEntityRenderer<CableBlockEntity, CableAccessoryBlockEntityRenderer.State> {
+public final class CableAccessoryBlockEntityRenderer implements RenderBoxProvider<CableBlockEntity>,
+		BlockEntityRenderer<CableBlockEntity, CableAccessoryBlockEntityRenderer.State> {
 	/** How far, in blocks, an arm continuation stands past the cell edge at most (see CableArmReach.Band). */
 	private static final double ARM_REACH_LIMIT = 0.5;
 	/**

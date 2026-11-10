@@ -20,14 +20,13 @@ import net.minecraft.world.level.storage.loot.LootTable;
  *       same keys (see {@code neoforge/.../data/alaindustrial/loot_modifiers/structure_loot_*.json}).</li>
  * </ul>
  *
- * <p>Two differences from the earlier injections, both on purpose:
+ * <p>Two properties worth knowing:
  * <ul>
- *   <li><b>A table replaced by a datapack or another mod is extended too.</b> The Fabric handler does not
- *       ask {@code source.isBuiltin()} for these keys, so Fabric behaves like a NeoForge modifier, which
- *       applies whatever the table's source. Structure mods commonly rewrite these three tables.</li>
+ *   <li><b>A table replaced by a datapack or another mod is extended too</b>, as every row of
+ *       {@link LootInjections} is on every loader. Structure mods commonly rewrite these three tables.</li>
  *   <li><b>The config switch is a loot condition inside the sub-table</b>
  *       ({@link StructureLootEnabledCondition}), not a check at data load: it is read when a chest is
- *       rolled, identically on both loaders.</li>
+ *       rolled, identically on every loader.</li>
  * </ul>
  *
  * <p>The injection only ever adds a pool after vanilla's: no container is read or written here, so the

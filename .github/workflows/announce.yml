@@ -5,7 +5,7 @@
 # The release skill runs this once, after every line of the version is verified on the
 # marketplaces; release.yml no longer announces anything itself.
 #
-#   gh workflow run announce.yml -R AlaMine-Team-Org/AlaIndustrial -f version=X.Y.Z
+#   gh workflow run announce.yml -R AlaVatra/AlaIndustrial -f version=X.Y.Z
 name: Announce
 run-name: Announce ${{ inputs.version }}${{ inputs.channel == 'news' && ' (news)' || '' }}
 
@@ -151,7 +151,7 @@ jobs:
           DESC="$(jq -r .description post.json)"
           # Custom message mode: the exact post to send (Markdown), e.g. a short news item.
           [ -n "$CUSTOM_TEXT" ] && DESC="$CUSTOM_TEXT"
-          ICON="https://raw.githubusercontent.com/AlaMine-Team-Org/AlaIndustrial/$MEDIA_TAG/common/src/main/resources/assets/alaindustrial/icon-128.png"
+          ICON="https://raw.githubusercontent.com/AlaVatra/AlaIndustrial/$MEDIA_TAG/common/src/main/resources/assets/alaindustrial/icon-128.png"
           NAME=""
           [ -n "${MEDIA:-}" ] && NAME="$(basename "$MEDIA")"
           payload="$(jq -n \
@@ -189,14 +189,14 @@ jobs:
           for attempt in 1 2 3; do
             if [ -n "${MEDIA:-}" ]; then
               code=$(curl -sS --connect-timeout 20 --max-time 120 -o disc_resp.json -w '%{http_code}' \
-                -H "User-Agent: AlaIndustrial-Release/1.0 (+https://github.com/AlaMine-Team-Org/AlaIndustrial)" \
+                -H "User-Agent: AlaIndustrial-Release/1.0 (+https://github.com/AlaVatra/AlaIndustrial)" \
                 -F "payload_json=<disc_payload.json;type=application/json" \
                 -F "files[0]=@$MEDIA;filename=$NAME" \
                 -X POST "$DISCORD_WEBHOOK")
             else
               code=$(curl -sS --connect-timeout 20 --max-time 60 -o disc_resp.json -w '%{http_code}' \
                 -H "Content-Type: application/json" \
-                -H "User-Agent: AlaIndustrial-Release/1.0 (+https://github.com/AlaMine-Team-Org/AlaIndustrial)" \
+                -H "User-Agent: AlaIndustrial-Release/1.0 (+https://github.com/AlaVatra/AlaIndustrial)" \
                 -X POST "$DISCORD_WEBHOOK" -d "$payload")
             fi
             if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then

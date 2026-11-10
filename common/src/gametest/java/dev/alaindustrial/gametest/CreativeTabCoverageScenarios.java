@@ -86,8 +86,11 @@ public final class CreativeTabCoverageScenarios {
 		return shown;
 	}
 
-	/** Every finding of the rule in the class javadoc, for the given set of shown item ids. */
-	static List<String> problems(Set<String> shown) {
+	/**
+	 * Every finding of the rule in the class javadoc, for the given set of shown item ids ({@code namespace:path}).
+	 * Public for the Forge registry probe (MOD-962), which feeds it the ids its real creative tabs show.
+	 */
+	public static List<String> problems(Set<String> shown) {
 		List<String> problems = new ArrayList<>();
 		Map<String, ContentManifest.ItemDef> items = new HashMap<>();
 		for (ContentManifest.ItemDef def : ContentManifest.ITEMS) {

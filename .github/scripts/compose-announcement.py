@@ -19,7 +19,7 @@ import json
 import re
 import sys
 
-REPO = "AlaMine-Team-Org/AlaIndustrial"
+REPO = "AlaVatra/AlaIndustrial"
 CF_FILES = "https://www.curseforge.com/minecraft/mc-mods/ala-industrial/files"
 MODRINTH_VERSION = "https://modrinth.com/mod/ala-industrial/version/"
 EMBED_DESCRIPTION_LIMIT = 4096
@@ -28,6 +28,8 @@ BOLD_LEAD = re.compile(r"\*\*(.+?)\*\*")
 FIRST_SENTENCE = re.compile(r"(.+?[.!?])(?:\s|$)")
 COUNT_SENTENCE = re.compile(r"^\d+ updates? in this release\.\s*")
 TAG = re.compile(r"^v(\d+\.\d+\.\d+)-mc(\d+(?:\.\d+)*)$")
+# The Minecraft lines that ship a Forge jar (release.yml FORGE_LINES, verify-artifacts.py FORGE_LINES).
+FORGE_LINES = ("26.3",)
 
 
 def parse_changelog(text: str) -> tuple[str, list[tuple[str, list[str]]]]:
@@ -119,8 +121,9 @@ def compose(version: str, lines: list[tuple[str, str]]) -> dict:
     for tag, _, _ in parsed:
         mc = minecraft_of(tag)
         mr = MODRINTH_VERSION + tag[1:]
+        forge = f" · [Forge]({mr}+forge)" if mc in FORGE_LINES else ""
         downloads.append(f"**Minecraft {mc}** — Modrinth [Fabric]({mr}+fabric) · "
-                         f"[NeoForge]({mr}+neoforge) · [CurseForge]({CF_FILES})")
+                         f"[NeoForge]({mr}+neoforge){forge} · [CurseForge]({CF_FILES})")
     minecrafts = " & ".join(minecraft_of(tag) for tag, _, _ in parsed)
     return {
         "title": f"Ala Industrial {version} — Minecraft {minecrafts}",

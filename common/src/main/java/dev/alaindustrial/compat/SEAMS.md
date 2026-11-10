@@ -9,7 +9,9 @@ The roots: `dev.alaindustrial.compat` (server-safe) and `dev.alaindustrial.compa
 signature) in `common/src/main`; `dev.alaindustrial.gametest.compat` in `common/src/gametest` (on NeoForge the
 gametest source set is its own JPMS module and cannot share a package with the main one); `dev.alaindustrial.compat`
 in `fabric/src/gametest` for the L3 client lane; `dev.alaindustrial.compat` in `neoforge/src/main` for a NeoForge API
-whose signature differs between the lines (MOD-906). Subpackages that integrate other mods (`compat.rei`,
+whose signature differs between the lines (MOD-906). `dev.alaindustrial.compat` in `forge/src/main` holds no
+facades: Forge is built on the 26.3 line only (MOD-962), so its bone-meal gate `BonemealEventsForge` has no twin on
+another line and no row here. Subpackages that integrate other mods (`compat.rei`,
 `compat.modmenu`, `client.compat.jei`) are not facades. Whatever this register says, the javadoc of each twin is
 the authority on what its line does and why (javap evidence included).
 

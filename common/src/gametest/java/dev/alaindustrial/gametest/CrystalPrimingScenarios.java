@@ -10,7 +10,9 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -44,7 +46,11 @@ public final class CrystalPrimingScenarios {
 				RosterEntry.of(CrystalPrimingScenarios::crystal03EveryTierFinishesIntoItsOwn,
 								"crystal_every_tier_finishes_into_its_own")
 						.fabricId("CrystalPrimingGameTest", "tcCrystal001Fun03_everyTierFinishesIntoItsOwn")
-						.ticks(20, 40));
+						.ticks(20, 40),
+				RosterEntry.of(CrystalPrimingScenarios::crystal04AlreadyFullBlankFinishesInChargeSlot,
+						"crystal_already_full_blank_finishes_in_charge_slot").ticks(40),
+				RosterEntry.of(CrystalPrimingScenarios::crystal05FullBlankFinishesInPlayerInventory,
+						"crystal_full_blank_finishes_in_player_inventory").ticks(40));
 
 		private Roster() {}
 	}
@@ -176,6 +182,71 @@ public final class CrystalPrimingScenarios {
 				helper.fail(finished.getItem() + " is a finished crystal but still has an EU buffer");
 				return;
 			}
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * CRYSTAL-04 — a blank that arrives already full finishes in a charge slot although no EU moves (MOD-962).
+	 *
+	 * <p>On Forge a foreign charger fills a blank but cannot swap it, so such a blank reaches the Battery Box
+	 * full. It takes no energy, and a promotion that ran only after energy moved left it a blank forever.
+	 *
+	 * @implements TC-CRYSTAL-001-FUN04 — an already-full blank becomes the crystal in a charge slot.
+	 */
+	public static void crystal04AlreadyFullBlankFinishesInChargeSlot(GameTestHelper helper) {
+		BatteryBoxBlockEntity be = placeStore(helper);
+		if (be == null) {
+			return;
+		}
+		ItemStack blank = new ItemStack(ModContent.ENERGY_CRYSTAL_BLANK.get());
+		ItemEnergy.set(blank, ItemEnergy.capacity(blank));
+		be.getEnergyStorage().setAmountUntracked(Config.batteryBoxBuffer);
+		be.setItem(BatteryBoxBlockEntity.CHARGE_SLOT, blank);
+
+		be.serverTick(helper.getLevel(), be.getBlockPos(), be.getBlockState());
+
+		ItemStack after = be.getItem(BatteryBoxBlockEntity.CHARGE_SLOT);
+		if (!after.is(ModContent.ENERGY_CRYSTAL.get())) {
+			helper.fail("a blank put in the charge slot already full stayed " + after.getItem() + " with "
+					+ ItemEnergy.get(after) + " EU — it must become the crystal although it takes no energy");
+			return;
+		}
+		if (be.getEnergyStorage().getAmount() != Config.batteryBoxBuffer) {
+			helper.fail("finishing an already-full blank cost the store "
+					+ (Config.batteryBoxBuffer - be.getEnergyStorage().getAmount()) + " EU");
+			return;
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * CRYSTAL-05 — a full blank a player carries becomes the crystal on its inventory tick (MOD-962); a blank
+	 * one EU short stays a blank. Mock players are not ticked by the game, so the test ticks the inventory.
+	 *
+	 * @implements TC-CRYSTAL-001-FUN05 — a full blank in a player's inventory becomes the crystal.
+	 */
+	public static void crystal05FullBlankFinishesInPlayerInventory(GameTestHelper helper) {
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		ItemStack full = new ItemStack(ModContent.ENERGY_CRYSTAL_BLANK.get());
+		ItemEnergy.set(full, ItemEnergy.capacity(full));
+		ItemStack shortOfFull = new ItemStack(ModContent.ENERGY_CRYSTAL_BLANK.get());
+		ItemEnergy.set(shortOfFull, ItemEnergy.capacity(shortOfFull) - 1);
+		player.getInventory().setItem(3, full);
+		player.getInventory().setItem(4, shortOfFull);
+
+		player.getInventory().tick();
+
+		ItemStack finished = player.getInventory().getItem(3);
+		if (!finished.is(ModContent.ENERGY_CRYSTAL.get()) || finished.getCount() != 1) {
+			helper.fail("a full blank in the player's inventory stayed " + finished.getItem() + " x"
+					+ finished.getCount() + " after an inventory tick — it must become one crystal");
+			return;
+		}
+		ItemStack unfinished = player.getInventory().getItem(4);
+		if (!unfinished.is(ModContent.ENERGY_CRYSTAL_BLANK.get())) {
+			helper.fail("a blank one EU short of full turned into " + unfinished.getItem());
+			return;
 		}
 		helper.succeed();
 	}

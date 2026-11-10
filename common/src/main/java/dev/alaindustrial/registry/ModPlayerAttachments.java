@@ -10,11 +10,14 @@ import dev.alaindustrial.stats.PlayerModStats;
 import dev.alaindustrial.stats.PlayerStatsClientCache;
 import dev.alaindustrial.stats.PlayerStatsStore;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Every per-player data attachment, declared once (MOD-708) and replayed by both loaders: Fabric through
@@ -31,6 +34,9 @@ import net.minecraft.network.codec.StreamCodec;
 public final class ModPlayerAttachments {
 	private ModPlayerAttachments() {
 	}
+
+	/** The loader's accessor of every entry, by entry id, as {@link PlayerAttachmentDef#bind} received it. */
+	private static final Map<String, PlayerAttachmentAccessor<?>> BOUND = new ConcurrentHashMap<>();
 
 	/**
 	 * One attachment.
@@ -56,6 +62,21 @@ public final class ModPlayerAttachments {
 			Objects.requireNonNull(streamCodec, "streamCodec");
 			Objects.requireNonNull(bindStore, "bindStore");
 			Objects.requireNonNull(bindClientCache, "bindClientCache");
+		}
+
+		/**
+		 * The one call a loader makes per entry: hands its accessor to the server-side store and keeps it for
+		 * the code that walks every entry ({@code PlayerDataCarryOver}, MOD-962).
+		 */
+		public void bind(PlayerAttachmentAccessor<T> accessor) {
+			BOUND.put(id, Objects.requireNonNull(accessor, "accessor"));
+			bindStore.accept(accessor);
+		}
+
+		/** The loader's accessor of this entry, or null before the loader bound it. */
+		@SuppressWarnings("unchecked")
+		public @Nullable PlayerAttachmentAccessor<T> accessor() {
+			return (PlayerAttachmentAccessor<T>) BOUND.get(id);
 		}
 	}
 

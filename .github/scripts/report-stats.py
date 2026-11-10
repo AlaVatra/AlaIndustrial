@@ -41,9 +41,9 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-SITE_URL = "https://alamine-team-org.github.io/AlaIndustrial/data/stats.json"
+SITE_URL = "https://wiki.alaindustrial.org/data/stats.json"
 TELEGRAM_HOST = "https://api.telegram.org"
-UA = "Ma3auka/AlaIndustrial-stats-report (+https://github.com/AlaMine-Team-Org/AlaIndustrial)"
+UA = "Ma3auka/AlaIndustrial-stats-report (+https://github.com/AlaVatra/AlaIndustrial)"
 TIMEOUT = 30
 
 # Telegram rejects a message longer than 4096 UTF-16 code units, counted AFTER
@@ -321,15 +321,27 @@ def build_report(data, today, site_result):
     if fabric is None or neoforge is None:
         problems.append("totals.loaders is incomplete")
     else:
-        loader_sum = fabric + neoforge
+        # Forge (Minecraft 26.3 only) joins the split once it has downloads; files written before it have no key.
+        forge = loaders.get("forge") if is_number(loaders.get("forge")) else 0
+        loader_sum = fabric + neoforge + forge
         if loader_sum:
             fabric_pct = js_round(fabric / loader_sum * 100)
+            forge_pct = js_round(forge / loader_sum * 100)
             lines.append("")
-            lines.append(split_bar(fabric_pct))
+            if forge:
+                fabric_cells = js_round(fabric_pct / 10.0)
+                forge_cells = min(10 - fabric_cells, js_round(forge_pct / 10.0))
+                lines.append("\U0001F7E6" * fabric_cells + "\U0001F7E8" * (10 - fabric_cells - forge_cells)
+                             + "\U0001F7EB" * forge_cells)
+            else:
+                lines.append(split_bar(fabric_pct))
             lines.append("\U0001F7E6 Fabric: <b>%s</b> · %d%%"
                          % (esc(number(fabric)), fabric_pct))
             lines.append("\U0001F7E8 NeoForge: <b>%s</b> · %d%%"
-                         % (esc(number(neoforge)), 100 - fabric_pct))
+                         % (esc(number(neoforge)), 100 - fabric_pct - forge_pct))
+            if forge:
+                lines.append("\U0001F7EB Forge: <b>%s</b> · %d%%"
+                             % (esc(number(forge)), forge_pct))
 
     generated = data.get("generated")
     if not isinstance(generated, str) or not generated:

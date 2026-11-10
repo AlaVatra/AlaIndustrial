@@ -73,7 +73,7 @@ public final class ModAttachmentsNeoForge {
 
 	private static <T> void bindStore(ModPlayerAttachments.PlayerAttachmentDef<T> def) {
 		DeferredHolder<AttachmentType<?>, AttachmentType<T>> type = holder(def);
-		def.bindStore().accept(new PlayerAttachmentAccessor<>() {
+		def.bind(new PlayerAttachmentAccessor<>() {
 			@Override
 			public T get(ServerPlayer player) {
 				// Read without creating (MOD-483). NeoForge's getData INSTALLS the default value when none

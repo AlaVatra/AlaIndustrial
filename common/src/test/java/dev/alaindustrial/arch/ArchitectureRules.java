@@ -65,14 +65,15 @@ public class ArchitectureRules {
 	 * {@code common/} holds all game logic and must compile and run identically on both loaders, so
 	 * nothing in it may reach into a loader API. The seam is the other way round: {@code common}
 	 * declares neutral abstractions ({@code EnergyPort}, {@code FluidPort}), and each loader adapts
-	 * its own API to them.
+	 * its own API to them. MinecraftForge ({@code net.minecraftforge..}) is the third loader and is banned
+	 * the same way (MOD-962, ADR-052: common/ gets no Forge types).
 	 */
 	@ArchTest
 	static final ArchRule commonDoesNotDependOnLoaderApis = noClasses()
 			.should().dependOnClassesThat().resideInAnyPackage(
-					"net.fabricmc..", "net.neoforged..", "team.reborn..")
-			.because("common/ must compile and run on BOTH loaders: a loader type here is an "
-					+ "unsatisfied dependency on the other loader at runtime. Adapt the loader API "
+					"net.fabricmc..", "net.neoforged..", "net.minecraftforge..", "team.reborn..")
+			.because("common/ must compile and run on EVERY loader: a loader type here is an "
+					+ "unsatisfied dependency on the other loaders at runtime. Adapt the loader API "
 					+ "to a neutral abstraction (EnergyPort/FluidPort) in that loader's subproject "
 					+ "instead");
 

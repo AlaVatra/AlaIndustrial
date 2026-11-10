@@ -74,7 +74,18 @@ public class BatteryBoxBlockEntity extends MachineBlockEntity implements MenuPro
 	 */
 	private void chargeItem() {
 		ItemStack target = getItem(CHARGE_SLOT);
-		if (target.isEmpty() || energy.getAmount() <= 0) {
+		if (target.isEmpty()) {
+			return;
+		}
+		// MOD-962: a blank that arrives already full (a foreign charger on Forge cannot swap it) takes no
+		// energy, so the promotion below would never run for it — finish it before anything has to move.
+		ItemStack alreadyFull = CrystalBlankItem.promote(target);
+		if (!alreadyFull.isEmpty()) {
+			setItem(CHARGE_SLOT, alreadyFull);
+			setChanged();
+			return;
+		}
+		if (energy.getAmount() <= 0) {
 			return;
 		}
 		// MOD-483 Quick Docking: the charger's own slot, which is the place the skill's description

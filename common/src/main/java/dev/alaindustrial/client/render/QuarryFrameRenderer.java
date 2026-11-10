@@ -51,7 +51,8 @@ import org.jspecify.annotations.Nullable;
  * atlas by a directory source in {@code atlases/blocks.json}, as the mob wheel's sheets are.
  */
 public final class QuarryFrameRenderer
-		implements BlockEntityRenderer<QuarryControllerBlockEntity, QuarryFrameRenderer.State> {
+		implements BlockEntityRenderer<QuarryControllerBlockEntity, QuarryFrameRenderer.State>,
+			RenderBoxProvider<QuarryControllerBlockEntity> {
 
 	private static final float PIXEL = 1.0F / 16.0F;
 

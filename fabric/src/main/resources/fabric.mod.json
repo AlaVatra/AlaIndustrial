@@ -9,9 +9,9 @@
 		"Ma3auka"
 	],
 	"contact": {
-		"homepage": "https://alamine-team-org.github.io/AlaIndustrial/en/index.html",
-		"sources": "https://github.com/AlaMine-Team-Org/AlaIndustrial",
-		"issues": "https://github.com/AlaMine-Team-Org/AlaIndustrial/issues",
+		"homepage": "https://wiki.alaindustrial.org/en/index.html",
+		"sources": "https://github.com/AlaVatra/AlaIndustrial",
+		"issues": "https://github.com/AlaVatra/AlaIndustrial/issues",
 		"discord": "https://discord.gg/ky7cFDF8JD"
 	},
 	"license": "MIT",

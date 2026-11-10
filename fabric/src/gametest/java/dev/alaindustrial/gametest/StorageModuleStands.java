@@ -11,6 +11,9 @@ import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestServerContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import java.nio.file.Path;
@@ -64,9 +67,26 @@ public final class StorageModuleStands {
             TestSingleplayerContext singleplayer) {
         TestServerContext server = singleplayer.getServer();
 
+        // Loaded and kept loaded before the first command: a /fill into an unloaded chunk refuses the whole
+        // box with nothing but a chat line. The stand before this one leaves the player far away (the quarry
+        // arena at x 344), and every block of this platform used to be silently refused.
+        server.runOnServer(mc -> {
+            ServerLevel level = mc.overworld();
+            for (int cx = 158 >> 4; cx <= 180 >> 4; cx++) {
+                for (int cz = 164 >> 4; cz <= 184 >> 4; cz++) {
+                    level.setChunkForced(cx, cz, true);
+                    level.getChunk(cx, cz);
+                }
+            }
+        });
+        server.runCommand("gamemode spectator @p");
+        // The camera first, the build after: a chunk the client first receives while the server is still
+        // lighting the new blocks keeps a section without daylight.
+        server.runCommand("tp @p 167.5 103.5 184.5 180 6");
+        L3Chunks.waitRender(singleplayer);
+
         server.runCommand("fill 158 99 164 180 105 176 minecraft:air");
         server.runCommand("fill 158 99 164 180 99 176 minecraft:smooth_stone");
-        server.runCommand("gamemode spectator @p");
 
         // Four groups on one line, two empty blocks between them so none of them merges into the next.
         String module = "alaindustrial:storage_module";
@@ -74,6 +94,12 @@ public final class StorageModuleStands {
         server.runCommand("fill 163 100 170 164 100 170 " + module);               // pair
         server.runCommand("fill 167 100 170 168 101 170 " + module);               // 2x2 wall
         server.runCommand("fill 171 100 170 174 100 170 " + module);               // row of four
+        String built = server.computeOnServer(mc -> BuiltInRegistries.BLOCK
+                .getKey(mc.overworld().getBlockState(new BlockPos(171, 100, 170)).getBlock()).toString());
+        if (!module.equals(built)) {
+            throw new AssertionError("[GUITEST][STORAGE] the stand was not built: (171, 100, 170) holds "
+                    + built + " on the server — look for \"That position is not loaded\" above.");
+        }
 
         L3Chunks.waitRender(singleplayer);
         context.waitTicks(5);

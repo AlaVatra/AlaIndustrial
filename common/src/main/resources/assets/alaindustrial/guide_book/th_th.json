@@ -6851,6 +6851,36 @@
           ]
         },
         {
+          "id": "slingshot",
+          "title": "หนังสติ๊ก",
+          "icon": "alaindustrial:slingshot",
+          "pages": [
+            {
+              "type": "text",
+              "title": "หนังสติ๊ก",
+              "text": "หนังสติ๊กไม้ที่ยิงคบเพลิงเป็นวิถีโค้ง — คบเพลิงจะติดอยู่ตรงจุดที่โดน บนพื้นหรือบนผนัง ง้างแบบเดียวกับธนูและไม่ต้องใช้พลังงาน"
+            },
+            {
+              "type": "recipe",
+              "title": "สูตร",
+              "recipe_type": "การคราฟต์แบบมีรูปแบบ",
+              "grid": [
+                "minecraft:stick",
+                "minecraft:string",
+                "minecraft:stick",
+                "",
+                "minecraft:stick",
+                "",
+                "",
+                "minecraft:stick",
+                ""
+              ],
+              "result_id": "alaindustrial:slingshot",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "soul_vessel",
           "title": "ภาชนะวิญญาณ",
           "icon": "alaindustrial:soul_vessel",

@@ -1,10 +1,8 @@
 package dev.alaindustrial.registry.neoforge;
 
 import dev.alaindustrial.Industrialization;
-import dev.alaindustrial.block.IndustrialWorkbenchBlock;
 import dev.alaindustrial.registry.ContentManifest;
 import dev.alaindustrial.registry.ModContent;
-import dev.alaindustrial.registry.content.ProcessingContent;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -14,8 +12,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * NeoForge block registration: a replay of the shared {@link ContentManifest#BLOCKS} list, plus the one
- * typed {@link DeferredBlock} handle the rest of the NeoForge source set reads.
+ * NeoForge block registration: a replay of the shared {@link ContentManifest#BLOCKS} list.
  *
  * <p><b>MOD-190 → MOD-403.</b> MOD-190 moved each block's {@code BlockBehaviour.Properties} chain into the
  * shared manifest (since MOD-711 it is part of the block's own {@link ContentManifest.BlockDef}). MOD-403
@@ -30,9 +27,10 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * lets manifest entries read earlier ones ({@code enriched_uranium_wall_torch} → the standing torch, the
  * liquid blocks → their fluid, whose {@code RegisterEvent} fires first).
  *
- * <p><b>The typed field below is a handle, not a registration.</b> {@code ModProfessionsNeoForge} reads
- * the workbench by name; everything else reads {@link ModContent}, which the replay binds. Adding a block
- * does NOT add a handle (MOD-708 removed the ones nobody read). A handle is derived from its manifest
+ * <p><b>No typed handle is left here.</b> Everything reads {@link ModContent}, which the replay binds, or
+ * looks a manifest entry up by its id (MOD-962 moved the last reader, {@code ModProfessionsNeoForge}, to
+ * {@code ModProfessions.POI_BLOCK}). Adding a block does NOT add a handle (MOD-708 removed the ones nobody
+ * read). A handle, if one is ever needed again, comes from {@link #handle}: it is derived from its manifest
  * entry, so the entry's block class — not a string — is what fixes the field's type parameter.
  */
 public final class ModBlocksNeoForge {
@@ -41,8 +39,7 @@ public final class ModBlocksNeoForge {
 
 	/**
 	 * Every manifest entry, queued on {@link #BLOCKS} the moment this class loads. Declared right after
-	 * the register on purpose: static fields initialise in textual order, so the register exists here and
-	 * the handle below can read the result.
+	 * the register on purpose: static fields initialise in textual order, so the register exists here.
 	 */
 	private static final Map<String, DeferredBlock<?>> REGISTERED = registerAll();
 
@@ -53,7 +50,6 @@ public final class ModBlocksNeoForge {
 	/** Energy condenser (MOD-393): banks grid surplus into energy clots. */
 	// MOD-537 — kok sagyz: the flower, and the root column it grows downward.
 	// MOD-505 — the crystal greenhouse.
-	public static final DeferredBlock<IndustrialWorkbenchBlock> INDUSTRIAL_WORKBENCH = handle(ProcessingContent.INDUSTRIAL_WORKBENCH);
 	// The organic chain (MOD-146/MOD-525).
 
 	private ModBlocksNeoForge() {

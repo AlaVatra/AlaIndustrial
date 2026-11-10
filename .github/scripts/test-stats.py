@@ -47,7 +47,7 @@ def load(hour: int, history: dict | None = None):
     def modrinth():
         calls["modrinth"] += 1
         return {"downloads": 4800, "followers": 8, "version": "0.1.119",
-                "loaders": {"fabric": 2470, "neoforge": 2330}}
+                "loaders": {"fabric": 2350, "neoforge": 2330, "forge": 120}}
 
     def curseforge():
         calls["curseforge"] += 1
@@ -108,6 +108,9 @@ def main() -> int:
     code, data, net = run(6, list(only_before), ["--skip-if-current"])
     check("row appended", data["series"][-1] == [YESTERDAY, 4800, 4300], str(data["series"][-1]))
     check("sources queried", net["modrinth"] == 1 and net["curseforge"] == 1, str(net))
+    check("loader split keeps every loader, Forge included",
+          data["totals"].get("loaders") == {"fabric": 2350, "neoforge": 2330, "forge": 120},
+          str(data["totals"].get("loaders")))
 
     print("--skip-if-current: yesterday has no CurseForge figure -> not 'in full'")
     _, data, _ = run(6, [[DAY_BEFORE, 4568, 4146], [YESTERDAY, 4700, None]], ["--skip-if-current"])

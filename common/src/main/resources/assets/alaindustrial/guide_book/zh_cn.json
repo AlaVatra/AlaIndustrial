@@ -6851,6 +6851,36 @@
           ]
         },
         {
+          "id": "slingshot",
+          "title": "弹弓",
+          "icon": "alaindustrial:slingshot",
+          "pages": [
+            {
+              "type": "text",
+              "title": "弹弓",
+              "text": "一把沿弧线射出火把的木制弹弓——火把打中哪里就留在哪里，立在地上或挂在墙上；像弓一样拉开，不需要能量。"
+            },
+            {
+              "type": "recipe",
+              "title": "配方",
+              "recipe_type": "有序合成",
+              "grid": [
+                "minecraft:stick",
+                "minecraft:string",
+                "minecraft:stick",
+                "",
+                "minecraft:stick",
+                "",
+                "",
+                "minecraft:stick",
+                ""
+              ],
+              "result_id": "alaindustrial:slingshot",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "soul_vessel",
           "title": "灵魂容器",
           "icon": "alaindustrial:soul_vessel",

@@ -49,7 +49,8 @@ import org.jspecify.annotations.Nullable;
  */
 public final class RadiantSolarPanelBlockEntityRenderer
 		implements BlockEntityRenderer<RadiantSolarPanelBlockEntity,
-				RadiantSolarPanelBlockEntityRenderer.State> {
+				RadiantSolarPanelBlockEntityRenderer.State>,
+			RenderBoxProvider<RadiantSolarPanelBlockEntity> {
 
 	private static final SpriteId SPRITE =
 			Sheets.BLOCKS_MAPPER.apply(Industrialization.id("radiant_solar_panel_body"));

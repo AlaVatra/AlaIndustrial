@@ -1,6 +1,7 @@
 {
 	"neoforge:conditions": [ { "type": "neoforge:always" } ],
 	"fabric:load_conditions": [ { "condition": "fabric:all_mods_loaded", "values": [ "alaindustrial" ] } ],
+	"forge:condition": { "type": "forge:true" },
 	"type": "alaindustrial:maceration",
 	"ingredient": "minecraft:lapis_block",
 	"result": { "id": "minecraft:lapis_lazuli", "count": 9 },

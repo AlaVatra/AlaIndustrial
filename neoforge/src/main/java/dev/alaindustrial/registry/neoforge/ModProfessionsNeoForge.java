@@ -3,6 +3,7 @@ package dev.alaindustrial.registry.neoforge;
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.registry.ModProfessions;
 import java.util.Set;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
@@ -15,11 +16,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * {@link DeferredRegister}s — built-in registries are frozen before NeoForge mod init, so eager
  * {@code Registry.register} would throw {@code already frozen}.
  *
- * <p>The POI's matching states are pulled from the workbench block via the deferred supplier (the
- * block resolves before POI registration fires on the mod bus — same ordering as vanilla worldgen
- * callbacks). NeoForge fills the internal blockstate→POI map automatically through its registry
- * callback ({@code NeoForgeRegistryCallbacks.PoiTypeCallbacks} — verified 26.2 sources), so unlike
- * Fabric no helper is needed beyond the plain registration.
+ * <p>The POI's matching states are pulled from the shared job-site block
+ * ({@link ModProfessions#POI_BLOCK}), looked up by its id inside the deferred supplier (the block registry
+ * is filled before POI registration fires on the mod bus — same ordering as vanilla worldgen callbacks).
+ * NeoForge fills the internal blockstate→POI map automatically through its registry callback
+ * ({@code NeoForgeRegistryCallbacks.PoiTypeCallbacks} — verified 26.2 sources), so unlike Fabric no helper
+ * is needed beyond the plain registration.
  */
 public final class ModProfessionsNeoForge {
 	private ModProfessionsNeoForge() {
@@ -33,7 +35,8 @@ public final class ModProfessionsNeoForge {
 
 	public static final DeferredHolder<PoiType, PoiType> INDUSTRIALIST_POI =
 			POI_TYPES.register("industrialist", () -> new PoiType(
-					Set.copyOf(ModBlocksNeoForge.INDUSTRIAL_WORKBENCH.get().getStateDefinition().getPossibleStates()),
+					Set.copyOf(BuiltInRegistries.BLOCK.getOptional(Industrialization.id(ModProfessions.POI_BLOCK.id()))
+							.orElseThrow().getStateDefinition().getPossibleStates()),
 					ModProfessions.POI_MAX_TICKETS,
 					ModProfessions.POI_VALID_RANGE));
 

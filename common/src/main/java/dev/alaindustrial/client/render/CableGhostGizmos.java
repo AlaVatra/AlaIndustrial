@@ -1,4 +1,4 @@
-package dev.alaindustrial.client.neoforge;
+package dev.alaindustrial.client.render;
 
 import dev.alaindustrial.block.CableBlock;
 import java.util.EnumMap;
@@ -21,25 +21,24 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 /**
- * NeoForge cable-placement ghost (MOD-022, the NeoForge counterpart to the Fabric
- * {@code CablePlacementPreview}). While the player holds one of the mod's cables and aims at a block,
- * draws a translucent hologram of the cable in the exact cell it would be placed into, with the exact
- * connection arms it will have once placed. Client-only; nothing is written to the world before the click.
+ * The cable-placement ghost of both Forge loaders (MOD-022, MOD-962; the per-tick counterpart to the Fabric
+ * {@code CablePlacementPreview}). While the player holds one of the mod's cables and aims at a block, draws a
+ * translucent hologram of the cable in the exact cell it would be placed into, with the exact connection arms it
+ * will have once placed. Client-only; nothing is written to the world before the click.
  *
- * <p><b>Rendering path (verified against 26.2).</b> Fabric feeds a {@code DrawableGizmoPrimitives} to the
- * render-time {@code SubmitNodeCollector} exposed by its {@code LevelRenderContext}; NeoForge's
- * {@code RenderLevelStageEvent} exposes no such collector, so this uses the vanilla per-tick gizmo API
- * instead — {@link Minecraft#collectPerTickGizmos()} opens the ambient {@code GizmoCollector} and
- * {@link Gizmos#cuboid} submits axis-aligned boxes for the cable core + each connection arm. Because the
- * ghost is nothing but axis-aligned boxes, this is visually faithful to the Fabric version (unlike the
- * network overlay, whose custom oriented-tube quads can only be approximated by this API). Submitted once
- * per client tick from {@code IndustrializationNeoForgeClient}; a per-tick refresh follows the cursor.
+ * <p><b>Rendering path.</b> Fabric feeds a {@code DrawableGizmoPrimitives} to the render-time
+ * {@code SubmitNodeCollector} of its frame hook. This class names no loader type: it uses the vanilla per-tick
+ * gizmo API — {@link Minecraft#collectPerTickGizmos()} opens the ambient {@code GizmoCollector} and
+ * {@link Gizmos#cuboid} submits axis-aligned boxes for the cable core + each connection arm. Because the ghost is
+ * nothing but axis-aligned boxes, this is visually faithful to the Fabric version. NeoForge and MinecraftForge
+ * call {@link #tick()} once per client tick from their client entry points; a per-tick refresh follows the
+ * cursor. (It lived in the NeoForge module as {@code NeoForgeCableGhost} until the Forge client needed it too.)
  *
  * <p><b>Correctness without a separate connection calc.</b> The ghost's {@link BlockState} comes from
  * {@link CableBlock#getStateForPlacement(BlockPlaceContext)} — the same method the real placement uses —
  * so preview connections match post-placement by construction.
  */
-public final class NeoForgeCableGhost {
+public final class CableGhostGizmos {
 
 	/** Faint translucent light-blue fill; bright light-blue stroke outline — mirrors the Fabric ghost colours. */
 	private static final int FILL_COLOR = 0x3380E5FF;
@@ -83,7 +82,7 @@ public final class NeoForgeCableGhost {
 			new AABB(14 / 16.0, 2 / 16.0, 5 / 16.0, 1.0, 8 / 16.0, 11 / 16.0)});
 	}
 
-	private NeoForgeCableGhost() {
+	private CableGhostGizmos() {
 	}
 
 	/** Submit the ghost for this client tick, if the player is holding a cable aimed at a placeable cell. */

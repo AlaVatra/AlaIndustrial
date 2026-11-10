@@ -56,7 +56,8 @@ import org.jspecify.annotations.Nullable;
  * loses the bottom, as the design's own clip does.
  */
 public final class TeleporterCapsuleDoorRenderer
-		implements BlockEntityRenderer<TeleporterBlockEntity, TeleporterCapsuleDoorRenderer.State> {
+		implements BlockEntityRenderer<TeleporterBlockEntity, TeleporterCapsuleDoorRenderer.State>,
+			RenderBoxProvider<TeleporterBlockEntity> {
 
 	// --- geometry, in pixels of the station's block, for a capsule facing north ---
 	/** The deck: the door disappears below this height. */

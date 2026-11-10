@@ -180,6 +180,9 @@ processResources {
             'description'                  : project.description,
             'neoforge_version'             : neoforge_version,
             'neoforge_loader_version_range': neoforge_loader_version_range,
+            'forge_version'                : findProperty('forge_version') ?: '',
+            'forge_loader_version_range'   : findProperty('forge_loader_version_range') ?: '',
+            'forge_pack_format'            : findProperty('forge_pack_format') ?: '',
             'credits'                      : credits,
             'java_version'                 : java_version
     ]

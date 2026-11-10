@@ -6851,6 +6851,36 @@
           ]
         },
         {
+          "id": "slingshot",
+          "title": "गुलेल",
+          "icon": "alaindustrial:slingshot",
+          "pages": [
+            {
+              "type": "text",
+              "title": "गुलेल",
+              "text": "लकड़ी की एक गुलेल, जो चाप में मशालें चलाती है — मशाल जहाँ लगती है वहीं लग जाती है, फ़र्श पर या दीवार पर; इसे धनुष की तरह खींचा जाता है और इसे किसी ऊर्जा की ज़रूरत नहीं।"
+            },
+            {
+              "type": "recipe",
+              "title": "रेसिपी",
+              "recipe_type": "आकारित क्राफ्टिंग",
+              "grid": [
+                "minecraft:stick",
+                "minecraft:string",
+                "minecraft:stick",
+                "",
+                "minecraft:stick",
+                "",
+                "",
+                "minecraft:stick",
+                ""
+              ],
+              "result_id": "alaindustrial:slingshot",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "soul_vessel",
           "title": "आत्मा पात्र",
           "icon": "alaindustrial:soul_vessel",

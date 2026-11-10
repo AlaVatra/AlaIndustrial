@@ -3,6 +3,7 @@ package dev.alaindustrial;
 import dev.alaindustrial.core.energy.EnergyLookup;
 import dev.alaindustrial.core.energy.EnergyPortHost;
 import dev.alaindustrial.item.energy.ItemEnergyBridge;
+import dev.alaindustrial.lifecycle.CommonSetup;
 import dev.alaindustrial.lifecycle.ServerHookRoster;
 import dev.alaindustrial.core.energy.EnergyTransactions;
 import dev.alaindustrial.core.fluid.FluidLookup;
@@ -257,14 +258,13 @@ public final class IndustrializationNeoForge {
 		// and lab-piece types (two DeferredRegisters — before datapack load and the first saved town).
 		modBus.addListener(dev.alaindustrial.registry.neoforge.ModDataRegistriesNeoForge::addAll);
 		dev.alaindustrial.registry.neoforge.ModWorldGenNeoForge.registerTownTypes(modBus);
-		// MOD-238: dispenser support for the filled oil bucket. DispenserBlock.registerBehavior writes a
-		// plain (unsynchronised) map and mod setup runs in parallel on NeoForge, so it must go through
-		// enqueueWork — the Fabric side registers it directly in its single-threaded mod init.
-		modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) ->
-				event.enqueueWork(dev.alaindustrial.item.fluid.OilBucketDispenseBehavior::register));
-		// MOD-535: forgiving dispenser equipping for the shielding suit (same threading rule as above).
-		modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) ->
-				event.enqueueWork(dev.alaindustrial.item.wearable.SuitDispenseBehavior::register));
+		// MOD-962: the one-off setup calls Fabric replays at the end of its init. DispenserBlock.registerBehavior
+		// writes an unsynchronised map and NeoForge runs mod setup in parallel, hence enqueueWork (main thread).
+		modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) -> event.enqueueWork(() -> {
+			for (CommonSetup.Step step : CommonSetup.STEPS) {
+				step.run().run();
+			}
+		}));
 		// MOD-022/MOD-242 — the world-gametest RegisterGameTestsEvent listener is added by
 		// NeoForgeGameTestBootstrap (gametest source set, dev runs only; see bootstrapGameTests).
 	}

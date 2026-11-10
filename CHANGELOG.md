@@ -1,20 +1,13 @@
 # Changelog
 
-## 0.1.231
+## 0.1.232
 
-<p><img alt="Ala Industrial Minecraft mod: a torch slingshot fires torches that stick to cave walls, with apiary station, tooltip and recipe tiles" src="https://raw.githubusercontent.com/AlaMine-Team-Org/AlaIndustrial/v0.1.231-mc26.2/release-media/v0.1.231-mc26.2/changelog.gif" width="720"></p>
+<p><img alt="Ala Industrial Minecraft mod: machines on a stone platform beside three signs, one for each mod loader" src="https://raw.githubusercontent.com/AlaVatra/AlaIndustrial/v0.1.232-mc26.2/release-media/v0.1.232-mc26.2/changelog.png" width="720"></p>
 
-Torches now fly from a slingshot, and bumblebee drones bring your honey home.
-
-### New
-
-- **Torch slingshot.** Shoots any torch in an arc. A torch that lands on a floor or wall stays there, and a mob it hits catches fire.
-- **Apiary drone station.** Four bumblebee drones fly to full hives fitted with a honey jar, pump the honey and bring it home to the station's tank, with a comb now and then.
-
-### Improved
-
-- **One tooltip style.** Every block and item tooltip now looks the same. Details show while holding Shift, and holding I over a machine opens its 3D blueprint.
+A full crystal blank always finishes, loot additions reach data pack chests, and your progress survives a change of mod loader.
 
 ### Bug Fixes
 
-- **Byproduct chance in custom recipes.** Recipes added by data packs or scripts now roll the chance of their secondary output, and recipe viewers show it.
+- **Crystal blanks.** A blank charged to the top always becomes a crystal, in any charging slot of the mod and in your inventory.
+- **Loot additions.** In some builds of the mod they now reach chests whose loot table a data pack replaced, and the bonus chest switch applies without a reload.
+- **Player progress.** Your profile and statistics in the mod survive opening the world with another mod loader.

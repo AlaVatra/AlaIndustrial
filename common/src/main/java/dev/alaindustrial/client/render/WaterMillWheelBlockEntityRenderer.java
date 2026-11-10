@@ -52,7 +52,8 @@ import org.jspecify.annotations.Nullable;
  * root pose rotates.</p>
  */
 public final class WaterMillWheelBlockEntityRenderer<T extends WaterMillBlockEntity>
-		implements BlockEntityRenderer<T, WaterMillWheelBlockEntityRenderer.State> {
+		implements BlockEntityRenderer<T, WaterMillWheelBlockEntityRenderer.State>,
+			RenderBoxProvider<T> {
 	public static final ModelLayerLocation MODEL_LAYER =
 			new ModelLayerLocation(Industrialization.id("water_mill_wheel"), "main");
 

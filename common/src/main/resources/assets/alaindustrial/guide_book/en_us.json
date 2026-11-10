@@ -6851,6 +6851,36 @@
           ]
         },
         {
+          "id": "slingshot",
+          "title": "Slingshot",
+          "icon": "alaindustrial:slingshot",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Slingshot",
+              "text": "A wooden slingshot that fires torches in an arc — the torch stays where it hits, on the floor or on a wall; it draws like a bow and needs no energy."
+            },
+            {
+              "type": "recipe",
+              "title": "Recipe",
+              "recipe_type": "Shaped Crafting",
+              "grid": [
+                "minecraft:stick",
+                "minecraft:string",
+                "minecraft:stick",
+                "",
+                "minecraft:stick",
+                "",
+                "",
+                "minecraft:stick",
+                ""
+              ],
+              "result_id": "alaindustrial:slingshot",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "soul_vessel",
           "title": "Soul Vessel",
           "icon": "alaindustrial:soul_vessel",

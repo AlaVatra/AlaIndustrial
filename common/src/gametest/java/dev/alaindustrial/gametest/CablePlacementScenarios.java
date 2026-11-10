@@ -200,7 +200,7 @@ public final class CablePlacementScenarios {
 	 *     hook), so before the fix {@code connectsTo} saw it as "a machine" and drew a misleading
 	 *     "energy goes here" arm. The fix is the {@code AbstractMachineBlock#isCableConnectable()}
 	 *     marker, which the chest overrides to {@code false}. Because the cable ghost preview (Fabric
-	 *     {@code CablePlacementPreview} / NeoForge {@code NeoForgeCableGhost}) calls the same
+	 *     {@code CablePlacementPreview} / Forge loaders {@code CableGhostGizmos}) calls the same
 	 *     {@code getStateForPlacement} -> {@code connectsTo} path, fixing the blockstate here fixes
 	 *     the preview too — no client-side test is possible (GameTest is server-side).
 	 *

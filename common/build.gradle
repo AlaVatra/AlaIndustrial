@@ -681,6 +681,11 @@ pitest {
     // (HudSmootherTest, LevelMathTest, GuidePaginatorTest, TemperedGearRollTest) invisible to PIT.
     targetTests = ['dev.alaindustrial.*Test']
     excludedClasses = [
+            // MOD-962: the two setup lists are method references into Minecraft-coupled classes (dispenser
+            // behaviours, fog, item models); each loader replays them, loader_parity_check holds the parity,
+            // and L1 cannot invoke a single entry without the Minecraft jar.
+            'dev.alaindustrial.lifecycle.CommonSetup',
+            'dev.alaindustrial.client.ClientSetup',
             // MOD-938: the two WTHIT entry points name no Minecraft type but implement WTHIT's plugin
             // interfaces, and the WTHIT API is compileOnly, so it is not on the L1 classpath. Each is one
             // registration call; the line they register is checked in the dev client with -PwithWthit.

@@ -6851,6 +6851,36 @@
           ]
         },
         {
+          "id": "slingshot",
+          "title": "مقلاع",
+          "icon": "alaindustrial:slingshot",
+          "pages": [
+            {
+              "type": "text",
+              "title": "مقلاع",
+              "text": "مقلاع خشبي يطلق المشاعل في قوس — تبقى الشعلة حيث تصيب، على الأرض أو على الجدار؛ يُشدّ مثل القوس ولا يحتاج إلى طاقة."
+            },
+            {
+              "type": "recipe",
+              "title": "الوصفة",
+              "recipe_type": "تصنيع مرتب",
+              "grid": [
+                "minecraft:stick",
+                "minecraft:string",
+                "minecraft:stick",
+                "",
+                "minecraft:stick",
+                "",
+                "",
+                "minecraft:stick",
+                ""
+              ],
+              "result_id": "alaindustrial:slingshot",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "soul_vessel",
           "title": "وعاء أرواح",
           "icon": "alaindustrial:soul_vessel",
