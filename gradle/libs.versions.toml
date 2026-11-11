@@ -38,6 +38,9 @@ architectury = "21.0.7"
 # Build plugins.
 fabric-loom = "1.17.12"
 neoforge-moddev = "2.0.141"
+# ForgeGradle 7 for the MinecraftForge module (MOD-962); the Forge 26.2/26.3 MDKs ask for [7.0.17,8).
+# https://plugins.gradle.org/plugin/net.minecraftforge.gradle
+forge-gradle = "7.0.40"
 pitest-plugin = "1.19.0"
 
 # Mutation-testing tool versions consumed by the pitest extension itself (not the
@@ -65,4 +68,5 @@ architectury-neoforge = { module = "dev.architectury:architectury-neoforge", ver
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
 neoforge-moddev = { id = "net.neoforged.moddev", version.ref = "neoforge-moddev" }
+forge-gradle = { id = "net.minecraftforge.gradle", version.ref = "forge-gradle" }
 pitest = { id = "info.solidsoft.pitest", version.ref = "pitest-plugin" }

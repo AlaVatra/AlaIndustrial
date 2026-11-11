@@ -1,6 +1,8 @@
 package dev.alaindustrial.item.tool.neoforge;
 
+import dev.alaindustrial.compat.RightClickTransform;
 import java.util.Set;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.UseOnContext;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
@@ -51,14 +53,23 @@ public enum RightClickAbility {
 	 * The NeoForge answer to "would a hoe convert this block?" (MOD-389), asked by the hoe before its charge
 	 * gate. The shared {@code RightClickTransform.wouldTill} reads vanilla's {@code HoeItem.TILLABLES}, which
 	 * this loader patches out of the flow — it would miss every block a mod contributes through
-	 * {@code BlockToolModificationEvent}, and NeoForge's copy of the rules has no DOWN-face check, so the two
-	 * would disagree on a click from below.
+	 * {@code BlockToolModificationEvent}.
+	 *
+	 * <p>NeoForge's copy of the rules in {@code IBlockExtension.getToolModifiedState} drops vanilla's DOWN-face
+	 * check ({@code HoeItem.onlyIfAirAbove}), so the bare probe — and NeoForge's own diamond hoe — tills dirt from
+	 * below. Our hoe follows the game instead (ADR-054): from below, vanilla's rules
+	 * ({@code RightClickTransform.wouldTill}, the map NeoForge keeps populated) must agree too, which leaves
+	 * exactly rooted dirt — its rule has no face condition. Refusing here is enough: the hoe returns {@code PASS}
+	 * before it reaches NeoForge's patched till.
 	 *
 	 * <p>{@code simulate = true} is the whole point: with {@code false}, probing rooted dirt would pop a
 	 * hanging root before the hoe has decided whether it can pay for the till. The call still routes through
 	 * the held stack's {@code canPerformAction(HOE_TILL)} gate, so it answers for this item.
 	 */
 	public static boolean wouldTill(UseOnContext context) {
+		if (context.getClickedFace() == Direction.DOWN && !RightClickTransform.wouldTill(context)) {
+			return false;
+		}
 		return context.getLevel().getBlockState(context.getClickedPos())
 				.getToolModifiedState(context, ItemAbilities.HOE_TILL, /*simulate*/ true) != null;
 	}

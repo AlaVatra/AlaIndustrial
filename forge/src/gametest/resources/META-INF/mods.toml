@@ -1,0 +1,25 @@
+# MOD-962 — the forge `gametest` source set is its OWN mod, as on Fabric (alaindustrial-gametest) and NeoForge
+# (alaindustrial_gametest, MOD-322): one pack per mod, so nothing here can shadow a file of the main mod.
+#
+# Dev-only: the release jar packs only `main`. It holds the Forge gametest lane (ForgeGameTestBootstrap, reached by
+# name from IndustrializationForge), the shared scenario bodies it replays and, through forge/build.gradle, the
+# NeoForge gametest data the lane shares. No @Mod class, hence lowcodefml.
+#
+# Values are literals on purpose: mods.toml interpolation is wired for `processResources` (main), not for
+# `processGametestResources`; pack.mcmeta beside this file repeats forge_pack_format from gradle.properties.
+modLoader = "lowcodefml"
+loaderVersion = "[0,)"
+license = "MIT"
+
+[[mods]]
+modId = "alaindustrial_gametest"
+version = "0.0.0"
+displayName = "Ala Industrial - gametest fixtures"
+description = '''Dev-only gametests and fixtures of the Forge lane. Never shipped: the release jar packs only the `main` source set.'''
+
+[[dependencies.alaindustrial_gametest]]
+modId = "alaindustrial"
+mandatory = true
+versionRange = "[0,)"
+ordering = "AFTER"
+side = "BOTH"

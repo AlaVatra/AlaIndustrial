@@ -8,7 +8,10 @@ and the entries a line has on its own under "Only on Minecraft <line>".
 Usage:
   python compose-announcement.py --version 0.1.183 \
       --line v0.1.183-mc26.3=path/to/CHANGELOG.md --line v0.1.183-mc26.2=path/to/CHANGELOG.md \
-      --out post.json
+      --forge v0.1.183-mc26.3 --forge v0.1.183-mc26.2 --out post.json
+
+`--forge TAG` names a line whose tagged tree carries forge/ and so shipped a Forge jar; the
+post links its +forge version. A line without it gets Fabric and NeoForge links only.
 
 Writes {"title", "url", "description", "downloads", "media_tag"} as JSON.
 """
@@ -28,8 +31,6 @@ BOLD_LEAD = re.compile(r"\*\*(.+?)\*\*")
 FIRST_SENTENCE = re.compile(r"(.+?[.!?])(?:\s|$)")
 COUNT_SENTENCE = re.compile(r"^\d+ updates? in this release\.\s*")
 TAG = re.compile(r"^v(\d+\.\d+\.\d+)-mc(\d+(?:\.\d+)*)$")
-# The Minecraft lines that ship a Forge jar (release.yml FORGE_LINES, verify-artifacts.py FORGE_LINES).
-FORGE_LINES = ("26.3",)
 
 
 def parse_changelog(text: str) -> tuple[str, list[tuple[str, list[str]]]]:
@@ -76,7 +77,7 @@ def minecraft_of(tag: str) -> str:
     return m.group(2)
 
 
-def compose(version: str, lines: list[tuple[str, str]]) -> dict:
+def compose(version: str, lines: list[tuple[str, str]], forge_tags: frozenset[str] | set[str] = frozenset()) -> dict:
     if not lines:
         raise ValueError("no release lines to announce")
     for tag, _ in lines:
@@ -121,7 +122,7 @@ def compose(version: str, lines: list[tuple[str, str]]) -> dict:
     for tag, _, _ in parsed:
         mc = minecraft_of(tag)
         mr = MODRINTH_VERSION + tag[1:]
-        forge = f" · [Forge]({mr}+forge)" if mc in FORGE_LINES else ""
+        forge = f" · [Forge]({mr}+forge)" if tag in forge_tags else ""
         downloads.append(f"**Minecraft {mc}** — Modrinth [Fabric]({mr}+fabric) · "
                          f"[NeoForge]({mr}+neoforge){forge} · [CurseForge]({CF_FILES})")
     minecrafts = " & ".join(minecraft_of(tag) for tag, _, _ in parsed)
@@ -138,6 +139,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--version", required=True)
     ap.add_argument("--line", action="append", default=[], metavar="TAG=CHANGELOG")
+    ap.add_argument("--forge", action="append", default=[], metavar="TAG",
+                    help="a line whose tagged tree carries forge/ (it shipped a Forge jar)")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     lines = []
@@ -146,7 +149,10 @@ def main() -> int:
         with open(path, encoding="utf-8") as fh:
             lines.append((tag, fh.read()))
     try:
-        post = compose(args.version, lines)
+        unknown = sorted(set(args.forge) - {tag for tag, _ in lines})
+        if unknown:
+            raise ValueError(f"--forge names a tag with no --line: {', '.join(unknown)}")
+        post = compose(args.version, lines, frozenset(args.forge))
     except ValueError as err:
         print(f"compose-announcement: {err}", file=sys.stderr)
         return 1

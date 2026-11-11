@@ -3,9 +3,10 @@
 # `vX.Y.Z` form remains valid only for the historical 26.2 releases). Builds every loader of the line,
 # publishes one file per loader to CurseForge and one version per loader to Modrinth with a MARKDOWN
 # changelog, and creates one GitHub Release carrying every jar:
-#   * Minecraft 26.3: Fabric + NeoForge + Forge, six marketplace publications;
-#   * Minecraft 26.2: Fabric + NeoForge, four. A 26.2 tree that carries forge/ is refused, and so is a 26.3
-#     tree that does not.
+#   * a tree that carries the Forge module (forge/build.gradle and forge/src): Fabric + NeoForge + Forge, six
+#     marketplace publications, on either Minecraft line;
+#   * a tree without it: Fabric + NeoForge, four. Half a module (one of the two without the other) is refused,
+#     and so is a Forge jar the tree does not account for.
 #
 # Why a direct API curl (not mc-publish/itsmeow) for CurseForge: mc-publish does
 # NOT send CurseForge's `changelogType`, so the Markdown never renders; itsmeow's
@@ -44,7 +45,7 @@ on:
         default: ''
       publish_forge:
         description: >-
-          Publish the Forge jar to Modrinth and CurseForge (Minecraft 26.3 only). Untick it for a run whose
+          Publish the Forge jar to Modrinth and CurseForge (a tree with forge/ only). Untick it for a run whose
           Forge file is uploaded by hand: the jar is still built, checked and attached to the GitHub Release,
           and publish-ids.json marks it as uploaded by hand. A tag push has no inputs; there the repository
           variable PUBLISH_FORGE=false does the same. Either one set to false turns Forge off.
@@ -82,13 +83,11 @@ env:
   # use a separate, deliberate workflow. The one switch is Forge's (the publish_forge input or the
   # PUBLISH_FORGE repository variable): its file can be uploaded by hand while the others go from here.
   PUBLISH_LOADERS: all
-  # The Minecraft lines that ship a Forge jar. Keep in step with FORGE_LINES in verify-artifacts.py.
-  FORGE_LINES: '26.3'
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    # Forge adds a third build and a third game-test lane on the 26.3 line (about 7 more minutes when the
+    # Forge adds a third build and a third game-test lane on a tree with forge/ (about 7 more minutes when the
     # jars are not reused from the pre-tag check).
     timeout-minutes: 75
     outputs:
@@ -144,15 +143,18 @@ jobs:
           TYPE=release
           [[ "$NF" != *-beta* ]] || TYPE=beta
           echo "neoforge_type=$TYPE" >> "$GITHUB_OUTPUT"
-          # Forge: on its lines only, and then the module must be in the tree; elsewhere it must not be.
+          # Forge: the tree decides, on either line. The module is forge/build.gradle plus forge/src plus a
+          # forge_version; one without the others is a broken sync, not a loader set.
           FORGE=false
-          for L in $FORGE_LINES; do [[ "$L" != "$MC" ]] || FORGE=true; done
-          if [[ "$FORGE" == true ]]; then
-            [[ -f forge/build.gradle ]] || { echo "::error::Minecraft $MC ships Forge, but forge/build.gradle is missing"; exit 1; }
-            [[ -n "$FG" ]] || { echo "::error::Minecraft $MC ships Forge, but gradle.properties has no forge_version"; exit 1; }
-          else
-            [[ ! -e forge ]] || { echo "::error::Minecraft $MC does not ship Forge, but the tree carries forge/"; exit 1; }
+          if [[ -f forge/build.gradle && -d forge/src ]]; then
+            FORGE=true
+            [[ -n "$FG" ]] || { echo "::error::the tree carries forge/, but gradle.properties has no forge_version"; exit 1; }
+          elif [[ -e forge ]]; then
+            echo "::error::the tree carries half a Forge module (forge/build.gradle and forge/src must both exist)"; exit 1
+          elif [[ -n "$FG" ]]; then
+            echo "::error::gradle.properties has a forge_version, but the tree has no forge/ module"; exit 1
           fi
+          echo "Loaders of Minecraft $MC: Fabric, NeoForge$([[ "$FORGE" != true ]] || echo ', Forge')"
           echo "forge=$FORGE" >> "$GITHUB_OUTPUT"
           TYPE=release
           [[ "$FG" != *-beta* ]] || TYPE=beta
@@ -280,7 +282,7 @@ jobs:
 
       # In-world behaviour tests for EVERY loader of the line must pass before a release ships.
       # :fabric:runGameTest = Fabric server gametests; :neoforge:runGameTests = NeoForge
-      # gameTestServer world tests; :forge:runGameTests = Forge's game-test server (26.3 only).
+      # gameTestServer world tests; :forge:runGameTests = Forge's game-test server (a tree with forge/).
       # Required tests gate the build; tests marked optional (unfinished features) only warn.
       - name: Game tests (every loader)
         if: steps.reuse.outputs.reused != 'true'
@@ -296,7 +298,7 @@ jobs:
       #  2. the version in each filename matches the tag (catches a stale jar),
       #  3. each jar actually carries its loader's metadata — so the [Fabric] /
       #     [NeoForge] / [Forge] label can never be pinned to the wrong artifact,
-      #  4. the set of jars is the line's own: Forge on 26.3, no Forge on 26.2.
+      #  4. the set of jars is the tree's own: a Forge jar exactly when the tree carries forge/.
       - name: Resolve & validate artifacts
         id: meta
         env:
@@ -319,7 +321,7 @@ jobs:
           FORGE_ARGS=()
           [ -z "$FORGE_JAR" ] || FORGE_ARGS=(--forge "$FORGE_JAR")
           python .github/scripts/verify-artifacts.py \
-            --version "$VERSION" --minecraft "$MC" \
+            --version "$VERSION" --minecraft "$MC" --tree . \
             --fabric "$FABRIC_JAR" \
             --neoforge "$NEOFORGE_JAR" \
             "${FORGE_ARGS[@]}" \
@@ -344,7 +346,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
           echo "Fabric:   $FABRIC_JAR"
           echo "NeoForge: $NEOFORGE_JAR"
-          echo "Forge:    ${FORGE_JAR:-not on Minecraft $MC}"
+          echo "Forge:    ${FORGE_JAR:-none, the tree has no forge/}"
 
       # Exclude the obsolete legacy version group; ambiguous matches fail before uploads.
       - name: Resolve CurseForge loader IDs
@@ -499,7 +501,7 @@ jobs:
           echo "::error::Modrinth NeoForge upload failed after 5 attempts (last HTTP $code). Response body above."
           exit 1
 
-      # Forge: the 26.3 line only. No required dependency: the jar needs only Forge and Minecraft
+      # Forge: any line whose tree carries forge/. No required dependency: the jar needs only Forge and Minecraft
       # (forge/src/main/resources/META-INF/mods.toml).
       - name: Publish Forge to Modrinth
         id: mr_forge
@@ -722,7 +724,7 @@ jobs:
       # A target skipped because it already existed is still named: Modrinth by looking its
       # version up by version_number, CurseForge as "preexisting" (its upload token cannot list
       # files). Never fails the release over bookkeeping: a missing id is written as null and
-      # the check falls back to the listing for that loader. A line without Forge records no forge keys.
+      # the check falls back to the listing for that loader. A tree without forge/ records no forge keys.
       - name: Record publication ids
         env:
           TAG: ${{ steps.rel.outputs.tag }}

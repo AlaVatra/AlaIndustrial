@@ -1,6 +1,7 @@
 package dev.alaindustrial.gametest.neoforge;
 
 import dev.alaindustrial.gametest.AlaGameTestHelper;
+import dev.alaindustrial.item.tool.neoforge.RightClickAbility;
 import dev.alaindustrial.registry.ModContent;
 import java.util.Collection;
 import java.util.List;
@@ -94,7 +95,11 @@ public final class ElectricToolAbilityNeoForgeScenarios {
 		return null;
 	}
 
-	/** Puts {@code state} on the plot (air above) and asks it, through {@code stack} in hand, what it becomes. */
+	/**
+	 * Puts {@code state} on the plot (air above) and asks it, through {@code stack} in hand, what it becomes. A till
+	 * is asked the way the hoe asks before its charge gate, through {@link RightClickAbility#wouldTill}, which adds
+	 * vanilla's DOWN-face rule to NeoForge's simulated modification.
+	 */
 	private static BlockState probe(GameTestHelper helper, ServerPlayer player, ItemStack stack, BlockState state,
 			Direction face, ItemAbility ability) {
 		helper.setBlock(PLOT, state);
@@ -103,14 +108,17 @@ public final class ElectricToolAbilityNeoForgeScenarios {
 		BlockPos abs = helper.absolutePos(PLOT);
 		UseOnContext context = new UseOnContext(player, InteractionHand.MAIN_HAND,
 				new BlockHitResult(Vec3.atCenterOf(abs), face, abs, false));
-		return helper.getLevel().getBlockState(abs).getToolModifiedState(context, ability, /*simulate*/ true);
+		BlockState simulated = helper.getLevel().getBlockState(abs).getToolModifiedState(context, ability,
+				/*simulate*/ true);
+		return ability == ItemAbilities.HOE_TILL && !RightClickAbility.wouldTill(context) ? null : simulated;
 	}
 
 	/**
 	 * @implements MOD-704-RC05 — on NeoForge 26.2 the simulated tool modification through a held electric
-	 *     tool (the probe the hoe asks before its charge gate) answers farmland for dirt from UP and from
-	 *     DOWN (this loader's {@code HOE_TILL} copy has no face check — vanilla's rules refuse DOWN), dirt for
-	 *     rooted dirt, nothing for stone, a path for grass and an unlit campfire for a lit one — and writes
+	 *     tool (the probe the hoe asks before its charge gate) answers farmland for dirt from UP and nothing
+	 *     from DOWN (vanilla's rules refuse the bottom face; this loader's {@code HOE_TILL} copy has no face
+	 *     check, and the hoe adds it back, ADR-054), dirt for rooted dirt from UP and from DOWN (its rule has no
+	 *     face condition), nothing for stone, a path for grass and an unlit campfire for a lit one — and writes
 	 *     nothing: the block stays and no hanging root is dropped.
 	 */
 	public static void simulatedProbeAnswersAndWritesNothing(GameTestHelper helper) {
@@ -121,7 +129,11 @@ public final class ElectricToolAbilityNeoForgeScenarios {
 				new Case(ModContent.ELECTRIC_HOE, Blocks.DIRT.defaultBlockState(), Direction.UP, ItemAbilities.HOE_TILL,
 						Blocks.FARMLAND.defaultBlockState()),
 				new Case(ModContent.ELECTRIC_HOE, Blocks.DIRT.defaultBlockState(), Direction.DOWN,
-						ItemAbilities.HOE_TILL, Blocks.FARMLAND.defaultBlockState()),
+						ItemAbilities.HOE_TILL, null),
+				new Case(ModContent.ELECTRIC_HOE_DIAMOND_TIP, Blocks.DIRT.defaultBlockState(), Direction.DOWN,
+						ItemAbilities.HOE_TILL, null),
+				new Case(ModContent.ELECTRIC_HOE, Blocks.ROOTED_DIRT.defaultBlockState(), Direction.DOWN,
+						ItemAbilities.HOE_TILL, Blocks.DIRT.defaultBlockState()),
 				new Case(ModContent.ELECTRIC_HOE_DIAMOND_TIP, Blocks.ROOTED_DIRT.defaultBlockState(), Direction.UP,
 						ItemAbilities.HOE_TILL, Blocks.DIRT.defaultBlockState()),
 				new Case(ModContent.ELECTRIC_HOE, Blocks.STONE.defaultBlockState(), Direction.UP,

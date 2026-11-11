@@ -1,0 +1,240 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.minecraftforge.gradle'
+}
+
+// MinecraftForge, the third loader beside Fabric and NeoForge (MOD-962, ADR-052).
+//
+// Part of `build` and `verifyAll` since stage 4 (gradle/checks.gradle); -PwithoutForge leaves it out
+// (settings.gradle).
+//
+// Layout after Ala Logger 0.2.0 and Ala Screen 0.2.0 (projects 023, 027), which ship Forge from the same kind
+// of build: ForgeGradle 7 beside Loom and ModDevGradle. Forge 26.x runs on Mojang's names in dev and in
+// production (no SRG, no reobf, no refmap), so the common sources compiled against NeoForm compile here
+// unchanged — this module recompiles them against Forge's patched Minecraft, exactly as `fabric/` and
+// `neoforge/` do.
+
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    // Compile-only APIs the common sources name (recipe viewers, WTHIT). None of them has a Forge 26.x
+    // runtime, so the plugins compile into the jar and are never discovered.
+    maven { url = 'https://maven.blamejared.com/' }
+    maven { url = 'https://maven.shedaniel.me/' }
+    maven { url = 'https://maven.architectury.dev/' }
+    maven {
+        url = 'https://maven2.bai.lol'
+        content {
+            includeGroup 'mcp.mobius.waila'
+            includeGroup 'lol.bai'
+        }
+    }
+}
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+
+    compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}@jar")
+    compileOnly("me.shedaniel:RoughlyEnoughItems-api:${rei_version}")
+    compileOnly(libs.cloth.basic.math)
+    compileOnly(libs.architectury.common)
+    compileOnly("mcp.mobius.waila:wthit-api:mojmap-${wthit_version}")
+    // MixinExtras ships inside Forge (mixinextras-forge 0.5.4); only the annotations are needed to compile.
+    compileOnly(libs.mixinextras.common)
+
+    testImplementation("org.junit.jupiter:junit-jupiter:${junit_version}")
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// The common mixin configs, in the order neoforge.mods.toml lists them, then Forge's own (FluidTypeLookupMixin,
+// the twin of alaindustrial.neoforge.mixins.json) and Forge's client config (slice 2.2: world overlays, block
+// outlines, block-entity culling boxes, the root's model data; its classes sit under "client", so a dedicated
+// server skips them). Forge reads mixin configs from the `MixinConfigs` attribute of the jar manifest only —
+// [[mixins]] in mods.toml is a NeoForge key.
+def mixinConfigs = ["${mod_id}.mixins.json", "${mod_id}.worldgen.mixins.json", "${mod_id}.compat-optional.mixins.json",
+                    "${mod_id}.forge.mixins.json", "${mod_id}.forge-client.mixins.json"]
+jar {
+    manifest {
+        attributes('MixinConfigs': mixinConfigs.join(','))
+    }
+}
+
+// Forge 26.x bundles the original Mixin 0.8.7, whose CompatibilityLevel stops at JAVA_21 (javap of
+// MixinEnvironment$CompatibilityLevel). The shared configs say JAVA_25 for Fabric's and NeoForge's newer Mixin;
+// the Forge jar gets JAVA_21. -PforgeKeepMixinLevel keeps JAVA_25, to reproduce the failure.
+// A filter closure is not a task input: without the explicit property, toggling the flag leaves
+// processResources UP-TO-DATE with the other level still inside (measured).
+def forgeMixinLevel = project.hasProperty('forgeKeepMixinLevel') ? 'JAVA_25' : 'JAVA_21'
+processResources {
+    inputs.property('forgeMixinLevel', forgeMixinLevel)
+}
+if (forgeMixinLevel == 'JAVA_21') {
+    processResources {
+        filesMatching('*.mixins.json') {
+            filter { String line -> line.replace('"JAVA_25"', '"JAVA_21"') }
+        }
+    }
+}
+
+// Dev-only `gametest` source set (MOD-962): the Forge gametest lane (ForgeGameTestBootstrap, stage 3), compiled
+// together with the shared scenario bodies of common/src/gametest/java it replays. The same
+// source-dir mechanism as the neoforge and fabric gametest sets; `jar` packs only `main`, so nothing here ships.
+// It is its OWN mod, `alaindustrial_gametest` (src/gametest/resources/META-INF/mods.toml), as on the other two
+// loaders (MOD-322): Forge 66 finds mods by the mods.toml of a classpath directory, and with
+// merge-source-sets each source set is one directory, so a second mod cannot shadow a file of the first.
+sourceSets {
+    gametest {
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+configurations {
+    commonGametestJava {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+dependencies {
+    commonGametestJava(project(path: ':common', configuration: 'commonGametestJava'))
+}
+
+tasks.named('compileGametestJava', JavaCompile) {
+    dependsOn(configurations.commonGametestJava)
+    source(configurations.commonGametestJava)
+}
+
+// -PforgeClientAudit: the dev client opens a copy of the last game-test world, runs the client-side mixin audit
+// (ForgeClientAudit, the one automated client check on Forge) and closes itself 600 ticks later.
+def clientAudit = project.hasProperty('forgeClientAudit')
+def auditWorld = 'ForgeClientAudit'
+def copyAuditWorld = tasks.register('copyForgeClientAuditWorld', Sync) {
+    description = 'Copy the world the Forge game-test server left behind into the dev client saves (client audit).'
+    from layout.projectDirectory.dir('runs/gameTestServer/gametestserver/gametestworld')
+    into layout.projectDirectory.dir("runs/client/saves/${auditWorld}")
+    exclude 'session.lock'
+}
+
+def forgeGameTestReport = file('build/test-results/forgeGameTest/TEST-forge-gametest.xml')
+// The ids of ScenarioRosterForge.NOT_ON_FORGE, written by the game-test server itself (one oracle: the Java map).
+def forgeOptionalTests = file('build/test-results/forgeGameTest/not-on-forge.txt')
+
+minecraft {
+    runs {
+        configureEach {
+            workingDir = layout.projectDirectory.dir("runs/${it.name}")
+            // A dev run has no jar manifest: name the configs on the command line instead.
+            mixinConfigs.each { args "--mixin.config=${it}" }
+        }
+        register('client') {
+            if (clientAudit) {
+                args '--quickPlaySingleplayer', auditWorld
+                systemProperty 'alaindustrial.forgeClientAudit', 'true'
+                systemProperty 'alaindustrial.forgeClientAudit.quitAfterTicks', '600'
+            }
+            // -PforgeJoin=host:port: the dev client joins a dedicated server (the stage 3 first run, MOD-962) through
+            // vanilla quick play, runs the same client audit there and closes itself after -PforgeJoinTicks ticks in
+            // the world (default 6000 = 5 min). Leaving the game is the audit's minecraft.stop(): a clean disconnect.
+            if (project.hasProperty('forgeJoin')) {
+                args '--quickPlayMultiplayer', project.property('forgeJoin')
+                systemProperty 'alaindustrial.forgeClientAudit', 'true'
+                systemProperty 'alaindustrial.forgeClientAudit.quitAfterTicks',
+                        project.findProperty('forgeJoinTicks') ?: '6000'
+            }
+        }
+        register('server') {
+            args '--nogui'
+        }
+        // The Forge gametest lane (MOD-962 stage 3, ADR-053): vanilla's game-test server runs every test instance
+        // of the world (ours from the roster pack, plus vanilla's always_pass), writes a JUnit-like report and
+        // exits with the number of failed required tests. It recreates its universe on every start, so no
+        // clean task is needed. 2 GB as on NeoForge (MOD-891). -PforgeTests=<selector> runs a subset
+        // ('alaindustrial:cable_*'; an empty match exits -1, never a silent pass), -PforgeTestRepeat=<n> repeats.
+        register('gameTestServer') {
+            maxHeapSize.set('2g')
+            args '--report', forgeGameTestReport.absolutePath
+            systemProperty 'alaindustrial.forgeOptionalTestsFile', forgeOptionalTests.absolutePath
+            if (project.hasProperty('forgeTests')) {
+                args '--tests', project.property('forgeTests')
+            }
+            if (project.hasProperty('forgeTestRepeat')) {
+                args '--repeatCount', project.property('forgeTestRepeat')
+            }
+        }
+    }
+}
+
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.findByName(variant)?.attributes {
+        attribute(loaderAttribute, 'forge')
+    }
+}
+
+if (clientAudit) {
+    tasks.matching { it.name == 'runClient' }.configureEach { dependsOn(copyAuditWorld) }
+}
+
+// The dev runs put the gametest directory on the JVM classpath beside main. Appended to the run tasks, not set
+// through `minecraft.runs { classpath ... }`: a run's own classpath REPLACES the source set's (measured: the
+// launcher itself went missing).
+tasks.matching { it.name in ['runClient', 'runServer', 'runGameTestServer'] }.configureEach {
+    classpath(sourceSets.gametest.output)
+}
+
+// `:forge:runGameTests`, the name the other lanes use (`checks.gradle` names lanes by it). The FG run must stay
+// `gameTestServer`: ForgeGradle maps the run name to its run metadata.
+def runGameTestServer = tasks.matching { it.name == 'runGameTestServer' }
+runGameTestServer.configureEach {
+    doFirst { forgeGameTestReport.parentFile.mkdirs(); forgeGameTestReport.delete(); forgeOptionalTests.delete() }
+    // Belt for the exit code (a POSIX exit status is the count mod 256): the report decides too.
+    doLast {
+        if (!forgeGameTestReport.isFile()) {
+            throw new GradleException("The Forge game-test server wrote no report at ${forgeGameTestReport}")
+        }
+        // JUnitLikeTestReporter writes no totals: a failed required test is a <failure> child of its <testcase>.
+        def report = new groovy.xml.XmlSlurper().parse(forgeGameTestReport)
+        def cases = report.'**'.findAll { it.name() == 'testcase' }
+        int failures = report.'**'.findAll { it.name() == 'failure' }.size()
+        logger.lifecycle("Forge gametests: ${cases.size()} test case(s), ${failures} required failure(s)")
+        if (cases.isEmpty() || failures > 0) {
+            throw new GradleException("Forge gametests: ${cases.size()} test case(s), ${failures} failure(s) in "
+                    + forgeGameTestReport)
+        }
+        // The ratchet on NOT_ON_FORGE: an optional failure is a <skipped> child; an entry that ran without one
+        // passed, so the Forge behaviour it names is gone and the line must go (a filtered run checks what it ran).
+        if (!forgeOptionalTests.isFile()) {
+            throw new GradleException("The Forge game-test server wrote no optional-test list at ${forgeOptionalTests}")
+        }
+        def optional = forgeOptionalTests.readLines('UTF-8').findAll { !it.isBlank() } as Set
+        def ran = cases.findAll { it.@name.text() in optional }
+        // any(), not find() != null: on a GPathResult find() answers an empty result, never null.
+        def failedOptional = { tc -> tc.children().any { c -> c.name() == 'skipped' } }
+        def stale = ran.findAll { !failedOptional(it) }.collect { it.@name.text() }.unique().sort()
+        int optionalFailed = ran.count { failedOptional(it) }
+        logger.lifecycle("Forge gametests: ${optionalFailed} optional failure(s) of NOT_ON_FORGE ${optional.sort()}")
+        if (!stale.isEmpty()) {
+            throw new GradleException("Forge gametests: stale ScenarioRosterForge.NOT_ON_FORGE entry: ${stale} now"
+                    + " pass(es) on Forge — remove the line(s), the test becomes required on this lane again")
+        }
+    }
+}
+tasks.register('runGameTests') {
+    group = 'verification'
+    description = 'Run the Forge gametest lane: the common roster plus the Forge hand-wired tests (ADR-053).'
+    dependsOn(runGameTestServer)
+}
+
+// The NeoForge gametest data is the Forge lane's too: Forge runs the NeoForge lane's parameters (same rig, same
+// structures, same fixtures), so one copy cannot drift. Its META-INF (neoforge.mods.toml) is NeoForge's alone.
+tasks.named('processGametestResources', ProcessResources) {
+    from('../neoforge/src/gametest/resources') {
+        exclude 'META-INF/**'
+    }
+}

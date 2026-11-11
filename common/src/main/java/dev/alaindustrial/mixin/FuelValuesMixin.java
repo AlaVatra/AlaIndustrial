@@ -25,11 +25,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * the facade {@code FurnaceFuel.burnsLikeBamboo} leaves its properties alone and this mixin answers for it
  * instead: {@code isFuel} says yes and {@code burnDuration} reports the table's own bamboo value, so a
  * datapack that edits bamboo moves sawdust with it.
+ *
+ * <p>Both targets name their descriptor (MOD-962): Forge 65 patches {@link FuelValues} with typed overloads
+ * {@code isFuel(ItemStack, RecipeType)} and {@code burnDuration(ItemStack, RecipeType)} (javap of the Forge-patched
+ * 26.2 jar), so a name alone no longer picks one method. The one-argument methods are the ones vanilla's furnace
+ * calls, and on Forge they delegate to the typed ones, so the hook sits where every vanilla fuel decision passes.
  */
 @Mixin(FuelValues.class)
 public abstract class FuelValuesMixin {
 
-	@Inject(method = "isFuel", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "isFuel(Lnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
 	private void alaindustrial$lavaCapsuleIsFuel(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
 		if (CapsuleFuel.isLavaCapsule(stack) || isSawdust(stack)) {
 			cir.setReturnValue(true);
@@ -41,7 +46,7 @@ public abstract class FuelValuesMixin {
 	// classes this shared mixin is compiled against for Fabric. It is also the exact method this mixin
 	// injects into, so the re-entrant lookup below must go through the same one to stay datapack-faithful.
 	@SuppressWarnings("deprecation")
-	@Inject(method = "burnDuration", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "burnDuration(Lnet/minecraft/world/item/ItemStack;)I", at = @At("HEAD"), cancellable = true)
 	private void alaindustrial$lavaCapsuleBurnDuration(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
 		if (CapsuleFuel.isLavaCapsule(stack)) {
 			// Mirror the vanilla lava bucket's own value (datapack-faithful) rather than hardcoding 20000.
