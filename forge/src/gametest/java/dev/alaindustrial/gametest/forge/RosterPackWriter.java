@@ -1,6 +1,7 @@
 package dev.alaindustrial.gametest.forge;
 
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.gametest.compat.GameTestData;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -39,7 +40,7 @@ final class RosterPackWriter {
 				+ "\"type\":\"minecraft:function\","
 				+ "\"function\":\"" + id + "\","
 				+ "\"environment\":\"" + environment + "\","
-				+ "\"dimension\":\"" + data.dimension().identifier() + "\","
+				+ GameTestData.dimension(data).map(d -> "\"dimension\":\"" + d + "\",").orElse("")
 				+ "\"structure\":\"" + data.structure() + "\","
 				+ "\"max_ticks\":" + data.maxTicks() + ","
 				+ "\"setup_ticks\":" + data.setupTicks() + ","

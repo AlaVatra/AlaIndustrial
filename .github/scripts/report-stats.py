@@ -321,7 +321,7 @@ def build_report(data, today, site_result):
     if fabric is None or neoforge is None:
         problems.append("totals.loaders is incomplete")
     else:
-        # Forge (Minecraft 26.3 only) joins the split once it has downloads; files written before it have no key.
+        # Forge joins the split once it has downloads; files written before it have no key.
         forge = loaders.get("forge") if is_number(loaders.get("forge")) else 0
         loader_sum = fabric + neoforge + forge
         if loader_sum:

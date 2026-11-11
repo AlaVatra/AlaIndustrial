@@ -486,7 +486,7 @@
         {
           "id": "mob_wheel_controller",
           "title": "दौड़ पहिये की ड्राइव",
-          "icon": "alaindustrial:mob_wheel_controller",
+          "icon": "alaindustrial:mob_wheel_rotor",
           "pages": [
             {
               "type": "text",

@@ -3,6 +3,7 @@ package dev.alaindustrial.gametest.forge;
 import com.mojang.authlib.GameProfile;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.compat.Invulnerability;
 import dev.alaindustrial.core.forge.ForgeFakePlayer;
 import dev.alaindustrial.core.forge.ForgeFakePlayers;
 import dev.alaindustrial.core.world.FakePlayers;
@@ -166,7 +167,7 @@ final class ForgeWiringScenarios {
 		GameProfile profile = new GameProfile(UUID.fromString("00000000-0000-4000-8000-00000000a1a1"), "AlaProbe");
 		ServerPlayer first = FakePlayers.get().get(level, profile);
 		boolean cached = FakePlayers.get().get(level, profile) == first;
-		boolean invulnerable = first.isPermanentlyInvulnerable();
+		boolean invulnerable = Invulnerability.isPermanent(first);
 		// Its own throw-away advancements: no listener, so a trigger it fires credits nobody (NeoForge parity).
 		boolean deafAdvancements = first.getAdvancements()
 				.getTriggerMapForType(CriteriaTriggers.INVENTORY_CHANGED) == null;

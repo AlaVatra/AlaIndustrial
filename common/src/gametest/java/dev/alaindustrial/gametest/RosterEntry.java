@@ -43,7 +43,7 @@ public record RosterEntry(
 		Rotation rotation,
 		boolean required) {
 
-	/** The gametest lanes; FORGE exists on the 26.3 line only (MOD-962). */
+	/** The gametest lanes; FORGE runs on both Minecraft lines since stage 5 of MOD-962. */
 	public enum Lane { FABRIC, NEOFORGE, FORGE }
 
 	/** Parameters that may differ between the lanes; {@code structure == null} is the lane default. */

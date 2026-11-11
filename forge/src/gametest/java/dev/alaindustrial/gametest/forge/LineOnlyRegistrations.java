@@ -3,8 +3,10 @@ package dev.alaindustrial.gametest.forge;
 import dev.alaindustrial.gametest.LineOnlyScenarios;
 
 /**
- * Forge registrations of the scenarios that exist on the 26.3 Minecraft line only (MOD-705), the same six lines as
- * the NeoForge class of the same name. Forge exists only on 26.3, so no byte-equality with another line is owed.
+ * Forge registrations of the scenarios that exist on ONE Minecraft line only (MOD-705), the twin of the NeoForge
+ * class of the same name: {@link ForgeGameTests} calls {@link #register} on both lines, so that call stays
+ * byte-equal; the content differs per line. On 26.3 they are the same six lines as NeoForge's, bodies in
+ * {@link LineOnlyScenarios}.
  */
 final class LineOnlyRegistrations {
 

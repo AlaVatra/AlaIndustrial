@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.gametest.compat.FeatureTypes;
 import dev.alaindustrial.registry.ModFluidsManifest;
 import dev.alaindustrial.registry.ModLootConditions;
 import dev.alaindustrial.registry.ModRecipes;
@@ -90,7 +91,7 @@ final class ForgeLoaderScenarios {
 			expect(server, failures, Registries.RECIPE_SERIALIZER, ModRecipes.families().size());
 			expect(server, failures, Registries.LOOT_CONDITION_TYPE, ModLootConditions.CONDITIONS.size());
 			expect(server, failures, Registries.PLACEMENT_MODIFIER_TYPE, ModWorldgenTypes.PLACEMENT_MODIFIERS.size());
-			expect(server, failures, Registries.FEATURE_TYPE, ModWorldgenTypes.FEATURE_TYPES.size());
+			expect(server, failures, FeatureTypes.registry(), ModWorldgenTypes.FEATURE_TYPES.size());
 			expect(server, failures, Registries.STRUCTURE_TYPE, ModWorldgenTypes.STRUCTURE_TYPES.size());
 			expect(server, failures, Registries.STRUCTURE_PIECE, ModWorldgenTypes.STRUCTURE_PIECES.size());
 			expect(server, failures, Registries.POINT_OF_INTEREST_TYPE, 1);

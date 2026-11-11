@@ -50,7 +50,7 @@ def check(name: str, ok: bool, detail: str = "") -> None:
 
 # Paired release: one post, shared entries once, the 26.3-only fix labelled, order independent.
 for order in ([LINE_263, LINE_262], [LINE_262, LINE_263]):
-    post = mod.compose("0.1.183", list(order))
+    post = mod.compose("0.1.183", list(order), {LINE_263[0]})
     d = post["description"]
     check("title", post["title"] == "Ala Industrial 0.1.183 — Minecraft 26.3 & 26.2", post["title"])
     check("shared once", d.count("The Mob Repeller pings.") == 1, d)
@@ -64,10 +64,17 @@ for order in ([LINE_263, LINE_262], [LINE_262, LINE_263]):
     check("links both", "v0.1.183-mc26.3+fabric" not in post["downloads"]
           and "0.1.183-mc26.3+fabric" in post["downloads"] and "0.1.183-mc26.2+neoforge" in post["downloads"],
           post["downloads"])
-    check("forge on its line only", "0.1.183-mc26.3+forge" in post["downloads"]
+    check("forge where the tree carried it", "0.1.183-mc26.3+forge" in post["downloads"]
           and "mc26.2+forge" not in post["downloads"], post["downloads"])
     check("media leader", post["media_tag"] == "v0.1.183-mc26.3", post["media_tag"])
     check("url leader", post["url"].endswith("/releases/tag/v0.1.183-mc26.3"), post["url"])
+
+# MOD-962 stage 5: Forge follows the tagged tree, not the line number - both lines, or neither.
+post = mod.compose("0.1.183", [LINE_263, LINE_262], {LINE_263[0], LINE_262[0]})
+check("forge on both lines", "0.1.183-mc26.3+forge" in post["downloads"]
+      and "0.1.183-mc26.2+forge" in post["downloads"], post["downloads"])
+post = mod.compose("0.1.183", [LINE_263, LINE_262])
+check("no forge without a tree that carries it", "+forge" not in post["downloads"], post["downloads"])
 
 # Wrapped lines must not break the "same entry on both lines" match.
 rewrapped = (LINE_262[0], LINE_262[1].replace("on all three\n  tiers.", "on all\n  three tiers."))

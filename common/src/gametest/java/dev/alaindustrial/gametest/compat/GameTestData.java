@@ -1,5 +1,6 @@
 package dev.alaindustrial.gametest.compat;
 
+import java.util.Optional;
 import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
@@ -41,5 +42,14 @@ public final class GameTestData {
 				1,          // requiredSuccesses
 				skyAccess,
 				padding);
+	}
+
+	/**
+	 * The dimension a test's data names, as written in a test instance's {@code "dimension"} field; empty where
+	 * the line's test data has none. This twin (26.3): the data's own {@code dimension()} — the field and the
+	 * JSON key arrived with 26.3.
+	 */
+	public static Optional<Identifier> dimension(TestData<?> data) {
+		return Optional.of(data.dimension().identifier());
 	}
 }

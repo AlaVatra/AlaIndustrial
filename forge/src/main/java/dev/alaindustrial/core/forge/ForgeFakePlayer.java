@@ -1,6 +1,7 @@
 package dev.alaindustrial.core.forge;
 
 import com.mojang.authlib.GameProfile;
+import dev.alaindustrial.compat.Invulnerability;
 import io.netty.channel.ChannelFutureListener;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -59,7 +60,7 @@ public final class ForgeFakePlayer extends ServerPlayer {
 	public ForgeFakePlayer(ServerLevel level, GameProfile profile) {
 		super(level.getServer(), level, profile, ClientInformation.createDefault());
 		this.connection = new FakeNetHandler(level.getServer(), this);
-		this.setPermanentlyInvulnerable(true);
+		Invulnerability.setPermanent(this, true);
 		if (this.gameMode.getGameModeForPlayer() != GameType.SURVIVAL) {
 			this.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
 		}

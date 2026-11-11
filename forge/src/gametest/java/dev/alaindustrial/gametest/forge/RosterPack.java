@@ -1,5 +1,6 @@
 package dev.alaindustrial.gametest.forge;
 
+import dev.alaindustrial.gametest.compat.InMemoryPacks;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -7,14 +8,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.AbstractPackMetadataResources;
 import net.minecraft.server.packs.PackLocationInfo;
-import net.minecraft.server.packs.PackMetadataResources;
-import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackFormat;
@@ -77,17 +74,7 @@ final class RosterPack {
 		PackLocationInfo info = new PackLocationInfo(ID, Component.literal("Ala Industrial roster tests"),
 				PackSource.DEFAULT, Optional.empty());
 		InMemoryPackResources resources = new InMemoryPackResources(info, meta, writer.files());
-		Pack.ResourcesSupplier supplier = new Pack.ResourcesSupplier() {
-			@Override
-			public PackMetadataResources openMetadata(PackLocationInfo location) {
-				return resources;
-			}
-
-			@Override
-			public Stream<PackResources> openResources(PackLocationInfo location, Pack.Metadata metadata) {
-				return Stream.of(resources);
-			}
-		};
+		Pack.ResourcesSupplier supplier = InMemoryPacks.supplier(resources);
 		Pack built = Pack.readMetaAndCreate(info, supplier, PackType.SERVER_DATA,
 				new PackSelectionConfig(false, Pack.Position.TOP, false));
 		if (built == null) {
@@ -101,7 +88,7 @@ final class RosterPack {
 	}
 
 	/** A data pack held in memory: {@code pack.mcmeta} plus a map from resource location to bytes. */
-	private static final class InMemoryPackResources extends AbstractPackMetadataResources implements PackResources {
+	private static final class InMemoryPackResources extends InMemoryPacks.Base {
 
 		private final byte[] meta;
 		private final Map<Identifier, byte[]> files;

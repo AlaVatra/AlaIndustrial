@@ -14,8 +14,8 @@ import org.jspecify.annotations.Nullable;
  * Reinforced bone meal asks Forge's {@code BonemealEvent} (MOD-962, slice 2.5), the twin of
  * {@code BonemealEventsNeoForge}: protection and moderation mods cancel it, as they do for vanilla bone meal.
  *
- * <p>Not a version facade (it is not in {@code SEAMS.md}): Forge exists only on the 26.3 line, so there is no
- * twin on another line; it sits in {@code compat} beside its NeoForge counterpart.
+ * <p>A version facade like its NeoForge counterpart (a row in {@code SEAMS.md}); today both twins are the same
+ * source, because Forge 65 (26.2) and Forge 66 (26.3) have the same {@code onApplyBonemeal} signature.
  *
  * <p><b>Differences from NeoForge, by Forge's own contract</b> ({@code ForgeEventFactory.onApplyBonemeal}):
  * <ul>

@@ -486,7 +486,7 @@
         {
           "id": "mob_wheel_controller",
           "title": "ตัวขับวงล้อวิ่ง",
-          "icon": "alaindustrial:mob_wheel_controller",
+          "icon": "alaindustrial:mob_wheel_rotor",
           "pages": [
             {
               "type": "text",

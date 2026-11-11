@@ -483,11 +483,11 @@ public final class ElectricHoeScenarios {
 	}
 
 	/**
-	 * The block a hoe leaves on every lane, for the faces where all four lanes agree: UP and a side face
-	 * convert the five soils, DOWN converts only rooted dirt (its rule has no face condition on any
-	 * line or loader). {@code null} = no literal here: the answer depends on the lane (the DOWN face of
-	 * the four air-above soils — refused by vanilla's rules on 26.2 Fabric and on 26.3, converted by the
-	 * NeoForge 26.2 {@code HOE_TILL} copy, which has no face check), and only the vanilla oracle pins it.
+	 * The block the electric hoe leaves on every lane, by vanilla's tilling rules (ADR-054: the game is the
+	 * measure): UP and a side face convert the five soils; DOWN converts only rooted dirt — its rule has no
+	 * face condition — and leaves the four air-above soils alone (26.2 {@code HoeItem.onlyIfAirAbove} refuses
+	 * {@code Direction.DOWN}, 26.3 has {@code disallowed_faces: [down]} in {@code block_transformer/hoe.json};
+	 * both checked with javap / the jar's data).
 	 */
 	private static Block literalTill(Block soil, Direction face) {
 		if (soil == Blocks.FARMLAND || soil == Blocks.STONE) {
@@ -497,9 +497,21 @@ public final class ElectricHoeScenarios {
 			return Blocks.DIRT;
 		}
 		if (face == Direction.DOWN) {
-			return null;
+			return soil;
 		}
 		return soil == Blocks.COARSE_DIRT ? Blocks.DIRT : Blocks.FARMLAND;
+	}
+
+	/**
+	 * A cell where the lane's own vanilla diamond hoe departs from vanilla's rules: NeoForge and Forge 26.2
+	 * till through a copy of the rules in their {@code HOE_TILL} hook that drops the DOWN-face check, so
+	 * their diamond hoe tills the four air-above soils from below. The electric hoe does not inherit that
+	 * (ADR-054), so on these cells the fixture check against the diamond hoe is skipped and the literal alone
+	 * is the oracle.
+	 */
+	private static boolean loaderPatchedCell(Block soil, Direction face) {
+		return face == Direction.DOWN && soil != Blocks.ROOTED_DIRT && soil != Blocks.FARMLAND
+				&& soil != Blocks.STONE;
 	}
 
 	/** Puts {@code soil} on the plot (air above) and clicks it from {@code face} with {@code stack}. */
@@ -516,10 +528,10 @@ public final class ElectricHoeScenarios {
 	 *
 	 * @implements MOD-704-RC01 — for every soil of the matrix (dirt, grass, dirt path, coarse dirt, rooted
 	 *     dirt, farmland, stone) and every face (UP, a side, DOWN), a charged electric hoe — base and
-	 *     diamond tip — leaves the same block a vanilla diamond hoe leaves on the same fixture, matches the
-	 *     lane-independent literal where all lanes agree, and spends exactly the till cost when (and only
-	 *     when) the block changed. The DOWN answer for the four air-above soils is pinned relative to
-	 *     vanilla only: it differs between lanes today (see research.md of MOD-704).
+	 *     diamond tip — leaves the block vanilla's tilling rules leave (the literal: nothing from DOWN on the
+	 *     four air-above soils, on every lane and loader), which is also what a vanilla diamond hoe leaves on
+	 *     the same fixture except where a loader patched that item, and spends exactly the till cost when (and
+	 *     only when) the block changed.
 	 */
 	public static void faceMatrixAgreesWithVanillaHoe(GameTestHelper helper) {
 		ServerPlayer player = survivalPlayer(helper);
@@ -530,7 +542,7 @@ public final class ElectricHoeScenarios {
 				clickFresh(helper, player, new ItemStack(Items.DIAMOND_HOE), soil, face);
 				Block vanilla = soilBlock(helper);
 				Block literal = literalTill(soil, face);
-				if (literal != null && vanilla != literal) {
+				if (vanilla != literal && !loaderPatchedCell(soil, face)) {
 					helper.fail("fixture error: a vanilla diamond hoe on " + soil + " from " + face + " left "
 							+ vanilla + ", expected " + literal);
 					return;
@@ -540,8 +552,9 @@ public final class ElectricHoeScenarios {
 					InteractionResult result = clickFresh(helper, player, tool, soil, face);
 					Block after = soilBlock(helper);
 					String cell = tool.getItem() + " on " + soil + " from " + face;
-					if (after != vanilla) {
-						helper.fail(cell + " left " + after + ", a vanilla diamond hoe left " + vanilla);
+					if (after != literal) {
+						helper.fail(cell + " left " + after + ", vanilla's tilling rules leave " + literal
+								+ " (a vanilla diamond hoe on this lane left " + vanilla + ")");
 						return;
 					}
 					boolean changed = after != soil;

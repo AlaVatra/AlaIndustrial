@@ -93,6 +93,11 @@ jobs:
             git fetch --quiet --depth 1 origin "refs/tags/$T:refs/tags/$T"
             git show "$T:CHANGELOG.md" > "changelog-$T.md"
             ARGS+=(--line "$T=changelog-$T.md")
+            # The tagged tree decides whether this line shipped a Forge jar (forge/build.gradle and forge/src).
+            if [ -n "$(git ls-tree --name-only "$T" -- forge/build.gradle)" ] \
+               && [ -n "$(git ls-tree -d --name-only "$T" -- forge/src)" ]; then
+              ARGS+=(--forge "$T")
+            fi
           done
           python .github/scripts/compose-announcement.py --version "$VERSION" "${ARGS[@]}" --out post.json
 

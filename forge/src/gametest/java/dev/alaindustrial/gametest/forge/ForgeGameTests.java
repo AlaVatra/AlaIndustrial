@@ -122,7 +122,7 @@ public final class ForgeGameTests {
 		registerTest(event, "roster_is_replayed_on_this_lane", 20, true,
 				helper -> RosterReplayScenarios.rosterIsReplayedOnThisLane(helper, RosterEntry.Lane.FORGE));
 
-		// MOD-705: scenarios of the 26.3 line only.
+		// MOD-705: scenarios of this Minecraft line only (the class differs per line).
 		LineOnlyRegistrations.register(event);
 
 		// Forge-only checks (MOD-962; moved from the stage-2 probe): the bridges of slice 2.3,

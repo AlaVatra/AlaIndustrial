@@ -55,9 +55,9 @@ def validate_neoforge(jar: Path, version: str, minecraft: str) -> dict:
     return {"loader": "neoforge", "metadata_version": version}
 
 
-# The lines that ship a Forge jar (ADR-052: Forge on Minecraft 26.3 only). A Forge jar on any other line, or a
-# line in this set without one, is a release that does not match its own publication matrix.
-FORGE_LINES = ("26.3",)
+# A line ships a Forge jar exactly when its tree carries the Forge module (forge/build.gradle and forge/src), on
+# either Minecraft line. A Forge jar from a tree without the module, or a tree with it and no Forge jar, is a
+# release that does not match its own publication matrix.
 # Forge's bundled Mixin (0.8.7) knows compatibility levels up to JAVA_21; a config asking for more fails to load.
 FORGE_MAX_MIXIN_LEVEL = 21
 
@@ -73,9 +73,23 @@ def manifest_attribute(jar: Path, name: str) -> str | None:
     return None
 
 
+def tree_has_forge(tree: Path) -> bool:
+    """The tree carries the Forge module: its build script, its sources (as settings.gradle includes it) and a
+    forge_version in gradle.properties. One without the others is a broken tree, never a quiet "no Forge"."""
+    build, src = (tree / "forge" / "build.gradle").is_file(), (tree / "forge" / "src").is_dir()
+    if build != src:
+        raise SystemExit(f"artifact: half a Forge module in {tree}: forge/build.gradle "
+                         f"{'present' if build else 'missing'}, forge/src {'present' if src else 'missing'}")
+    props = tree / "gradle.properties"
+    version = props.is_file() and bool(re.search(r"^forge_version=\S", props.read_text(encoding="utf-8"), re.M))
+    if build != version:
+        raise SystemExit(f"artifact: {tree} carries the Forge module but gradle.properties has no forge_version"
+                         if build else
+                         f"artifact: gradle.properties in {tree} has a forge_version but the tree has no forge/ module")
+    return build
+
+
 def validate_forge(jar: Path, version: str, minecraft: str) -> dict:
-    if minecraft not in FORGE_LINES:
-        raise SystemExit(f"artifact: a Forge jar on Minecraft {minecraft}; Forge ships on {', '.join(FORGE_LINES)} only")
     text = read_zip_text(jar, "META-INF/mods.toml")
     mods = re.findall(r"\[\[mods\]\](.*?)(?=\[|\Z)", text, re.S)
     expected = [m for m in mods if re.search(r'^modId\s*=\s*"alaindustrial"', m, re.M)]
@@ -123,7 +137,8 @@ def main() -> int:
     p.add_argument("--minecraft", required=True, choices=["26.2", "26.3"])
     p.add_argument("--fabric", required=True, type=Path)
     p.add_argument("--neoforge", required=True, type=Path)
-    p.add_argument("--forge", type=Path, help=f"required on Minecraft {', '.join(FORGE_LINES)}, refused elsewhere")
+    p.add_argument("--forge", type=Path, help="required when the tree carries forge/, refused when it does not")
+    p.add_argument("--tree", type=Path, default=Path("."), help="the release tree whose loader set is checked")
     p.add_argument("--output", required=True, type=Path)
     args = p.parse_args()
 
@@ -131,8 +146,12 @@ def main() -> int:
         ("fabric", args.fabric, validate_fabric),
         ("neoforge", args.neoforge, validate_neoforge),
     ]
-    if args.minecraft in FORGE_LINES and args.forge is None:
-        raise SystemExit(f"artifact: Minecraft {args.minecraft} ships a Forge jar too; pass --forge")
+    has_forge = tree_has_forge(args.tree)
+    if has_forge and args.forge is None:
+        raise SystemExit(f"artifact: the tree carries forge/, so Minecraft {args.minecraft} ships a Forge jar too; "
+                         "pass --forge")
+    if not has_forge and args.forge is not None:
+        raise SystemExit(f"artifact: a Forge jar for Minecraft {args.minecraft}, but the tree has no forge/ module")
     if args.forge is not None:
         loaders.append(("forge", args.forge, validate_forge))
 

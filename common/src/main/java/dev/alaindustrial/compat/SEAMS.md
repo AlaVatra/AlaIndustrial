@@ -9,9 +9,8 @@ The roots: `dev.alaindustrial.compat` (server-safe) and `dev.alaindustrial.compa
 signature) in `common/src/main`; `dev.alaindustrial.gametest.compat` in `common/src/gametest` (on NeoForge the
 gametest source set is its own JPMS module and cannot share a package with the main one); `dev.alaindustrial.compat`
 in `fabric/src/gametest` for the L3 client lane; `dev.alaindustrial.compat` in `neoforge/src/main` for a NeoForge API
-whose signature differs between the lines (MOD-906). `dev.alaindustrial.compat` in `forge/src/main` holds no
-facades: Forge is built on the 26.3 line only (MOD-962), so its bone-meal gate `BonemealEventsForge` has no twin on
-another line and no row here. Subpackages that integrate other mods (`compat.rei`,
+whose signature differs between the lines (MOD-906); `dev.alaindustrial.compat` in `forge/src/main` for the same
+on Forge (both lines since stage 5 of MOD-962). Subpackages that integrate other mods (`compat.rei`,
 `compat.modmenu`, `client.compat.jei`) are not facades. Whatever this register says, the javadoc of each twin is
 the authority on what its line does and why (javap evidence included).
 
@@ -37,7 +36,7 @@ the authority on what its line does and why (javap evidence included).
 |---|---|---|---|---|
 | `LineBlockProps` | `Properties popsOnPush(Properties)`, `Properties pinnedAgainstPistons(Properties)`, `Properties washedAwayByFluids(Properties)`, `Properties seeThrough(Properties)` | `PushReaction.POPPED`, `IMMOVEABLE`; washing is the `#minecraft:washed_away_by_fluids` tag, the properties stay as they are; `seeThrough` passes `isViewBlocking` a four-argument predicate (with the entity's box) | `PushReaction.DESTROY`, `BLOCK`; washing is `forceSolidOff()`; `seeThrough`'s `isViewBlocking` predicate takes three arguments | MOD-703, MOD-795 |
 | `ServerDrops` | `void drop(Player, ItemStack)`, `void placeBackInInventory(Player, ItemStack)` | `drop(stack, false, Prediction.SERVER_ONLY)`, `placeItemBackInInventory(stack, Prediction.SERVER_ONLY)` | `drop(stack, false)`, `placeItemBackInInventory(stack)` | MOD-703 |
-| `Invulnerability` | `int graceTicks(Entity)`, `void setGraceTicks(Entity, int)`, `void setPermanent(Entity, boolean)` | the grace window is `LivingEntity.damageCooldownTime` (`0` and no-op for a non-living entity; `get/setInvulnerableTime` is a different timer that blocks all damage, MOD-841), `setPermanentlyInvulnerable` | the public field `invulnerableTime`, `setInvulnerable` | MOD-703, MOD-841 |
+| `Invulnerability` | `int graceTicks(Entity)`, `void setGraceTicks(Entity, int)`, `boolean isPermanent(Entity)`, `void setPermanent(Entity, boolean)` | the grace window is `LivingEntity.damageCooldownTime` (`0` and no-op for a non-living entity; `get/setInvulnerableTime` is a different timer that blocks all damage, MOD-841), `isPermanentlyInvulnerable`/`setPermanentlyInvulnerable` | the public field `invulnerableTime`, `isInvulnerable`/`setInvulnerable` | MOD-703, MOD-841, MOD-962 |
 | `Bonemeal` | `boolean isValidTarget(BonemealableBlock, LevelReader, BlockPos, BlockState)`, `boolean isSuccess(BonemealableBlock, Level, RandomSource, BlockPos, BlockState)`, `void perform(BonemealableBlock, ServerLevel, RandomSource, BlockPos, BlockState)` | the trio with `BonemealSource.INTERACTION` | the trio without a source | MOD-703 |
 | `LineSounds` | `SoundEvent hoeTill()` | `SoundEvents.HOE_TILL.value()` (a `Holder.Reference`) | `SoundEvents.HOE_TILL` (a `SoundEvent`) | MOD-703 |
 | `LineMobs` | `boolean isEnderman(Entity)` | `instanceof Enderman` | `instanceof EnderMan` | MOD-818 |
@@ -56,6 +55,12 @@ it, so the `player` component of the three triggers' record headers stays a one-
 | Facade | Signature | 26.3 body | 26.2 body | Task |
 |---|---|---|---|---|
 | `BonemealEventsNeoForge` | `ReinforcedBonemeal.Verdict check(@Nullable Player, Level, BlockPos, BlockState, ItemStack)` | `EventHooks.fireBonemealEvent(…, BonemealSource.INTERACTION, stack)` | `EventHooks.fireBonemealEvent(…, stack)` — no source | MOD-906 |
+
+## `dev.alaindustrial.compat` (forge/src/main)
+
+| Facade | Signature | 26.3 body | 26.2 body | Task |
+|---|---|---|---|---|
+| `BonemealEventsForge` | `ReinforcedBonemeal.Verdict check(@Nullable Player, Level, BlockPos, BlockState, ItemStack)` | `ForgeEventFactory.onApplyBonemeal(player, level, pos, state, stack)` (Forge 66) | the same call: Forge 65 has the same `onApplyBonemeal` signature, so the twins are byte-equal today | MOD-962 |
 
 ## `dev.alaindustrial.compat.client` (common/src/main)
 
@@ -81,6 +86,9 @@ line-neutral.
 | Facade | Signature | 26.3 body | 26.2 body | Task |
 |---|---|---|---|---|
 | `GameTestData` | `TestData<Holder<TestEnvironmentDefinition<?>>> of(Holder<…>, Identifier, int, boolean, Rotation, boolean, int)` | the 12-argument `TestData` (with a dimension) | the 11-argument one | MOD-717 |
+| `GameTestData` | `Optional<Identifier> dimension(TestData<?>)` (the `"dimension"` of a test instance JSON, the Forge roster pack) | `Optional.of(data.dimension().identifier())` | `Optional.empty()` — 26.2 test data has no dimension | MOD-962 |
+| `FeatureTypes` | `ResourceKey<? extends Registry<?>> registry()` (the registry of worldgen feature types) | `Registries.FEATURE_TYPE` | `Registries.FEATURE` | MOD-962 |
+| `InMemoryPacks` | `abstract static class Base(PackLocationInfo)` (base of a pack held in memory), `Pack.ResourcesSupplier supplier(PackResources)` | `Base extends AbstractPackMetadataResources implements PackResources`; the supplier answers `openMetadata` with the pack and `openResources` with `Stream.of(pack)` | `Base extends AbstractPackResources implements PackResources`; the supplier answers `openPrimary` and `openFull` with the pack | MOD-962 |
 | `FeaturePlacement` | `boolean place(ServerLevel, Identifier, RandomSource, BlockPos)` | a configured `Feature` from `Registries.FEATURE` | a `ConfiguredFeature` from `Registries.CONFIGURED_FEATURE` | MOD-704 |
 | `SiteBiome` | `void fill(ServerLevel, ChunkAccess, Holder<Biome>)` | `fillBiomesFromNoise(resolver)` | `fillBiomesFromNoise(resolver, Climate.Sampler)` | MOD-704 |
 | `LineBlockFacts` | `String pushIntent(BlockState)`, `boolean washedAwayByLine(Block)` | the 26.3 push reactions; membership of `#minecraft:washed_away_by_fluids` | the 26.2 push reactions; the `forceSolidOff` flag of the block's properties | MOD-703 |
