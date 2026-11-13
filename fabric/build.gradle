@@ -163,6 +163,7 @@ loom {
             if (project.findProperty("quarryonly") != null) vmArg("-Dalaindustrial.quarryonly=1")
             if (project.findProperty("quarryguionly") != null) vmArg("-Dalaindustrial.quarryguionly=1")
             if (project.findProperty("rootprobe") != null) vmArg("-Dalaindustrial.rootprobe=1")
+            if (project.findProperty("playerviewonly") != null) vmArg("-Dalaindustrial.playerviewonly=1")
             if (project.findProperty("guionly") != null) {
                 vmArg("-Dalaindustrial.guionly=1")
             }

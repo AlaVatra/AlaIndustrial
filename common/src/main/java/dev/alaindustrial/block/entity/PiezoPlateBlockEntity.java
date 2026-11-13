@@ -32,14 +32,14 @@ import org.jspecify.annotations.Nullable;
  * <p><b>Sleeping.</b> A plate with no outlet sleeps between group checks; the press wakes the group's outlets,
  * so a pulse leaves the same tick it was made.
  */
-public class PiezoPlateBlockEntity extends EnergyBlockEntity {
+public class PiezoPlateBlockEntity extends EnergyBlockEntity implements SharedStoreGroup.Member {
 	/** Idle sleep of an outlet with nothing to move; a press or a draw wakes it sooner. */
 	private static final int OUTLET_IDLE_TICKS = 10;
 
-	private @Nullable PiezoPlateGroup group;
+	private @Nullable SharedStoreGroup group;
 	private int outletMask;
 	// What the wrench overlay shows; filled by the group walk on the server, read from the update tag on the client.
-	private PiezoPlateGroup.Status viewStatus = PiezoPlateGroup.Status.NO_OUTLET;
+	private SharedStoreGroup.Status viewStatus = SharedStoreGroup.Status.NO_OUTLET;
 	private int viewSize = 1;
 	private int viewOutlets;
 	private long viewStored;
@@ -83,7 +83,7 @@ public class PiezoPlateBlockEntity extends EnergyBlockEntity {
 
 	@Override
 	protected int onServerTick(Level level, BlockPos pos, BlockState state) {
-		PiezoPlateGroup current = PiezoPlateGroup.of(level, this);
+		SharedStoreGroup current = PiezoPlateGroup.of(level, this);
 		if (!current.isOutlet(this)) {
 			return IDLE_SLEEP_TICKS;
 		}
@@ -143,16 +143,19 @@ public class PiezoPlateBlockEntity extends EnergyBlockEntity {
 
 	// --- group view --------------------------------------------------------------------------------
 
-	@Nullable PiezoPlateGroup group() {
+	@Override
+	public @Nullable SharedStoreGroup group() {
 		return group;
 	}
 
-	void setOutletMask(int mask) {
+	@Override
+	public void setOutletMask(int mask) {
 		outletMask = mask;
 	}
 
 	/** Called by the group walk on every member; re-sends the overlay data only when it changed. */
-	void joinGroup(PiezoPlateGroup joined, PiezoPlateGroup.Status status, int size, int outlets, long stored,
+	@Override
+	public void joinGroup(SharedStoreGroup joined, SharedStoreGroup.Status status, int size, int outlets, long stored,
 			long capacity) {
 		group = joined;
 		long storedStep = capacity > 0 ? stored * 20 / capacity : 0;
@@ -170,7 +173,7 @@ public class PiezoPlateBlockEntity extends EnergyBlockEntity {
 		}
 	}
 
-	public PiezoPlateGroup.Status viewStatus() {
+	public SharedStoreGroup.Status viewStatus() {
 		return viewStatus;
 	}
 
@@ -213,7 +216,7 @@ public class PiezoPlateBlockEntity extends EnergyBlockEntity {
 	@Override
 	protected void loadMachineData(ValueInput input) {
 		super.loadMachineData(input);
-		viewStatus = PiezoPlateGroup.Status.byOrdinal(input.getIntOr("GroupStatus", viewStatus.ordinal()));
+		viewStatus = SharedStoreGroup.Status.byOrdinal(input.getIntOr("GroupStatus", viewStatus.ordinal()));
 		viewSize = input.getIntOr("GroupSize", viewSize);
 		viewOutlets = input.getIntOr("GroupOutlets", viewOutlets);
 		viewStored = input.getLongOr("GroupStored", viewStored);

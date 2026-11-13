@@ -102,6 +102,20 @@ final class FlowPlan {
 		cap[e] = c - flow;
 	}
 
+	/**
+	 * Shut edge {@code e} for one search's worth of pushes; returns its residual for {@link #reopen}. No path uses a
+	 * closed edge, so nothing pushes on it until it reopens (ADR-055).
+	 */
+	long close(int e) {
+		long r = cap[e];
+		cap[e] = 0L;
+		return r;
+	}
+
+	void reopen(int e, long residual) {
+		cap[e] += residual;
+	}
+
 	/** The flow planned on forward edge {@code e}. */
 	long flow(int e) {
 		return orig[e] - cap[e];

@@ -190,6 +190,15 @@ final class LinePlanner<P> {
 		addSinks(view, takers, PlanEnds.TAKER, packetCap, lossPerBlock);
 		sources.clear();
 		addSources(view, generators, packetCap);
+		for (PlanEnds.Sink<P> s : sinks) {
+			s.self = -1;
+			for (int g = 0; g < sources.size(); g++) {
+				if (sources.get(g).producer.host().equals(s.consumer.host())) {
+					s.self = g;
+					sources.get(g).alsoSink = true;
+				}
+			}
+		}
 		route(packetCap);
 		balanceSources(packetCap);
 		for (int e = 0; e < nbr.length; e++) {
@@ -418,7 +427,7 @@ final class LinePlanner<P> {
 		}
 		for (int s = 0; s < g; s++) {
 			PlanEnds.Source<P> src = sources.get(s);
-			graph.edge(source, 2 * c + s, Math.min(src.available, sourceLevel));
+			src.supplyEdge = graph.edge(source, 2 * c + s, Math.min(src.available, sourceLevel));
 			for (int i = 0; i < src.cableCount; i++) {
 				long perFace = Math.min(packetCap, src.cells.get(src.cellOf[i]).perCall());
 				src.edges[i] = graph.edge(2 * c + s, 2 * src.cables[i], perFace);
@@ -498,7 +507,7 @@ final class LinePlanner<P> {
 			PlanEnds.Sink<P> s = sinks.get(k);
 			long want = s.machine() ? Math.min(s.planned, s.need) : 0L;
 			if (want > 0) {
-				all &= graph.augmentAll(source, node(k), want) == want;
+				all &= toSink(source, k, want) == want;
 			}
 		}
 		recordNeeds();
@@ -506,7 +515,7 @@ final class LinePlanner<P> {
 			PlanEnds.Sink<P> s = sinks.get(k);
 			long want = s.planned - (s.machine() ? Math.min(s.planned, s.need) : 0L);
 			if (want > 0) {
-				all &= graph.augmentAll(source, node(k), want) == want;
+				all &= toSink(source, k, want) == want;
 			}
 		}
 		return all;
@@ -565,6 +574,30 @@ final class LinePlanner<P> {
 		long all = hops.net(e) - hops.net(reverse[e]);
 		long needs = needHop[e] - needHop[reverse[e]];
 		return Math.max(0L, all - needs);
+	}
+
+	/**
+	 * Route up to {@code want} to sink {@code k} along successive paths — never out of the generator of its own host
+	 * (ADR-055): that generator and its cable edges are closed while the search runs, so a block that takes and
+	 * gives on one face is not fed out of itself through the cable beside it.
+	 */
+	private long toSink(int from, int k, long want) {
+		int g = sinks.get(k).self;
+		if (g < 0) {
+			return graph.augmentAll(from, node(k), want);
+		}
+		PlanEnds.Source<P> own = sources.get(g);
+		long[] kept = new long[own.cableCount + 1];
+		kept[0] = graph.close(own.supplyEdge);
+		for (int i = 0; i < own.cableCount; i++) {
+			kept[i + 1] = graph.close(own.edges[i]);
+		}
+		long got = graph.augmentAll(from, node(k), want);
+		graph.reopen(own.supplyEdge, kept[0]);
+		for (int i = 0; i < own.cableCount; i++) {
+			graph.reopen(own.edges[i], kept[i + 1]);
+		}
+		return got;
 	}
 
 	private int node(int sink) {
@@ -648,7 +681,7 @@ final class LinePlanner<P> {
 			PlanEnds.Sink<P> s = sinks.get(group[(start + k) % n]);
 			long w = want(s, false);
 			if (w > 0) {
-				credit(s, graph.augmentAll(from, node(group[(start + k) % n]), w));
+				credit(s, toSink(from, group[(start + k) % n], w));
 			}
 		}
 	}
@@ -667,8 +700,9 @@ final class LinePlanner<P> {
 			before[k] = s.planned;
 			long w = want(s, needOnly);
 			long got = 0L;
-			if (w > 0 && n < TREE_GROUP) {
-				got = graph.augmentAll(from, node(group[k]), w);
+			if (w > 0 && (n < TREE_GROUP || s.self >= 0)) {
+				got = toSink(from, group[k], w);
+				fresh = false; // a search of its own retires the group's tree
 			} else if (w > 0) {
 				if (!fresh) {
 					graph.tree(from);
@@ -731,7 +765,7 @@ final class LinePlanner<P> {
 			PlanEnds.Sink<P> s = sinks.get(group[k]);
 			long amount = s.planned - before[k];
 			s.planned = before[k];
-			credit(s, graph.augmentAll(from, node(group[k]), amount));
+			credit(s, toSink(from, group[k], amount));
 		}
 	}
 
@@ -761,7 +795,7 @@ final class LinePlanner<P> {
 				long c = Math.min(Math.min(chunk, want(s, needOnly)), remaining - given);
 				// short: a taker the shared budget cut, or a sink the cables could not bring its chunk
 				boolean full = c > 0 && c == Math.min(chunk, wantUncut(s, needOnly));
-				long got = c > 0 ? credit(s, graph.augmentAll(from, node(group[at]), c)) : 0L;
+				long got = c > 0 ? credit(s, toSink(from, group[at], c)) : 0L;
 				given += got;
 				if (!full || got < c) {
 					whole = false;

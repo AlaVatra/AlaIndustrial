@@ -2,12 +2,20 @@ package dev.alaindustrial.command.demo;
 
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.block.ConcreteRailBeamBlock;
+import dev.alaindustrial.block.TodoClipboardBlock;
+import dev.alaindustrial.block.entity.TodoClipboardBlockEntity;
+import dev.alaindustrial.core.todo.TodoList;
+import dev.alaindustrial.core.todo.TodoListRules;
+import dev.alaindustrial.core.todo.TodoListRules.Edit;
+import dev.alaindustrial.item.misc.TodoClipboardItem;
+import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 
 /**
  * Zone <b>metals</b> (MOD-796, x=61..85, rows z=26..32): the storage block of every ingot of the mod and the
@@ -31,6 +39,9 @@ import net.minecraft.world.level.block.StairBlock;
  *
  * <p>MOD-804 puts a pair of sound absorbers two rows behind it (z=38, x=78..79): touching, so the stand shows
  * them joined into one tier-II panel with two lamps lit, not two single blocks.
+ *
+ * <p>MOD-905 hangs a to-do clipboard, written and half done, on a tempered iron block at the east end of that row
+ * (x=84, the clipboard at z=38 facing the camera, its block at z=39).
  *
  * <p>MOD-927 puts the quarry's building blocks in two rows behind them (x=72..84, one block every other column):
  * concrete fresh and set, its slab and stairs, the hazard stripes, the concrete rail beam lying along x and the
@@ -57,6 +68,8 @@ final class MetalFamilyZone implements DemoZone {
 	private static final int FITTINGS_Z = 36;
 	/** MOD-804: the sound absorber pair; MOD-864: the reinforced glass trapdoor. */
 	private static final int ABSORBER_Z = 38;
+	/** MOD-905: the to-do clipboard's column, east of the absorbers and the trapdoor. */
+	private static final int CLIPBOARD_X = 84;
 	/** MOD-927: the concrete row and the foundation-and-plate row of the quarry's building blocks. */
 	private static final int CONCRETE_Z = 40;
 	private static final int FOUNDATION_Z = 42;
@@ -89,7 +102,34 @@ final class MetalFamilyZone implements DemoZone {
 		w.set(78, 1, ABSORBER_Z, block("sound_absorber"));
 		w.set(79, 1, ABSORBER_Z, block("sound_absorber"));
 		w.set(82, 1, ABSORBER_Z, block("reinforced_glass_trapdoor"));
+		todoClipboard(w);
 		quarryConstruction(w);
+	}
+
+	/** MOD-905: a written clipboard on a wall, items and a note, one line done and struck through. */
+	private static void todoClipboard(StandWriter w) {
+		w.set(CLIPBOARD_X, 1, ABSORBER_Z + 1, block("tempered_iron_block"));
+		w.place(w.origin().offset(CLIPBOARD_X, 1, ABSORBER_Z), block("todo_clipboard").defaultBlockState()
+				.setValue(TodoClipboardBlock.FACE, AttachFace.WALL)
+				.setValue(TodoClipboardBlock.FACING, Direction.NORTH));
+		w.configure(CLIPBOARD_X, 1, ABSORBER_Z, TodoClipboardBlockEntity.class, "list to write",
+				clipboard -> clipboard.replaceList(sampleList()));
+	}
+
+	/** The stand's list, built through the rules a player's edits go through. */
+	private static TodoList sampleList() {
+		TodoList list = TodoList.EMPTY;
+		List<Edit> edits = new ArrayList<>(List.of(Edit.addItem("minecraft:oak_log", 32),
+				Edit.addItem("minecraft:cobblestone", 128),
+				Edit.addItem(Industrialization.id("tin_ingot").toString(), 16)));
+		TodoClipboardItem.exampleNote("gui.alaindustrial.todo_clipboard.example.power_the_sawmill")
+				.ifPresent(edits::add);
+		edits.add(Edit.toggleDone(0));
+		for (Edit edit : edits) {
+			TodoList next = TodoListRules.apply(list, edit);
+			list = next == null ? list : next;
+		}
+		return list;
 	}
 
 	/** MOD-927: the quarry's building blocks, released as decor ahead of the quarry. */

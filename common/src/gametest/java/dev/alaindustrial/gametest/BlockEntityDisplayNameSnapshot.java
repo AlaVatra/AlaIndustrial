@@ -38,6 +38,8 @@ final class BlockEntityDisplayNameSnapshot {
 					+ " block.alaindustrial.lightning_rod_generator",
 			"creative_energy_source @creative_energy_source: block.alaindustrial.creative_energy_source",
 			"mob_wheel_controller @mob_wheel_controller: block.alaindustrial.mob_wheel_controller",
+			"thermoelectric_generator @thermoelectric_generator:"
+					+ " block.alaindustrial.thermoelectric_generator",
 			"macerator @macerator: block.alaindustrial.macerator",
 			"component_repair_bench @component_repair_bench: block.alaindustrial.component_repair_bench",
 			"upgrade_table @upgrade_table: container.alaindustrial.upgrade_table",
@@ -88,5 +90,6 @@ final class BlockEntityDisplayNameSnapshot {
 			"mob_repeller @mob_repeller: block.alaindustrial.mob_repeller",
 			"mob_repeller_mv @mob_repeller_mv: block.alaindustrial.mob_repeller_mv",
 			"mob_repeller_hv @mob_repeller_hv: block.alaindustrial.mob_repeller_hv",
-			"electric_mob_trap @electric_mob_trap: block.alaindustrial.electric_mob_trap");
+			"electric_mob_trap @electric_mob_trap: block.alaindustrial.electric_mob_trap",
+			"todo_clipboard @todo_clipboard: block.alaindustrial.todo_clipboard");
 }

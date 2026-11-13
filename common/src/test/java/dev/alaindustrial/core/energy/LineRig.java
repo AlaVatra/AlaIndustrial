@@ -58,12 +58,27 @@ final class LineRig {
 	record Source(Cell pos, EnergyBuffer buf, long out) {
 	}
 
+	/**
+	 * A foreign block that takes and gives on the same face (MOD-940: an Energized Power battery, a Tech Reborn or
+	 * Energized Power cable): the network sees it as a generator and as a consumer of unknown need at once. On its
+	 * own tick, before the network's, it hands {@code onward} EU on out of the line (the foreign cables behind it)
+	 * and, with {@code pushBack}, offers what it holds to the cables beside it, as those blocks do. With
+	 * {@code pull} it is a Tech Reborn cable network: it first pulls from the cables beside it what room it has, then
+	 * shares what it holds evenly between the target behind it and the cables beside ({@code CableTickManager}).
+	 */
+	record Dual(String name, Cell pos, EnergyBuffer buf, long onward, boolean pushBack, boolean pull) {
+	}
+
 	final String name;
 	final double loss;
 	final Set<Cell> cables = new LinkedHashSet<>();
 	final Map<Cell, EnergyBuffer> buffers = new LinkedHashMap<>();
 	final List<Source> sources = new ArrayList<>();
 	final List<End> ends = new ArrayList<>();
+	final List<Dual> duals = new ArrayList<>();
+	/** What the network drew out of the dual-role blocks in the latest tick, and what they handed on in all. */
+	long dualOut;
+	long forwarded;
 	/** The boxes that discharge on backup ticks ({@link #battery}). */
 	final Set<String> batteries = new LinkedHashSet<>();
 	final dev.alaindustrial.core.net.DistanceField<Cell> producer = new dev.alaindustrial.core.net.DistanceField<>(
@@ -189,6 +204,83 @@ final class LineRig {
 		return this;
 	}
 
+	/** A {@link Dual} holding {@code charge}, taking and giving at most {@code rate} a call. */
+	LineRig dual(String id, int x, int z, long capacity, long rate, long charge, long onward, boolean pushBack) {
+		return dual(id, x, z, capacity, rate, rate, charge, onward, pushBack);
+	}
+
+	/** A {@link Dual} with its own intake and output per call: an output of 0 is a role it cannot use. */
+	LineRig dual(String id, int x, int z, long capacity, long in, long out, long charge, long onward,
+			boolean pushBack) {
+		EnergyBuffer b = new EnergyBuffer(capacity, in, out, () -> { });
+		b.setAmountUntracked(charge);
+		duals.add(new Dual(id, new Cell(x, z), b, onward, pushBack, false));
+		ends.add(new End(id, new Cell(x, z), b, true, 0, 0));
+		return this;
+	}
+
+	/** A Tech Reborn cable network of {@code capacity}, {@code rate} a call, with an open-ended target behind it. */
+	LineRig foreignCable(String id, int x, int z, long capacity, long rate) {
+		EnergyBuffer b = new EnergyBuffer(capacity, rate, rate, () -> { });
+		duals.add(new Dual(id, new Cell(x, z), b, rate, true, true));
+		ends.add(new End(id, new Cell(x, z), b, true, 0, 0));
+		return this;
+	}
+
+	/** The dual-role blocks' own tick: hand on out of the line, then offer the rest to the cables beside. */
+	private void dualsTick(Txn txn) {
+		for (Dual d : duals) {
+			List<Cell> beside = neighbours(d.pos());
+			for (Cell n : d.pull() ? beside : List.<Cell>of()) {
+				d.buf().insert(buffers.get(n).extract(d.buf().getCapacity() - d.buf().getAmount(), txn), txn);
+			}
+			long share = d.pull() ? d.buf().getAmount() / (beside.size() + 1) : Long.MAX_VALUE;
+			forwarded += d.buf().drainInternal(Math.min(Math.min(share, d.onward()), d.buf().getAmount()));
+			for (Cell n : d.pushBack() ? beside : List.<Cell>of()) {
+				EnergyBuffer cable = buffers.get(n);
+				long room = Math.min(cable.maxInsert, cable.getCapacity() - cable.getAmount());
+				cable.insert(d.buf().extract(Math.min(share, room), txn), txn);
+			}
+		}
+	}
+
+	/** A dual-role block's port as a generator: counts what the network draws out of it ({@link #dualOut}). */
+	private EnergyPort countingOut(EnergyBuffer buf) {
+		return new EnergyPort() {
+			@Override
+			public long insert(long maxAmount, Txn txn) {
+				return buf.insert(maxAmount, txn);
+			}
+
+			@Override
+			public long extract(long maxAmount, Txn txn) {
+				long got = buf.extract(maxAmount, txn);
+				dualOut += got;
+				return got;
+			}
+
+			@Override
+			public long getAmount() {
+				return buf.getAmount();
+			}
+
+			@Override
+			public long getCapacity() {
+				return buf.getCapacity();
+			}
+
+			@Override
+			public boolean supportsInsertion() {
+				return true;
+			}
+
+			@Override
+			public boolean supportsExtraction() {
+				return true;
+			}
+		};
+	}
+
 	LineRig box(String id, int x, int z, long capacity) {
 		ends.add(new End(id, new Cell(x, z), new EnergyBuffer(capacity, boxIntake, 0, () -> { }), false, 0, 0));
 		return this;
@@ -235,6 +327,8 @@ final class LineRig {
 
 	/** One network tick: the line plan carried out on the rig (ADR-049); the cables create and lose nothing. */
 	void tick() {
+		Txn txn = new Txn();
+		dualsTick(txn);
 		List<EnergyLineDistributor.LiveConsumer<Cell>> machines = new ArrayList<>();
 		List<EnergyLineDistributor.LiveConsumer<Cell>> stores = new ArrayList<>();
 		long machineRoom = 0;
@@ -269,6 +363,13 @@ final class LineRig {
 			producers.add(new EnergyLineDistributor.LiveProducer<>(s.pos(), s.buf()));
 			sourcePos.add(s.pos());
 		}
+		for (Dual d : duals) {
+			producers.add(new EnergyLineDistributor.LiveProducer<>(d.pos(), countingOut(d.buf()), d.pos(),
+					Math.min(d.buf().getAmount(), d.buf().maxExtract)));
+			if (d.buf().maxExtract > 0) {
+				sourcePos.add(d.pos()); // one that can never give seeds no distance (ADR-003: supplying producers)
+			}
+		}
 		if (producer.isEmpty()) {
 			seed(producer, sourcePos);
 			for (End e : ends) {
@@ -285,7 +386,7 @@ final class LineRig {
 		if (cableList.size() != cables.size()) {
 			cableList = List.copyOf(cables);
 		}
-		Txn txn = new Txn();
+		dualOut = 0;
 		long cablesBefore = inCables();
 		long endsBefore = inEnds();
 		Map<String, Long> before = new LinkedHashMap<>();
@@ -323,9 +424,10 @@ final class LineRig {
 		}
 		injected += in;
 		lost += drawn - moved;
-		assertEquals(cablesBefore + in + discharged - drawn, inCables(),
+		assertEquals(cablesBefore + in + dualOut + discharged - drawn, inCables(),
 				name + ": the cables neither create nor lose EU");
-		assertEquals(endsBefore + moved - discharged, inEnds(), name + ": what left the cables reached the endpoints");
+		assertEquals(endsBefore + moved - discharged - dualOut, inEnds(),
+				name + ": what left the cables reached the endpoints");
 		for (End e : ends) {
 			gain.put(e.name(), e.buf().getAmount() - before.get(e.name()));
 		}

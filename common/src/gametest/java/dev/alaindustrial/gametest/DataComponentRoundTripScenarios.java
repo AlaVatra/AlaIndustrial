@@ -129,6 +129,13 @@ public final class DataComponentRoundTripScenarios {
 				new RemoteLog.Entry(2, 250L, RemoteLog.Kind.RANDOM_JUMPED, true, new RemoteLog.Station("", 3),
 						RemoteLog.Station.NONE, 12, -40, 800))));
 		s.put(ModDataComponents.ELECTRIC_BOW_CHARGED_ID, Unit.INSTANCE);
+		// MOD-977: the Jetpack Mk2's hover switch, on.
+		s.put(ModDataComponents.JETPACK_HOVER_ID, true);
+		// MOD-905: an item line that is done, a note that is not, and a step other than the default one.
+		s.put(ModDataComponents.TODO_LIST_ID, new dev.alaindustrial.core.todo.TodoList(List.of(
+				dev.alaindustrial.core.todo.TodoEntry.item("minecraft:oak_log", 32).withDone(true),
+				dev.alaindustrial.core.todo.TodoEntry.note("Power the sawmill")),
+				dev.alaindustrial.core.todo.TodoAccess.OTHERS_TICK));
 		s.put(ModDataComponents.CABLE_COLOR_ID, DyeColor.LIME);
 		s.put(ModDataComponents.ITEM_MODULES_ID, new ItemModules(
 				List.of(ItemStack.EMPTY, new ItemStack(Items.REDSTONE), new ItemStack(Items.GLOWSTONE_DUST, 2))));

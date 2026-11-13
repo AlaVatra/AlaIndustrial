@@ -295,7 +295,10 @@ final class EnergyLineDistributor<P> {
 						continue;
 					}
 					long own = s == s0 ? due : 0L;
-					long got = inject(src, i, Math.min(due, Math.min(own + spare[s], packetCap - drawnByHost[s])), tx);
+					// a host that is a receiver too puts in only its own share: covering another's, it would feed
+					// the cable it draws from out of itself (ADR-055)
+					long cover = src.alsoSink ? 0L : spare[s];
+					long got = inject(src, i, Math.min(due, Math.min(own + cover, packetCap - drawnByHost[s])), tx);
 					spare[s] -= Math.max(0L, got - own);
 					drawnByHost[s] += got;
 					drawn += got;

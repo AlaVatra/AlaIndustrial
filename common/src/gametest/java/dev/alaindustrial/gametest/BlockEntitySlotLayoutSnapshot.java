@@ -99,6 +99,8 @@ final class BlockEntitySlotLayoutSnapshot {
 			"storm_wind_mill: size=5 upgrades=1 battery=- menu=yes overclockable=no batteryFed=no",
 			"teleporter: size=0 upgrades=- battery=- menu=no overclockable=no batteryFed=no",
 			"thermal_centrifuge: size=7 upgrades=2 battery=6 menu=yes overclockable=yes batteryFed=yes",
+			"thermoelectric_generator: size=4 upgrades=0 battery=- menu=yes overclockable=no batteryFed=no",
+			"todo_clipboard: size=- upgrades=- battery=- menu=yes overclockable=no batteryFed=no",
 			"town_dispatcher: size=31 upgrades=- battery=- menu=yes overclockable=no batteryFed=no",
 			"town_road: size=- upgrades=- battery=- menu=no overclockable=no batteryFed=no",
 			"upgrade_table: size=7 upgrades=2 battery=6 menu=yes overclockable=yes batteryFed=yes",

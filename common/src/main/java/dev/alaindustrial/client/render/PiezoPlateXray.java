@@ -2,6 +2,7 @@ package dev.alaindustrial.client.render;
 
 import dev.alaindustrial.block.entity.PiezoPlateBlockEntity;
 import dev.alaindustrial.block.entity.PiezoPlateGroup;
+import dev.alaindustrial.block.entity.SharedStoreGroup;
 import dev.alaindustrial.registry.ModContent;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public final class PiezoPlateXray {
 	private static final int OFFHAND_SLOT = 29;
 	private static final float EDGE_WIDTH = 2.0f;
 
-	private record Plate(BlockPos pos, PiezoPlateGroup.Status status, int outletMask) {
+	private record Plate(BlockPos pos, SharedStoreGroup.Status status, int outletMask) {
 	}
 
 	private static @Nullable ClientLevel seenLevel;

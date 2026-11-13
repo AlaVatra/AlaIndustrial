@@ -7,8 +7,9 @@ import dev.alaindustrial.item.energy.PoweredItem.LowChargeProfile;
 import dev.alaindustrial.item.energy.ItemBuffers;
 import dev.alaindustrial.item.energy.ItemEnergy;
 
-import dev.alaindustrial.Industrialization;
-import dev.alaindustrial.core.energy.EnergyTier;
+import dev.alaindustrial.core.tooltip.MachineTooltipSpec;
+import dev.alaindustrial.core.tooltip.TooltipRole;
+import dev.alaindustrial.registry.ModDataComponents;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
@@ -27,7 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.EquipmentAsset;
-import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.level.block.WebBlock;
 
 import java.util.Set;
 import java.util.UUID;
@@ -56,18 +57,20 @@ import org.jspecify.annotations.Nullable;
  * {@link #ARMOR_POINTS} (a point under iron: it is a flight device that also shields, not a
  * chestplate that also flies). Charge lives in the shared {@code pouch_energy} component through
  * {@link ItemEnergy}.
+ *
+ * <p>One class for both grades (MOD-977): the {@link JetpackTier} it is built with picks the buffer, the intake,
+ * the thrust price and the worn look, and only the Mk2 has the hover mode ({@link #isHoverOn}), whose flag lives
+ * in the {@code jetpack_hover} component. The rules of a flight tick are {@link JetpackMotion}'s.
  */
 public class JetpackItem extends Item implements PoweredItem {
 
-	/** Worn look while the jetpack holds charge — see {@link EnergyPackItem#ENERGY_PACK_ASSET} for
-	 * why the key is built by hand. */
-	public static final ResourceKey<EquipmentAsset> JETPACK_ASSET =
-			ResourceKey.create(EquipmentAssets.ROOT_ID, Industrialization.id("jetpack"));
+	/** Worn look while the tier-one jetpack holds charge — see {@link EnergyPackItem#ENERGY_PACK_ASSET} for
+	 * why the key is built by hand; the Mk2's is {@link JetpackTier#litAsset()}. */
+	public static final ResourceKey<EquipmentAsset> JETPACK_ASSET = JetpackTier.BASIC.litAsset();
 
 	/** The drained look — dark nozzles, red indicator. Swapped by {@link #refreshWornAsset} from the
 	 * single place charge changes ({@link ItemEnergy#set}), like the Energy Pack's. */
-	public static final ResourceKey<EquipmentAsset> JETPACK_OFF_ASSET =
-			ResourceKey.create(EquipmentAssets.ROOT_ID, Industrialization.id("jetpack_off"));
+	public static final ResourceKey<EquipmentAsset> JETPACK_OFF_ASSET = JetpackTier.BASIC.offAsset();
 
 	/** Armor points while worn — one under an iron chestplate (6): "iron or slightly weaker". */
 	public static final double ARMOR_POINTS = 5.0;
@@ -82,8 +85,21 @@ public class JetpackItem extends Item implements PoweredItem {
 	 */
 	private static final Set<UUID> THRUSTED_THIS_FLIGHT = ConcurrentHashMap.newKeySet();
 
-	public JetpackItem(Properties properties) {
+	private final JetpackTier tier;
+
+	public JetpackItem(Properties properties, JetpackTier tier) {
 		super(properties);
+		this.tier = tier;
+	}
+
+	/** Which grade this item is (MOD-977). */
+	public JetpackTier tier() {
+		return tier;
+	}
+
+	/** The grade of the jetpack in {@code stack}; anything else reads as tier one. */
+	public static JetpackTier tierOf(ItemStack stack) {
+		return stack.getItem() instanceof JetpackItem jetpack ? jetpack.tier : JetpackTier.BASIC;
 	}
 
 	// --- worn look follows the charge (same contract as the Energy Pack) ---
@@ -94,7 +110,8 @@ public class JetpackItem extends Item implements PoweredItem {
 	 * "default" (see {@link EnergyPackItem#refreshWornAsset}). Writes only on an actual flip.
 	 */
 	public static void refreshWornAsset(ItemStack stack, long eu) {
-		ResourceKey<EquipmentAsset> wanted = eu > 0 ? JETPACK_ASSET : JETPACK_OFF_ASSET;
+		JetpackTier tier = tierOf(stack);
+		ResourceKey<EquipmentAsset> wanted = eu > 0 ? tier.litAsset() : tier.offAsset();
 		Equippable current = stack.get(DataComponents.EQUIPPABLE);
 		if (current == null || current.assetId().orElse(null) != wanted) {
 			stack.set(DataComponents.EQUIPPABLE, equippable(wanted));
@@ -115,13 +132,13 @@ public class JetpackItem extends Item implements PoweredItem {
 	 * durability (it must not break mid-flight), no enchantability; the default asset is the drained
 	 * one because a fresh jetpack comes out of the grid empty.
 	 */
-	public static Properties equipmentProperties(Properties properties) {
+	public static Properties equipmentProperties(Properties properties, JetpackTier tier) {
 		return properties
 				.stacksTo(1)
-				.component(DataComponents.EQUIPPABLE, equippable(JETPACK_OFF_ASSET))
+				.component(DataComponents.EQUIPPABLE, equippable(tier.offAsset()))
 				.attributes(ItemAttributeModifiers.builder()
 						.add(Attributes.ARMOR,
-								new AttributeModifier(Industrialization.id("jetpack_armor"), ARMOR_POINTS,
+								new AttributeModifier(tier.armorModifierId(), ARMOR_POINTS,
 										AttributeModifier.Operation.ADD_VALUE),
 								EquipmentSlotGroup.CHEST)
 						.build());
@@ -187,28 +204,113 @@ public class JetpackItem extends Item implements PoweredItem {
 			JetpackLight.extinguish(level, player);
 			return;
 		}
-		if (!jumpHeld) {
-			// Engine idle in the air (no input) — drop the flight glow; the glide has its own branch.
-			JetpackLight.extinguish(level, player);
-			return;
+		JetpackTier tier = tierOf(stack);
+		// MOD-977: the hover mode needs no input of its own. Holding height and the slow descent cost the same, so
+		// the server never needs to know whether sneak is held: the client moves the player, the server bills.
+		JetpackMotion.Mode mode = JetpackMotion.mode(jumpHeld, false, isPowered(stack, player),
+				hoverActive(stack, player), THRUSTED_THIS_FLIGHT.contains(player.getUUID()));
+		switch (mode) {
+			case THRUST, HOVER, HOVER_DESCEND -> {
+				int price = mode == JetpackMotion.Mode.THRUST ? tier.euPerTick() : tier.hoverEuPerTick();
+				ItemEnergy.spend(stack, Math.min(price, ItemEnergy.get(stack)), player);
+				if (mode == JetpackMotion.Mode.THRUST) {
+					THRUSTED_THIS_FLIGHT.add(player.getUUID());
+				}
+				player.resetFallDistance();
+				exhaust(level, player);
+				// Torch-like glow follows the engine — only while it actually runs (see JetpackLight).
+				// Stamp with the server tick counter (never null, unlike a level's game time via overworld()),
+				// the same clock the per-tick sweep reads, so a live light is never swept mid-flight.
+				JetpackLight.ignite(level, player, level.getServer().getTickCount());
+				keepFlightAllowed(player);
+			}
+			case GLIDE -> {
+				// Glide after a mid-flight cutout: no thrust, no cost, no glow, but no fall damage either. No counter
+				// reset: a glide sinks, which vanilla never counts as floating, and resetting it for a free mode would
+				// let a client that holds its height on an empty jetpack float forever.
+				player.resetFallDistance();
+				JetpackLight.extinguish(level, player);
+			}
+			// Engine idle in the air, or an empty jetpack that never fired this flight: no glow, a normal fall.
+			case OFF -> JetpackLight.extinguish(level, player);
 		}
-		if (isPowered(stack, player)) {
-			ItemEnergy.spend(stack, Math.min(ToolConfig.jetpackEuPerTick, ItemEnergy.get(stack)), player);
-			THRUSTED_THIS_FLIGHT.add(player.getUUID());
-			player.resetFallDistance();
-			exhaust(level, player);
-			// Torch-like glow follows the engine — only while it actually thrusts (see JetpackLight).
-			// Stamp with the server tick counter (never null, unlike a level's game time via overworld()),
-			// the same clock the per-tick sweep reads, so a live light is never swept mid-flight.
-			JetpackLight.ignite(level, player, level.getServer().getTickCount());
-		} else if (THRUSTED_THIS_FLIGHT.contains(player.getUUID())) {
-			// Glide after a mid-flight cutout: no thrust, no cost, no glow, but no fall damage either.
-			player.resetFallDistance();
-			JetpackLight.extinguish(level, player);
-		} else {
-			// Empty jetpack that never fired this flight: no thrust, no glow, a normal fall.
-			JetpackLight.extinguish(level, player);
+	}
+
+	/**
+	 * Whether the hover mode holds this player now (MOD-977): switched on, on a grade that has it, and not while
+	 * riding or in creative flight, where the client leaves the motion alone and nothing must be billed, nor where
+	 * the surroundings already move the player ({@link #holdsPlayerItself}). The one rule: the client moves by it,
+	 * the server bills by it.
+	 */
+	public static boolean hoverActive(ItemStack stack, Player player) {
+		return isHoverOn(stack) && !player.isPassenger() && !player.getAbilities().flying
+				&& !holdsPlayerItself(player);
+	}
+
+	/**
+	 * Whether the player is in a liquid, on a climbable block (ladder, vine, scaffolding) or in a cobweb (MOD-977).
+	 * There vanilla governs the vertical motion itself, so a hover would fight it and bill EU for nothing: the hover
+	 * pauses and picks up again on leaving. Asked of the current position on each side, never synced, so both read
+	 * the same block states. The web test is the block check vanilla's inside-block pass makes, on the box shrunk by
+	 * the same 1e-5, because the stuck multiplier it leaves behind is protected and cleared by every move.
+	 */
+	public static boolean holdsPlayerItself(Player player) {
+		return player.isInLiquid() || player.onClimbable()
+				|| player.level().getBlockStatesIfLoaded(player.getBoundingBox().deflate(1.0E-5))
+						.anyMatch(state -> state.getBlock() instanceof WebBlock);
+	}
+
+	/**
+	 * A dedicated server with {@code allow-flight=false} disconnects a player who floats for 80 ticks without the
+	 * right to fly ({@code ServerGamePacketListenerImpl}): a long tier-one climb and a Mk2 hover both float by design.
+	 * Resetting the counter on a tick the engine runs, on either grade, keeps it from counting a powered flight
+	 * (MOD-977); a tick that burns no EU never resets it. A vanilla method that none of the three loaders patches;
+	 * a mock player without a connection has nothing to reset.
+	 */
+	private static void keepFlightAllowed(Player player) {
+		if (player instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
+			serverPlayer.connection.resetFlyingTicks();
 		}
+	}
+
+	// --- hover mode (MOD-977) ---
+
+	/** Whether the hover mode is switched on: only a grade that has it, and absent reads as off. */
+	public static boolean isHoverOn(ItemStack stack) {
+		return tierOf(stack).supportsHover()
+				&& Boolean.TRUE.equals(stack.get(ModDataComponents.JETPACK_HOVER.get()));
+	}
+
+	/** What a press of the hover key did. */
+	public enum HoverToggle {
+		/** No jetpack in the chest slot: the key belongs to the jetpack, so nothing is said. */
+		NOT_WORN,
+		/** A jetpack without the mode: say so, or the key looks broken. */
+		UNSUPPORTED,
+		/** Switched on. */
+		ON,
+		/** Switched off. */
+		OFF
+	}
+
+	/**
+	 * Flips the hover mode of the jetpack in {@code player}'s chest slot. On is written as {@code true}, off removes
+	 * the component, so a jetpack that never hovered stays component-identical to one fresh from the grid.
+	 */
+	public static HoverToggle toggleHover(Player player) {
+		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+		if (!(chest.getItem() instanceof JetpackItem)) {
+			return HoverToggle.NOT_WORN;
+		}
+		if (!tierOf(chest).supportsHover()) {
+			return HoverToggle.UNSUPPORTED;
+		}
+		if (isHoverOn(chest)) {
+			chest.remove(ModDataComponents.JETPACK_HOVER.get());
+			return HoverToggle.OFF;
+		}
+		chest.set(ModDataComponents.JETPACK_HOVER.get(), true);
+		return HoverToggle.ON;
 	}
 
 	/**
@@ -240,18 +342,18 @@ public class JetpackItem extends Item implements PoweredItem {
 
 	@Override
 	public int getBarColor(ItemStack stack) {
-		return EnergyBar.color(EnergyTier.LV);
+		return EnergyBar.color(tier.energyTier());
 	}
 
 	/** MOD-707: this item's EU buffer, read by {@code ItemEnergy.capacity} through {@link PoweredItem}. */
 	@Override
 	public long energyCapacity(ItemStack stack, ItemBuffers buffers) {
-		return buffers.jetpackBuffer();
+		return tier.buffer(buffers);
 	}
 
 	@Override
 	public long energyInputRate(ItemStack stack) {
-		return ToolConfig.jetpackInputRate;
+		return tier.inputRate();
 	}
 
 	/** Warns once, then every second, and says so when the buffer runs out (MOD-652). */
@@ -266,9 +368,31 @@ public class JetpackItem extends Item implements PoweredItem {
 		refreshWornAsset(stack, charge);
 	}
 
-	/** How to fly, then the charge (MOD-148). */
+	/**
+	 * How to fly, then the charge (MOD-148). The Mk2 (MOD-977) shows only whether hover is on and the charge; how to
+	 * fly, the hover key, the slow sink and where hover pauses wait under [SHIFT], one short line each (owner's
+	 * review 2026-11-12: the tooltip must be the size of the other worn items').
+	 */
 	@Override
 	public PoweredToolTooltip toolTooltip() {
-		return PoweredToolTooltip.of("jetpack", List.of());
+		PoweredToolTooltip tooltip = PoweredToolTooltip.of(tier.id(), List.of());
+		if (!tier.supportsHover()) {
+			return tooltip;
+		}
+		String prefix = "tooltip.alaindustrial." + tier.id();
+		MachineTooltipSpec.Line usage = MachineTooltipSpec.action(prefix + ".usage");
+		MachineTooltipSpec.Line key = MachineTooltipSpec.action(prefix + ".hover_key");
+		MachineTooltipSpec.Line sink = MachineTooltipSpec.text(prefix + ".hover_sink", TooltipRole.INFO);
+		MachineTooltipSpec.Line limits = MachineTooltipSpec.text(prefix + ".hover_limits", TooltipRole.INFO);
+		return tooltip.withoutUsage().withBeforeCharge(JetpackItem::hoverLine)
+				.withDetail(stack -> sink).withDetail(stack -> limits)
+				.withDetail(stack -> usage).withDetail(stack -> key);
+	}
+
+	private static MachineTooltipSpec.@Nullable Line hoverLine(ItemStack stack) {
+		String prefix = "tooltip.alaindustrial." + tierOf(stack).id();
+		return isHoverOn(stack)
+				? MachineTooltipSpec.text(prefix + ".hover_on", TooltipRole.STATE_ON)
+				: MachineTooltipSpec.text(prefix + ".hover_off", TooltipRole.STATE_OFF);
 	}
 }

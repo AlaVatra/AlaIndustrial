@@ -68,6 +68,10 @@ public final class ModDataComponents {
 	public static final Identifier REACTOR_TABLET_ALARM_ID = Industrialization.id("reactor_tablet_alarm");
 	/** MOD-923 — the hive attachments an apiary map lists. */
 	public static final Identifier APIARY_MAP_POINTS_ID = Industrialization.id("apiary_map_points");
+	/** MOD-977 — the Jetpack Mk2's hover switch. */
+	public static final Identifier JETPACK_HOVER_ID = Industrialization.id("jetpack_hover");
+	/** MOD-905 — the list a to-do clipboard carries when it is taken off the wall. */
+	public static final Identifier TODO_LIST_ID = Industrialization.id("todo_list");
 	public static final Identifier TELEPORTER_LOG_ID = Industrialization.id("teleporter_log");
 	public static final Identifier FLUID_TANK_CONTENTS_ID = Industrialization.id("fluid_tank_contents");
 	public static final Identifier DISTILLATION_COLUMN_CONTENTS_ID = Industrialization.id("distillation_column_contents");
@@ -246,6 +250,23 @@ public final class ModDataComponents {
 	public static Supplier<DataComponentType<dev.alaindustrial.item.apiary.ApiaryMapPoints>> APIARY_MAP_POINTS = () -> {
 		throw new IllegalStateException("ModDataComponents.APIARY_MAP_POINTS read before its loader bound it");
 	};
+	/**
+	 * Whether the Jetpack Mk2's hover mode is on (MOD-977). <b>Absent = off</b>: a jetpack fresh from the grid falls
+	 * like before until its owner presses the key, and switching off removes the component again, so a jetpack that
+	 * never hovered stays component-identical. Synced, so the client holds the height the server bills for.
+	 */
+	public static Supplier<DataComponentType<Boolean>> JETPACK_HOVER = () -> {
+		throw new IllegalStateException("ModDataComponents.JETPACK_HOVER read before its loader bound it");
+	};
+
+	/** Build the {@code jetpack_hover} type every loader registers (MOD-977). */
+	public static DataComponentType<Boolean> createJetpackHover() {
+		return DataComponentType.<Boolean>builder()
+				.persistent(Codec.BOOL)
+				.networkSynchronized(ByteBufCodecs.BOOL)
+				.build();
+	}
+
 	public static Supplier<DataComponentType<TeleportPoints>> TELEPORTER_POINTS = () -> {
 		throw new IllegalStateException("ModDataComponents.TELEPORTER_POINTS read before its loader bound it");
 	};
@@ -333,6 +354,23 @@ public final class ModDataComponents {
 	public static Supplier<DataComponentType<dev.alaindustrial.item.misc.PlanSheet>> PLAN_SHEET = () -> {
 		throw new IllegalStateException("ModDataComponents.PLAN_SHEET read before its loader bound it");
 	};
+
+	/**
+	 * The list of a to-do clipboard (MOD-905), on the item of a clipboard taken off its wall or broken; absent on a
+	 * blank one. Persistent and synchronised: the item model, the in-hand sheet and the tooltip read it.
+	 */
+	public static Supplier<DataComponentType<dev.alaindustrial.core.todo.TodoList>> TODO_LIST = () -> {
+		throw new IllegalStateException("ModDataComponents.TODO_LIST read before its loader bound it");
+	};
+
+	/** Build the {@code todo_list} type both loaders register (MOD-905). */
+	public static DataComponentType<dev.alaindustrial.core.todo.TodoList> createTodoList() {
+		return DataComponentType.<dev.alaindustrial.core.todo.TodoList>builder()
+				.persistent(dev.alaindustrial.core.todo.TodoListCodecs.CODEC)
+				.networkSynchronized(dev.alaindustrial.core.todo.TodoListCodecs.STREAM_CODEC)
+				.cacheEncoding()
+				.build();
+	}
 
 	/** Build the {@code plan_sheet} type both loaders register (MOD-859). */
 	public static DataComponentType<dev.alaindustrial.item.misc.PlanSheet> createPlanSheet() {
@@ -842,5 +880,7 @@ public final class ModDataComponents {
 			new ComponentDef<>(REACTOR_TABLET_ALARM_ID, ModDataComponents::createReactorTabletAlarm,
 					c -> REACTOR_TABLET_ALARM = c),
 			new ComponentDef<>(APIARY_MAP_POINTS_ID, ModDataComponents::createApiaryMapPoints,
-					c -> APIARY_MAP_POINTS = c));
+					c -> APIARY_MAP_POINTS = c),
+			new ComponentDef<>(JETPACK_HOVER_ID, ModDataComponents::createJetpackHover, c -> JETPACK_HOVER = c),
+			new ComponentDef<>(TODO_LIST_ID, ModDataComponents::createTodoList, c -> TODO_LIST = c));
 }

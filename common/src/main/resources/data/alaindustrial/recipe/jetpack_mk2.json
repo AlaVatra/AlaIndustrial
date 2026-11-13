@@ -1,0 +1,21 @@
+{
+	"type": "alaindustrial:crafting_shaped_charge_transfer",
+	"category": "equipment",
+	"key": {
+		"P": "alaindustrial:electrum_reinforced_plate",
+		"C": "alaindustrial:advanced_circuit",
+		"B": "alaindustrial:reinforced_bearing",
+		"J": "alaindustrial:jetpack",
+		"G": "alaindustrial:gold_cable",
+		"E": "alaindustrial:energy_crystal"
+	},
+	"pattern": [
+		"PCP",
+		"BJB",
+		"GEG"
+	],
+	"result": {
+		"id": "alaindustrial:jetpack_mk2",
+		"count": 1
+	}
+}

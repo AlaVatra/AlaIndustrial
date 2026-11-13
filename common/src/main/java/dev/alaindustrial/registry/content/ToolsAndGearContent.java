@@ -43,6 +43,7 @@ import dev.alaindustrial.item.wearable.EnergyPackItem;
 import dev.alaindustrial.item.wearable.FluxweaveArmorItem;
 import dev.alaindustrial.item.wearable.FluxweaveSolarHelmetItem;
 import dev.alaindustrial.item.wearable.JetpackItem;
+import dev.alaindustrial.item.wearable.JetpackTier;
 import dev.alaindustrial.menu.MagnetMenu;
 import dev.alaindustrial.menu.TeleporterRemoteMenu;
 import dev.alaindustrial.registry.ContentManifest.BlockDef;
@@ -240,7 +241,13 @@ public final class ToolsAndGearContent {
 					p -> new dev.alaindustrial.item.tool.MagnetFilterModuleItem(p.stacksTo(1)),
 					s -> ModContent.MAGNET_FILTER_MODULE = s),
 			// Jetpack (MOD-148): worn EU flight — thrust on held jump, powerless glide when drained.
-			item("jetpack", p -> new JetpackItem(JetpackItem.equipmentProperties(p)), s -> ModContent.JETPACK = s),
+			item("jetpack",
+					p -> new JetpackItem(JetpackItem.equipmentProperties(p, JetpackTier.BASIC), JetpackTier.BASIC),
+					s -> ModContent.JETPACK = s),
+			// Jetpack Mk2 (MOD-977): the tier-two jetpack, crafted from the first one; hover on a key.
+			item("jetpack_mk2",
+					p -> new JetpackItem(JetpackItem.equipmentProperties(p, JetpackTier.MK2), JetpackTier.MK2),
+					s -> ModContent.JETPACK_MK2 = s),
 			// Scythe (MOD-068): six material tiers, each an AOE foliage clearer. Registered like a hoe
 			// (.hoe(material, attackDamage, -1.0f) attaches the tool component + enchantability) but as
 			// ScytheItem, not HoeItem — the scythe must not till dirt on right-click, it clears its area
@@ -310,6 +317,7 @@ public final class ToolsAndGearContent {
 		show(out, ModContent.MODULE_BLANK);
 		show(out, ModContent.MAGNET_FILTER_MODULE);
 		show(out, ModContent.JETPACK);
+		show(out, ModContent.JETPACK_MK2);
 		// Charge carriers last: they exist to feed everything above.
 		show(out, ModContent.BATTERY);
 		show(out, ModContent.BATTERY_POUCH);
@@ -414,7 +422,7 @@ public final class ToolsAndGearContent {
 		// it also sits with the other powered items under Tools & Utilities below.
 		after(out, ModContent.TEMPERED_IRON_BOOTS, ModContent.ENERGY_PACK);
 		// The Jetpack is chest gear too (MOD-148) — it sits right after the pack here.
-		after(out, ModContent.ENERGY_PACK, ModContent.JETPACK);
+		after(out, ModContent.ENERGY_PACK, ModContent.JETPACK, ModContent.JETPACK_MK2);
 	}
 
 	/**
@@ -459,5 +467,6 @@ public final class ToolsAndGearContent {
 		show(out, ModContent.ELECTROMAGNET);
 		show(out, ModContent.ELECTROMAGNET_ADVANCED);
 		show(out, ModContent.JETPACK);
+		show(out, ModContent.JETPACK_MK2);
 	}
 }

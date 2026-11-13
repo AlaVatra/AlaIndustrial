@@ -1,6 +1,7 @@
 package dev.alaindustrial.registry;
 
 import dev.alaindustrial.Industrialization;
+import java.util.List;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -179,6 +180,18 @@ public final class ModTags {
 		 * nests (MOD-858) belong here too.
 		 */
 		public static final TagKey<Block> TOWN_BUILD_NOT_BUILT = key("town_build/not_built");
+
+		/**
+		 * What a thermoelectric generator's face counts as hot (MOD-811), by level: entry {@code n - 1} is
+		 * {@code alaindustrial:thermoelectric/hot_n}. Four tags rather than one because a tag carries no
+		 * number; a datapack adds a material to the level it belongs in. Read by {@code WorldTemperature}.
+		 */
+		public static final List<TagKey<Block>> THERMOELECTRIC_HOT = List.of(key("thermoelectric/hot_1"),
+				key("thermoelectric/hot_2"), key("thermoelectric/hot_3"), key("thermoelectric/hot_4"));
+
+		/** The cold side of {@link #THERMOELECTRIC_HOT}: {@code alaindustrial:thermoelectric/cold_1..4}. */
+		public static final List<TagKey<Block>> THERMOELECTRIC_COLD = List.of(key("thermoelectric/cold_1"),
+				key("thermoelectric/cold_2"), key("thermoelectric/cold_3"), key("thermoelectric/cold_4"));
 
 		private static TagKey<Block> key(String path) {
 			return TagKey.create(Registries.BLOCK, Industrialization.id(path));
@@ -400,5 +413,20 @@ public final class ModTags {
 		 */
 		public static final TagKey<Fluid> C_STEAM =
 				TagKey.create(Registries.FLUID, Identifier.fromNamespaceAndPath("c", "steam"));
+
+		/**
+		 * The fluid half of the thermoelectric temperature table (MOD-811), same names and levels as
+		 * {@link Blocks#THERMOELECTRIC_HOT}: a cell's fluid is read after its block.
+		 */
+		public static final List<TagKey<Fluid>> THERMOELECTRIC_HOT = List.of(key("thermoelectric/hot_1"),
+				key("thermoelectric/hot_2"), key("thermoelectric/hot_3"), key("thermoelectric/hot_4"));
+
+		/** The cold fluids: {@code alaindustrial:thermoelectric/cold_1..4}. */
+		public static final List<TagKey<Fluid>> THERMOELECTRIC_COLD = List.of(key("thermoelectric/cold_1"),
+				key("thermoelectric/cold_2"), key("thermoelectric/cold_3"), key("thermoelectric/cold_4"));
+
+		private static TagKey<Fluid> key(String path) {
+			return TagKey.create(Registries.FLUID, Industrialization.id(path));
+		}
 	}
 }

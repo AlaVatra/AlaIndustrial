@@ -484,6 +484,44 @@
           ]
         },
         {
+          "id": "thermoelectric_generator",
+          "title": "Thermoelektrischer Generator",
+          "icon": "alaindustrial:thermoelectric_generator",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Thermoelektrischer Generator",
+              "text": "Ein passiver LV-Generator ohne Brennstoff — erzeugt EU, wenn von zwei gegenüberliegenden Seiten eine heiß und die andere kalt ist; ein größerer Unterschied gibt mehr Energie, und eine Reihe angrenzender Generatoren gibt sie über ein einziges Kabel ab."
+            },
+            {
+              "type": "stats",
+              "title": "Werte",
+              "lines": [
+                "Energie: 0–4 EU/t",
+                "Puffer: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Rezept",
+              "recipe_type": "Geformtes Handwerk",
+              "grid": [
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:iron_plate",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate"
+              ],
+              "result_id": "alaindustrial:thermoelectric_generator",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_wheel_controller",
           "title": "Laufradantrieb",
           "icon": "alaindustrial:mob_wheel_controller",
@@ -6268,6 +6306,43 @@
                 "alaindustrial:tin_ingot"
               ],
               "result_id": "alaindustrial:jetpack",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "jetpack_mk2",
+          "title": "Jetpack Mk2",
+          "icon": "alaindustrial:jetpack_mk2",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Jetpack Mk2",
+              "text": "Jetpack der zweiten Stufe — aus dem ersten mit MV-Teilen gebaut: viermal so viel Ladung, anderthalbmal so schnell, und er kann schweben und dabei langsam sinken."
+            },
+            {
+              "type": "stats",
+              "title": "Werte",
+              "lines": [
+                "Puffer: 120 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Rezept",
+              "recipe_type": "Geformtes Handwerk",
+              "grid": [
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:jetpack",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:gold_cable",
+                "alaindustrial:energy_crystal",
+                "alaindustrial:gold_cable"
+              ],
+              "result_id": "alaindustrial:jetpack_mk2",
               "result_count": 1
             }
           ]

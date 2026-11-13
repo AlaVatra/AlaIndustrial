@@ -84,6 +84,9 @@ public class GuiClientGameTest implements FabricClientGameTest {
 
     @Override
     public void runTest(ClientGameTestContext context) {
+        if (PlayerViewStands.ONLY) {
+            return; // -Pplayerviewonly: ScreensClientGameTest shoots those frames alone
+        }
         // MOD-362 — consistent world settings: the same seed and generator on every machine, so a frame
         // can eventually be compared against something other than itself.
         try (TestSingleplayerContext singleplayer = context.worldBuilder()

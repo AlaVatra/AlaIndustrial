@@ -3,6 +3,8 @@ package dev.alaindustrial.core.environment;
 import dev.alaindustrial.config.Knob;
 import dev.alaindustrial.config.Section;
 
+// size-justified: one holder for every generator's knobs, read where the core can import it (ADR-034); a split by
+// generator would scatter one config section over many files and break the operator file's single order.
 /**
  * Generator knobs moved out of {@code Config} by {@code docs/tools/authoring/config_holder_codemod.py}
  * (MOD-710, ADR-034). The json key of each knob is still its field name and its section is still
@@ -439,6 +441,32 @@ public final class GeneratorConfig {
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 1,
 			doc = "Water mill EU buffer. Applies to newly placed blocks.")
 	public static int waterMillBuffer = 4000;
+
+	// --- Thermoelectric generator (MOD-811): EU from a hot face across from a cold one, no fuel ---
+	/**
+	 * Thousandths of an EU/t per degree of difference on a working axis (hot level + cold level, 2..8). The
+	 * default 250 makes lava against blue ice 2 EU/t; the block banks the fraction (ThermoelectricOutput).
+	 */
+	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
+			doc = "Thermoelectric generator output per degree of difference on a working axis, in thousandths of"
+					+ " an EU/t (250 = 0.25 EU/t; lava against blue ice is 8 degrees).")
+	public static int thermoelectricMilliEuPerDegree = 250;
+	@Knob(section = Section.GENERATORS, clientVisible = true, min = 1,
+			doc = "Thermoelectric generator EU buffer. Applies to newly placed blocks.")
+	public static int thermoelectricBuffer = 4000;
+	/**
+	 * Touching thermoelectric generators form a row that hands its energy to the members with a receiver beside
+	 * them, the piezo-plate way (SharedStoreGroup). The default 8 x 4 EU/t (two working axes, the most a row
+	 * member can have) is exactly the 32 EU/t budget, so a full row on its best layout loses nothing.
+	 */
+	@Knob(section = Section.GENERATORS, min = 1,
+			doc = "EU/t a whole row of touching thermoelectric generators can hand to its outlets, all outlets"
+					+ " together.")
+	public static int thermoelectricRowOutputPerTick = 32;
+	@Knob(section = Section.GENERATORS, clientVisible = true, min = 1,
+			doc = "Most thermoelectric generators one row can join; a longer row splits into several rows, each"
+					+ " needing its own outlet.")
+	public static int thermoelectricRowMaxGenerators = 8;
 
 	// --- Mob wheel (MOD-763): a 3x3x3 running wheel turned by one mob shut in it ---
 	// Each species' numbers live in the table of MobWheelProfile (D8); these knobs scale the whole roster.

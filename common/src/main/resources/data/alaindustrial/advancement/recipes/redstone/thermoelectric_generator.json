@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cupronickel_plate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:plates/cupronickel"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cupronickel_plate"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "alaindustrial:thermoelectric_generator"
+    ]
+  }
+}

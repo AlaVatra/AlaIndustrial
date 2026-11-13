@@ -171,9 +171,13 @@ public final class MenuScreenManifest {
 			screen(() -> ModContent.THERMAL_CENTRIFUGE_MENU.get(), ThermalCentrifugeScreen::new),
 			screen(() -> ModContent.LIGHTNING_ROD_GENERATOR_MENU.get(), LightningRodGeneratorScreen::new),
 			screen(() -> ModContent.MOB_WHEEL_CONTROLLER_MENU.get(), MobWheelScreen::new),
+			// MOD-811 — the thermoelectric generator: six faces, three axes, the rate.
+			screen(() -> ModContent.THERMOELECTRIC_GENERATOR_MENU.get(), ThermoelectricGeneratorScreen::new),
 			screen(() -> ModContent.REACTOR_CONTROLLER_MENU.get(), ReactorControllerScreen::new),
 			screen(() -> ModContent.REACTOR_TABLET_MENU.get(), ReactorTabletScreen::new),
 			screen(() -> ModContent.MONITOR_CORE_MENU.get(), MonitorCoreScreen::new),
 			screen(() -> ModContent.CREATIVE_ENERGY_SOURCE_MENU.get(), CreativeEnergySourceScreen::new),
-			screen(() -> ModContent.MAGNET_MENU.get(), MagnetScreen::new));
+			screen(() -> ModContent.MAGNET_MENU.get(), MagnetScreen::new),
+			// MOD-905 — the to-do clipboard's list.
+			screen(() -> ModContent.TODO_CLIPBOARD_MENU.get(), TodoClipboardScreen::new));
 }

@@ -46,6 +46,8 @@ import net.minecraft.world.phys.Vec3;
  *
  * <p>{@code /ala worker spawn [force]} (0.1.219) restores a worker the capsule's way, without the capsule and its
  * price ({@link #spawn}); its replies go through lang keys, the owner's call for a test command players may see.
+ * It needs no player (MOD-936): from the server console or {@code execute positioned … rotated …} the source's
+ * position and facing stand in for the player's, so a script can people a town on a dev server nobody joined.
  */
 public final class ShiftWorkerCommand {
 	private static final String SPAWN_KEY = "command.alaindustrial.worker.spawn.";
@@ -98,12 +100,15 @@ public final class ShiftWorkerCommand {
 	 * ({@link ShiftWorkers#CAPSULE_HOST}, then {@link TownHousing#settle}) two blocks in front of the player, for the
 	 * town whose territory they stand in, at no price. Without {@code force} the capsule's rules decide
 	 * ({@link ReceptionCapsuleRules#verdict}: a lit, claimed core, the tier's limit, a free house) and a refusal names
-	 * the capsule's reason; {@code force} skips them, and outside every territory takes the nearest town.
+	 * the capsule's reason; {@code force} skips them, and outside every territory takes the nearest town. A source with
+	 * no player (the console, {@code execute positioned}) stands in with its own position and facing (MOD-936).
 	 */
-	static int spawn(CommandSourceStack source, boolean force) throws CommandSyntaxException {
-		ServerPlayer player = source.getPlayerOrException();
+	static int spawn(CommandSourceStack source, boolean force) {
+		ServerPlayer player = source.getPlayer();
 		ServerLevel level = source.getLevel();
-		BlockPos feet = player.blockPosition();
+		Vec3 origin = player != null ? player.position() : source.getPosition();
+		float yaw = player != null ? player.getYRot() : source.getRotation().y;
+		BlockPos feet = BlockPos.containing(origin);
 		Optional<Settlement> inside = SettlementRegistry.get(level.getServer()).territoryAt(level.dimension(), feet);
 		Optional<Settlement> town = inside.isPresent() || !force ? inside
 				: TownSuppliesCommand.nearestTown(level, feet, TownSuppliesCommand.NEAR_TOWN);
@@ -119,8 +124,8 @@ public final class ShiftWorkerCommand {
 				return 0;
 			}
 		}
-		Optional<RecordNumber> released = ShiftWorkers.CAPSULE_HOST.releaseNew(level, standSpot(level, player),
-				player.getYRot() + 180.0F, town.get());
+		Optional<RecordNumber> released = ShiftWorkers.CAPSULE_HOST.releaseNew(level, standSpot(level, origin, yaw),
+				yaw + 180.0F, town.get());
 		if (released.isEmpty()) {
 			source.sendFailure(Component.translatable(SPAWN_KEY + "failed"));
 			return 0;
@@ -146,11 +151,11 @@ public final class ShiftWorkerCommand {
 	}
 
 	/**
-	 * Where the new worker stands: two blocks in front of the player on a free cell with a floor, a block up or down
-	 * if need be; the player's own spot when there is none.
+	 * Where the new worker stands: two blocks in front of {@code origin} facing {@code yaw} on a free cell with a
+	 * floor, a block up or down if need be; {@code origin} itself when there is none.
 	 */
-	private static Vec3 standSpot(ServerLevel level, ServerPlayer player) {
-		BlockPos ahead = player.blockPosition().relative(player.getDirection(), 2);
+	private static Vec3 standSpot(ServerLevel level, Vec3 origin, float yaw) {
+		BlockPos ahead = BlockPos.containing(origin).relative(Direction.fromYRot(yaw), 2);
 		for (int dy : new int[] {0, 1, -1}) {
 			BlockPos cell = ahead.above(dy);
 			BlockPos below = cell.below();
@@ -159,7 +164,7 @@ public final class ShiftWorkerCommand {
 				return Vec3.atBottomCenterOf(cell);
 			}
 		}
-		return player.position();
+		return origin;
 	}
 
 	private static int run(CommandSourceStack source, String lookName) throws CommandSyntaxException {

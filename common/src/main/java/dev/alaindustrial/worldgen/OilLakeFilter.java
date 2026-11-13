@@ -7,7 +7,6 @@ import dev.alaindustrial.Industrialization;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -55,9 +54,19 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
  * a lake may clip it, which is the same outcome as not having the filter at all and strictly better
  * than a dead world.
  *
- * <p>{@code requireChunk = false} is <b>not</b> an alternative: verified against the 26.2 bytecode,
- * {@code WorldGenRegion#getChunk(int, int, ChunkStatus, boolean)} never reads that parameter and
- * throws regardless. {@code hasChunk} is the only non-throwing probe — a plain distance comparison.
+ * <p>{@code requireChunk = false} is <b>not</b> an alternative, and {@code hasChunk} alone is not the whole
+ * answer (MOD-970). Verified by {@code javap} on 26.3 and 26.2: vanilla
+ * {@code WorldGenRegion#getChunk(int, int, ChunkStatus, boolean)} never reads that parameter and either returns
+ * the chunk or throws; it never returns {@code null}. {@code WorldGenRegion} is not final, so a region from
+ * another mod can subclass it. The trace of GitHub issue 7 (Distant Horizons 3.3.4) shows a
+ * {@code NullPointerException} on {@code "chunk"} inside {@code isProtected}; the conclusion drawn from it is that
+ * the Distant Horizons region answers {@code null} for a chunk {@code hasChunk} accepted. The Distant Horizons
+ * bytecode itself was not inspected, so this is an inference from the trace, not a verified fact. Every read goes
+ * through {@link OilLakeStructureWalk#readable}: outside the region nothing is read, and {@code null} is the same
+ * soft failure as above — "no protected structure here". An exception thrown from a foreign {@code getChunk}
+ * itself is deliberately not caught. {@code hasChunk} stays the only non-throwing probe in vanilla — a plain
+ * distance comparison.
+ *
  * Asking for {@code STRUCTURE_STARTS} is legal at every allowed distance, because it is at or before
  * each status in the dependency array ({@code [CARVERS, CARVERS, STRUCTURE_STARTS × 7]} at
  * {@code FEATURES}), and starts carry their full piece list from that status onward.
@@ -148,60 +157,83 @@ public final class OilLakeFilter extends PlacementFilter {
 		if (!region.getLevel().structureManager().shouldGenerateStructures()) {
 			return true;
 		}
-		List<Holder<Structure>> protectedStructures = new ArrayList<>();
-		region.registryAccess().lookupOrThrow(Registries.STRUCTURE)
-				.getTagOrEmpty(NO_OIL_LAKES).forEach(protectedStructures::add);
-		List<Holder<Structure>> protectedAreas = new ArrayList<>();
-		region.registryAccess().lookupOrThrow(Registries.STRUCTURE)
-				.getTagOrEmpty(NO_OIL_LAKES_IN_AREA).forEach(protectedAreas::add);
+		List<Structure> protectedStructures = structuresOf(region, NO_OIL_LAKES);
+		List<Structure> protectedAreas = structuresOf(region, NO_OIL_LAKES_IN_AREA);
 		if (protectedStructures.isEmpty() && protectedAreas.isEmpty()) {
 			// Empty (or absent) tags — a modpack opting out. Nothing to protect, nothing to look up.
 			return true;
 		}
+		// One adapter per filter call, not per probe: the probe position is the only thing that changes.
+		Probe probe = new Probe(region);
 		return !OilLakeSamples.anyBlocked(origin.getX(), origin.getY(), origin.getZ(),
 				horizontalRadius, minYOffset, maxYOffset, yStep,
-				(x, y, z) -> isProtected(region, protectedStructures, false, new BlockPos(x, y, z))
-						|| isProtected(region, protectedAreas, true, new BlockPos(x, y, z)));
+				(x, y, z) -> probe.at(x, y, z).isProtected(protectedStructures, false)
+						|| probe.isProtected(protectedAreas, true));
+	}
+
+	private static List<Structure> structuresOf(WorldGenRegion region, TagKey<Structure> tag) {
+		List<Structure> structures = new ArrayList<>();
+		region.registryAccess().lookupOrThrow(Registries.STRUCTURE).getTagOrEmpty(tag)
+				.forEach(holder -> structures.add(holder.value()));
+		return structures;
 	}
 
 	/**
-	 * Whether a piece of a protected structure — or, with {@code wholeArea}, its area at a chunk's precision (see
-	 * {@link #NO_OIL_LAKES_IN_AREA}) — covers {@code pos}, asking only chunks this region is allowed to touch.
-	 * Both chunk reads are gated by {@link WorldGenRegion#hasChunk} — see the class doc for why that is the only
-	 * safe gate and what the soft failure costs.
+	 * The region and the structure lookup of one filter call, adapted once for {@link OilLakeStructureWalk}; the
+	 * probed position is the only state that moves between probes, so a probe allocates nothing here. Used from
+	 * the one worldgen thread that runs the call, never shared.
+	 *
+	 * <p>Whether a protected structure — or, with {@code wholeArea}, its area at a chunk's precision (see
+	 * {@link #NO_OIL_LAKES_IN_AREA}) — covers the probed position, asking only chunks this region is allowed to
+	 * touch. Every chunk read goes through {@link OilLakeStructureWalk#readable}; see the class doc for why, and
+	 * what the soft failure costs.
 	 */
-	private static boolean isProtected(WorldGenRegion region, List<Holder<Structure>> protectedStructures,
-			boolean wholeArea, BlockPos pos) {
-		int chunkX = SectionPos.blockToSectionCoord(pos.getX());
-		int chunkZ = SectionPos.blockToSectionCoord(pos.getZ());
-		if (!region.hasChunk(chunkX, chunkZ)) {
-			return false;
+	private static final class Probe
+			implements OilLakeStructureWalk.Region<ChunkAccess>, OilLakeStructureWalk.Lookup<ChunkAccess, Structure> {
+		private final WorldGenRegion region;
+		private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+
+		Probe(WorldGenRegion region) {
+			this.region = region;
 		}
-		ChunkAccess chunk = region.getChunk(chunkX, chunkZ, ChunkStatus.STRUCTURE_STARTS, false);
-		for (Holder<Structure> holder : protectedStructures) {
-			Structure structure = holder.value();
-			if (wholeArea) {
-				if (!chunk.getReferencesForStructure(structure).isEmpty()) {
-					return true;
-				}
-				continue;
-			}
+
+		Probe at(int x, int y, int z) {
+			pos.set(x, y, z);
+			return this;
+		}
+
+		boolean isProtected(List<Structure> structures, boolean wholeArea) {
+			return OilLakeStructureWalk.isProtected(this, this, structures, wholeArea,
+					SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
+		}
+
+		@Override
+		public boolean hasChunk(int chunkX, int chunkZ) {
+			return region.hasChunk(chunkX, chunkZ);
+		}
+
+		@Override
+		public ChunkAccess chunkOrNull(int chunkX, int chunkZ) {
+			return region.getChunk(chunkX, chunkZ, ChunkStatus.STRUCTURE_STARTS, false);
+		}
+
+		@Override
+		public boolean anyReference(ChunkAccess chunk, Structure structure,
+				OilLakeStructureWalk.StartVisitor visitor) {
 			for (long reference : chunk.getReferencesForStructure(structure)) {
 				// References are packed chunk coordinates; unpack without allocating a ChunkPos.
-				int startX = ChunkPos.getX(reference);
-				int startZ = ChunkPos.getZ(reference);
-				if (!region.hasChunk(startX, startZ)) {
-					// The structure began outside the region — unknowable here without crashing.
-					continue;
-				}
-				StructureStart start = region.getChunk(startX, startZ, ChunkStatus.STRUCTURE_STARTS, false)
-						.getStartForStructure(structure);
-				if (start != null && start.isValid() && coversPosition(start, pos)) {
+				if (visitor.visit(ChunkPos.getX(reference), ChunkPos.getZ(reference))) {
 					return true;
 				}
 			}
+			return false;
 		}
-		return false;
+
+		@Override
+		public boolean startCovers(ChunkAccess startChunk, Structure structure) {
+			StructureStart start = startChunk.getStartForStructure(structure);
+			return start != null && start.isValid() && coversPosition(start, pos);
+		}
 	}
 
 	/**

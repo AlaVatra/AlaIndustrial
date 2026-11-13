@@ -245,6 +245,11 @@ pitest {
                      'dev.alaindustrial.client.blueprint.BlueprintProgress',
                      'dev.alaindustrial.client.hud.HudSmoother',
                      'dev.alaindustrial.client.sound.HumTeleportDetector',
+                     // MOD-961: the slingshot's pouch-arm rule and pull frames (SlingshotDrawMathTest).
+                     'dev.alaindustrial.client.SlingshotDrawMath',
+                     // MOD-961: the bow's zoom curve, its composition into a loader FOV event and the hidden
+                     // hand, shared by the slingshot and the Electric Bow (BowDrawMathTest).
+                     'dev.alaindustrial.client.BowDrawMath',
                      // MOD-629: the remote's «Map» tab geometry — scale, clusters, rim arrows, clicks,
                      // the price rounded up. Minecraft-free precisely so L1 runs it (RemoteMapTest);
                      // added here with the class, not a release later.
@@ -282,6 +287,7 @@ pitest {
                      // could be unit-tested (OilLakeSamplesTest), then never added it here — the same
                      // "code added, list not updated" defect as the incubator trio below.
                      'dev.alaindustrial.worldgen.OilLakeSamples',
+                     'dev.alaindustrial.worldgen.OilLakeStructureWalk',
                      // MOD-248: the oil-deposit blob grid, Minecraft-free for the same reason and
                      // covered by OilLakeShapeTest. Added here with the class, not a release later.
                      'dev.alaindustrial.worldgen.OilLakeShape',
@@ -303,6 +309,9 @@ pitest {
                      'dev.alaindustrial.item.energy.LowChargeRule',
                      // MOD-652: who was warned when — the per-player, per-item clocks the repeat reads. LowChargeLedgerTest.
                      'dev.alaindustrial.item.energy.LowChargeLedger',
+                     // MOD-977: the jetpack's flight modes and motion numbers, shared by the server tick and the
+                     // client motion. Minecraft-free on purpose; JetpackMotionTest.
+                     'dev.alaindustrial.item.wearable.JetpackMotion*',
                      'dev.alaindustrial.item.material.TemperedIronToolStats',
                      'dev.alaindustrial.item.misc.TooltipKeys',
                      // MOD-710 (ADR-034): the powered-tool knob holder. Minecraft-free like every holder and,
@@ -410,6 +419,9 @@ pitest {
                      'dev.alaindustrial.block.entity.quarry.QuarryFramePlacements',
                      // MOD-951: the quarry's work states; added WITH its L1 suite (QuarryWorkStatusTest).
                      'dev.alaindustrial.block.entity.quarry.QuarryWorkStatus',
+                     // MOD-971: the iron furnace's smelting-experience rounding; added WITH its L1 suite
+                     // (SmeltingExperienceTest).
+                     'dev.alaindustrial.block.entity.SmeltingExperience',
                      'dev.alaindustrial.mutation.MutationGrade',
                      'dev.alaindustrial.mutation.MutationRoll',
                      // MOD-695: server->client config sync. The snapshot's wire format and the client's
@@ -608,6 +620,12 @@ pitest {
                      // with. The glob reaches the nested Fit record.
                      'dev.alaindustrial.client.screen.TextFit*',
                      'dev.alaindustrial.client.screen.SettlementCoreLayout',
+                     // MOD-905: the to-do clipboard window's keys and layout — Minecraft-free, L1 suites
+                     // TodoWindowKeysTest and TodoWindowLayoutTest.
+                     'dev.alaindustrial.client.screen.TodoWindowKeys*',
+                     'dev.alaindustrial.client.screen.TodoWindowLayout',
+                     // MOD-811: the thermoelectric generator screen's layout — L1 ThermoelectricGeneratorLayoutTest.
+                     'dev.alaindustrial.client.screen.ThermoelectricGeneratorLayout',
                      // MOD-890: the chronicle's rows as tall as their sentences — L1 suite ChronicleRowsTest.
                      'dev.alaindustrial.client.screen.ChronicleRows*',
                      // MOD-854: where the shift worker's card puts its modules — Minecraft-free, L1 suite
@@ -881,6 +899,10 @@ pitest {
             // MOD-952: its fluid twin, the same lookup through a BlockGetter; covered by the quarry's
             // water through the socket on both loaders.
             'dev.alaindustrial.core.fluid.FluidHostRedirect',
+            // MOD-905: the to-do list's disk and wire codecs. Static fields built from ByteBufCodecs and
+            // StreamCodec, so its few mutants (the codec bounds) are NO_COVERAGE in the MC-free run. Covered by
+            // TodoClipboardScenarios (the list rides the item and the NBT round trip) on every loader.
+            'dev.alaindustrial.core.todo.TodoListCodecs',
             'dev.alaindustrial.core.energy.DirectAdjacencyDistributor', // was EnergyNet (renamed MOD-168 #7)
             'dev.alaindustrial.core.energy.EnergyNetwork',
             'dev.alaindustrial.core.energy.EnergyPortHost',

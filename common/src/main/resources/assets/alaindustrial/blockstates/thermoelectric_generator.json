@@ -1,0 +1,163 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "axis_y": "off"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_neutral",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis_y": "hot_negative"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_hot",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis_y": "hot_positive"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_cold",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "axis_y": "off"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_neutral",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "axis_y": "hot_positive"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_hot",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "axis_y": "hot_negative"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_cold",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "axis_z": "off"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_neutral"
+      }
+    },
+    {
+      "when": {
+        "axis_z": "hot_negative"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_hot"
+      }
+    },
+    {
+      "when": {
+        "axis_z": "hot_positive"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_cold"
+      }
+    },
+    {
+      "when": {
+        "axis_z": "off"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_neutral",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "axis_z": "hot_positive"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_hot",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "axis_z": "hot_negative"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_cold",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "axis_x": "off"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_neutral",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "axis_x": "hot_negative"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_hot",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "axis_x": "hot_positive"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_cold",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "axis_x": "off"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_neutral",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis_x": "hot_positive"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_hot",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis_x": "hot_negative"
+      },
+      "apply": {
+        "model": "alaindustrial:block/thermoelectric_generator_face_cold",
+        "y": 90
+      }
+    }
+  ]
+}

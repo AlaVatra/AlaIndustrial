@@ -31,16 +31,20 @@ import dev.alaindustrial.block.TemperedIronLadderBlock;
 import dev.alaindustrial.block.QuarryFoundationBlock;
 import dev.alaindustrial.block.TemperedIronScaffoldBlock;
 import dev.alaindustrial.block.TemperedIronTrapdoorBlock;
+import dev.alaindustrial.block.TodoClipboardBlock;
 import dev.alaindustrial.block.entity.ElectricMobTrapBlockEntity;
 import dev.alaindustrial.block.entity.FluidTapBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerHvBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerMvBlockEntity;
+import dev.alaindustrial.block.entity.TodoClipboardBlockEntity;
 import dev.alaindustrial.compat.LineBlockProps;
 import dev.alaindustrial.menu.ElectricMobTrapMenu;
 import dev.alaindustrial.menu.MobRepellerHvMenu;
 import dev.alaindustrial.menu.MobRepellerMenu;
 import dev.alaindustrial.menu.MobRepellerMvMenu;
+import dev.alaindustrial.item.misc.TodoClipboardItem;
+import dev.alaindustrial.menu.TodoClipboardMenu;
 import dev.alaindustrial.registry.ContentManifest.BlockDef;
 import dev.alaindustrial.registry.ContentManifest.BlockEntityDef;
 import dev.alaindustrial.registry.ContentManifest.Domain;
@@ -466,6 +470,12 @@ public final class DecorContent {
 	public static final BlockDef<Block> HAZARD_STRIPE_BLOCK = block("hazard_stripe_block", Block::new,
 			machine(MapColor.COLOR_YELLOW, p -> p.strength(3.0f, 9.0f).sound(SoundType.STONE)),
 			s -> ModContent.HAZARD_STRIPE_BLOCK = s);
+	// MOD-905 — the to-do clipboard: a board hung on any face, like a lever; no collision, like a painting. Breaks
+	// by hand (an axe is faster), and a piston pops it off with its list.
+	public static final BlockDef<TodoClipboardBlock> TODO_CLIPBOARD = block("todo_clipboard", TodoClipboardBlock::new,
+			p -> LineBlockProps.popsOnPush(p).mapColor(MapColor.WOOD).strength(0.5f).sound(SoundType.WOOD)
+					.noCollision().noOcclusion(),
+			s -> ModContent.TODO_CLIPBOARD = s);
 
 	/** This domain's blocks, in declaration order — collected since {@code beginBlocks()} above. */
 	private static final List<BlockDef<?>> BLOCKS = endBlocks();
@@ -584,7 +594,10 @@ public final class DecorContent {
 			blockItem("reinforced_plate_block", s -> ModContent.REINFORCED_PLATE_BLOCK_ITEM = s),
 			blockItem("reinforced_plate_slab", s -> ModContent.REINFORCED_PLATE_SLAB_ITEM = s),
 			blockItem("reinforced_plate_stairs", s -> ModContent.REINFORCED_PLATE_STAIRS_ITEM = s),
-			blockItem("hazard_stripe_block", s -> ModContent.HAZARD_STRIPE_BLOCK_ITEM = s));
+			blockItem("hazard_stripe_block", s -> ModContent.HAZARD_STRIPE_BLOCK_ITEM = s),
+			// MOD-905 — blank clipboards stack to 16; a written one carries max_stack_size 1 from its block entity.
+			blockItem("todo_clipboard", p -> new TodoClipboardItem(registeredBlock("todo_clipboard"), p.stacksTo(16)),
+					s -> ModContent.TODO_CLIPBOARD_ITEM = s));
 
 	private static final List<BlockEntityDef<?>> BLOCK_ENTITIES = List.of(
 			blockEntity("mob_repeller", MobRepellerBlockEntity.class, MobRepellerBlockEntity::new,
@@ -598,7 +611,10 @@ public final class DecorContent {
 					s -> ModContent.ELECTRIC_MOB_TRAP_BE = s, ELECTRIC_MOB_TRAP),
 			// MOD-837 — the Tap: its buffer and its pouring.
 			blockEntity("fluid_tap", FluidTapBlockEntity.class, FluidTapBlockEntity::new,
-					s -> ModContent.FLUID_TAP_BE = s, FLUID_TAP));
+					s -> ModContent.FLUID_TAP_BE = s, FLUID_TAP),
+			// MOD-905 — the to-do clipboard: its list and its owner.
+			blockEntity("todo_clipboard", TodoClipboardBlockEntity.class, TodoClipboardBlockEntity::new,
+					s -> ModContent.TODO_CLIPBOARD_BE = s, TODO_CLIPBOARD));
 
 	private static final List<MenuDef<?>> MENUS = List.of(
 			// MOD-278 — the guard field, one menu per tier (same class, tier-specific client factory:
@@ -607,7 +623,9 @@ public final class DecorContent {
 			menu("mob_repeller_mv", MobRepellerMvMenu::new, s -> ModContent.MOB_REPELLER_MV_MENU = s),
 			menu("mob_repeller_hv", MobRepellerHvMenu::new, s -> ModContent.MOB_REPELLER_HV_MENU = s),
 			// MOD-818 — the Electric Mob Trap: a 3x3 take-only buffer and the liquid-experience gauge.
-			menu("electric_mob_trap", ElectricMobTrapMenu::new, s -> ModContent.ELECTRIC_MOB_TRAP_MENU = s));
+			menu("electric_mob_trap", ElectricMobTrapMenu::new, s -> ModContent.ELECTRIC_MOB_TRAP_MENU = s),
+			// MOD-905 — the to-do clipboard's list over the player's inventory; the list comes as a snapshot.
+			menu("todo_clipboard", TodoClipboardMenu::new, s -> ModContent.TODO_CLIPBOARD_MENU = s));
 
 	/** Everything this domain declares; {@link dev.alaindustrial.registry.ContentManifest#DOMAINS} joins it in. */
 	public static final Domain DOMAIN = new Domain("Decor", BLOCKS, ITEMS, BLOCK_ENTITIES, MENUS);
@@ -749,6 +767,11 @@ public final class DecorContent {
 	/** The sound absorber (MOD-804): next to the repellers, the other block that acts on its surroundings. */
 	public static void soundAbsorber(Sink out) {
 		show(out, ModContent.SOUND_ABSORBER_ITEM);
+	}
+
+	/** The to-do clipboard (MOD-905): a plan on the wall of the base, beside the other blocks a base is fitted with. */
+	public static void todoClipboard(Sink out) {
+		show(out, ModContent.TODO_CLIPBOARD_ITEM);
 	}
 
 	/** The Enriched Uranium Torch (MOD-085) — a sprite among cubes, so it closes the block run (MOD-574). */

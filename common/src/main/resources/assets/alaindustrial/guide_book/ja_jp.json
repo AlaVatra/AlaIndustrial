@@ -484,6 +484,44 @@
           ]
         },
         {
+          "id": "thermoelectric_generator",
+          "title": "熱電発電機",
+          "icon": "alaindustrial:thermoelectric_generator",
+          "pages": [
+            {
+              "type": "text",
+              "title": "熱電発電機",
+              "text": "燃料のいらない受動式のLV発電機。向かい合う2面の一方が熱く、もう一方が冷たいとEUを作る。温度差が大きいほどエネルギーが増え、隣り合う発電機の列は1本のケーブルでまとめて送り出す。"
+            },
+            {
+              "type": "stats",
+              "title": "ステータス",
+              "lines": [
+                "エネルギー: 0–4 EU/t",
+                "バッファ: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "レシピ",
+              "recipe_type": "定形クラフト",
+              "grid": [
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:iron_plate",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate"
+              ],
+              "result_id": "alaindustrial:thermoelectric_generator",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_wheel_controller",
           "title": "回し車の駆動部",
           "icon": "alaindustrial:mob_wheel_controller",
@@ -6268,6 +6306,43 @@
                 "alaindustrial:tin_ingot"
               ],
               "result_id": "alaindustrial:jetpack",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "jetpack_mk2",
+          "title": "ジェットパック Mk2",
+          "icon": "alaindustrial:jetpack_mk2",
+          "pages": [
+            {
+              "type": "text",
+              "title": "ジェットパック Mk2",
+              "text": "第2ティアのジェットパック。初代にMV部品を組み合わせて作ります。充電量は4倍、速度は1.5倍で、ゆっくり降下しながらホバリングもできます。"
+            },
+            {
+              "type": "stats",
+              "title": "ステータス",
+              "lines": [
+                "バッファ: 120 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "レシピ",
+              "recipe_type": "定形クラフト",
+              "grid": [
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:jetpack",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:gold_cable",
+                "alaindustrial:energy_crystal",
+                "alaindustrial:gold_cable"
+              ],
+              "result_id": "alaindustrial:jetpack_mk2",
               "result_count": 1
             }
           ]

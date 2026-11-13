@@ -484,6 +484,44 @@
           ]
         },
         {
+          "id": "thermoelectric_generator",
+          "title": "Termoelektrický generátor",
+          "icon": "alaindustrial:thermoelectric_generator",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Termoelektrický generátor",
+              "text": "Pasivní LV generátor bez paliva — vyrábí EU, když je ze dvou protilehlých stran jedna horká a druhá studená; větší rozdíl dává víc energie a řada sousedních generátorů ji posílá jedním kabelem."
+            },
+            {
+              "type": "stats",
+              "title": "Parametry",
+              "lines": [
+                "Energie: 0–4 EU/t",
+                "Zásobník: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Výroba podle vzoru",
+              "grid": [
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:iron_plate",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate"
+              ],
+              "result_id": "alaindustrial:thermoelectric_generator",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_wheel_controller",
           "title": "Pohon běžeckého kola",
           "icon": "alaindustrial:mob_wheel_controller",
@@ -6268,6 +6306,43 @@
                 "alaindustrial:tin_ingot"
               ],
               "result_id": "alaindustrial:jetpack",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "jetpack_mk2",
+          "title": "Raketový batoh Mk2",
+          "icon": "alaindustrial:jetpack_mk2",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Raketový batoh Mk2",
+              "text": "Raketový batoh druhé úrovně — vyrábí se z prvního s díly MV: čtyřnásobný náboj, o polovinu rychlejší a umí se vznášet s pomalým klesáním."
+            },
+            {
+              "type": "stats",
+              "title": "Parametry",
+              "lines": [
+                "Zásobník: 120 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Výroba podle vzoru",
+              "grid": [
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:jetpack",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:gold_cable",
+                "alaindustrial:energy_crystal",
+                "alaindustrial:gold_cable"
+              ],
+              "result_id": "alaindustrial:jetpack_mk2",
               "result_count": 1
             }
           ]
