@@ -69,6 +69,7 @@ public final class PoweredItemEnergySnapshotScenarios {
 			Map.entry("electromagnet", new Energy(5_000L, 32L)),
 			Map.entry("electromagnet_advanced", new Energy(20_000L, 128L)),
 			Map.entry("jetpack", new Energy(30_000L, 32L)),
+			Map.entry("jetpack_mk2", new Energy(120_000L, 128L)),
 			Map.entry("fluxweave_helmet", new Energy(15_000L, 32L)),
 			Map.entry("fluxweave_chestplate", new Energy(15_000L, 32L)),
 			Map.entry("fluxweave_leggings", new Energy(15_000L, 32L)),

@@ -484,6 +484,44 @@
           ]
         },
         {
+          "id": "thermoelectric_generator",
+          "title": "열전 발전기",
+          "icon": "alaindustrial:thermoelectric_generator",
+          "pages": [
+            {
+              "type": "text",
+              "title": "열전 발전기",
+              "text": "연료가 필요 없는 수동형 LV 발전기 — 마주 보는 두 면 중 한쪽이 뜨겁고 다른 쪽이 차가우면 EU를 만든다. 차이가 클수록 에너지가 늘고, 맞닿은 발전기 한 줄은 케이블 하나로 내보낸다."
+            },
+            {
+              "type": "stats",
+              "title": "정보",
+              "lines": [
+                "에너지: 0–4 EU/t",
+                "버퍼: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "레시피",
+              "recipe_type": "정형 제작",
+              "grid": [
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:iron_plate",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate"
+              ],
+              "result_id": "alaindustrial:thermoelectric_generator",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_wheel_controller",
           "title": "쳇바퀴 구동부",
           "icon": "alaindustrial:mob_wheel_rotor",
@@ -6268,6 +6306,43 @@
                 "alaindustrial:tin_ingot"
               ],
               "result_id": "alaindustrial:jetpack",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "jetpack_mk2",
+          "title": "제트팩 Mk2",
+          "icon": "alaindustrial:jetpack_mk2",
+          "pages": [
+            {
+              "type": "text",
+              "title": "제트팩 Mk2",
+              "text": "2티어 제트팩 — 첫 번째 제트팩에 MV 부품을 더해 만듭니다. 충전량은 4배, 속도는 1.5배이며 천천히 내려가며 호버링할 수 있습니다."
+            },
+            {
+              "type": "stats",
+              "title": "정보",
+              "lines": [
+                "버퍼: 120 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "레시피",
+              "recipe_type": "정형 제작",
+              "grid": [
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:jetpack",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:gold_cable",
+                "alaindustrial:energy_crystal",
+                "alaindustrial:gold_cable"
+              ],
+              "result_id": "alaindustrial:jetpack_mk2",
               "result_count": 1
             }
           ]

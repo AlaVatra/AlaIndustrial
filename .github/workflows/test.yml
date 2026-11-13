@@ -92,7 +92,9 @@ jobs:
             export ALA_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M)"
             EXTRA="--no-build-cache"
           fi
-          ./gradlew build --no-daemon --stacktrace $EXTRA
+          # MOD-975: fabric-loom wires :fabric:runGameTest into :fabric:build; the next step runs every loader's
+          # game tests, so `build` skips Fabric's here instead of running them twice (~3.6 min per line).
+          ./gradlew build -x :fabric:runGameTest --no-daemon --stacktrace $EXTRA
 
       - name: Game tests (every loader, in-world behaviour)
         env:

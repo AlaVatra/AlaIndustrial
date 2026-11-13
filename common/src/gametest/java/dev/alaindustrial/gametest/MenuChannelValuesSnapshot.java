@@ -107,6 +107,10 @@ final class MenuChannelValuesSnapshot {
 			"mob_wheel_controller charged getters: energy=6 capacity=12 progress=0/0",
 			"mob_wheel_controller charged menu[0]: getProductionRate=0 getSpeedPercent=0"
 					+ " getStaminaPermille=0",
+			"thermoelectric_generator placed [0]: 0 4000 0 0 0 0 0 0 0 0 0",
+			"thermoelectric_generator placed getters: energy=0 capacity=4000 progress=0/0",
+			"thermoelectric_generator charged [0]: 2000 4000 0 0 0 0 0 0 0 0 0",
+			"thermoelectric_generator charged getters: energy=2000 capacity=4000 progress=0/0",
 			"macerator placed [0]: 0 800 0 150 1",
 			"macerator placed getters: energy=0 capacity=800 progress=0/150",
 			"macerator charged [0]: 400 800 0 150 1",

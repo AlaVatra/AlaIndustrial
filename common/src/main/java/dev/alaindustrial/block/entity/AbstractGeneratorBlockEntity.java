@@ -219,6 +219,17 @@ public abstract class AbstractGeneratorBlockEntity extends MachineBlockEntity {
 	}
 
 	/**
+	 * A generator that pools its buffer with touching generators of its kind (the thermoelectric row, MOD-811)
+	 * gathers the row's energy here, after its own production and before the push, so what it gathered leaves on
+	 * the same tick. The default gathers nothing.
+	 *
+	 * @return true when the buffer changed
+	 */
+	protected boolean gatherBeforePush(Level level) {
+		return false;
+	}
+
+	/**
 	 * Generators are producers: every face but FACING emits, none accepts (R-NRG-03). FACING is
 	 * energy-inert — no cable/hopper connects through the front (D-FACING).
 	 */
@@ -270,6 +281,9 @@ public abstract class AbstractGeneratorBlockEntity extends MachineBlockEntity {
 							.recordProduction(serverLevel.getServer(), getOwner(), generatorId, credited);
 				}
 			}
+		}
+		if (gatherBeforePush(level)) {
+			changed = true;
 		}
 		// Direct push to a cable-less adjacent machine. The cabled path is owned by the EnergyNetwork
 		// (which pulls from this generator's buffer), so skip cable neighbours to avoid double delivery.

@@ -484,6 +484,44 @@
           ]
         },
         {
+          "id": "thermoelectric_generator",
+          "title": "Generator Termoelektrik",
+          "icon": "alaindustrial:thermoelectric_generator",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Generator Termoelektrik",
+              "text": "Generator LV pasif tanpa bahan bakar — menghasilkan EU saat dari dua sisi yang berhadapan satu panas dan satu dingin; makin besar selisihnya, makin banyak energinya, dan sebaris generator yang bersentuhan mengirimnya lewat satu kabel."
+            },
+            {
+              "type": "stats",
+              "title": "Statistik",
+              "lines": [
+                "Energi: 0–4 EU/t",
+                "Bufer: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Resep",
+              "recipe_type": "Pembuatan Berpola",
+              "grid": [
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:iron_plate",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate"
+              ],
+              "result_id": "alaindustrial:thermoelectric_generator",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_wheel_controller",
           "title": "Penggerak Roda Lari",
           "icon": "alaindustrial:mob_wheel_rotor",
@@ -6268,6 +6306,43 @@
                 "alaindustrial:tin_ingot"
               ],
               "result_id": "alaindustrial:jetpack",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "jetpack_mk2",
+          "title": "Jetpack Mk2",
+          "icon": "alaindustrial:jetpack_mk2",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Jetpack Mk2",
+              "text": "Jetpack tingkat dua — dibuat dari yang pertama dengan komponen MV: muatan empat kali lipat, satu setengah kali lebih cepat, dan bisa melayang sambil turun perlahan."
+            },
+            {
+              "type": "stats",
+              "title": "Statistik",
+              "lines": [
+                "Bufer: 120 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Resep",
+              "recipe_type": "Pembuatan Berpola",
+              "grid": [
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:jetpack",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:gold_cable",
+                "alaindustrial:energy_crystal",
+                "alaindustrial:gold_cable"
+              ],
+              "result_id": "alaindustrial:jetpack_mk2",
               "result_count": 1
             }
           ]

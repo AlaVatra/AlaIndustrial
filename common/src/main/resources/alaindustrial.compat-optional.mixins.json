@@ -6,6 +6,7 @@
   "mixins": [
     "ColumnBoreCrackMixin",
     "FurnaceFuelSlotMixin",
+    "FurnaceResultSlotMixin",
     "LivingEntityNauseaGuardMixin",
     "LivingEntityOilDrowningMixin",
     "SkeletonSpawnEquipmentMixin",
@@ -13,9 +14,7 @@
     "ZombieSpawnEquipmentMixin"
   ],
   "client": [
-    "client.AbstractClientPlayerElectricBowMixin",
     "client.ClientLevelCrackMixin",
-    "client.FirstPersonHandsAndItemsElectricBowMixin",
     "client.FirstPersonHandsAndItemsRendererElectricBowMixin",
     "client.FirstPersonHandsAndItemsRendererReactorTabletMixin",
     "client.FogRendererAccessor",

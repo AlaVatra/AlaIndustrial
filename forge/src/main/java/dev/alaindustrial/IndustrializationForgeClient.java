@@ -216,6 +216,12 @@ final class IndustrializationForgeClient {
 		ItemTooltipEvent.BUS.addListener(event -> MachineTooltips.append(event.getItemStack(), event.getToolTip(),
 				Minecraft.getInstance().hasShiftDown()));
 		TickEvent.ClientTickEvent.Post.BUS.addListener(event -> CableGhostGizmos.tick());
+		// MOD-961: the slingshot's pouch hand and zoom, the Electric Bow's hidden hand and zoom (the Fabric client
+		// does this by optional mixins).
+		dev.alaindustrial.client.forge.ForgeSlingshotHooks.register();
+		dev.alaindustrial.client.forge.ForgeElectricBowHooks.register();
+		// MOD-905: the to-do clipboard held in the hands like a map.
+		dev.alaindustrial.client.forge.ForgeTodoClipboardHooks.register();
 	}
 
 	/**

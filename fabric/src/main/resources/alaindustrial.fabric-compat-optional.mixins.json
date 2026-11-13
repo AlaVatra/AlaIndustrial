@@ -1,0 +1,18 @@
+{
+	"required": false,
+	"minVersion": "0.8",
+	"package": "dev.alaindustrial.mixin.client.fabric",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [],
+	"client": [
+		"AbstractClientPlayerElectricBowZoomMixin",
+		"AbstractClientPlayerSlingshotMixin",
+		"FirstPersonHandsAndItemsRendererElectricBowHandMixin",
+		"FirstPersonHandsAndItemsRendererSlingshotMixin",
+		"FirstPersonHandsAndItemsRendererTodoClipboardMixin"
+	],
+	"server": [],
+	"injectors": {
+		"defaultRequire": 0
+	}
+}

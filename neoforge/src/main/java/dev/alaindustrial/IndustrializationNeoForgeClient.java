@@ -175,6 +175,12 @@ public final class IndustrializationNeoForgeClient {
 		// MOD-778: the shared block outlines. LOWEST so every other listener has had its say (and added its
 		// custom renderers) before the outline is decided.
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, IndustrializationNeoForgeClient::replaceBlockOutline);
+		// MOD-961: the slingshot's pouch hand and zoom, the Electric Bow's hidden hand and zoom (the Fabric client
+		// does this by optional mixins).
+		dev.alaindustrial.client.neoforge.NeoForgeSlingshotHooks.register();
+		dev.alaindustrial.client.neoforge.NeoForgeElectricBowHooks.register();
+		// MOD-905: the to-do clipboard held in the hands like a map.
+		dev.alaindustrial.client.neoforge.NeoForgeTodoClipboardHooks.register();
 	}
 
 	/**

@@ -350,6 +350,7 @@ public final class DemoStandScenarios {
 					helper.fail("the kok-sagyz plant at local x=" + kokX + " of the garden is gone after 100 ticks");
 				}
 			}
+			assertClipboardHangs(helper, origin);
 			helper.succeed();
 		});
 	}
@@ -425,6 +426,18 @@ public final class DemoStandScenarios {
 	 * row stands a loose mob_wheel_cell of its own, so every mob wheel block would still be "somewhere on the
 	 * stand" if the assembly on the generator row had failed and left fourteen loose parts.
 	 */
+	/**
+	 * MOD-905: the stand writes cells with no survival check, so a wall clipboard hung facing its own support
+	 * floats in the air, shows the back of its sheet to the room and drops at the first neighbour update.
+	 */
+	private static void assertClipboardHangs(GameTestHelper helper, BlockPos origin) {
+		BlockPos pos = origin.offset(84, 1, 38);
+		BlockState clipboard = helper.getLevel().getBlockState(pos);
+		if (!clipboard.is(ModContent.TODO_CLIPBOARD.get()) || !clipboard.canSurvive(helper.getLevel(), pos)) {
+			helper.fail("the metal zone's to-do clipboard does not hang on its support: " + clipboard);
+		}
+	}
+
 	private static void assertMobWheelAssembled(GameTestHelper helper, BlockPos origin) {
 		BlockState wheelDrive = helper.getLevel().getBlockState(origin.offset(57, 1, 10));
 		if (!wheelDrive.is(ModContent.MOB_WHEEL_CONTROLLER.get()) || !wheelDrive.getValue(MobWheelStructure.FORMED)) {

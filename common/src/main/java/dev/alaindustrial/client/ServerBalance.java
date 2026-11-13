@@ -444,6 +444,22 @@ public final class ServerBalance {
 		return current.intValue("jetpackMaxY", ToolConfig.jetpackMaxY);
 	}
 
+	public static int jetpackMk2Buffer() {
+		return current.intValue("jetpackMk2Buffer", ToolConfig.jetpackMk2Buffer);
+	}
+
+	public static double jetpackMk2HorizontalMultiplier() {
+		return current.doubleValue("jetpackMk2HorizontalMultiplier", ToolConfig.jetpackMk2HorizontalMultiplier);
+	}
+
+	public static double jetpackMk2HoverSinkPerTick() {
+		return current.doubleValue("jetpackMk2HoverSinkPerTick", ToolConfig.jetpackMk2HoverSinkPerTick);
+	}
+
+	public static double jetpackMk2RiseMultiplier() {
+		return current.doubleValue("jetpackMk2RiseMultiplier", ToolConfig.jetpackMk2RiseMultiplier);
+	}
+
 	public static int kokSagyzSandGrowthPercent() {
 		return current.intValue("kokSagyzSandGrowthPercent", Config.kokSagyzSandGrowthPercent);
 	}
@@ -742,6 +758,18 @@ public final class ServerBalance {
 
 	public static int thermalCentrifugeEuPerTick() {
 		return current.intValue("thermalCentrifugeEuPerTick", Config.thermalCentrifugeEuPerTick);
+	}
+
+	public static int thermoelectricBuffer() {
+		return current.intValue("thermoelectricBuffer", GeneratorConfig.thermoelectricBuffer);
+	}
+
+	public static int thermoelectricMilliEuPerDegree() {
+		return current.intValue("thermoelectricMilliEuPerDegree", GeneratorConfig.thermoelectricMilliEuPerDegree);
+	}
+
+	public static int thermoelectricRowMaxGenerators() {
+		return current.intValue("thermoelectricRowMaxGenerators", GeneratorConfig.thermoelectricRowMaxGenerators);
 	}
 
 	public static int tierHvVoltage() {

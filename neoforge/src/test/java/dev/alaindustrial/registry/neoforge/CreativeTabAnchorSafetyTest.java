@@ -169,7 +169,8 @@ class CreativeTabAnchorSafetyTest {
 				"alaindustrial:electric_hoe_diamond_tip",
 				"alaindustrial:electromagnet",
 				"alaindustrial:electromagnet_advanced",
-				"alaindustrial:jetpack");
+				"alaindustrial:jetpack",
+				"alaindustrial:jetpack_mk2");
 		List<String> expected = new ArrayList<>(parentAndSearch);
 		// insertAfter asserts against the parent and search sets independently, and the mod contributes
 		// to both — so the search half repeats the parent half exactly.
@@ -201,7 +202,8 @@ class CreativeTabAnchorSafetyTest {
 				"alaindustrial:tempered_iron_leggings",
 				"alaindustrial:tempered_iron_boots",
 				"alaindustrial:energy_pack",
-				"alaindustrial:jetpack");
+				"alaindustrial:jetpack",
+				"alaindustrial:jetpack_mk2");
 		List<String> expected = new ArrayList<>(parentAndSearch);
 		expected.addAll(parentAndSearch);
 
@@ -276,7 +278,8 @@ class CreativeTabAnchorSafetyTest {
 				ModContent.TEMPERED_IRON_LEGGINGS.get().getDefaultInstance(),
 				ModContent.TEMPERED_IRON_BOOTS.get().getDefaultInstance(),
 				ModContent.ENERGY_PACK.get().getDefaultInstance(),
-				ModContent.JETPACK.get().getDefaultInstance())) {
+				ModContent.JETPACK.get().getDefaultInstance(),
+				ModContent.JETPACK_MK2.get().getDefaultInstance())) {
 			assertTrue(event.getParentEntries().contains(expected),
 					() -> "missing from the parent tab after the fallback: " + expected);
 			assertTrue(event.getSearchEntries().contains(expected),

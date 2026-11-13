@@ -282,6 +282,12 @@ public final class AlaCommonScenarios {
 			if (id.getPath().equals("reactor_button") || id.getPath().equals("reactor_lever")) {
 				continue;
 			}
+			// MOD-905: the to-do clipboard is a wooden board hung like a painting; its spec makes the axe optional
+			// ("speeds it up, not required", docs/blocks/utility/todo_clipboard.md), so a bare hand takes it down
+			// with its list. Its drop with the list is asserted in TodoClipboardScenarios.
+			if (id.getPath().equals("todo_clipboard")) {
+				continue;
+			}
 			Block block = BuiltInRegistries.BLOCK.getValue(id);
 			// Liquid blocks (MOD-238 oil): fluids are never mined — not requiresCorrectToolForDrops,
 			// not in mineable/pickaxe, no drops at all (vanilla water/lava behave identically), so

@@ -46,7 +46,8 @@
 		"alaindustrial.fabric-client.mixins.json",
 		"alaindustrial.mixins.json",
 		"alaindustrial.worldgen.mixins.json",
-		"alaindustrial.compat-optional.mixins.json"
+		"alaindustrial.compat-optional.mixins.json",
+		"alaindustrial.fabric-compat-optional.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=${fabric_loader_version}",

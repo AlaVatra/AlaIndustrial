@@ -138,9 +138,11 @@ public final class ScenarioRoster {
 			IncubatorScenarios.Roster.ENTRIES,
 			IndustrialistScenarios.Roster.ENTRIES,
 			InvulnerabilityScenarios.Roster.ENTRIES,
+			IronFurnaceExperienceScenarios.Roster.ENTRIES,
 			IronFurnaceFuelScenarios.Roster.ENTRIES,
 			ItemPipeScenarios.Roster.ENTRIES,
 			JetpackScenarios.Roster.ENTRIES,
+			JetpackMk2Scenarios.Roster.ENTRIES,
 			KokSagyzScenarios.Roster.ENTRIES,
 			LegacySaveCorpusScenarios.Roster.ENTRIES,
 			LightningRodScenarios.Roster.ENTRIES,
@@ -236,6 +238,7 @@ public final class ScenarioRoster {
 			StatsChipScenarios.Roster.ENTRIES,
 			SteamPipeScenarios.Roster.ENTRIES,
 			StockDisplayFrameScenarios.Roster.ENTRIES,
+			StonecutterDecorScenarios.Roster.ENTRIES,
 			StorageClusterScenarios.Roster.ENTRIES,
 			StorageEnergyScenarios.Roster.ENTRIES,
 			StructureLootScenarios.Roster.ENTRIES,
@@ -247,6 +250,7 @@ public final class ScenarioRoster {
 			TeleporterStationScenarios.Roster.ENTRIES,
 			TemperedIronToolScenarios.Roster.ENTRIES,
 			ThermalCentrifugeScenarios.Roster.ENTRIES,
+			TodoClipboardScenarios.Roster.ENTRIES,
 			RecipeDatapackScenarios.Roster.ENTRIES,
 			UpgradeSlotHintScenarios.Roster.ENTRIES,
 			TownBuildMaterialsScenarios.Roster.ENTRIES,
@@ -282,7 +286,9 @@ public final class ScenarioRoster {
 			WorldContentScenarios.Roster.ENTRIES,
 			WorldgenFeatureSnapshotScenarios.Roster.ENTRIES,
 			WorldgenInjectionScenarios.Roster.ENTRIES,
-			WornComponentCueScenarios.Roster.ENTRIES);
+			WornComponentCueScenarios.Roster.ENTRIES,
+			ThermoelectricGeneratorScenarios.Roster.ENTRIES,
+			ThermoelectricRowScenarios.Roster.ENTRIES);
 
 	/** Every entry, in declaration order. */
 	public static final List<RosterEntry> ALL = flatten(PARTS);

@@ -216,6 +216,8 @@ public final class CreativeTabContent {
 		DecorContent.metalBlocks(out);
 		DecorContent.mobRepellers(out);
 		DecorContent.soundAbsorber(out);
+		// MOD-905 - the to-do clipboard, a block a base is fitted with; shaped, so it lands among the models.
+		DecorContent.todoClipboard(out);
 		ProcessingContent.stations(out);
 		// MOD-831 - the settlement core, found in a town hall rather than built.
 		ProcessingContent.settlement(out);
@@ -264,13 +266,14 @@ public final class CreativeTabContent {
 	}
 
 	/**
-	 * Decorative and utility blocks of vanilla Functional Blocks: the torch, the repellers, the sound absorber,
-	 * the two stations and the settlement core.
+	 * Decorative and utility blocks of vanilla Functional Blocks: the torch, the repellers, the sound absorber, the
+	 * to-do clipboard, the two stations and the settlement core.
 	 */
 	private static void utility(Sink out) {
 		DecorContent.torch(out);
 		DecorContent.mobRepellers(out);
 		DecorContent.soundAbsorber(out);
+		DecorContent.todoClipboard(out);
 		ProcessingContent.stations(out);
 		ProcessingContent.settlement(out);
 	}

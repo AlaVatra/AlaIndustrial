@@ -1,0 +1,57 @@
+{
+  "variants": {
+    "face=ceiling,facing=east": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "x": 180,
+      "y": 90
+    },
+    "face=ceiling,facing=north": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "x": 180
+    },
+    "face=ceiling,facing=south": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "x": 180,
+      "y": 180
+    },
+    "face=ceiling,facing=west": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "x": 180,
+      "y": 270
+    },
+    "face=floor,facing=east": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "y": 270
+    },
+    "face=floor,facing=north": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "y": 180
+    },
+    "face=floor,facing=south": {
+      "model": "alaindustrial:block/todo_clipboard"
+    },
+    "face=floor,facing=west": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "y": 90
+    },
+    "face=wall,facing=east": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "x": 90,
+      "y": 90
+    },
+    "face=wall,facing=north": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "x": 90
+    },
+    "face=wall,facing=south": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "x": 90,
+      "y": 180
+    },
+    "face=wall,facing=west": {
+      "model": "alaindustrial:block/todo_clipboard",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

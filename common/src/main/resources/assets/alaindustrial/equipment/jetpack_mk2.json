@@ -1,0 +1,14 @@
+{
+	"layers": {
+		"humanoid": [
+			{
+				"texture": "alaindustrial:jetpack_mk2"
+			}
+		],
+		"humanoid_baby": [
+			{
+				"texture": "alaindustrial:jetpack_mk2"
+			}
+		]
+	}
+}

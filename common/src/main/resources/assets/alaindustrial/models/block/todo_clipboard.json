@@ -1,0 +1,330 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "alaindustrial:block/todo_clipboard",
+    "board": "alaindustrial:block/todo_clipboard",
+    "sheet": "alaindustrial:block/todo_clipboard_sheet",
+    "clip": "alaindustrial:block/todo_clipboard_clip"
+  },
+  "elements": [
+    {
+      "name": "board",
+      "from": [
+        2,
+        0,
+        0
+      ],
+      "to": [
+        14,
+        1,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            15,
+            14,
+            16
+          ],
+          "texture": "#board"
+        },
+        "south": {
+          "uv": [
+            2,
+            15,
+            14,
+            16
+          ],
+          "texture": "#board"
+        },
+        "east": {
+          "uv": [
+            0,
+            15,
+            15,
+            16
+          ],
+          "texture": "#board"
+        },
+        "west": {
+          "uv": [
+            0,
+            15,
+            15,
+            16
+          ],
+          "texture": "#board"
+        },
+        "up": {
+          "uv": [
+            2,
+            0,
+            14,
+            15
+          ],
+          "texture": "#board"
+        },
+        "down": {
+          "uv": [
+            2,
+            0,
+            14,
+            15
+          ],
+          "texture": "#board",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "name": "sheet",
+      "from": [
+        3,
+        1,
+        1
+      ],
+      "to": [
+        13,
+        1.25,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            14.75,
+            13,
+            15
+          ],
+          "texture": "#sheet"
+        },
+        "south": {
+          "uv": [
+            3,
+            14.75,
+            13,
+            15
+          ],
+          "texture": "#sheet"
+        },
+        "east": {
+          "uv": [
+            1,
+            14.75,
+            13.5,
+            15
+          ],
+          "texture": "#sheet"
+        },
+        "west": {
+          "uv": [
+            1,
+            14.75,
+            13.5,
+            15
+          ],
+          "texture": "#sheet"
+        },
+        "up": {
+          "uv": [
+            3,
+            1,
+            13,
+            13.5
+          ],
+          "texture": "#sheet"
+        }
+      }
+    },
+    {
+      "name": "clip_base",
+      "from": [
+        5,
+        1,
+        12.5
+      ],
+      "to": [
+        11,
+        1.75,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            14.25,
+            11,
+            15
+          ],
+          "texture": "#clip"
+        },
+        "south": {
+          "uv": [
+            5,
+            14.25,
+            11,
+            15
+          ],
+          "texture": "#clip"
+        },
+        "east": {
+          "uv": [
+            12.5,
+            14.25,
+            15,
+            15
+          ],
+          "texture": "#clip"
+        },
+        "west": {
+          "uv": [
+            12.5,
+            14.25,
+            15,
+            15
+          ],
+          "texture": "#clip"
+        },
+        "up": {
+          "uv": [
+            5,
+            12.5,
+            11,
+            15
+          ],
+          "texture": "#clip"
+        }
+      }
+    },
+    {
+      "name": "clip_lever",
+      "from": [
+        6,
+        1.75,
+        13
+      ],
+      "to": [
+        10,
+        2,
+        14.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            14,
+            10,
+            14.25
+          ],
+          "texture": "#clip"
+        },
+        "south": {
+          "uv": [
+            6,
+            14,
+            10,
+            14.25
+          ],
+          "texture": "#clip"
+        },
+        "east": {
+          "uv": [
+            13,
+            14,
+            14.5,
+            14.25
+          ],
+          "texture": "#clip"
+        },
+        "west": {
+          "uv": [
+            13,
+            14,
+            14.5,
+            14.25
+          ],
+          "texture": "#clip"
+        },
+        "up": {
+          "uv": [
+            6,
+            13,
+            10,
+            14.5
+          ],
+          "texture": "#clip"
+        }
+      }
+    },
+    {
+      "name": "clip_ring",
+      "from": [
+        7,
+        0.25,
+        15
+      ],
+      "to": [
+        9,
+        1.5,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            14.5,
+            9,
+            15.75
+          ],
+          "texture": "#clip"
+        },
+        "south": {
+          "uv": [
+            7,
+            14.5,
+            9,
+            15.75
+          ],
+          "texture": "#clip"
+        },
+        "east": {
+          "uv": [
+            15,
+            14.5,
+            16,
+            15.75
+          ],
+          "texture": "#clip"
+        },
+        "west": {
+          "uv": [
+            15,
+            14.5,
+            16,
+            15.75
+          ],
+          "texture": "#clip"
+        },
+        "up": {
+          "uv": [
+            7,
+            15,
+            9,
+            16
+          ],
+          "texture": "#clip"
+        },
+        "down": {
+          "uv": [
+            7,
+            15,
+            9,
+            16
+          ],
+          "texture": "#clip"
+        }
+      }
+    }
+  ]
+}

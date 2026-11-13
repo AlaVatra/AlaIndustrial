@@ -2,6 +2,7 @@ package dev.alaindustrial.client;
 
 import dev.alaindustrial.client.render.BlueprintResultItemModel;
 import dev.alaindustrial.client.render.ModItemTintSources;
+import dev.alaindustrial.client.render.TodoSheetItemModel;
 import dev.alaindustrial.client.sound.MachineHumClientHook;
 import dev.alaindustrial.client.tooltip.TooltipKeysClientHook;
 import java.util.List;
@@ -31,6 +32,8 @@ public final class ClientSetup {
 			// Item tint sources and the blueprint's product item-model type (MOD-275): before the first reload.
 			new Step("ModItemTintSources.register", ModItemTintSources::register),
 			new Step("BlueprintResultItemModel.register", BlueprintResultItemModel::register),
+			// MOD-905: the to-do clipboard's list written on its sheet in the first-person hand.
+			new Step("TodoSheetItemModel.register", TodoSheetItemModel::register),
 			// MOD-248: the submerged-in-oil fog, inserted into vanilla's fog environment list.
 			new Step("OilFogEnvironment.install", OilFogEnvironment::install),
 			// The client-side machine-hum manager (looping ambient sound).

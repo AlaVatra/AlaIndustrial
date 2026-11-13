@@ -484,6 +484,44 @@
           ]
         },
         {
+          "id": "thermoelectric_generator",
+          "title": "เครื่องกำเนิดไฟฟ้าเทอร์โมอิเล็กทริก",
+          "icon": "alaindustrial:thermoelectric_generator",
+          "pages": [
+            {
+              "type": "text",
+              "title": "เครื่องกำเนิดไฟฟ้าเทอร์โมอิเล็กทริก",
+              "text": "เครื่องกำเนิดไฟฟ้า LV แบบพาสซีฟที่ไม่ใช้เชื้อเพลิง — ผลิต EU เมื่อสองด้านที่อยู่ตรงข้ามกันด้านหนึ่งร้อนอีกด้านหนึ่งเย็น ยิ่งต่างกันมากยิ่งได้พลังงานมาก และแถวของเครื่องที่ติดกันส่งพลังงานออกทางสายเคเบิลเส้นเดียว"
+            },
+            {
+              "type": "stats",
+              "title": "สถิติ",
+              "lines": [
+                "พลังงาน: 0–4 EU ต่อทิก",
+                "บัฟเฟอร์: 4000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "สูตร",
+              "recipe_type": "การคราฟต์แบบมีรูปแบบ",
+              "grid": [
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:iron_plate",
+                "alaindustrial:cupronickel_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:cupronickel_plate"
+              ],
+              "result_id": "alaindustrial:thermoelectric_generator",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_wheel_controller",
           "title": "ตัวขับวงล้อวิ่ง",
           "icon": "alaindustrial:mob_wheel_rotor",
@@ -6268,6 +6306,43 @@
                 "alaindustrial:tin_ingot"
               ],
               "result_id": "alaindustrial:jetpack",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "jetpack_mk2",
+          "title": "เจ็ตแพ็ก Mk2",
+          "icon": "alaindustrial:jetpack_mk2",
+          "pages": [
+            {
+              "type": "text",
+              "title": "เจ็ตแพ็ก Mk2",
+              "text": "เจ็ตแพ็กระดับสอง — สร้างจากชิ้นแรกร่วมกับชิ้นส่วน MV: ประจุมากกว่าสี่เท่า เร็วขึ้นหนึ่งเท่าครึ่ง และลอยตัวพร้อมค่อยๆ ลดระดับได้"
+            },
+            {
+              "type": "stats",
+              "title": "สถิติ",
+              "lines": [
+                "บัฟเฟอร์: 120,000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "สูตร",
+              "recipe_type": "การคราฟต์แบบมีรูปแบบ",
+              "grid": [
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:electrum_reinforced_plate",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:jetpack",
+                "alaindustrial:reinforced_bearing",
+                "alaindustrial:gold_cable",
+                "alaindustrial:energy_crystal",
+                "alaindustrial:gold_cable"
+              ],
+              "result_id": "alaindustrial:jetpack_mk2",
               "result_count": 1
             }
           ]

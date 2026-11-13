@@ -3,6 +3,7 @@ package dev.alaindustrial.block;
 import dev.alaindustrial.core.tooltip.TooltipRole;
 import dev.alaindustrial.block.entity.PiezoPlateBlockEntity;
 import dev.alaindustrial.block.entity.PiezoPlateGroup;
+import dev.alaindustrial.block.entity.SharedStoreGroup;
 import dev.alaindustrial.client.ServerBalance;
 import dev.alaindustrial.core.energy.EnergyHostRedirect;
 import dev.alaindustrial.core.energy.FloorPortLender;
@@ -238,7 +239,7 @@ public class PiezoPlateBlock extends BasePressurePlateBlock
 				|| !(level.getBlockEntity(pos) instanceof PiezoPlateBlockEntity plate)) {
 			return;
 		}
-		PiezoPlateGroup group = PiezoPlateGroup.of(level, plate);
+		SharedStoreGroup group = PiezoPlateGroup.of(level, plate);
 		String key = plate.viewOutlets() > 0 ? "message.alaindustrial.piezo_plate.placed_connected"
 				: "message.alaindustrial.piezo_plate.placed_no_outlet";
 		player.sendOverlayMessage(Component.translatable(key, group.size()));

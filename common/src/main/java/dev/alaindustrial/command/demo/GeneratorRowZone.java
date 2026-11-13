@@ -19,9 +19,9 @@ import net.minecraft.world.level.block.Blocks;
  * into its battery box by the cable-less direct push (the box sits on an OUT face).
  *
  * <p>The row is laid out at a pitch of six cells (MOD-659), so every generator has its own bay and a
- * free aisle on each side: coal x=4, geothermal x=10, the four solar panels x=16..34, then the water
- * mill's channel (x=44..48), the concentrator (x=54..55), the mob wheel (x=57..59, z=8..10, MOD-763), and the
- * wind row of the next method.
+ * free aisle on each side: coal x=4, geothermal x=10, the four solar panels x=16..34, a row of three
+ * thermoelectric generators x=40, z=6..8 (MOD-811), then the water mill's channel (x=44..48), the
+ * concentrator (x=54..55), the mob wheel (x=57..59, z=8..10, MOD-763), and the wind row of the next method.
  *
  * <p>Domain (coding standard, section 1): EnergyGeneration.
  */
@@ -75,6 +75,18 @@ final class GeneratorRowZone implements DemoZone {
 			w.set(x, 1, GEN_Z + 1, ModContent.BATTERY_BOX.get());
 			x += 6;
 		}
+
+		// MOD-811 — a row of three thermoelectric generators in the bay after the last panel, running from the
+		// aisle back to the line: magma to the west of each, blue ice to the east, so every west-east axis works at
+		// 3 + 4 degrees = 1.75 EU/t, 5.25 EU/t for the row. Both are solid and inert — no flowing lava on a stand
+		// whose whole world ticks — and blue ice never melts. Only the back generator touches the box: the row
+		// hands the other two's energy along to it, and the box takes it by the direct push, like every bay here.
+		for (int z = GEN_Z - 2; z <= GEN_Z; z++) {
+			w.set(39, 1, z, Blocks.MAGMA_BLOCK);
+			w.set(40, 1, z, ModContent.THERMOELECTRIC_GENERATOR.get());
+			w.set(41, 1, z, Blocks.BLUE_ICE);
+		}
+		w.set(40, 1, GEN_Z + 1, ModContent.BATTERY_BOX.get());
 
 		// Water mill driven by a real CURRENT (MOD-188): only FLOWING water turns the wheel — a still
 		// source powers nothing. The mill faces NORTH, so its wheel hangs in the whole plane one row in

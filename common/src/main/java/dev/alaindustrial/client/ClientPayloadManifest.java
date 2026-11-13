@@ -27,6 +27,7 @@ import dev.alaindustrial.network.ShiftWorkerCardPayload;
 import dev.alaindustrial.network.ShiftWorkerRosterPayload;
 import dev.alaindustrial.network.TownObstructionPayload;
 import dev.alaindustrial.network.TownPulsePayload;
+import dev.alaindustrial.network.TodoClipboardSnapshotPayload;
 import dev.alaindustrial.network.TownWorksPayload;
 import dev.alaindustrial.network.ZonePreviewPayload;
 import dev.alaindustrial.network.TeleportFadePayload;
@@ -153,7 +154,9 @@ public final class ClientPayloadManifest {
 			// MOD-886: a town's needs and chronicle for its core's screen.
 			queued(TownPulsePayload.TYPE, TownPulseClient::receive),
 			// MOD-890: the block in the way of the town's work, outlined for a few seconds.
-			queued(TownObstructionPayload.TYPE, ObstructionHighlight::receive));
+			queued(TownObstructionPayload.TYPE, ObstructionHighlight::receive),
+			// MOD-905: the open to-do clipboard's list, for its window.
+			inline(TodoClipboardSnapshotPayload.TYPE, TodoClipboardClient::receive));
 
 	private static final Map<CustomPacketPayload.Type<?>, ClientHandlerDef<?>> BY_TYPE = index();
 

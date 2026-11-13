@@ -4,13 +4,21 @@ import dev.alaindustrial.Config;
 import dev.alaindustrial.compat.FurnaceFuel;
 import dev.alaindustrial.block.IronFurnaceBlock;
 import dev.alaindustrial.registry.ModContent;
+import com.mojang.serialization.Codec;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
@@ -19,6 +27,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -29,6 +39,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Iron Furnace block entity — a fuel-burning smelter that runs every vanilla {@code minecraft:smelting}
@@ -47,8 +58,11 @@ import net.minecraft.world.level.storage.ValueOutput;
  * {@code MenuType.FURNACE}), so the vanilla {@code FurnaceScreen} opens with no client registration —
  * only the title differs (from {@link #getDefaultName()}).
  *
- * <p>Known v1 limitation (see task MOD-115): no smelting XP is awarded on collection. The stone and
- * electric furnaces differ here too (the electric furnace also grants none); tracked as a follow-up.
+ * <p>Smelting experience works as in the vanilla furnace (MOD-971): every smelt banks its recipe, a player
+ * taking from the result slot is paid the banked experience ({@link #awardUsedRecipesAndPopExperience}), and
+ * breaking the block pops it ({@link #preRemoveSideEffects}). Automation taking the results pays nothing and
+ * leaves the experience banked. The bank is saved under {@code recipes_used}; a furnace saved without it loads
+ * with an empty bank. The electric furnace grants no experience.
  */
 public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 	public static final int INPUT_SLOT = 0;
@@ -68,7 +82,14 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 	private static final int[] SLOTS_DOWN = { RESULT_SLOT, FUEL_SLOT };
 	private static final int[] SLOTS_SIDE = { FUEL_SLOT };
 
+	/** How a recipe count map is saved; the vanilla furnace's shape under this class's snake_case key. */
+	private static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USED_CODEC =
+			Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
+
 	private NonNullList<ItemStack> items = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
+
+	/** Smelts per recipe since a player last took from the result slot: the banked experience (MOD-971). */
+	private final Map<ResourceKey<Recipe<?>>, Integer> recipesUsed = new HashMap<>();
 
 	/** Remaining burn ticks of the fuel currently on fire (0 = not lit). */
 	private int litTime;
@@ -130,10 +151,10 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 		ItemStack input = be.items.get(INPUT_SLOT);
 		ItemStack fuel = be.items.get(FUEL_SLOT);
 
-		SmeltingRecipe recipe = input.isEmpty()
+		RecipeHolder<SmeltingRecipe> recipe = input.isEmpty()
 				? null
-				: be.quickCheck.getRecipeFor(new SingleRecipeInput(input), level).map(RecipeHolder::value).orElse(null);
-		boolean canCook = recipe != null && be.canAcceptResult(recipe);
+				: be.quickCheck.getRecipeFor(new SingleRecipeInput(input), level).orElse(null);
+		boolean canCook = recipe != null && be.canAcceptResult(recipe.value());
 
 		// Light fresh fuel only when there is something to cook and the fire has gone out.
 		if (be.litTime <= 0 && canCook && !fuel.isEmpty()) {
@@ -199,10 +220,10 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 				&& out.getCount() + result.getCount() <= Math.min(OUTPUT_MAX, out.getMaxStackSize());
 	}
 
-	/** Consume one input and add one result to the output slot. */
-	private void smelt(SmeltingRecipe recipe) {
+	/** Consume one input, add one result to the output slot and bank the recipe for its smelting experience. */
+	private void smelt(RecipeHolder<SmeltingRecipe> recipe) {
 		ItemStack input = items.get(INPUT_SLOT);
-		ItemStack result = recipe.assemble(new SingleRecipeInput(input));
+		ItemStack result = recipe.value().assemble(new SingleRecipeInput(input));
 		ItemStack out = items.get(RESULT_SLOT);
 		if (out.isEmpty()) {
 			items.set(RESULT_SLOT, result.copy());
@@ -210,6 +231,56 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 			out.grow(result.getCount());
 		}
 		input.shrink(1);
+		recipesUsed.merge(recipe.id(), 1, Integer::sum);
+	}
+
+	// --- smelting experience (MOD-971): the vanilla furnace's rule, re-implemented ---
+
+	/**
+	 * Pays the experience banked since the last take to {@code player} and unlocks the smelted recipes for them,
+	 * then forgets them. Called by {@code FurnaceResultSlotMixin} when a player takes from the result slot (a
+	 * click, a shift-click, a hotbar swap), which is the only path that pays: hoppers, pipes and every loader's
+	 * item transfer reach the container without a slot, so automation leaves the experience banked.
+	 */
+	public void awardUsedRecipesAndPopExperience(ServerPlayer player) {
+		List<RecipeHolder<?>> smelted = popExperience(player.level(), player.position());
+		player.awardRecipes(smelted);
+		for (RecipeHolder<?> holder : smelted) {
+			player.triggerRecipeCrafted(holder, items);
+		}
+		recipesUsed.clear();
+		setChanged();
+	}
+
+	/**
+	 * Spawns the banked experience at {@code pos} and returns the recipes it came from. A recipe that no longer
+	 * exists (a removed datapack) is skipped, as the vanilla furnace skips it.
+	 */
+	private List<RecipeHolder<?>> popExperience(ServerLevel level, Vec3 pos) {
+		List<RecipeHolder<?>> smelted = new ArrayList<>();
+		recipesUsed.forEach((key, count) -> level.recipeAccess().byKey(key).ifPresent(holder -> {
+			smelted.add(holder);
+			if (holder.value() instanceof AbstractCookingRecipe cooking) {
+				int points = SmeltingExperience.points(count, cooking.experience(), level.getRandom().nextFloat());
+				if (points > 0) {
+					ExperienceOrb.award(level, pos, points);
+				}
+			}
+		}));
+		return smelted;
+	}
+
+	/**
+	 * Breaking the furnace pops the banked experience at its centre, as the vanilla furnace does. This hook runs
+	 * on every removal path (player, explosion, piston, {@code /setblock}) while the block entity is still
+	 * attached; {@code super} drops the contents.
+	 */
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		super.preRemoveSideEffects(pos, state);
+		if (level instanceof ServerLevel serverLevel) {
+			popExperience(serverLevel, Vec3.atCenterOf(pos));
+		}
 	}
 
 	// --- container / menu ---
@@ -288,6 +359,7 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 		output.putInt("lit_time", litTime);
 		output.putInt("lit_duration", litDuration);
 		output.putInt("cook_progress", cookProgress);
+		output.store("recipes_used", RECIPES_USED_CODEC, recipesUsed);
 	}
 
 	@Override
@@ -298,6 +370,9 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 		litTime = input.getIntOr("lit_time", 0);
 		litDuration = input.getIntOr("lit_duration", 0);
 		cookProgress = input.getIntOr("cook_progress", 0);
+		// A furnace saved before MOD-971 has no key and starts with nothing banked.
+		recipesUsed.clear();
+		recipesUsed.putAll(input.read("recipes_used", RECIPES_USED_CODEC).orElse(Map.of()));
 		cookTotal = Math.max(1, Config.ironFurnaceCookTime);
 	}
 }

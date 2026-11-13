@@ -65,6 +65,14 @@ public final class ItemTooltip {
 		return add(TooltipLayout.Slot.DETAIL, TooltipRender.roleLine(role, key, unitKey, values));
 	}
 
+	/**
+	 * A described line under [Shift]: a key action stays in its own slot, any other role becomes a detail (MOD-977).
+	 */
+	public ItemTooltip detail(MachineTooltipSpec.Line line) {
+		TooltipLayout.Slot slot = line.role().defaultSlot();
+		return add(slot.underShift() ? slot : TooltipLayout.Slot.DETAIL, TooltipRender.line(line));
+	}
+
 	/** The tier line, under [Shift]. */
 	public ItemTooltip tier(MachineTooltipSpec.Tier tier) {
 		return add(TooltipLayout.Slot.TIER, TooltipRender.line(tier.line()));

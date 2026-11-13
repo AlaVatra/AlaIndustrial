@@ -42,6 +42,8 @@ final class PlanEnds {
 		int cableCount;
 		int distance = Integer.MAX_VALUE / 2;
 		long planned;
+		/** The generator of the same host, or -1: never planned to feed this receiver (ADR-055). */
+		int self = -1;
 
 		Sink(EnergyLineDistributor.LiveConsumer<P> consumer, int kind, long room, long need, boolean storage) {
 			this.consumer = consumer;
@@ -82,6 +84,10 @@ final class PlanEnds {
 		final int[] edges = new int[FACES * 4];
 		int cableCount;
 		long available;
+		/** The edge into this host from the plan's source ({@code LinePlanner.build}). */
+		int supplyEdge;
+		/** Is this host a receiver of the same plan too? Then it never covers another generator's share (ADR-055). */
+		boolean alsoSink;
 
 		Source(EnergyLineDistributor.LiveProducer<P> producer, long available) {
 			this.producer = producer;

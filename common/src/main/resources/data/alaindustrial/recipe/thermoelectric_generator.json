@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "NCN",
+    "IKI",
+    "NCN"
+  ],
+  "key": {
+    "N": "#c:plates/cupronickel",
+    "I": "#c:plates/iron",
+    "C": "alaindustrial:copper_cable",
+    "K": "alaindustrial:copper_coil"
+  },
+  "result": {
+    "id": "alaindustrial:thermoelectric_generator"
+  }
+}

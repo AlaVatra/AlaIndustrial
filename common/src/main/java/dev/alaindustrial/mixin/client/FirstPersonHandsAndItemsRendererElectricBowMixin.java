@@ -13,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.At;
  * 20-tick draw inside {@code submitArmWithItem}'s {@code BOW} branch; the Electric Bow draws over its
  * own time, so the hand reaches full pull on the same tick the shot does.
  *
- * <p>Both loaders keep that single {@code 20.0F} verbatim, so one shared mixin serves both. The edit
- * touches the constant only for an Electric Bow stack, which renders through the {@code BOW} branch
- * alone.
+ * <p>All three loaders keep that single {@code 20.0F} verbatim (their patches of the method do not touch
+ * the {@code BOW} branch), so one shared mixin serves them all. The edit touches the constant only for an
+ * Electric Bow stack, which renders through the {@code BOW} branch alone.
  *
  * <p><b>26.3 renamed the target class.</b> {@code ItemInHandRenderer} became
- * {@link FirstPersonHandsAndItemsRenderer} and the hand-<em>selection</em> half of MOD-363 moved out of
- * it entirely, into {@code net.minecraft.client.player.FirstPersonHandsAndItems} — see
- * {@link FirstPersonHandsAndItemsElectricBowMixin}, which is why this pair is now two classes.
+ * {@link FirstPersonHandsAndItemsRenderer}. The other half of MOD-363 — the zoom and the other hand hidden —
+ * is {@code client.ElectricBowFirstPerson} since MOD-961: the mixins that tried it by wrapping
+ * {@code ItemStack.is(Item)} never matched, because vanilla calls the inherited {@code is(Object)}.
  *
  * <p>Cosmetic by nature, so it lives in the optional config: a conflict costs the pose, never the game.
  */

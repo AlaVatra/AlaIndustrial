@@ -407,7 +407,11 @@ public final class ClientContentManifest {
 			// MOD-480 — the monitoring panel's face: the watched item and its count.
 			renderer(ContentManifest.blockEntity("monitor_panel",
 							dev.alaindustrial.block.entity.MonitorPanelBlockEntity.class),
-					dev.alaindustrial.client.render.MonitorPanelBlockEntityRenderer::new));
+					dev.alaindustrial.client.render.MonitorPanelBlockEntityRenderer::new),
+			// MOD-905 — the to-do clipboard's list, written on its sheet.
+			renderer(ContentManifest.blockEntity("todo_clipboard",
+							dev.alaindustrial.block.entity.TodoClipboardBlockEntity.class),
+					dev.alaindustrial.client.render.TodoClipboardRenderer::new));
 
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 	// Model layers
@@ -515,7 +519,9 @@ public final class ClientContentManifest {
 			// MOD-482: the column bore on the held drill.
 			ModKeyMappings.TOGGLE_DRILL_COLUMN,
 			// MOD-797: the blueprint of the hovered or held item.
-			ModKeyMappings.OPEN_BLUEPRINT);
+			ModKeyMappings.OPEN_BLUEPRINT,
+			// MOD-977: the worn Jetpack Mk2's hover mode.
+			ModKeyMappings.TOGGLE_JETPACK_HOVER);
 
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 	// HUD layers (MOD-706)

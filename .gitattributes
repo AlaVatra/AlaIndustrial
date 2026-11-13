@@ -35,8 +35,5 @@ docs/tasks/archive/README.md      linguist-generated=true -diff merge=regenerate
 docs/roadmap/README.md            linguist-generated=true -diff merge=regenerated
 docs/testing/TRACEABILITY.md      linguist-generated=true -diff merge=regenerated
 docs/testing/COVERAGE.md          linguist-generated=true -diff
-tools/crafts_board.html           linguist-generated=true -diff merge=regenerated
-tools/recipes_graph.html          linguist-generated=true -diff merge=regenerated
-tools/showcase.html               linguist-generated=true -diff merge=regenerated
 tools/advancement_tree.html       linguist-generated=true -diff merge=regenerated
 docs/tools/block_graph.html       linguist-generated=true -diff merge=regenerated

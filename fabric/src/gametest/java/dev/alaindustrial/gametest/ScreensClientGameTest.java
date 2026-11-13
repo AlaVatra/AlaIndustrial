@@ -167,6 +167,9 @@ public class ScreensClientGameTest implements FabricClientGameTest {
             // and the band where the map's rows go.
             new Screen("apiary_drone_station", "apiary_drone_station", "Apiary Station"),
             new Screen("water_mill", "water_mill", "Water Mill"),
+            // MOD-811: the thermoelectric generator alone on the rig, every face neutral — the six face cells, the
+            // three axis columns at 0, the total and the «no pair» status row.
+            new Screen("thermoelectric_generator", "thermoelectric_generator", "Thermoelectric Generator"),
             new Screen("wind_mill", "wind_mill", "Wind Mill"),
             new Screen("high_altitude_wind_mill", "high_altitude_wind_mill", "High Altitude Wind Mill"),
             new Screen("storm_wind_mill", "storm_wind_mill", "Storm Wind Mill"),
@@ -204,6 +207,8 @@ public class ScreensClientGameTest implements FabricClientGameTest {
             // MOD-818: the electric mob trap — the 3x3 take-only buffer, the energy bar, the liquid-experience gauge
             // and the zone preview button.
             new Screen("electric_mob_trap", "electric_mob_trap", "Electric Mob Trap"),
+            // MOD-905: the to-do clipboard - hung on a block, written and half done (see TodoClipboardStand).
+            new Screen("todo_clipboard", "todo_clipboard", "To-do Clipboard"),
             // MOD-479: the creative energy source. Shot in its placed state — switched on at the
             // default output, slot empty — because that is the state the stand can produce with a
             // right click and nothing else, and it already carries every control the panel owns:
@@ -223,7 +228,8 @@ public class ScreensClientGameTest implements FabricClientGameTest {
      * language half the player base reads.
      */
     private static final List<String> LOCALE_SWEEP =
-            List.of("alloy_smelter", "garden_drone_station", "teleporter_station", "gold_chest", "vulcanizer");
+            List.of("alloy_smelter", "garden_drone_station", "teleporter_station", "gold_chest", "vulcanizer",
+                    "todo_clipboard");
 
     private static final String LONG_LOCALE = "ru_ru";
 
@@ -252,12 +258,16 @@ public class ScreensClientGameTest implements FabricClientGameTest {
             ShotRecorder.begin(context);
             L3Chunks.waitRender(singleplayer);
 
+            if (PlayerViewStands.shotAlone(context, singleplayer)) {
+                return;
+            }
             buildRig(context, singleplayer);
             captureEveryScreen(context, singleplayer);
             captureRemoteScreen(context, singleplayer);
             captureMagnetScreen(context, singleplayer);
             captureLocaleSweep(context, singleplayer);
             captureItemRenderContexts(context, singleplayer);
+            PlayerViewStands.shoot(context, singleplayer);
 
             ShotRecorder.finish();
             assertEveryScreenPhotographed();
@@ -412,6 +422,10 @@ public class ScreensClientGameTest implements FabricClientGameTest {
                     Direction.NORTH, ModContent.RECEPTION_CAPSULE.get()));
             return;
         }
+        if (screen.blockId().equals("todo_clipboard")) {
+            server.runOnServer(mc -> TodoClipboardStand.place(mc.overworld(), new BlockPos(x, BLOCK_Y, RIG_Z)));
+            return;
+        }
         if (screen.menuId().equals("double_chest")) {
             // MOD-391: the double window only exists over a PAIR — the clicked (right) half at x, its
             // LEFT partner one block east. Explicit halves, because /setblock never runs placement.
@@ -480,6 +494,9 @@ public class ScreensClientGameTest implements FabricClientGameTest {
                 context.waitTicks(50);
             }
 
+            if (screen.blockId().equals("todo_clipboard")) {
+                server.runOnServer(mc -> TodoClipboardStand.prepareViewer(mc.overworld(), pos));
+            }
             openByRightClick(context, pos, screen);
 
             ShotRecorder.captureScreen(screen.menuId(), "opened",
@@ -488,6 +505,9 @@ public class ScreensClientGameTest implements FabricClientGameTest {
                             + "check that the whole window is in frame and no label is clipped");
 
             captureMachineStates(context, screen);
+            if (screen.menuId().equals("todo_clipboard")) {
+                TodoClipboardStand.captureAccess(context, server, pos);
+            }
             if (screen.menuId().equals("town_dispatcher")) {
                 TownDispatcherShots.captureTabs(context);
             }
@@ -789,7 +809,7 @@ public class ScreensClientGameTest implements FabricClientGameTest {
      * only way that is really true — a probe key that differs between the two languages actually comes
      * back translated.
      */
-    private static void setLocale(ClientGameTestContext context, String code) {
+    static void setLocale(ClientGameTestContext context, String code) {
         String before = context.computeOnClient(mc -> Language.getInstance().getOrDefault(LOCALE_PROBE_KEY));
         context.runOnClient(mc -> {
             mc.getLanguageManager().setSelected(code);

@@ -28,6 +28,7 @@ import dev.alaindustrial.block.PiezoPlateBlock;
 import dev.alaindustrial.block.RadiantSolarPanelBlock;
 import dev.alaindustrial.block.SolarPanelBlock;
 import dev.alaindustrial.block.StormWindMillBlock;
+import dev.alaindustrial.block.ThermoelectricGeneratorBlock;
 import dev.alaindustrial.block.WaterMillBlock;
 import dev.alaindustrial.block.WindMillBlock;
 import dev.alaindustrial.block.entity.CreativeEnergySourceBlockEntity;
@@ -42,6 +43,7 @@ import dev.alaindustrial.block.entity.PiezoPlateBlockEntity;
 import dev.alaindustrial.block.entity.RadiantSolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.SolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.StormWindMillBlockEntity;
+import dev.alaindustrial.block.entity.ThermoelectricGeneratorBlockEntity;
 import dev.alaindustrial.block.entity.WaterMillBlockEntity;
 import dev.alaindustrial.block.entity.WindMillBlockEntity;
 import dev.alaindustrial.compat.LineBlockProps;
@@ -56,6 +58,7 @@ import dev.alaindustrial.menu.MoonlitSolarPanelMenu;
 import dev.alaindustrial.menu.RadiantSolarPanelMenu;
 import dev.alaindustrial.menu.SolarPanelMenu;
 import dev.alaindustrial.menu.StormWindMillMenu;
+import dev.alaindustrial.menu.ThermoelectricGeneratorMenu;
 import dev.alaindustrial.menu.WaterMillMenu;
 import dev.alaindustrial.menu.WindMillMenu;
 import dev.alaindustrial.registry.ContentManifest.BlockDef;
@@ -173,6 +176,12 @@ public final class EnergyGenerationContent {
 	public static final BlockDef<PiezoPlateBlock> SILENT_PIEZO_PLATE = block("silent_piezo_plate",
 			PiezoPlateBlock::silent, EnergyGenerationContent::piezoPlate, s -> ModContent.SILENT_PIEZO_PLATE = s);
 
+	/** MOD-811 — EU from a hot face across from a cold one: a full metal cube with no facing, no fuel. */
+	public static final BlockDef<ThermoelectricGeneratorBlock> THERMOELECTRIC_GENERATOR =
+			block("thermoelectric_generator", ThermoelectricGeneratorBlock::new,
+					machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL)),
+					s -> ModContent.THERMOELECTRIC_GENERATOR = s);
+
 	/** This domain's blocks, in declaration order — collected since {@code beginBlocks()} above. */
 	private static final List<BlockDef<?>> BLOCKS = endBlocks();
 
@@ -197,7 +206,8 @@ public final class EnergyGenerationContent {
 			blockItem("mob_wheel_rotor", s -> ModContent.MOB_WHEEL_ROTOR_ITEM = s),
 			blockItem("mob_wheel_gate", s -> ModContent.MOB_WHEEL_GATE_ITEM = s),
 			blockItem("piezo_plate", s -> ModContent.PIEZO_PLATE_ITEM = s),
-			blockItem("silent_piezo_plate", s -> ModContent.SILENT_PIEZO_PLATE_ITEM = s));
+			blockItem("silent_piezo_plate", s -> ModContent.SILENT_PIEZO_PLATE_ITEM = s),
+			blockItem("thermoelectric_generator", s -> ModContent.THERMOELECTRIC_GENERATOR_ITEM = s));
 
 	private static final List<BlockEntityDef<?>> BLOCK_ENTITIES = List.of(
 			blockEntity("generator", GeneratorBlockEntity.class, GeneratorBlockEntity::new,
@@ -231,7 +241,10 @@ public final class EnergyGenerationContent {
 			blockEntity("mob_wheel_controller", MobWheelBlockEntity.class, MobWheelBlockEntity::new,
 					s -> ModContent.MOB_WHEEL_CONTROLLER_BE = s, MOB_WHEEL_CONTROLLER),
 			blockEntity("piezo_plate", PiezoPlateBlockEntity.class, PiezoPlateBlockEntity::new,
-					s -> ModContent.PIEZO_PLATE_BE = s, PIEZO_PLATE, SILENT_PIEZO_PLATE));
+					s -> ModContent.PIEZO_PLATE_BE = s, PIEZO_PLATE, SILENT_PIEZO_PLATE),
+			blockEntity("thermoelectric_generator", ThermoelectricGeneratorBlockEntity.class,
+					ThermoelectricGeneratorBlockEntity::new, s -> ModContent.THERMOELECTRIC_GENERATOR_BE = s,
+					THERMOELECTRIC_GENERATOR));
 
 	private static final List<MenuDef<?>> MENUS = List.of(
 			menu("generator", GeneratorMenu::new, s -> ModContent.GENERATOR_MENU = s),
@@ -252,7 +265,10 @@ public final class EnergyGenerationContent {
 			menu("creative_energy_source", CreativeEnergySourceMenu::new,
 					s -> ModContent.CREATIVE_ENERGY_SOURCE_MENU = s),
 			// MOD-763 — the mob wheel's drive: feeder slot, stamina, status, species.
-			menu("mob_wheel_controller", MobWheelMenu::new, s -> ModContent.MOB_WHEEL_CONTROLLER_MENU = s));
+			menu("mob_wheel_controller", MobWheelMenu::new, s -> ModContent.MOB_WHEEL_CONTROLLER_MENU = s),
+			// MOD-811 — the thermoelectric generator: six faces, three axes, the rate.
+			menu("thermoelectric_generator", ThermoelectricGeneratorMenu::new,
+					s -> ModContent.THERMOELECTRIC_GENERATOR_MENU = s));
 
 	/** Everything this domain declares; {@link dev.alaindustrial.registry.ContentManifest#DOMAINS} joins it in. */
 	public static final Domain DOMAIN = new Domain("EnergyGeneration", BLOCKS, ITEMS, BLOCK_ENTITIES, MENUS);
@@ -266,6 +282,8 @@ public final class EnergyGenerationContent {
 		show(out, ModContent.GENERATOR_ITEM);
 		show(out, ModContent.GEOTHERMAL_GENERATOR_ITEM);
 		show(out, ModContent.WATER_MILL_ITEM);
+		// MOD-811 — the other small fuel-free cube, beside the water mill it is balanced against.
+		show(out, ModContent.THERMOELECTRIC_GENERATOR_ITEM);
 		show(out, ModContent.WIND_MILL_ITEM);
 		// T2 wind mills (MOD-172): the height-focused Sky Mill and the weather-focused Tempest Mill.
 		// Obtained only by evolving the T1 wind mill with a day/night alignment chip (no direct recipe),

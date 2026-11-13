@@ -2749,6 +2749,93 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 "ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack.purpose {#AAAAAA}
 "ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack.usage {#AAAAAA}
 "⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"30 000" {#FFFFFF}>, <"30 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+== alaindustrial:jetpack_mk2 plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.depleted {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.depleted {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_sink {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_limits {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.usage {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.hover_key {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.depleted {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.depleted {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_sink {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_limits {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.usage {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.hover_key {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:jetpack_mk2 eu=1
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"1" {#FFFFFF}>, <"120 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"1" {#FFFFFF}>, <"120 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_sink {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_limits {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.usage {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.hover_key {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"1" {#FFFFFF}>, <"120 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"1" {#FFFFFF}>, <"120 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_sink {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_limits {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.usage {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.hover_key {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:jetpack_mk2 full
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"120 000" {#FFFFFF}>, <"120 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"120 000" {#FFFFFF}>, <"120 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_sink {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_limits {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.usage {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.hover_key {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"120 000" {#FFFFFF}>, <"120 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.purpose {#AAAAAA}
+"✘ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_off {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.stat.charge(<"120 000" {#FFFFFF}>, <"120 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_sink {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.jetpack_mk2.hover_limits {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.usage {#AAAAAA}
+"▶ " {#FFC15A} + tooltip.alaindustrial.jetpack_mk2.hover_key {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:jungle_diamond_chest_boat plain : none
 == alaindustrial:jungle_electrum_chest_boat plain : none
 == alaindustrial:jungle_gold_chest_boat plain : none
@@ -3950,6 +4037,31 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
 "■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
 "▶ " {#FFC15A} + tooltip.alaindustrial.key.open_machine {#AAAAAA}
 tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:thermoelectric_generator plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.thermoelectric_generator.best_axis(<"2" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.thermoelectric_generator.best_axis(<"2" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.buffer(<"4 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.thermoelectric_generator.per_degree(<tooltip.alaindustrial.number.decimal(0, 25) {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.row(<"8" {#FFFFFF}>) {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.hot {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.cold {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.purpose {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.purpose {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.row(<"8" {#FFFFFF}>) {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.hot {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.thermoelectric_generator.cold {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:tin_block plain : none
 == alaindustrial:tin_cable plain
 -- plain eu
@@ -4004,6 +4116,19 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:tin_slab plain : none
 == alaindustrial:tin_stairs plain : none
 == alaindustrial:tin_wall plain : none
+== alaindustrial:todo_clipboard plain
+-- plain eu
+"ℹ Hangs on a wall and keeps a" {#AAAAAA}
+"list of items to gather and notes" {#AAAAAA}
+-- shift eu
+"ℹ Hangs on a wall and keeps a" {#AAAAAA}
+"list of items to gather and notes" {#AAAAAA}
+-- plain no-eu
+"ℹ Hangs on a wall and keeps a" {#AAAAAA}
+"list of items to gather and notes" {#AAAAAA}
+-- shift no-eu
+"ℹ Hangs on a wall and keeps a" {#AAAAAA}
+"list of items to gather and notes" {#AAAAAA}
 == alaindustrial:town_dispatcher plain
 -- plain eu
 "ℹ Town hall construction" {#AAAAAA}

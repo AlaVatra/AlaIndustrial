@@ -6,6 +6,7 @@ import dev.alaindustrial.compat.client.Keyboard;
 import net.minecraft.client.KeyMapping;
 import dev.alaindustrial.network.DrillColumnTogglePayload;
 import dev.alaindustrial.network.FluxweaveStepAssistPayload;
+import dev.alaindustrial.network.JetpackHoverTogglePayload;
 import dev.alaindustrial.network.NetworkDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -85,6 +86,14 @@ public final class ModKeyMappings {
 			InputConstants.KEY_I,
 			CATEGORY);
 
+	/** Switch the worn Jetpack Mk2's hover mode (MOD-977). Default: N — unbound in vanilla 26.3 and 26.2. Sent to the
+	 * server like the step assist: the flag is a component on the server's copy of the worn stack. */
+	public static final KeyMapping TOGGLE_JETPACK_HOVER = new KeyMapping(
+			"key.alaindustrial.toggle_jetpack_hover",
+			Keyboard.keyMappingType(),
+			InputConstants.KEY_N,
+			CATEGORY);
+
 	private ModKeyMappings() {
 	}
 
@@ -129,6 +138,11 @@ public final class ModKeyMappings {
 			// sound) comes back from the handler.
 			if (player != null) {
 				NetworkDispatcher.get().sendToServer(new DrillColumnTogglePayload());
+			}
+		}
+		while (TOGGLE_JETPACK_HOVER.consumeClick()) {
+			if (player != null) {
+				NetworkDispatcher.get().sendToServer(new JetpackHoverTogglePayload());
 			}
 		}
 		while (OPEN_PROFILE.consumeClick()) {

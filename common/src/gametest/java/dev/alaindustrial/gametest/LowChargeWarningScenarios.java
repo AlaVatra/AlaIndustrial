@@ -46,6 +46,8 @@ public final class LowChargeWarningScenarios {
 				RosterEntry.of(LowChargeWarningScenarios::fun03JetpackRunningOutHasItsOwnSignal,
 						"low_charge_jetpack_depletion_signal").ticks(20, 40),
 				RosterEntry.of(LowChargeWarningScenarios::fun04ToolsWarnToo, "low_charge_tools_warn").ticks(20, 40),
+				RosterEntry.of(LowChargeWarningScenarios::fun06JetpackMk2HoverWarnsToo,
+						"low_charge_jetpack_mk2_hover_warns").ticks(20, 40),
 				RosterEntry.of(LowChargeWarningScenarios::fun05ToolSaysDepletedWhenItCannotPayAgain,
 						"low_charge_tool_depleted_once").ticks(20, 40),
 				RosterEntry.of(LowChargeWarningScenarios::neg01AboveTheThresholdIsSilent,
@@ -188,6 +190,38 @@ public final class LowChargeWarningScenarios {
 			helper.fail("the debit must empty the jetpack");
 		}
 		expectWarning(helper, drain(helper, owner), ModSounds.CHARGE_DEPLETED.get(), DEPLETED_KEY);
+		helper.succeed();
+	}
+
+	/**
+	 * FUN06 (MOD-977): the Jetpack Mk2 warns like tier one, and a hover tick is a debit like a thrust tick: hovering
+	 * across the threshold sends the owner one beep and the low-charge line.
+	 */
+	public static void fun06JetpackMk2HoverWarnsToo(GameTestHelper helper) {
+		ServerPlayer owner = survivalPlayer(helper);
+		long cap = ToolConfig.jetpackMk2Buffer;
+		ItemStack mk2 = stackOf(ModContent.JETPACK_MK2.get(), cap / 10 + ToolConfig.jetpackMk2HoverEuPerTick / 2);
+		mk2.set(dev.alaindustrial.registry.ModDataComponents.JETPACK_HOVER.get(), true);
+		owner.setOnGround(true);
+		dev.alaindustrial.item.wearable.JetpackItem.serverFlightTick(mk2, helper.getLevel(), owner, false);
+		owner.setOnGround(false);
+		// One thrust tick opens the flight (and crosses nothing yet if the price lands above the line), then hover.
+		ItemEnergy.set(mk2, cap / 10 + ToolConfig.jetpackMk2EuPerTick + ToolConfig.jetpackMk2HoverEuPerTick / 2);
+		dev.alaindustrial.item.wearable.JetpackItem.serverFlightTick(mk2, helper.getLevel(), owner, true);
+		drain(helper, owner);
+
+		dev.alaindustrial.item.wearable.JetpackItem.serverFlightTick(mk2, helper.getLevel(), owner, false);
+
+		if (ItemEnergy.get(mk2) >= cap / 10) {
+			helper.fail("the hover tick must have taken the Mk2 under 10%, it holds " + ItemEnergy.get(mk2));
+		}
+		// The exhaust hisses every eighth game tick, so count the beeps rather than every sound packet.
+		List<Object> sent = drain(helper, owner);
+		long beeps = sounds(sent).stream().filter(p -> p.getSound().value() == ModSounds.LOW_CHARGE_BEEP.get()).count();
+		List<ClientboundSystemChatPacket> lines = overlays(sent);
+		if (beeps != 1 || lines.size() != 1 || !LOW_KEY.equals(translatable(helper, lines.get(0).content()).getKey())) {
+			helper.fail("expected one low-charge beep and one " + LOW_KEY + " line, got " + sent);
+		}
 		helper.succeed();
 	}
 

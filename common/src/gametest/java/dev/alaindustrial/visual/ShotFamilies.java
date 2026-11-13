@@ -158,6 +158,15 @@ public final class ShotFamilies {
                             + "the battery bar, charge and health under it; on the right the open tab's modules, every "
                             + "row inside its card, a «+» only on a working stat's row, the two inactive stats grey "
                             + "with their caption; a dead record grey under its stamp with no buttons")},
+            new Object[] {"gui_todo_clipboard_", new Family(ShotGroup.GUI, List.of("R-GUI-01", "R-GUI-03"),
+                    "To-do clipboard (MOD-905) seen by its owner, in the mod's item-screen style: the rounded "
+                            + "bevelled frame, the centred title, owner and «done/total» under it; five ruled paper "
+                            + "rows in a sunk well with tick boxes, item icons, names cut with an ellipsis rather than "
+                            + "running into the right-aligned «have/need» counter - «12/32» in plain ink, the "
+                            + "cobblestone counter green - the struck-through done line, the note, red crosses; under "
+                            + "the list a dark field and four raised icon buttons (add, search, clear, access) with no "
+                            + "words to cut; an empty list shows its wrapped hint inside the sheet; a hover shows a "
+                            + "tooltip; the search fills the sheet with sunk slots; nothing cut in any language")},
             new Object[] {"gui_reception_capsule_", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
                     "Reception capsule (MOD-833, MOD-844): a tall window; a 3D shift-worker head beside the "
                             + "workers and EU rows, a full-width progress bar, then one row per material - its slot "
@@ -254,6 +263,50 @@ public final class ShotFamilies {
                     "Item model: the same item across the render transforms a player sees it in")},
             new Object[] {"worn_", new Family(ShotGroup.ITEM, List.of("R-VIS-05"),
                     "Worn on the body: the armour model sits on the player, front and back")},
+            new Object[] {"worn_jetpack_mk2_", new Family(ShotGroup.ITEM, List.of("R-VIS-05", "R-VIS-01"),
+                    "Jetpack Mk2 on the back (MOD-977), third person: the pack sits on the shoulders, not in the "
+                            + "body or floating off it; the _lit frames show the charged look and the _off frames "
+                            + "the drained one, and the two differ")},
+            new Object[] {"item_jetpack_icons", new Family(ShotGroup.ITEM, List.of("R-VIS-05"),
+                    "Jetpack tiers in the hotbar (MOD-977): the tier-one jetpack and the Mk2, each charged and "
+                            + "drained, side by side - the Mk2 tells itself apart from the tier-one pack at a glance")},
+            new Object[] {"item_jetpack_mk2_tooltip", new Family(ShotGroup.ITEM, List.of("R-GUI-03"),
+                    "Jetpack Mk2 tooltip (MOD-977): the name, charge and stat lines inside the tooltip box, "
+                            + "none clipped at the screen edge; drained (_empty) it is no taller than the drained "
+                            + "tier-one tooltip (_tier_one), and only _shift adds the how-to lines, one per row")},
+            // ── First-person hands ──────────────────────────────────────────────────────────
+            new Object[] {"hand_", new Family(ShotGroup.ITEM, List.of("R-VIS-05"),
+                    "First person, an item in use or held up: both hands and the item where a player expects "
+                            + "them, nothing floating in the air or passing through the item")},
+            new Object[] {"hand_slingshot_draw_", new Family(ShotGroup.ITEM, List.of("R-VIS-05"),
+                    "Slingshot drawn in first person (MOD-961): the second hand grips the pouch and comes back "
+                            + "with it as the pull frame changes (start, 13 and 18 ticks) - the fist is never in "
+                            + "the air beside the pouch and never passes through the slingshot's fork")},
+            new Object[] {"hand_bow_draw_", new Family(ShotGroup.ITEM, List.of("R-VIS-05"),
+                    "Bow drawn in first person (MOD-961): the Electric Bow's frames show the arm, the bow and "
+                            + "the arrow as the vanilla bow's reference frames of the same draw time do, and the "
+                            + "other hand is hidden in both")},
+            new Object[] {"hand_todo_clipboard_", new Family(ShotGroup.ITEM, List.of("R-VIS-05", "R-GUI-03"),
+                    "To-do clipboard held like a vanilla map (MOD-905): in both hands the player's arms hold it "
+                            + "from below, tilted up when looking down and lowered when looking ahead; with a torch "
+                            + "in the other hand, or in the off hand, one arm holds it out at its side. The sheet "
+                            + "faces the camera, the clip on top, the text reads left to right (not mirrored), icons "
+                            + "and have/need counters on their lines, nothing runs off the sheet, no board floats "
+                            + "without a hand")},
+            new Object[] {"world_todo_clipboard_wall", new Family(ShotGroup.WORLD, List.of("R-VIS-04", "R-GUI-03"),
+                    "To-do clipboards on a wall (MOD-905): a short list and a long one with a name cut by an "
+                            + "ellipsis; each line's have/need counter right-aligned - plain ink where the viewer "
+                            + "is short, green where he carries enough - and the done line struck through")},
+            new Object[] {"world_thermoelectric_", new Family(ShotGroup.WORLD, List.of("R-VIS-04", "R-VIS-01"),
+                    "Thermoelectric generators (MOD-811): the demo stand's row of three between magma and blue "
+                            + "ice with its battery box, and a lone generator whose hot face shows above a soul "
+                            + "campfire and whose cold face shows through ice, and a bare one with the idle casing "
+                            + "(the LV machine frame around a thermopile window) - each face its own texture, none "
+                            + "rotated")},
+            new Object[] {"world_battery_box_ports", new Family(ShotGroup.WORLD, List.of("R-VIS-04"),
+                    "Battery box ports (MOD-940): the input face's socket with a blue core, the output face's "
+                            + "with a red one, told apart at a glance; the socket is not stretched or turned "
+                            + "and sits in the middle of its face")},
             new Object[] {"hud_", new Family(ShotGroup.ITEM, List.of("R-GUI-03"),
                     "Hotbar charge HUD: the bar under the item matches its stored EU and does not drift "
                             + "off the icon")},

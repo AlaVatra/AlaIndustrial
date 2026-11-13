@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "minecraft:iron_nugget",
+    "S": "minecraft:stick",
+    "P": "minecraft:paper"
+  },
+  "pattern": [
+    " I ",
+    "SPS",
+    "SPS"
+  ],
+  "result": {
+    "id": "alaindustrial:todo_clipboard"
+  }
+}

@@ -84,6 +84,41 @@ final class EnergyRoleForFaceSnapshot {
 			"piezo_plate[powered=false] DUNSWE=ONOOOO",
 			"piezo_plate@silent_piezo_plate[powered=true] DUNSWE=ONOOOO",
 			"piezo_plate@silent_piezo_plate[powered=false] DUNSWE=ONOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=off,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=off,axis_z=hot_positive] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=off,axis_z=hot_negative] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=hot_positive,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=hot_positive,axis_z=hot_positive] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=hot_positive,axis_z=hot_negative] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=hot_negative,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=hot_negative,axis_z=hot_positive] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=off,axis_y=hot_negative,axis_z=hot_negative] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=off,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=off,axis_z=hot_positive] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=off,axis_z=hot_negative] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=hot_positive,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=hot_positive,axis_z=hot_positive]"
+					+ " DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=hot_positive,axis_z=hot_negative]"
+					+ " DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=hot_negative,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=hot_negative,axis_z=hot_positive]"
+					+ " DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_positive,axis_y=hot_negative,axis_z=hot_negative]"
+					+ " DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=off,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=off,axis_z=hot_positive] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=off,axis_z=hot_negative] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=hot_positive,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=hot_positive,axis_z=hot_positive]"
+					+ " DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=hot_positive,axis_z=hot_negative]"
+					+ " DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=hot_negative,axis_z=off] DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=hot_negative,axis_z=hot_positive]"
+					+ " DUNSWE=OOOOOO",
+			"thermoelectric_generator[axis_x=hot_negative,axis_y=hot_negative,axis_z=hot_negative]"
+					+ " DUNSWE=OOOOOO",
 			"copper_cable[breaker_open=false,down=false,east=false,east_low=false,north=false,north_low"
 					+ "=false,south=false,south_low=false,up=false,west=false,west_low=false] DUNSWE=BBBBBB",
 			"copper_cable@tin_cable[breaker_open=false,down=false,east=false,east_low=false,north=false"

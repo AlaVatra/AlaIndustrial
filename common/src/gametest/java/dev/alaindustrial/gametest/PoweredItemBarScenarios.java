@@ -37,7 +37,9 @@ public final class PoweredItemBarScenarios {
 	private static final Map<String, Integer> COLOR_OVERRIDES = Map.of(
 			"energy_crystal_blank", EnergyTier.MV.color(),
 			"lapotron_crystal_blank", EnergyTier.HV.color(),
-			"resonant_crystal_blank", EnergyTier.HV.color());
+			"resonant_crystal_blank", EnergyTier.HV.color(),
+			// MOD-977: the Jetpack Mk2 charges on MV, and its bar says so.
+			"jetpack_mk2", EnergyTier.MV.color());
 
 	public static void barMatchesContract(GameTestHelper helper) {
 		List<String> problems = new ArrayList<>();

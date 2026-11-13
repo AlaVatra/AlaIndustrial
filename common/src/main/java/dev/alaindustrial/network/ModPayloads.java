@@ -160,6 +160,8 @@ public final class ModPayloads {
 			clientbound(TownPulsePayload.TYPE, TownPulsePayload.CODEC),
 			// MOD-890: the block in the way of the town's work, outlined for the player who pressed «show it».
 			clientbound(TownObstructionPayload.TYPE, TownObstructionPayload.CODEC),
+			// MOD-905: the open to-do clipboard's list, after every change, for that window only.
+			clientbound(TodoClipboardSnapshotPayload.TYPE, TodoClipboardSnapshotPayload.CODEC),
 			// MOD-093: renaming a teleport point — the one string that needs a payload of its own.
 			serverbound(TeleportRenamePayload.TYPE, TeleportRenamePayload.CODEC, TeleportRenamePayload::handle),
 			// MOD-592: a recipe-viewer drop onto a magnet filter cell.
@@ -171,6 +173,9 @@ public final class ModPayloads {
 			// MOD-482: the column bore's on/off switch; the reply is an action-bar line.
 			serverbound(DrillColumnTogglePayload.TYPE, DrillColumnTogglePayload.CODEC,
 					DrillColumnTogglePayload::handle),
+			// MOD-977: the Jetpack Mk2's hover switch; the reply is an action-bar line.
+			serverbound(JetpackHoverTogglePayload.TYPE, JetpackHoverTogglePayload.CODEC,
+					JetpackHoverTogglePayload::handle),
 			// MOD-483: every skill purchase and reset; the skills attachment syncs itself back.
 			serverbound(SkillActionPayload.TYPE, SkillActionPayload.CODEC, SkillActionPayload::handle),
 			// MOD-854: the client asks for a worker's card or a town's roster; the server checks and replies.
@@ -196,5 +201,8 @@ public final class ModPayloads {
 					TownPulseRequestPayload::handle),
 			// MOD-890: «show it» at a stopped job's «In the way» line; the server checks and replies.
 			serverbound(TownObstructionRequestPayload.TYPE, TownObstructionRequestPayload.CODEC,
-					TownObstructionRequestPayload::handle));
+					TownObstructionRequestPayload::handle),
+			// MOD-905: one edit of the open to-do clipboard; the block entity checks rights, revision and limits.
+			serverbound(TodoClipboardEditPayload.TYPE, TodoClipboardEditPayload.CODEC,
+					TodoClipboardEditPayload::handle));
 }

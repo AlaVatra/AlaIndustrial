@@ -299,10 +299,12 @@ public final class MachineTooltips {
 	private static ItemTooltip poweredToolTooltip(ItemStack stack, PoweredToolTooltip tooltip) {
 		ItemTooltip out = new ItemTooltip();
 		Object[] usage = tooltip.usageValues();
-		if (usage.length > 0) {
-			out.stat(TooltipRole.ENERGY, tooltip.usageKey(), null, usage);
-		} else {
-			out.info(tooltip.usageKey());
+		String usageKey = tooltip.usageKey();
+		// No usage key: the tool says how it is used under [SHIFT], in its details (MOD-977).
+		if (usageKey != null && usage.length > 0) {
+			out.stat(TooltipRole.ENERGY, usageKey, null, usage);
+		} else if (usageKey != null) {
+			out.info(usageKey);
 		}
 		addStateLines(stack, tooltip.beforeCharge(), out);
 		if (tooltip.depleted().test(stack)) {
@@ -312,6 +314,12 @@ public final class MachineTooltips {
 					ItemEnergy.shownCapacity(stack));
 		}
 		addStateLines(stack, tooltip.afterCharge(), out);
+		for (Function<ItemStack, MachineTooltipSpec.@Nullable Line> detail : tooltip.details()) {
+			MachineTooltipSpec.Line line = detail.apply(stack);
+			if (line != null) {
+				out.detail(line);
+			}
+		}
 		return out;
 	}
 

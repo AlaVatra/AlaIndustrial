@@ -20,23 +20,26 @@ import org.jspecify.annotations.Nullable;
  * <p>Replaces seven hand-written copies of the same shape in the client's {@code MachineTooltips} (drill,
  * chainsaw, shovel, hoe, saber, bow, jetpack) and the energy pack's eighth.
  *
- * @param usageKey     translation key of the first line, grey
+ * @param usageKey     translation key of the first line, grey; null for a tool that moves it under [SHIFT]
  * @param usageArgs    its arguments, read live (the per-use EU cost, through {@code ServerBalance})
  * @param beforeCharge state lines between the usage line and the charge line; a function returns null when
  *                     the stack has no such state (a drill without the column bore)
  * @param depletedKey  translation key of the line shown instead of the charge
  * @param depleted     when the red line replaces the charge line
  * @param afterCharge  state lines after the charge line
+ * @param details      lines shown only under [SHIFT]: a key action in its own slot, any other line as a detail
  */
-public record PoweredToolTooltip(String usageKey, List<IntSupplier> usageArgs,
+public record PoweredToolTooltip(@Nullable String usageKey, List<IntSupplier> usageArgs,
 		List<Function<ItemStack, MachineTooltipSpec.@Nullable Line>> beforeCharge, String depletedKey,
 		Predicate<ItemStack> depleted,
-		List<Function<ItemStack, MachineTooltipSpec.@Nullable Line>> afterCharge) {
+		List<Function<ItemStack, MachineTooltipSpec.@Nullable Line>> afterCharge,
+		List<Function<ItemStack, MachineTooltipSpec.@Nullable Line>> details) {
 
 	public PoweredToolTooltip {
 		usageArgs = List.copyOf(usageArgs);
 		beforeCharge = List.copyOf(beforeCharge);
 		afterCharge = List.copyOf(afterCharge);
+		details = List.copyOf(details);
 	}
 
 	/** The usual "depleted" rule: no EU left at all — asked without the local capacity (MOD-790). */
@@ -51,29 +54,40 @@ public record PoweredToolTooltip(String usageKey, List<IntSupplier> usageArgs,
 	public static PoweredToolTooltip of(String key, List<IntSupplier> usageArgs) {
 		String prefix = "tooltip.alaindustrial." + key;
 		return new PoweredToolTooltip(prefix + ".usage", usageArgs, List.of(), prefix + ".depleted",
-				PoweredToolTooltip::empty, List.of());
+				PoweredToolTooltip::empty, List.of(), List.of());
 	}
 
 	/** This tooltip with {@code line} added before the charge line. */
 	public PoweredToolTooltip withBeforeCharge(Function<ItemStack, MachineTooltipSpec.@Nullable Line> line) {
 		return new PoweredToolTooltip(usageKey, usageArgs, append(beforeCharge, line), depletedKey,
-				depleted, afterCharge);
+				depleted, afterCharge, details);
 	}
 
 	/** This tooltip with {@code line} added after the charge line. */
 	public PoweredToolTooltip withAfterCharge(Function<ItemStack, MachineTooltipSpec.@Nullable Line> line) {
 		return new PoweredToolTooltip(usageKey, usageArgs, beforeCharge, depletedKey, depleted,
-				append(afterCharge, line));
+				append(afterCharge, line), details);
+	}
+
+	/** This tooltip with {@code line} added under [SHIFT] (MOD-977: how to use it, where it does not work). */
+	public PoweredToolTooltip withDetail(Function<ItemStack, MachineTooltipSpec.@Nullable Line> line) {
+		return new PoweredToolTooltip(usageKey, usageArgs, beforeCharge, depletedKey, depleted, afterCharge,
+				append(details, line));
+	}
+
+	/** This tooltip without the usage line in front: the tool says how it is used under [SHIFT] instead. */
+	public PoweredToolTooltip withoutUsage() {
+		return new PoweredToolTooltip(null, usageArgs, beforeCharge, depletedKey, depleted, afterCharge, details);
 	}
 
 	/** This tooltip with another usage key (a tier that names its own reference tool). */
 	public PoweredToolTooltip withUsageKey(String key) {
-		return new PoweredToolTooltip(key, usageArgs, beforeCharge, depletedKey, depleted, afterCharge);
+		return new PoweredToolTooltip(key, usageArgs, beforeCharge, depletedKey, depleted, afterCharge, details);
 	}
 
 	/** This tooltip with another "depleted" rule (a saber below one hit's worth, a bow that shows uncharged). */
 	public PoweredToolTooltip withDepleted(Predicate<ItemStack> rule) {
-		return new PoweredToolTooltip(usageKey, usageArgs, beforeCharge, depletedKey, rule, afterCharge);
+		return new PoweredToolTooltip(usageKey, usageArgs, beforeCharge, depletedKey, rule, afterCharge, details);
 	}
 
 	/** The usage line's arguments as the line shows them now. */

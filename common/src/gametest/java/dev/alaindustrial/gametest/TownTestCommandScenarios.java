@@ -112,7 +112,8 @@ public final class TownTestCommandScenarios {
 
 	/**
 	 * {@code /ala worker spawn} in a lit, claimed town with no house is refused («no housing»), as the capsule would
-	 * refuse it; {@code /ala worker spawn force} makes a worker of that town with a number from the ledger.
+	 * refuse it; {@code /ala worker spawn force} makes a worker of that town with a number from the ledger, and so it
+	 * does from a source with no player, standing in at the source's own spot (MOD-936).
 	 *
 	 * @implements MOD-824-R5-WORKER-SPAWN — the spawn command makes a worker the capsule's way, its rules unless forced
 	 */
@@ -134,10 +135,26 @@ public final class TownTestCommandScenarios {
 				.filter(record -> !known.contains(record.entity())).findFirst()
 				.orElseThrow(() -> helper.assertionException("no new record in the book"));
 		helper.assertTrue(made.settlement() == town, "the worker belongs to town " + made.settlement());
-		if (helper.getLevel().getEntity(made.entity()) instanceof ShiftWorker worker) {
-			worker.discard();
-		} else {
-			throw helper.assertionException("the new worker is not in the world");
+		known.add(made.entity());
+		// MOD-936: no player at all — the console or `execute positioned` — and the source's own spot stands in.
+		CommandSourceStack console = helper.getLevel().getServer().createCommandSourceStack()
+				.withLevel(helper.getLevel()).withPosition(Vec3.atBottomCenterOf(helper.absolutePos(STAND)))
+				.withSuppressedOutput();
+		int fromConsole = run(helper, console, "ala worker spawn force");
+		helper.assertTrue(fromConsole == 1, "force from a source with no player should make a worker, got "
+				+ fromConsole);
+		helper.assertTrue(ShiftWorkers.livingWorkers(helper.getLevel().getServer(), town) == before + 2,
+				"the console's spawn should add a second living worker to the town");
+		ShiftWorkerRecord second = ShiftWorkers.book(helper.getLevel().getServer()).all().stream()
+				.filter(record -> !known.contains(record.entity())).findFirst()
+				.orElseThrow(() -> helper.assertionException("the console's spawn left no new record"));
+		helper.assertTrue(second.settlement() == town, "the console's worker belongs to town " + second.settlement());
+		for (ShiftWorkerRecord record : List.of(made, second)) {
+			if (helper.getLevel().getEntity(record.entity()) instanceof ShiftWorker worker) {
+				worker.discard();
+			} else {
+				throw helper.assertionException("the new worker " + record.number() + " is not in the world");
+			}
 		}
 		SettlementRegistry.get(helper.getLevel().getServer()).setActive(town, false);
 		helper.succeed();
@@ -168,12 +185,16 @@ public final class TownTestCommandScenarios {
 
 	/** Runs {@code command} as {@code player} with an operator's rights on the test commands' own dispatcher. */
 	private static int run(GameTestHelper helper, ServerPlayer player, String command) {
+		return run(helper, helper.getLevel().getServer().createCommandSourceStack()
+				.withLevel(helper.getLevel()).withEntity(player).withPosition(player.position())
+				.withSuppressedOutput(), command);
+	}
+
+	/** Runs {@code command} from {@code source} on the test commands' own dispatcher. */
+	private static int run(GameTestHelper helper, CommandSourceStack source, String command) {
 		CommandDispatcher<CommandSourceStack> dispatcher = new CommandDispatcher<>();
 		dispatcher.register(Commands.literal("ala").then(ShiftWorkerCommand.tree())
 				.then(Commands.literal("town").then(TownSuppliesCommand.tree())));
-		CommandSourceStack source = helper.getLevel().getServer().createCommandSourceStack()
-				.withLevel(helper.getLevel()).withEntity(player).withPosition(player.position())
-				.withSuppressedOutput();
 		try {
 			return dispatcher.execute(command, source);
 		} catch (CommandSyntaxException e) {

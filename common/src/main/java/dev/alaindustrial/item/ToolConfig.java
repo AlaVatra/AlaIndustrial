@@ -399,6 +399,36 @@ public final class ToolConfig {
 	@Knob(section = Section.TOOLS, min = 0,
 			doc = "Light level (0-15) a thrusting jetpack casts around the flyer; 0 disables the glow.")
 	public static int jetpackFlightLightLevel = 10;
+	// --- Jetpack Mk2 (MOD-977, the tier-two jetpack; ceiling and glow are the tier-one knobs above) ---
+	/** Jetpack Mk2 EU buffer: four tier-one jetpacks, about two minutes of thrust at {@link #jetpackMk2EuPerTick}. */
+	@Knob(section = Section.TOOLS, clientVisible = true, min = 1,
+			doc = "Jetpack Mk2 EU buffer.")
+	public static int jetpackMk2Buffer = 120_000;
+	/** EU the Mk2 burns per tick of thrust: the tier-one price, so the Mk2 sells flight time, not cheap thrust. */
+	@Knob(section = Section.TOOLS, min = 1,
+			doc = "EU the Jetpack Mk2 burns per tick of thrust (jump held while airborne).")
+	public static int jetpackMk2EuPerTick = 50;
+	/** EU the Mk2 burns per tick of hover (holding height or the slow descent): half of thrust. */
+	@Knob(section = Section.TOOLS, min = 1,
+			doc = "EU the Jetpack Mk2 burns per tick while hovering (holding height or descending slowly).")
+	public static int jetpackMk2HoverEuPerTick = 25;
+	/** Max EU/tick the Mk2 accepts while charging (MV ceiling, like the advanced magnet). */
+	@Knob(section = Section.TOOLS, min = 1,
+			doc = "Max EU/t the Jetpack Mk2 accepts while charging in a slot.")
+	public static int jetpackMk2InputRate = 128;
+	/** Multiplier on the tier-one thrust acceleration and rise-speed cap; 1.0 rises like tier one. */
+	@Knob(section = Section.TOOLS, clientVisible = true, min = 1.0, floorTo = 1.0,
+			doc = "Jetpack Mk2 multiplier on the tier-one thrust and rise speed (1.0 = same as tier one).")
+	public static double jetpackMk2RiseMultiplier = 1.5;
+	/** Multiplier on the vanilla air speed while the Mk2 engine runs; 1.0 adds nothing. */
+	@Knob(section = Section.TOOLS, clientVisible = true, min = 1.0, floorTo = 1.0,
+			doc = "Jetpack Mk2 multiplier on the horizontal air speed while its engine runs (1.0 = vanilla).")
+	public static double jetpackMk2HorizontalMultiplier = 1.5;
+	/** Blocks per tick a hovering Mk2 sinks (owner's review 2026-11-12: a tier two holds the player, not a point in
+	 * the air): 0.02 is 0.4 blocks a second, about four blocks in ten seconds. 0 holds the height exactly. */
+	@Knob(section = Section.TOOLS, clientVisible = true, min = 0.0, floorTo = 0.0,
+			doc = "Blocks per tick a hovering Jetpack Mk2 sinks (0.02 = 0.4 blocks a second; 0 holds the height).")
+	public static double jetpackMk2HoverSinkPerTick = 0.02;
 	// --- Scythe bonus seed drop (MOD-315) ---
 	/**
 	 * Global multiplier on the scythe's per-tier bonus-seed chance ({@code ScytheTiers}); 0 disables it,

@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "firstperson_righthand",
+          "firstperson_lefthand",
+          "none"
+        ],
+        "model": {
+          "type": "minecraft:composite",
+          "models": [
+            {
+              "type": "minecraft:model",
+              "model": "alaindustrial:item/todo_clipboard_held"
+            },
+            {
+              "type": "alaindustrial:todo_sheet"
+            }
+          ]
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "property": "minecraft:has_component",
+      "component": "alaindustrial:todo_list",
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "alaindustrial:item/todo_clipboard"
+      },
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "alaindustrial:item/todo_clipboard_written"
+      }
+    }
+  }
+}

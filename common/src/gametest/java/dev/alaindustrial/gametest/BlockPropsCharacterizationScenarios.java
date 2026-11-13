@@ -81,6 +81,7 @@ public final class BlockPropsCharacterizationScenarios {
 			"soot_layer push=pops ticks=none",
 			"teleporter_capsule push=pinned ticks=none",
 			"tempered_iron_ladder push=pops ticks=none",
+			"todo_clipboard push=pops ticks=none",
 			"trellis push=pops ticks=some",
 			"workstation push=pinned ticks=none");
 
