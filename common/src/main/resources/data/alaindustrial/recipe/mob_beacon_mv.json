@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "alaindustrial:electrum_plate",
+    "A": "alaindustrial:advanced_circuit",
+    "G": "minecraft:glowstone",
+    "B": "alaindustrial:mob_beacon",
+    "X": "alaindustrial:energy_crystal"
+  },
+  "pattern": [
+    "PAP",
+    "GBG",
+    "PXP"
+  ],
+  "result": {
+    "id": "alaindustrial:mob_beacon_mv"
+  }
+}

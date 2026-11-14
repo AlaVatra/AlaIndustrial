@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "alaindustrial:electrum_plate",
+    "A": "alaindustrial:advanced_circuit",
+    "R": "alaindustrial:resonance_coil",
+    "B": "alaindustrial:mob_beacon_mv",
+    "X": "alaindustrial:lapotron_crystal"
+  },
+  "pattern": [
+    "PAP",
+    "RBR",
+    "PXP"
+  ],
+  "result": {
+    "id": "alaindustrial:mob_beacon_hv"
+  }
+}

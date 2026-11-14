@@ -69,6 +69,11 @@ public final class ShotFamilies {
                             + "two paths, the bridge with its saddles and the cart with its drill - and no cube of the "
                             + "blocks under it shows through, flickers or pokes out; in quarry_frame_loose the same "
                             + "view with the far tower's top head layer gone and every block of the frame visible")},
+            new Object[] {"drill_bore_zone_", new Family(ShotGroup.WORLD, List.of("R-PHY-10"),
+                    "Drill bore zone (MOD-967): in drill_bore_zone_on the aimed stone and the four stones of the "
+                            + "cross around it (above, below, left, right) each carry the game's thin dark block "
+                            + "outline, the same on all five, with a line between neighbours and none on the four "
+                            + "corner stones; the _off frames are the same view with only the aimed stone outlined")},
             new Object[] {"root_inspect_", new Family(ShotGroup.WORLD, List.of("R-VIS-04"),
                     "One and two root segments appear through original soil only while crouching")},
             // ── Screens ──────────────────────────────────────────────────────────────────────

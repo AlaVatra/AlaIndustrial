@@ -506,6 +506,50 @@ public final class MachineRecipeScenarios {
 				Config.compressorDuration);
 	}
 
+	// ── The snow and ice ladder (MOD-966): four of the lower grade for one of the next ──────────────
+
+	/**
+	 * TC-COMP-001-FUN12 (MOD-966): the ladder's first rung — four snow blocks for one ice.
+	 *
+	 * <p><b>This pins the RECIPE, not the mechanic</b> (the batch mechanic is covered above by glowstone and
+	 * redstone): what nothing else reads is the number 4 in {@code snow_block.json}. Edit it back to the old
+	 * one-for-one and the leftover here is 4 instead of 1, so this goes red while the MOD-455 scenarios stay
+	 * green. Five blocks rather than four, so a leftover of exactly one proves the machine took the batch and
+	 * stopped.
+	 *
+	 * @implements TC-COMP-001-FUN12 — the compressor compacts 4× snow_block into 1 ice in one operation
+	 *     (130 ticks), leaving the 5th block untouched (MOD-966 stepped ladder).
+	 * @covers R-GUI-02
+	 */
+	public static void tcComp001Fun12_compressorCompactsSnowBlocksIntoIce(GameTestHelper helper) {
+		assertConsumesBatchPerOperation(helper, compressor(), Items.SNOW_BLOCK, 5, 4,
+				Config.compressorDuration, Items.ICE, 1);
+	}
+
+	/**
+	 * TC-COMP-001-FUN10 (MOD-966): the second rung — four ice for one packed ice.
+	 *
+	 * @implements TC-COMP-001-FUN10 — the compressor compacts 4× ice into 1 packed_ice in one operation
+	 *     (130 ticks), leaving the 5th ice untouched (MOD-966 stepped ladder).
+	 * @covers R-GUI-02
+	 */
+	public static void tcComp001Fun10_compressorCompactsIceIntoPackedIce(GameTestHelper helper) {
+		assertConsumesBatchPerOperation(helper, compressor(), Items.ICE, 5, 4,
+				Config.compressorDuration, Items.PACKED_ICE, 1);
+	}
+
+	/**
+	 * TC-COMP-001-FUN11 (MOD-966): the third rung — four packed ice for one blue ice.
+	 *
+	 * @implements TC-COMP-001-FUN11 — the compressor compacts 4× packed_ice into 1 blue_ice in one
+	 *     operation (130 ticks), leaving the 5th packed ice untouched (MOD-966 stepped ladder).
+	 * @covers R-GUI-02
+	 */
+	public static void tcComp001Fun11_compressorCompactsPackedIceIntoBlueIce(GameTestHelper helper) {
+		assertConsumesBatchPerOperation(helper, compressor(), Items.PACKED_ICE, 5, 4,
+				Config.compressorDuration, Items.BLUE_ICE, 1);
+	}
+
 	/**
 	 * TC-MACH-004-FUN02: extractor consumes exactly 1 blaze_rod per operation, yielding exactly 3× blaze_powder.
 	 *

@@ -2933,6 +2933,66 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:mangrove_iron_chest_boat plain : none
 == alaindustrial:mangrove_shielding_chest_boat plain : none
 == alaindustrial:mangrove_silver_chest_boat plain : none
+== alaindustrial:mob_beacon plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_input(<"4" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_input(<"4" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.buffer(<"2 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"◎ " {#55FFFF} + tooltip.alaindustrial.range(<"16" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.blocks {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon.purpose {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon.purpose {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"◎ " {#55FFFF} + tooltip.alaindustrial.range(<"16" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.blocks {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:mob_beacon_hv plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon_hv.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_input(<"32" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon_hv.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_input(<"32" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"■ " {#FF55FF} + tooltip.alaindustrial.tier_hv(<"HV" {#FF55FF}>) {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.buffer(<"32 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"◎ " {#55FFFF} + tooltip.alaindustrial.range(<"48" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.blocks {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon_hv.purpose {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon_hv.purpose {#AAAAAA}
+"■ " {#FF55FF} + tooltip.alaindustrial.tier_hv(<"HV" {#FF55FF}>) {#AAAAAA}
+"◎ " {#55FFFF} + tooltip.alaindustrial.range(<"48" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.blocks {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:mob_beacon_mv plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon_mv.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_input(<"16" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon_mv.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_input(<"16" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_mv(<"MV" {#55FF55}>) {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.buffer(<"8 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"◎ " {#55FFFF} + tooltip.alaindustrial.range(<"32" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.blocks {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon_mv.purpose {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_beacon_mv.purpose {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_mv(<"MV" {#55FF55}>) {#AAAAAA}
+"◎ " {#55FFFF} + tooltip.alaindustrial.range(<"32" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.blocks {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:mob_repeller plain
 -- plain eu
 "ℹ " {#AAAAAA} + tooltip.alaindustrial.mob_repeller.purpose {#AAAAAA}

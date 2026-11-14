@@ -543,5 +543,11 @@ final class EnergyRoleForFaceSnapshot {
 			"mob_repeller_hv[lit=true] DUNSWE=IIIIII",
 			"mob_repeller_hv[lit=false] DUNSWE=IIIIII",
 			"electric_mob_trap[lit=true] DUNSWE=INIIII",
-			"electric_mob_trap[lit=false] DUNSWE=INIIII");
+			"electric_mob_trap[lit=false] DUNSWE=INIIII",
+			"mob_beacon[lit=true] DUNSWE=INNNNN",
+			"mob_beacon[lit=false] DUNSWE=INNNNN",
+			"mob_beacon@mob_beacon_mv[lit=true] DUNSWE=INNNNN",
+			"mob_beacon@mob_beacon_mv[lit=false] DUNSWE=INNNNN",
+			"mob_beacon@mob_beacon_hv[lit=true] DUNSWE=INNNNN",
+			"mob_beacon@mob_beacon_hv[lit=false] DUNSWE=INNNNN");
 }

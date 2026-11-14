@@ -1,0 +1,734 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "alaindustrial:block/mob_beacon_mv_frame",
+    "glass": "minecraft:block/glass",
+    "obsidian": "minecraft:block/obsidian",
+    "core": "minecraft:block/beacon",
+    "frame": "alaindustrial:block/mob_beacon_mv_frame",
+    "plate": "alaindustrial:block/mob_beacon_mv_plate_on",
+    "plate_top": "alaindustrial:block/mob_beacon_plate_top",
+    "socket": "alaindustrial:block/mob_beacon_socket"
+  },
+  "elements": [
+    {
+      "__comment": "glass_shell",
+      "from": [
+        0.5,
+        2,
+        0.5
+      ],
+      "to": [
+        15.5,
+        15.5,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            0.5,
+            15.5,
+            14
+          ],
+          "texture": "#glass"
+        },
+        "east": {
+          "uv": [
+            0.5,
+            0.5,
+            15.5,
+            14
+          ],
+          "texture": "#glass"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            0.5,
+            15.5,
+            14
+          ],
+          "texture": "#glass"
+        },
+        "west": {
+          "uv": [
+            0.5,
+            0.5,
+            15.5,
+            14
+          ],
+          "texture": "#glass"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            0.5,
+            15.5,
+            15.5
+          ],
+          "texture": "#glass"
+        }
+      }
+    },
+    {
+      "__comment": "obsidian_base",
+      "from": [
+        2,
+        2,
+        2
+      ],
+      "to": [
+        14,
+        4.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            11.5,
+            14,
+            14
+          ],
+          "texture": "#obsidian"
+        },
+        "east": {
+          "uv": [
+            2,
+            11.5,
+            14,
+            14
+          ],
+          "texture": "#obsidian"
+        },
+        "south": {
+          "uv": [
+            2,
+            11.5,
+            14,
+            14
+          ],
+          "texture": "#obsidian"
+        },
+        "west": {
+          "uv": [
+            2,
+            11.5,
+            14,
+            14
+          ],
+          "texture": "#obsidian"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#obsidian"
+        }
+      }
+    },
+    {
+      "__comment": "crystal",
+      "from": [
+        3.5,
+        4.5,
+        3.5
+      ],
+      "to": [
+        12.5,
+        14,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            2,
+            12.5,
+            11.5
+          ],
+          "texture": "#core"
+        },
+        "east": {
+          "uv": [
+            3.5,
+            2,
+            12.5,
+            11.5
+          ],
+          "texture": "#core"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            2,
+            12.5,
+            11.5
+          ],
+          "texture": "#core"
+        },
+        "west": {
+          "uv": [
+            3.5,
+            2,
+            12.5,
+            11.5
+          ],
+          "texture": "#core"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            3.5,
+            12.5,
+            12.5
+          ],
+          "texture": "#core"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "__comment": "post_0_0",
+      "from": [
+        0,
+        2,
+        0
+      ],
+      "to": [
+        1.5,
+        14.5,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14
+          ],
+          "texture": "#frame"
+        },
+        "south": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14
+          ],
+          "texture": "#frame"
+        },
+        "west": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "west"
+        }
+      }
+    },
+    {
+      "__comment": "post_0_14.5",
+      "from": [
+        0,
+        2,
+        14.5
+      ],
+      "to": [
+        1.5,
+        14.5,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14
+          ],
+          "texture": "#frame"
+        },
+        "east": {
+          "uv": [
+            14.5,
+            1.5,
+            16.0,
+            14
+          ],
+          "texture": "#frame"
+        },
+        "south": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            1.5,
+            16.0,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "west"
+        }
+      }
+    },
+    {
+      "__comment": "post_14.5_0",
+      "from": [
+        14.5,
+        2,
+        0
+      ],
+      "to": [
+        16.0,
+        14.5,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.5,
+            1.5,
+            16.0,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            14.5,
+            1.5,
+            16.0,
+            14
+          ],
+          "texture": "#frame"
+        },
+        "west": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14
+          ],
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "__comment": "post_14.5_14.5",
+      "from": [
+        14.5,
+        2,
+        14.5
+      ],
+      "to": [
+        16.0,
+        14.5,
+        16.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14.5,
+            1.5,
+            16.0,
+            14
+          ],
+          "texture": "#frame"
+        },
+        "east": {
+          "uv": [
+            14.5,
+            1.5,
+            16.0,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            14.5,
+            1.5,
+            16.0,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            1.5,
+            16.0,
+            14
+          ],
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "__comment": "top_ring_n",
+      "from": [
+        0,
+        14.5,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ],
+          "texture": "#frame"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1.5,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ],
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "__comment": "top_ring_s",
+      "from": [
+        0,
+        14.5,
+        14.5
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ],
+          "texture": "#frame"
+        },
+        "east": {
+          "uv": [
+            14.5,
+            0,
+            16,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            14.5,
+            0,
+            16,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            14.5,
+            16,
+            16
+          ],
+          "texture": "#frame",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0,
+            14.5,
+            16,
+            16
+          ],
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "__comment": "top_ring_w",
+      "from": [
+        0,
+        14.5,
+        1.5
+      ],
+      "to": [
+        1.5,
+        16,
+        14.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.5,
+            0,
+            14.5,
+            1.5
+          ],
+          "texture": "#frame"
+        },
+        "west": {
+          "uv": [
+            1.5,
+            0,
+            14.5,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14.5
+          ],
+          "texture": "#frame",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0,
+            1.5,
+            1.5,
+            14.5
+          ],
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "__comment": "top_ring_e",
+      "from": [
+        14.5,
+        14.5,
+        1.5
+      ],
+      "to": [
+        16,
+        16,
+        14.5
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.5,
+            0,
+            14.5,
+            1.5
+          ],
+          "texture": "#frame",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            1.5,
+            0,
+            14.5,
+            1.5
+          ],
+          "texture": "#frame"
+        },
+        "up": {
+          "uv": [
+            14.5,
+            1.5,
+            16,
+            14.5
+          ],
+          "texture": "#frame",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            14.5,
+            1.5,
+            16,
+            14.5
+          ],
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "__comment": "base_plate",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#plate",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#plate",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#plate",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#plate",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#plate_top"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#socket",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

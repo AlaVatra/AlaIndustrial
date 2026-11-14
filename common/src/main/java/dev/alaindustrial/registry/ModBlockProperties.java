@@ -83,6 +83,14 @@ public final class ModBlockProperties {
 	}
 
 	/**
+	 * Light emission of a running Mob Beacon (MOD-968): <b>10</b>, the soft glow of its lens and windows. Below the
+	 * repeller's 14 on purpose: the beacon shows mobs, it is not meant to light the yard and keep them from spawning.
+	 */
+	public static int beaconLight(BlockState state) {
+		return state.getValue(BlockStateProperties.LIT) ? 10 : 0;
+	}
+
+	/**
 	 * Per-state light emission for the Charging Station (MOD-274). Unlike {@link #litLight} this reads a
 	 * four-valued {@code state} property, so the levels live on {@link ChargePadState} itself rather than
 	 * as magic numbers here — the enum is where "what is the station telling the player" is decided.

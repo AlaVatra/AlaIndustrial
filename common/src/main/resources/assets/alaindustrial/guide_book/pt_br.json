@@ -230,6 +230,11 @@
               ],
               "result_id": "alaindustrial:wind_mill",
               "result_count": 1
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -268,6 +273,11 @@
               ],
               "result_id": "alaindustrial:water_mill",
               "result_count": 1
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -381,7 +391,73 @@
                 ""
               ],
               "result_id": "alaindustrial:lightning_rod_generator",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "",
+                    "minecraft:lightning_rod",
+                    "",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_cable",
+                    "",
+                    "alaindustrial:electronic_circuit",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:lightning_rod_generator",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:copper_ingot",
+                    "",
+                    "minecraft:copper_ingot",
+                    "alaindustrial:iron_plate",
+                    "minecraft:copper_ingot",
+                    "",
+                    "alaindustrial:copper_cable",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:lightning_rod_conductor_tip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:gold_plate",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:gold_plate",
+                    "alaindustrial:lightning_rod_conductor_tip_reinforced",
+                    "alaindustrial:gold_plate",
+                    "",
+                    "alaindustrial:electronic_circuit",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:lightning_rod_conductor_tip_advanced",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:lightning_rod_conductor_tip",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:lightning_rod_conductor_tip_reinforced",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -422,6 +498,24 @@
                 "Energia: 8 EU/t (dia)",
                 "Buffer: 16 000 EU"
               ]
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação com forma",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "minecraft:glass",
+                "alaindustrial:tempered_iron_plate",
+                "minecraft:glass",
+                "alaindustrial:machine_casing",
+                "minecraft:glass",
+                "alaindustrial:tempered_iron_plate",
+                "minecraft:glass",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:concentrator_section",
+              "result_count": 2
             }
           ]
         },
@@ -554,7 +648,83 @@
                 "minecraft:oak_planks"
               ],
               "result_id": "alaindustrial:mob_wheel_controller",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:oak_planks",
+                    "alaindustrial:wooden_gear",
+                    "minecraft:oak_planks",
+                    "minecraft:oak_planks",
+                    "alaindustrial:copper_cable",
+                    "minecraft:oak_planks",
+                    "minecraft:oak_planks",
+                    "minecraft:copper_ingot",
+                    "minecraft:oak_planks"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:mob_wheel_controller",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:stick",
+                    "minecraft:oak_planks",
+                    "minecraft:stick",
+                    "minecraft:stick",
+                    "minecraft:oak_planks",
+                    "minecraft:stick",
+                    "minecraft:stick",
+                    "minecraft:oak_planks",
+                    "minecraft:stick"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:mob_wheel_frame",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "minecraft:oak_planks",
+                    "minecraft:stick",
+                    "minecraft:oak_planks",
+                    "minecraft:stick",
+                    "alaindustrial:wooden_gear",
+                    "minecraft:stick",
+                    "minecraft:oak_planks",
+                    "minecraft:stick",
+                    "minecraft:oak_planks"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:mob_wheel_rotor",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:oak_fence_gate",
+                    "minecraft:stick",
+                    "minecraft:stick",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:mob_wheel_gate",
+                  "result_count": 1
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Portão: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -591,7 +761,41 @@
                 ""
               ],
               "result_id": "alaindustrial:piezo_plate",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:stone_pressure_plate",
+                    "minecraft:quartz",
+                    "alaindustrial:copper_cable",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:piezo_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:piezo_plate",
+                    "minecraft:string",
+                    "minecraft:string",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:silent_piezo_plate",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -1006,7 +1210,41 @@
                 ""
               ],
               "result_id": "alaindustrial:copper_cable",
-              "result_count": 3
+              "result_count": 3,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:copper_ingot",
+                    "minecraft:copper_ingot",
+                    "minecraft:copper_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:copper_cable",
+                  "result_count": 3
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:iron_ingot",
+                    "",
+                    "minecraft:iron_ingot",
+                    "minecraft:lever",
+                    "minecraft:iron_ingot",
+                    "",
+                    "minecraft:iron_ingot",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:cable_breaker",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -1161,7 +1399,41 @@
                 "alaindustrial:shielding_alloy_plate"
               ],
               "result_id": "alaindustrial:reactor_controller",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:reactor_circuit",
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:shielding_alloy_reinforced_plate",
+                    "alaindustrial:advanced_machine_casing",
+                    "alaindustrial:shielding_alloy_reinforced_plate",
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:control_rod_drive",
+                    "alaindustrial:shielding_alloy_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reactor_controller",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:palladium_plate",
+                    "alaindustrial:resonance_coil",
+                    "alaindustrial:palladium_plate",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:palladium_plate",
+                    "minecraft:redstone",
+                    "alaindustrial:palladium_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reactor_circuit",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -1643,6 +1915,11 @@
               ],
               "result_id": "alaindustrial:sawmill",
               "result_count": 1
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -1946,7 +2223,89 @@
                 "minecraft:iron_ingot"
               ],
               "result_id": "alaindustrial:recycler",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:iron_ingot",
+                    "alaindustrial:recycler_blades_iron",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:recycler_blades_iron",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:recycler_blades_iron",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:iron_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:recycler",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:slag_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:slag_poor",
+                  "result_count": 9
+                },
+                {
+                  "grid": [
+                    "alaindustrial:slag_poor",
+                    "alaindustrial:slag_poor",
+                    "alaindustrial:slag_poor",
+                    "alaindustrial:slag_poor",
+                    "alaindustrial:slag_poor",
+                    "alaindustrial:slag_poor",
+                    "alaindustrial:slag_poor",
+                    "alaindustrial:slag_poor",
+                    "alaindustrial:slag_poor"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:slag_block",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:iron_ingot",
+                    "",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:basic_bearing",
+                    "minecraft:iron_ingot",
+                    "",
+                    "alaindustrial:iron_gear",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:recycler_blades_iron",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:diamond",
+                    "",
+                    "minecraft:diamond",
+                    "alaindustrial:recycler_blades_tempered",
+                    "minecraft:diamond",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:recycler_blades_diamond",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -2210,7 +2569,41 @@
                 "minecraft:iron_ingot"
               ],
               "result_id": "alaindustrial:distillation_column",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:copper_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:copper_plate",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:machine_casing",
+                    "minecraft:iron_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:distillation_column",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:copper_plate",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:copper_plate",
+                    "",
+                    "alaindustrial:copper_plate",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:copper_plate",
+                    "alaindustrial:iron_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:rectification_section",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         }
@@ -2775,6 +3168,54 @@
                 },
                 {
                   "grid": [
+                    "alaindustrial:tin_block",
+                    "",
+                    "",
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "",
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tin_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tin_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "alaindustrial:tin_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tin_wall",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
                     "alaindustrial:silver_ingot",
                     "alaindustrial:silver_ingot",
                     "alaindustrial:silver_ingot",
@@ -2788,6 +3229,54 @@
                   "recipe_type": "Fabricação com forma",
                   "result_id": "alaindustrial:silver_block",
                   "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_block",
+                    "",
+                    "",
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "",
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:silver_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:silver_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "alaindustrial:silver_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:silver_wall",
+                  "result_count": 6
                 },
                 {
                   "grid": [
@@ -2807,6 +3296,54 @@
                 },
                 {
                   "grid": [
+                    "alaindustrial:nickel_block",
+                    "",
+                    "",
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "",
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:nickel_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:nickel_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "alaindustrial:nickel_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:nickel_wall",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
                     "alaindustrial:uranium_ingot",
                     "alaindustrial:uranium_ingot",
                     "alaindustrial:uranium_ingot",
@@ -2820,6 +3357,54 @@
                   "recipe_type": "Fabricação com forma",
                   "result_id": "alaindustrial:uranium_block",
                   "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:uranium_block",
+                    "",
+                    "",
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "",
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:uranium_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:uranium_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "alaindustrial:uranium_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:uranium_wall",
+                  "result_count": 6
                 },
                 {
                   "grid": [
@@ -2839,6 +3424,54 @@
                 },
                 {
                   "grid": [
+                    "alaindustrial:palladium_block",
+                    "",
+                    "",
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "",
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:palladium_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:palladium_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "alaindustrial:palladium_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:palladium_wall",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
                     "alaindustrial:bronze_ingot",
                     "alaindustrial:bronze_ingot",
                     "alaindustrial:bronze_ingot",
@@ -2852,6 +3485,54 @@
                   "recipe_type": "Fabricação com forma",
                   "result_id": "alaindustrial:bronze_block",
                   "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:bronze_block",
+                    "",
+                    "",
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "",
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:bronze_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:bronze_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "alaindustrial:bronze_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:bronze_wall",
+                  "result_count": 6
                 },
                 {
                   "grid": [
@@ -2871,6 +3552,54 @@
                 },
                 {
                   "grid": [
+                    "alaindustrial:invar_block",
+                    "",
+                    "",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:invar_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:invar_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:invar_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:invar_wall",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
                     "alaindustrial:cupronickel_ingot",
                     "alaindustrial:cupronickel_ingot",
                     "alaindustrial:cupronickel_ingot",
@@ -2884,6 +3613,54 @@
                   "recipe_type": "Fabricação com forma",
                   "result_id": "alaindustrial:cupronickel_block",
                   "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:cupronickel_block",
+                    "",
+                    "",
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "",
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:cupronickel_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:cupronickel_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "alaindustrial:cupronickel_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:cupronickel_wall",
+                  "result_count": 6
                 },
                 {
                   "grid": [
@@ -2903,6 +3680,54 @@
                 },
                 {
                   "grid": [
+                    "alaindustrial:electrum_block",
+                    "",
+                    "",
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "",
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electrum_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electrum_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "alaindustrial:electrum_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electrum_wall",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
                     "alaindustrial:netherite_alloy_ingot",
                     "alaindustrial:netherite_alloy_ingot",
                     "alaindustrial:netherite_alloy_ingot",
@@ -2919,6 +3744,54 @@
                 },
                 {
                   "grid": [
+                    "alaindustrial:netherite_alloy_block",
+                    "",
+                    "",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:netherite_alloy_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:netherite_alloy_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:netherite_alloy_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:netherite_alloy_wall",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
                     "alaindustrial:shielding_alloy_ingot",
                     "alaindustrial:shielding_alloy_ingot",
                     "alaindustrial:shielding_alloy_ingot",
@@ -2932,6 +3805,102 @@
                   "recipe_type": "Fabricação com forma",
                   "result_id": "alaindustrial:shielding_alloy_block",
                   "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_alloy_block",
+                    "",
+                    "",
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "",
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:shielding_alloy_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:shielding_alloy_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "alaindustrial:shielding_alloy_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:shielding_alloy_wall",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_block",
+                    "",
+                    "",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:tempered_iron_block",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_wall",
+                  "result_count": 6
                 },
                 {
                   "grid": [
@@ -3004,6 +3973,24 @@
               "type": "text",
               "title": "Minério de Níquel",
               "text": "O mais raro dos metais do mod — minério no mundo e a cadeia bruto → pó → lingote; o material para ligas MV e carcaças de máquinas."
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação sem forma",
+              "grid": [
+                "alaindustrial:nickel_block",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:nickel_ingot",
+              "result_count": 9
             }
           ]
         },
@@ -3046,6 +4033,58 @@
               "type": "text",
               "title": "Minério de Estanho",
               "text": "Um metal inicial do mod — minério no mundo e a cadeia bruto → pó → lingote; o material base para fios e circuitos LV."
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação sem forma",
+              "grid": [
+                "alaindustrial:tin_block",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:tin_ingot",
+              "result_count": 9,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tin_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:tin_ingot",
+                  "result_count": 9
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:glass_pane",
+                    "",
+                    "alaindustrial:tin_plate",
+                    "",
+                    "alaindustrial:tin_plate",
+                    "alaindustrial:tin_plate",
+                    "alaindustrial:tin_plate",
+                    "alaindustrial:tin_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:empty_can",
+                  "result_count": 8
+                }
+              ]
             }
           ]
         },
@@ -3077,6 +4116,58 @@
               "type": "text",
               "title": "Minério de Paládio",
               "text": "O único minério do Nether do mod — escondido em netherrack, basalto e pedra do abismo, exige picareta de diamante e é processado em pó, lingote e placa."
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação sem forma",
+              "grid": [
+                "alaindustrial:palladium_block",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:palladium_ingot",
+              "result_count": 9,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:palladium_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:palladium_ingot",
+                  "result_count": 9
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:palladium_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:palladium_plate",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -3162,6 +4253,24 @@
               "type": "text",
               "title": "Minério de Prata",
               "text": "Um metal de minério raro do mod — bloco de minério e a cadeia bruto → pó → lingote; o material para circuitos e componentes de nível intermediário."
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação sem forma",
+              "grid": [
+                "alaindustrial:silver_block",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:silver_ingot",
+              "result_count": 9
             }
           ]
         },
@@ -3216,6 +4325,24 @@
               "type": "text",
               "title": "Minério de Urânio",
               "text": "O minério mais raro do mod — extraído com picareta de ferro e processado em pó e lingote; já é usado na tocha, no teletransportador e na incubadora, e futuramente em máquinas nucleares."
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação sem forma",
+              "grid": [
+                "alaindustrial:uranium_block",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:uranium_ingot",
+              "result_count": 9
             }
           ]
         },
@@ -3245,7 +4372,57 @@
                 ""
               ],
               "result_id": "alaindustrial:shielding_alloy_ingot",
-              "result_count": 9
+              "result_count": 9,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:shielding_alloy_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:shielding_alloy_ingot",
+                  "result_count": 9
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:shielding_alloy_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:shielding_alloy_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:depleted_uranium",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:shielding_alloy_reinforced_plate",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -3343,6 +4520,11 @@
               ],
               "result_id": "alaindustrial:incubator",
               "result_count": 1
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Vidro de Cúpula: serve qualquer um dos 18 tipos"
             }
           ]
         },
@@ -3452,7 +4634,62 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:apiary_drone_station",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:fluid_tank",
+                    "alaindustrial:iron_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:apiary_drone_station",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:oak_planks",
+                    "minecraft:honeycomb",
+                    "minecraft:oak_planks",
+                    "alaindustrial:iron_plate",
+                    "minecraft:honeycomb",
+                    "alaindustrial:iron_plate",
+                    "minecraft:oak_planks",
+                    "alaindustrial:iron_plate",
+                    "minecraft:oak_planks"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:apiary_drone_hive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:copper_ingot",
+                    "",
+                    "minecraft:copper_ingot",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:iron_ingot",
+                    "minecraft:copper_ingot",
+                    "minecraft:glass_bottle",
+                    "minecraft:copper_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:apiary_drone",
+                  "result_count": 1
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -3489,7 +4726,41 @@
                 "minecraft:iron_ingot"
               ],
               "result_id": "alaindustrial:garden_drone_station",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:copper_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:copper_ingot",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:garden_drone_station",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:copper_ingot",
+                    "",
+                    "minecraft:copper_ingot",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:iron_ingot",
+                    "minecraft:copper_ingot",
+                    "minecraft:hopper",
+                    "minecraft:copper_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:garden_drone",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -3526,7 +4797,94 @@
                 "alaindustrial:crystal_farm_floor"
               ],
               "result_id": "alaindustrial:crystal_farm_controller",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:crystal_farm_floor",
+                    "minecraft:amethyst_shard",
+                    "alaindustrial:crystal_farm_floor",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:crystal_farm_floor",
+                    "alaindustrial:crystal_farm_floor",
+                    "alaindustrial:crystal_farm_floor"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:crystal_farm_controller",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:crystal_farm_floor",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:crystal_farm_glass"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:crystal_farm_glass",
+                  "result_count": 8
+                },
+                {
+                  "grid": [
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:crystal_farm_glass",
+                    "",
+                    "alaindustrial:crystal_farm_glass",
+                    "alaindustrial:crystal_farm_glass",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron_plate",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:crystal_farm_door",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "minecraft:quartz",
+                    "minecraft:smooth_basalt",
+                    "minecraft:quartz",
+                    "minecraft:smooth_basalt",
+                    "minecraft:amethyst_block",
+                    "minecraft:smooth_basalt",
+                    "minecraft:quartz",
+                    "minecraft:smooth_basalt",
+                    "minecraft:quartz"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:crystal_seedbed",
+                  "result_count": 1
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Vidro de Estufa: serve qualquer um dos 19 tipos"
             }
           ]
         },
@@ -3642,7 +5000,73 @@
                 ""
               ],
               "result_id": "alaindustrial:industrial_concrete",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:industrial_concrete_slab",
+                    "",
+                    "",
+                    "alaindustrial:industrial_concrete_slab",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:industrial_concrete",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:gravel",
+                    "alaindustrial:cement",
+                    "minecraft:gravel",
+                    "minecraft:sand",
+                    "minecraft:water_bucket",
+                    "minecraft:sand",
+                    "minecraft:gravel",
+                    "alaindustrial:cement",
+                    "minecraft:gravel"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:fresh_concrete",
+                  "result_count": 8
+                },
+                {
+                  "grid": [
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:industrial_concrete_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:industrial_concrete",
+                    "",
+                    "",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:industrial_concrete_stairs",
+                  "result_count": 4
+                }
+              ]
             }
           ]
         },
@@ -3672,7 +5096,89 @@
                 ""
               ],
               "result_id": "alaindustrial:tempered_iron_bars",
-              "result_count": 16
+              "result_count": 16,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_bars",
+                  "result_count": 16
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_ladder",
+                  "result_count": 8
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_trapdoor",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_chain",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reinforced_glass_trapdoor",
+                  "result_count": 2
+                }
+              ]
             }
           ]
         },
@@ -3822,7 +5328,185 @@
                 "alaindustrial:tempered_iron_plate"
               ],
               "result_id": "alaindustrial:quarry_foundation",
-              "result_count": 4
+              "result_count": 4,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:tempered_iron_block",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:quarry_foundation",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:invar_block",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:invar_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:invar_quarry_foundation",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:netherite_alloy_ingot",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:netherite_alloy_ingot",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:netherite_alloy_block",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:netherite_alloy_ingot",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:netherite_alloy_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:netherite_alloy_quarry_foundation",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron_bars",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_scaffold",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "minecraft:rail",
+                    "alaindustrial:tempered_iron_plate",
+                    "minecraft:rail",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:concrete_rail_beam",
+                  "result_count": 3
+                },
+                {
+                  "grid": [
+                    "minecraft:rail",
+                    "alaindustrial:tempered_iron_plate",
+                    "minecraft:rail",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:plate_rail_beam",
+                  "result_count": 3
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reinforced_plate_block",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:reinforced_plate_slab",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_plate_slab",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reinforced_plate_block",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:reinforced_plate_block",
+                    "alaindustrial:reinforced_plate_block",
+                    "alaindustrial:reinforced_plate_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reinforced_plate_slab",
+                  "result_count": 6
+                },
+                {
+                  "grid": [
+                    "alaindustrial:reinforced_plate_block",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_plate_block",
+                    "alaindustrial:reinforced_plate_block",
+                    "",
+                    "alaindustrial:reinforced_plate_block",
+                    "alaindustrial:reinforced_plate_block",
+                    "alaindustrial:reinforced_plate_block"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reinforced_plate_stairs",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "minecraft:yellow_dye",
+                    "alaindustrial:industrial_concrete",
+                    "minecraft:black_dye",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete",
+                    "alaindustrial:industrial_concrete"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:hazard_stripe_block",
+                  "result_count": 8
+                }
+              ]
             }
           ]
         },
@@ -3882,7 +5566,41 @@
                 "alaindustrial:shielding_alloy_reinforced_plate"
               ],
               "result_id": "alaindustrial:reactor_door",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:reactor_glass",
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:insulated_copper_cable",
+                    "minecraft:iron_door",
+                    "alaindustrial:insulated_copper_cable",
+                    "alaindustrial:shielding_alloy_reinforced_plate",
+                    "alaindustrial:control_rod_drive",
+                    "alaindustrial:shielding_alloy_reinforced_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reactor_door",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:shielding_alloy_plate",
+                    "alaindustrial:shielding_alloy_plate",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:tempered_iron_plate",
+                    "minecraft:piston",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:control_rod_drive",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -3920,6 +5638,11 @@
               ],
               "result_id": "alaindustrial:iron_chest",
               "result_count": 1
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Baú de Cobre: serve qualquer um dos 8 tipos"
             }
           ]
         },
@@ -4095,6 +5818,44 @@
           ]
         },
         {
+          "id": "mob_beacon_hv",
+          "title": "Farol de criaturas grande",
+          "icon": "alaindustrial:mob_beacon_hv",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Farol de criaturas grande",
+              "text": "O nível mais alto do farol de criaturas — contorna toda criatura num raio de 48 blocos por 32 EU/t; fabricado a partir do farol médio."
+            },
+            {
+              "type": "stats",
+              "title": "Estatísticas",
+              "lines": [
+                "Energia: 32 EU/t (destaque)",
+                "Buffer: 32000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação com forma",
+              "grid": [
+                "alaindustrial:electrum_plate",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:electrum_plate",
+                "alaindustrial:resonance_coil",
+                "alaindustrial:mob_beacon_mv",
+                "alaindustrial:resonance_coil",
+                "alaindustrial:electrum_plate",
+                "alaindustrial:lapotron_crystal",
+                "alaindustrial:electrum_plate"
+              ],
+              "result_id": "alaindustrial:mob_beacon_hv",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_repeller_hv",
           "title": "Repelente grande",
           "icon": "alaindustrial:mob_repeller_hv",
@@ -4179,6 +5940,11 @@
               ],
               "result_id": "alaindustrial:industrial_workbench",
               "result_count": 1
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -4215,7 +5981,41 @@
                 "alaindustrial:iron_plate"
               ],
               "result_id": "alaindustrial:drone_nest",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:copper_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:copper_plate",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:iron_plate",
+                    "alaindustrial:iron_plate",
+                    "",
+                    "alaindustrial:iron_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:drone_nest",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:copper_plate",
+                    "",
+                    "alaindustrial:copper_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:battery",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:copper_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:copper_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:construction_drone",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -4416,6 +6216,44 @@
           ]
         },
         {
+          "id": "mob_beacon",
+          "title": "Farol de criaturas pequeno",
+          "icon": "alaindustrial:mob_beacon",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Farol de criaturas pequeno",
+              "text": "Um farol técnico a EU — enquanto tem energia, toda criatura num raio de 16 blocos brilha com um contorno visível através das paredes. Os faróis médio e grande são fabricados a partir dele."
+            },
+            {
+              "type": "stats",
+              "title": "Estatísticas",
+              "lines": [
+                "Energia: 4 EU/t (destaque)",
+                "Buffer: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação com forma",
+              "grid": [
+                "alaindustrial:iron_plate",
+                "alaindustrial:electronic_circuit",
+                "alaindustrial:iron_plate",
+                "alaindustrial:copper_coil",
+                "minecraft:beacon",
+                "alaindustrial:copper_coil",
+                "alaindustrial:iron_plate",
+                "alaindustrial:copper_cable",
+                "alaindustrial:iron_plate"
+              ],
+              "result_id": "alaindustrial:mob_beacon",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_repeller",
           "title": "Repelente pequeno",
           "icon": "alaindustrial:mob_repeller",
@@ -4514,6 +6352,11 @@
                   "result_count": 1
                 }
               ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Carvão: serve qualquer um dos 2 tipos"
             }
           ]
         },
@@ -4544,6 +6387,11 @@
               ],
               "result_id": "alaindustrial:sound_absorber",
               "result_count": 2
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Lã: serve qualquer um dos 16 tipos"
             }
           ]
         },
@@ -4616,6 +6464,74 @@
           ]
         },
         {
+          "id": "todo_clipboard",
+          "title": "Prancheta de tarefas",
+          "icon": "alaindustrial:todo_clipboard",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Prancheta de tarefas",
+              "text": "Uma prancheta com uma folha de tarefas: pendure na parede como um quadro, anote até 10 itens (um item com quantidade ou uma nota) com caixas de marcação e leia direto na folha; ao ser retirada, ela guarda a lista."
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação com forma",
+              "grid": [
+                "",
+                "minecraft:iron_nugget",
+                "",
+                "minecraft:stick",
+                "minecraft:paper",
+                "minecraft:stick",
+                "minecraft:stick",
+                "minecraft:paper",
+                "minecraft:stick"
+              ],
+              "result_id": "alaindustrial:todo_clipboard",
+              "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "mob_beacon_mv",
+          "title": "Farol de criaturas médio",
+          "icon": "alaindustrial:mob_beacon_mv",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Farol de criaturas médio",
+              "text": "O segundo nível do farol de criaturas — contorna toda criatura num raio de 32 blocos por 16 EU/t; fabricado a partir do farol pequeno."
+            },
+            {
+              "type": "stats",
+              "title": "Estatísticas",
+              "lines": [
+                "Energia: 16 EU/t (destaque)",
+                "Buffer: 8000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação com forma",
+              "grid": [
+                "alaindustrial:electrum_plate",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:electrum_plate",
+                "minecraft:glowstone",
+                "alaindustrial:mob_beacon",
+                "minecraft:glowstone",
+                "alaindustrial:electrum_plate",
+                "alaindustrial:energy_crystal",
+                "alaindustrial:electrum_plate"
+              ],
+              "result_id": "alaindustrial:mob_beacon_mv",
+              "result_count": 1
+            }
+          ]
+        },
+        {
           "id": "mob_repeller_mv",
           "title": "Repelente médio",
           "icon": "alaindustrial:mob_repeller_mv",
@@ -4631,6 +6547,109 @@
               "lines": [
                 "Energia: 32 EU/t (campo)",
                 "Buffer: 8000 EU"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "monitor_core",
+          "title": "Núcleo de monitoramento",
+          "icon": "alaindustrial:monitor_core",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Núcleo de monitoramento",
+              "text": "Uma parede modular de painéis que mostra quanto há de cada item nos baús conectados. O núcleo fornece energia e permissão, o fio inteligente lê os contêineres e cada painel exibe um tipo de item."
+            },
+            {
+              "type": "stats",
+              "title": "Estatísticas",
+              "lines": [
+                "Energia: 2 EU/t + 1 EU/t por painel em funcionamento"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação com forma",
+              "grid": [
+                "alaindustrial:reinforced_amethyst",
+                "alaindustrial:electrum_plate",
+                "alaindustrial:reinforced_amethyst",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:energy_crystal",
+                "alaindustrial:advanced_circuit",
+                "alaindustrial:reinforced_amethyst",
+                "alaindustrial:electrum_plate",
+                "alaindustrial:reinforced_amethyst"
+              ],
+              "result_id": "alaindustrial:monitor_core",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:reinforced_amethyst",
+                    "alaindustrial:electrum_plate",
+                    "alaindustrial:reinforced_amethyst",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:reinforced_amethyst",
+                    "alaindustrial:electrum_plate",
+                    "alaindustrial:reinforced_amethyst"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:monitor_core",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:gold_ingot",
+                    "",
+                    "",
+                    "alaindustrial:copper_cable",
+                    "",
+                    "",
+                    "minecraft:redstone",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:smart_wire",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_plate",
+                    "minecraft:glass",
+                    "alaindustrial:silver_plate",
+                    "minecraft:glass",
+                    "alaindustrial:stock_display_frame",
+                    "minecraft:glass",
+                    "alaindustrial:silver_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:silver_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:monitor_panel",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_plate",
+                    "minecraft:redstone",
+                    "alaindustrial:silver_plate",
+                    "minecraft:redstone",
+                    "alaindustrial:reinforced_amethyst",
+                    "minecraft:redstone",
+                    "alaindustrial:silver_plate",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:silver_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:capacity_card",
+                  "result_count": 1
+                }
               ]
             }
           ]
@@ -4850,7 +6869,57 @@
                 ""
               ],
               "result_id": "alaindustrial:overclocker_chip_i",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "",
+                    "alaindustrial:energy_clot_i",
+                    "",
+                    "minecraft:gold_ingot",
+                    "alaindustrial:empty_chip",
+                    "minecraft:gold_ingot",
+                    "",
+                    "minecraft:redstone",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:overclocker_chip_i",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "alaindustrial:energy_clot_ii",
+                    "",
+                    "minecraft:gold_ingot",
+                    "alaindustrial:overclocker_chip_i",
+                    "minecraft:gold_ingot",
+                    "",
+                    "minecraft:gold_ingot",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:overclocker_chip_ii",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "alaindustrial:energy_clot_iii",
+                    "",
+                    "minecraft:gold_ingot",
+                    "alaindustrial:overclocker_chip_ii",
+                    "minecraft:gold_ingot",
+                    "",
+                    "minecraft:gold_ingot",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:overclocker_chip_iii",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -4911,6 +6980,11 @@
               ],
               "result_id": "alaindustrial:mute_chip",
               "result_count": 1
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Lã: serve qualquer um dos 16 tipos"
             }
           ]
         },
@@ -4977,7 +7051,57 @@
                 "alaindustrial:invar_plate"
               ],
               "result_id": "alaindustrial:choke",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:invar_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:choke",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:choke",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:diamond_dust"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:choke_reinforced",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_plate",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:silver_plate",
+                    "alaindustrial:resonance_coil",
+                    "alaindustrial:choke_reinforced",
+                    "alaindustrial:resonance_coil",
+                    "alaindustrial:silver_plate",
+                    "alaindustrial:palladium_plate",
+                    "alaindustrial:silver_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:choke_advanced",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -5067,7 +7191,62 @@
                 "minecraft:oak_planks"
               ],
               "result_id": "alaindustrial:water_mill_wheel",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:oak_planks",
+                    "minecraft:copper_ingot",
+                    "minecraft:oak_planks",
+                    "minecraft:stick",
+                    "alaindustrial:wooden_gear",
+                    "minecraft:stick",
+                    "minecraft:oak_planks",
+                    "minecraft:copper_ingot",
+                    "minecraft:oak_planks"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:water_mill_wheel",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron_plate",
+                    "minecraft:copper_ingot",
+                    "alaindustrial:water_mill_wheel",
+                    "minecraft:copper_ingot",
+                    "",
+                    "alaindustrial:iron_gear",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:water_mill_wheel_reinforced",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "minecraft:copper_ingot",
+                    "alaindustrial:water_mill_wheel_reinforced",
+                    "minecraft:copper_ingot",
+                    "",
+                    "alaindustrial:silver_gear",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:water_mill_wheel_advanced",
+                  "result_count": 1
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -5097,7 +7276,57 @@
                 "alaindustrial:invar_reinforced_plate"
               ],
               "result_id": "alaindustrial:core_barrel",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:invar_reinforced_plate",
+                    "alaindustrial:invar_reinforced_plate",
+                    "alaindustrial:invar_reinforced_plate",
+                    "alaindustrial:choke",
+                    "",
+                    "alaindustrial:choke",
+                    "alaindustrial:invar_reinforced_plate",
+                    "alaindustrial:invar_reinforced_plate",
+                    "alaindustrial:invar_reinforced_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:core_barrel",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:core_barrel",
+                    "alaindustrial:irradiated_diamond",
+                    "alaindustrial:core_barrel",
+                    "alaindustrial:choke_reinforced",
+                    "alaindustrial:module_blank",
+                    "alaindustrial:choke_reinforced",
+                    "alaindustrial:invar_reinforced_plate",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:invar_reinforced_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:drill_column_module",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:irradiated_diamond",
+                    "alaindustrial:core_barrel",
+                    "alaindustrial:irradiated_diamond",
+                    "alaindustrial:choke_reinforced",
+                    "alaindustrial:module_blank",
+                    "alaindustrial:choke_reinforced",
+                    "alaindustrial:invar_reinforced_plate",
+                    "alaindustrial:advanced_circuit",
+                    "alaindustrial:invar_reinforced_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:drill_row_module",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -5256,6 +7485,21 @@
                   "result_count": 1
                 }
               ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Arenito: serve qualquer um dos 4 tipos"
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Porta de Madeira: serve qualquer um dos 13 tipos"
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Cama: serve qualquer um dos 16 tipos"
             }
           ]
         },
@@ -5345,7 +7589,115 @@
                 ""
               ],
               "result_id": "alaindustrial:iron_gear",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "",
+                    "minecraft:iron_ingot",
+                    "",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:wooden_gear",
+                    "minecraft:iron_ingot",
+                    "",
+                    "minecraft:iron_ingot",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:iron_gear",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:stick",
+                    "",
+                    "minecraft:stick",
+                    "minecraft:oak_button",
+                    "minecraft:stick",
+                    "",
+                    "minecraft:stick",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:wooden_gear",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:cobblestone",
+                    "",
+                    "minecraft:cobblestone",
+                    "alaindustrial:wooden_gear",
+                    "minecraft:cobblestone",
+                    "",
+                    "minecraft:cobblestone",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:stone_gear",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:gold_ingot",
+                    "",
+                    "minecraft:gold_ingot",
+                    "alaindustrial:wooden_gear",
+                    "minecraft:gold_ingot",
+                    "",
+                    "minecraft:gold_ingot",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:gold_gear",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "alaindustrial:silver_ingot",
+                    "",
+                    "alaindustrial:silver_ingot",
+                    "alaindustrial:wooden_gear",
+                    "alaindustrial:silver_ingot",
+                    "",
+                    "alaindustrial:silver_ingot",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:silver_gear",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "alaindustrial:electrum_ingot",
+                    "",
+                    "alaindustrial:electrum_ingot",
+                    "alaindustrial:wooden_gear",
+                    "alaindustrial:electrum_ingot",
+                    "",
+                    "alaindustrial:electrum_ingot",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electrum_gear",
+                  "result_count": 1
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Botões de Madeira: serve qualquer um dos 13 tipos"
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Materiais de Pedra: serve qualquer um dos 3 tipos"
             }
           ]
         },
@@ -5375,7 +7727,41 @@
                 ""
               ],
               "result_id": "alaindustrial:module_blank",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "",
+                    "minecraft:iron_ingot",
+                    "",
+                    "minecraft:redstone",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:redstone",
+                    "",
+                    "minecraft:iron_ingot",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:module_blank",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:paper",
+                    "",
+                    "minecraft:paper",
+                    "alaindustrial:module_blank",
+                    "minecraft:paper",
+                    "",
+                    "minecraft:paper",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:magnet_filter_module",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -5405,7 +7791,57 @@
                 ""
               ],
               "result_id": "alaindustrial:mutation_chip_duplicate",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:amethyst_shard",
+                    "alaindustrial:empty_chip",
+                    "minecraft:amethyst_shard",
+                    "",
+                    "alaindustrial:uranium_plate",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:mutation_chip_duplicate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:redstone",
+                    "alaindustrial:empty_chip",
+                    "minecraft:lapis_lazuli",
+                    "",
+                    "alaindustrial:uranium_plate",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:mutation_chip_transform",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:diamond",
+                    "alaindustrial:empty_chip",
+                    "minecraft:echo_shard",
+                    "",
+                    "alaindustrial:uranium_plate",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:mutation_chip_create",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -5598,6 +8034,16 @@
                   "result_count": 1
                 }
               ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Porta de Madeira: serve qualquer um dos 13 tipos"
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Arenito: serve qualquer um dos 4 tipos"
             }
           ]
         },
@@ -5639,7 +8085,41 @@
                 "alaindustrial:nickel_plate"
               ],
               "result_id": "alaindustrial:basic_bearing",
-              "result_count": 4
+              "result_count": 4,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:nickel_plate",
+                    "minecraft:iron_nugget",
+                    "alaindustrial:nickel_plate",
+                    "minecraft:iron_nugget",
+                    "alaindustrial:stone_gear",
+                    "minecraft:iron_nugget",
+                    "alaindustrial:nickel_plate",
+                    "minecraft:iron_nugget",
+                    "alaindustrial:nickel_plate"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:basic_bearing",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "",
+                    "alaindustrial:bronze_reinforced_plate",
+                    "",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:electrum_gear",
+                    "alaindustrial:basic_bearing",
+                    "",
+                    "alaindustrial:bronze_reinforced_plate",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:reinforced_bearing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -5783,7 +8263,57 @@
                 ""
               ],
               "result_id": "alaindustrial:rtp_chip",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "",
+                    "minecraft:chorus_fruit",
+                    "",
+                    "alaindustrial:resonance_coil",
+                    "alaindustrial:empty_chip",
+                    "alaindustrial:resonance_coil",
+                    "",
+                    "minecraft:redstone",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:rtp_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "minecraft:amethyst_shard",
+                    "",
+                    "minecraft:amethyst_shard",
+                    "minecraft:ender_pearl",
+                    "minecraft:amethyst_shard",
+                    "",
+                    "minecraft:glowstone_dust",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:spatial_crystal",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "",
+                    "alaindustrial:resonant_shard",
+                    "",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:copper_coil",
+                    "",
+                    "alaindustrial:resonant_shard",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:resonance_coil",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -5843,7 +8373,62 @@
                 "minecraft:oak_planks"
               ],
               "result_id": "alaindustrial:windmill_rotor",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:oak_planks",
+                    "minecraft:iron_ingot",
+                    "minecraft:oak_planks",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:wooden_gear",
+                    "alaindustrial:copper_cable",
+                    "minecraft:oak_planks",
+                    "minecraft:iron_ingot",
+                    "minecraft:oak_planks"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:windmill_rotor",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:windmill_rotor",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:iron_gear",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:windmill_rotor_reinforced",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:windmill_rotor_reinforced",
+                    "alaindustrial:copper_cable",
+                    "",
+                    "alaindustrial:silver_gear",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:windmill_rotor_advanced",
+                  "result_count": 1
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -5924,6 +8509,24 @@
               "lines": [
                 "Energia: 260 EU por barra"
               ]
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação sem forma",
+              "grid": [
+                "alaindustrial:forge_hammer",
+                "alaindustrial:carbon_rod",
+                "alaindustrial:carbon_rod",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:carbon_rod_double",
+              "result_count": 1
             }
           ]
         },
@@ -5966,6 +8569,314 @@
               "type": "text",
               "title": "Pó de Ferro",
               "text": "Pó e intermediários relacionados (placa, tarugo) — no que o Triturador e outras máquinas transformam os minérios."
+            },
+            {
+              "type": "recipe",
+              "title": "Receita",
+              "recipe_type": "Fabricação sem forma",
+              "grid": [
+                "alaindustrial:forge_hammer",
+                "minecraft:copper_ingot",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "result_id": "alaindustrial:copper_plate",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "minecraft:copper_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:copper_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "minecraft:gold_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:gold_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "minecraft:iron_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:iron_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:tin_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:tin_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_plate_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:silver_plate",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:silver_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:silver_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:nickel_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:nickel_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:uranium_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:uranium_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate_block",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:tempered_iron_plate",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:tempered_iron_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:bronze_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:bronze_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:invar_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:invar_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:cupronickel_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:cupronickel_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:electrum_ingot",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:electrum_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:bronze_plate",
+                    "alaindustrial:bronze_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:bronze_reinforced_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:invar_reinforced_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:cupronickel_plate",
+                    "alaindustrial:cupronickel_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:cupronickel_reinforced_plate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:forge_hammer",
+                    "alaindustrial:electrum_plate",
+                    "alaindustrial:electrum_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:electrum_reinforced_plate",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -5995,7 +8906,57 @@
                 "alaindustrial:nickel_ingot"
               ],
               "result_id": "alaindustrial:alignment_chip_day",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:nickel_ingot",
+                    "minecraft:glowstone",
+                    "alaindustrial:nickel_ingot",
+                    "minecraft:glowstone",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:glowstone",
+                    "alaindustrial:nickel_ingot",
+                    "minecraft:glowstone",
+                    "alaindustrial:nickel_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:alignment_chip_day",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:nickel_ingot",
+                    "minecraft:lapis_block",
+                    "alaindustrial:nickel_ingot",
+                    "minecraft:lapis_block",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:lapis_block",
+                    "alaindustrial:nickel_ingot",
+                    "minecraft:lapis_block",
+                    "alaindustrial:nickel_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:alignment_chip_night",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -6209,7 +9170,73 @@
                 "alaindustrial:tempered_iron"
               ],
               "result_id": "alaindustrial:tempered_iron_chestplate",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_chestplate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_helmet",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_leggings",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "alaindustrial:tempered_iron",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:tempered_iron_boots",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -6429,7 +9456,73 @@
                 ""
               ],
               "result_id": "alaindustrial:insulated_chestplate",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:leather_chestplate",
+                    "minecraft:slime_ball",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:insulated_chestplate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:leather_helmet",
+                    "minecraft:slime_ball",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:insulated_helmet",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:leather_leggings",
+                    "minecraft:slime_ball",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:insulated_leggings",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:leather_boots",
+                    "minecraft:slime_ball",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:insulated_boots",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -6457,33 +9550,17 @@
               "grid": [
                 "alaindustrial:tempered_iron",
                 "alaindustrial:tempered_iron",
-                "alaindustrial:tempered_iron",
                 "",
+                "alaindustrial:tempered_iron",
                 "minecraft:stick",
                 "",
                 "",
                 "minecraft:stick",
                 ""
               ],
-              "result_id": "alaindustrial:tempered_iron_pickaxe",
+              "result_id": "alaindustrial:tempered_iron_axe",
               "result_count": 1,
               "variants": [
-                {
-                  "grid": [
-                    "alaindustrial:tempered_iron",
-                    "alaindustrial:tempered_iron",
-                    "alaindustrial:tempered_iron",
-                    "",
-                    "minecraft:stick",
-                    "",
-                    "",
-                    "minecraft:stick",
-                    ""
-                  ],
-                  "recipe_type": "Fabricação com forma",
-                  "result_id": "alaindustrial:tempered_iron_pickaxe",
-                  "result_count": 1
-                },
                 {
                   "grid": [
                     "alaindustrial:tempered_iron",
@@ -6788,6 +9865,11 @@
                   "result_count": 1
                 }
               ]
+            },
+            {
+              "type": "text",
+              "title": "",
+              "text": "Qualquer Tábua: serve qualquer um dos 13 tipos"
             }
           ]
         },
@@ -6854,7 +9936,969 @@
                 ""
               ],
               "result_id": "alaindustrial:oak_iron_chest_boat",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:oak_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:spruce_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:spruce_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:birch_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:birch_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:jungle_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:jungle_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:acacia_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:acacia_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:cherry_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:cherry_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:dark_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:dark_oak_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:pale_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:pale_oak_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:mangrove_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:mangrove_iron_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:iron_chest",
+                    "minecraft:bamboo_raft",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:bamboo_iron_chest_raft",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:oak_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:spruce_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:spruce_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:birch_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:birch_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:jungle_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:jungle_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:acacia_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:acacia_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:cherry_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:cherry_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:dark_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:dark_oak_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:pale_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:pale_oak_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:mangrove_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:mangrove_silver_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:silver_chest",
+                    "minecraft:bamboo_raft",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:bamboo_silver_chest_raft",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:oak_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:spruce_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:spruce_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:birch_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:birch_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:jungle_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:jungle_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:acacia_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:acacia_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:cherry_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:cherry_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:dark_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:dark_oak_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:pale_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:pale_oak_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:mangrove_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:mangrove_gold_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:gold_chest",
+                    "minecraft:bamboo_raft",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:bamboo_gold_chest_raft",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:oak_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:spruce_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:spruce_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:birch_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:birch_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:jungle_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:jungle_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:acacia_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:acacia_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:cherry_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:cherry_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:dark_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:dark_oak_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:pale_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:pale_oak_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:mangrove_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:mangrove_electrum_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_chest",
+                    "minecraft:bamboo_raft",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:bamboo_electrum_chest_raft",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:oak_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:spruce_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:spruce_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:birch_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:birch_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:jungle_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:jungle_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:acacia_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:acacia_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:cherry_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:cherry_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:dark_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:dark_oak_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:pale_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:pale_oak_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:mangrove_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:mangrove_diamond_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_chest",
+                    "minecraft:bamboo_raft",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:bamboo_diamond_chest_raft",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:oak_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:spruce_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:spruce_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:birch_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:birch_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:jungle_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:jungle_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:acacia_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:acacia_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:cherry_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:cherry_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:dark_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:dark_oak_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:pale_oak_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:pale_oak_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:mangrove_boat",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:mangrove_shielding_chest_boat",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:shielding_chest",
+                    "minecraft:bamboo_raft",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação sem forma",
+                  "result_id": "alaindustrial:bamboo_shielding_chest_raft",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -7041,7 +11085,89 @@
                 "alaindustrial:silver_ingot"
               ],
               "result_id": "alaindustrial:iron_to_silver_chest_upgrade",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:silver_ingot",
+                    "alaindustrial:silver_ingot",
+                    "alaindustrial:silver_ingot",
+                    "alaindustrial:silver_ingot",
+                    "minecraft:stick",
+                    "alaindustrial:silver_ingot",
+                    "alaindustrial:silver_ingot",
+                    "alaindustrial:silver_ingot",
+                    "alaindustrial:silver_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:iron_to_silver_chest_upgrade",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:stick",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:copper_to_iron_chest_upgrade",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:gold_ingot",
+                    "minecraft:gold_ingot",
+                    "minecraft:gold_ingot",
+                    "minecraft:gold_ingot",
+                    "minecraft:stick",
+                    "minecraft:gold_ingot",
+                    "minecraft:gold_ingot",
+                    "minecraft:gold_ingot",
+                    "minecraft:gold_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:silver_to_gold_chest_upgrade",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:electrum_ingot",
+                    "alaindustrial:electrum_ingot",
+                    "alaindustrial:electrum_ingot",
+                    "alaindustrial:electrum_ingot",
+                    "minecraft:stick",
+                    "alaindustrial:electrum_ingot",
+                    "alaindustrial:electrum_ingot",
+                    "alaindustrial:electrum_ingot",
+                    "alaindustrial:electrum_ingot"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:gold_to_electrum_chest_upgrade",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:diamond",
+                    "minecraft:diamond",
+                    "minecraft:diamond",
+                    "minecraft:diamond",
+                    "minecraft:stick",
+                    "minecraft:diamond",
+                    "minecraft:diamond",
+                    "minecraft:diamond",
+                    "minecraft:diamond"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electrum_to_diamond_chest_upgrade",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -7305,7 +11431,73 @@
                 "alaindustrial:rubber"
               ],
               "result_id": "alaindustrial:shielding_chestplate",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:leather",
+                    "minecraft:yellow_dye",
+                    "minecraft:leather",
+                    "alaindustrial:rubber",
+                    "minecraft:leather",
+                    "alaindustrial:rubber",
+                    "alaindustrial:rubber",
+                    "minecraft:leather",
+                    "alaindustrial:rubber"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:shielding_chestplate",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:leather",
+                    "minecraft:yellow_dye",
+                    "minecraft:leather",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:shielding_helmet",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:leather",
+                    "minecraft:leather",
+                    "minecraft:leather",
+                    "alaindustrial:rubber",
+                    "minecraft:yellow_dye",
+                    "alaindustrial:rubber",
+                    "alaindustrial:rubber",
+                    "",
+                    "alaindustrial:rubber"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:shielding_leggings",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:leather",
+                    "",
+                    "minecraft:leather",
+                    "alaindustrial:rubber",
+                    "minecraft:yellow_dye",
+                    "alaindustrial:rubber",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:shielding_boots",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -7342,7 +11534,73 @@
                 "alaindustrial:copper_coil"
               ],
               "result_id": "alaindustrial:electric_drill",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:battery",
+                    "minecraft:diamond_pickaxe",
+                    "alaindustrial:battery",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:copper_coil"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electric_drill",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:invar_ingot",
+                    "alaindustrial:electric_drill",
+                    "alaindustrial:invar_ingot",
+                    "",
+                    "alaindustrial:silver_gear",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electric_drill_diamond_tip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:netherite_scrap",
+                    "minecraft:netherite_scrap",
+                    "minecraft:netherite_scrap",
+                    "alaindustrial:netherite_alloy_ingot",
+                    "alaindustrial:electrum_gear",
+                    "alaindustrial:netherite_alloy_ingot",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:netherite_drill_head",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:diamond",
+                    "alaindustrial:netherite_drill_upgrade_smithing_template",
+                    "minecraft:diamond",
+                    "minecraft:diamond",
+                    "minecraft:netherrack",
+                    "minecraft:diamond",
+                    "minecraft:diamond",
+                    "minecraft:diamond",
+                    "minecraft:diamond"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:netherite_drill_upgrade_smithing_template",
+                  "result_count": 2
+                }
+              ]
             }
           ]
         },
@@ -7379,7 +11637,41 @@
                 "alaindustrial:copper_coil"
               ],
               "result_id": "alaindustrial:electric_shovel",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:battery",
+                    "minecraft:diamond_shovel",
+                    "alaindustrial:battery",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:copper_coil"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electric_shovel",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:cupronickel_ingot",
+                    "alaindustrial:electric_shovel",
+                    "alaindustrial:cupronickel_ingot",
+                    "",
+                    "alaindustrial:lapis_dust",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electric_shovel_diamond_tip",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -7491,7 +11783,41 @@
                 "alaindustrial:copper_coil"
               ],
               "result_id": "alaindustrial:electric_hoe",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:battery",
+                    "minecraft:diamond_hoe",
+                    "alaindustrial:battery",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:copper_coil"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electric_hoe",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:cupronickel_ingot",
+                    "alaindustrial:electric_hoe",
+                    "alaindustrial:cupronickel_ingot",
+                    "",
+                    "alaindustrial:lapis_dust",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electric_hoe_diamond_tip",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -7528,7 +11854,41 @@
                 "alaindustrial:copper_coil"
               ],
               "result_id": "alaindustrial:electric_chainsaw",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "minecraft:iron_ingot",
+                    "alaindustrial:battery",
+                    "minecraft:diamond_axe",
+                    "alaindustrial:battery",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:copper_coil"
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electric_chainsaw",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:diamond_dust",
+                    "alaindustrial:bronze_ingot",
+                    "alaindustrial:electric_chainsaw",
+                    "alaindustrial:bronze_ingot",
+                    "",
+                    "alaindustrial:gold_gear",
+                    ""
+                  ],
+                  "recipe_type": "Fabricação com forma",
+                  "result_id": "alaindustrial:electric_chainsaw_diamond_tip",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },

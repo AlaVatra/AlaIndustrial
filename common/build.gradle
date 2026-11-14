@@ -255,6 +255,11 @@ pitest {
                      // added here with the class, not a release later.
                      'dev.alaindustrial.client.screen.teleporter.RemoteMap',
                      'dev.alaindustrial.entity.TemperedGearRoll',
+                     // MOD-968: the mob beacon's glow rule, its knob holder and its tier ladder — Minecraft-free
+                     // on purpose, listed WITH their L1 suites (GlowRenewalTest, MobBeaconTierTest).
+                     'dev.alaindustrial.entity.GlowRenewal',
+                     'dev.alaindustrial.entity.MobBeaconConfig',
+                     'dev.alaindustrial.block.MobBeaconTier',
                      // MOD-580: the magnet's two grades. Minecraft-free on purpose (Config plus an
                      // IntSupplier), so it belongs in the run rather than in excludedClasses; the
                      // relation it guards — advanced reaches further, only advanced pulls experience —
@@ -401,6 +406,9 @@ pitest {
                      // MOD-863: where a monitoring panel puts its item — the back of a 3D model rests on
                      // the opaque screen instead of sinking behind it. MonitorItemFitTest guards it.
                      'dev.alaindustrial.client.render.MonitorItemFit',
+                     // MOD-967: the drill bore zone's held plan and frame bounds — MC-free, added WITH
+                     // its L1 suite (DrillBoreOutlinePlanTest).
+                     'dev.alaindustrial.client.render.DrillBoreOutlinePlan*',
                      // MOD-146: the fermenter's idle diagnosis — MC-free by the same design as the
                      // status enums above, and added here WITH its L1 suite (FermenterStatusTest),
                      // not a release later.
