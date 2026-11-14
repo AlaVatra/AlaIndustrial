@@ -68,6 +68,7 @@ final class BlockEntitySlotLayoutSnapshot {
 			"kok_sagyz_root: size=- upgrades=- battery=- menu=no overclockable=no batteryFed=no",
 			"lightning_rod_generator: size=5 upgrades=1 battery=- menu=yes overclockable=no batteryFed=no",
 			"macerator: size=7 upgrades=2 battery=6 menu=yes overclockable=yes batteryFed=yes",
+			"mob_beacon: size=- upgrades=- battery=- menu=no overclockable=no batteryFed=no",
 			"mob_repeller: size=6 upgrades=1 battery=5 menu=yes overclockable=no batteryFed=yes",
 			"mob_repeller_hv: size=6 upgrades=1 battery=5 menu=yes overclockable=no batteryFed=yes",
 			"mob_repeller_mv: size=6 upgrades=1 battery=5 menu=yes overclockable=no batteryFed=yes",

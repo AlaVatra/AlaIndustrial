@@ -47,6 +47,7 @@ import dev.alaindustrial.client.render.CableSleeveTint;
 import dev.alaindustrial.client.render.ChestBlockEntityRenderer;
 import dev.alaindustrial.client.render.ConcentratorSchematicRenderer;
 import dev.alaindustrial.client.render.ConstructionDroneRenderer;
+import dev.alaindustrial.client.render.DrillBoreOutline;
 import dev.alaindustrial.client.render.ElectricMobTrapBlockEntityRenderer;
 import dev.alaindustrial.client.render.EnergyCondenserBlockEntityRenderer;
 import dev.alaindustrial.client.render.FluidPipeTint;
@@ -715,7 +716,10 @@ public final class ClientContentManifest {
 			// MOD-803: any cell of an assembled Mirror Concentrator outlines the whole machine.
 			blockOutline(ConcentratorOutline::shape),
 			// MOD-803: the station or either glass cell of an assembled teleporter outlines the whole capsule.
-			blockOutline(TeleporterCapsuleOutline::shape));
+			blockOutline(TeleporterCapsuleOutline::shape),
+			// MOD-967: a drill with bore modules outlines every extra block it will take, as the game outlines the
+			// aimed one. Last, so a multiblock's whole contour above still wins on its own cells.
+			blockOutline(DrillBoreOutline::shape));
 
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 	// World overlays (MOD-962)

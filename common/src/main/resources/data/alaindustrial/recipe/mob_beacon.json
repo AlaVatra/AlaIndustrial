@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "#c:plates/iron",
+    "E": "alaindustrial:electronic_circuit",
+    "O": "alaindustrial:copper_coil",
+    "B": "minecraft:beacon",
+    "W": "alaindustrial:copper_cable"
+  },
+  "pattern": [
+    "PEP",
+    "OBO",
+    "PWP"
+  ],
+  "result": {
+    "id": "alaindustrial:mob_beacon"
+  }
+}

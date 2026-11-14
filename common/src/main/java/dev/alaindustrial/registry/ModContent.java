@@ -277,6 +277,10 @@ public final class ModContent {
 	public static Supplier<Block> MOB_REPELLER_MV = unbound("MOB_REPELLER_MV");
 	public static Supplier<Block> MOB_REPELLER_HV = unbound("MOB_REPELLER_HV");
 	public static Supplier<Block> ELECTRIC_MOB_TRAP = unbound("ELECTRIC_MOB_TRAP");
+	// Mob Beacon tiers (MOD-968): all three crafted, one block entity type between them.
+	public static Supplier<Block> MOB_BEACON = unbound("MOB_BEACON");
+	public static Supplier<Block> MOB_BEACON_MV = unbound("MOB_BEACON_MV");
+	public static Supplier<Block> MOB_BEACON_HV = unbound("MOB_BEACON_HV");
 	/** The Tap (MOD-837): lets any fluid out of a tank or pipe; liquid experience comes out as orbs. */
 	public static Supplier<Block> FLUID_TAP = unbound("FLUID_TAP");
 	/** The to-do clipboard (MOD-905): a list of items with counts and notes, hung on any face of a block. */
@@ -1054,6 +1058,9 @@ public final class ModContent {
 	public static Supplier<BlockItem> MOB_REPELLER_MV_ITEM = unbound("MOB_REPELLER_MV_ITEM");
 	public static Supplier<BlockItem> MOB_REPELLER_HV_ITEM = unbound("MOB_REPELLER_HV_ITEM");
 	public static Supplier<BlockItem> ELECTRIC_MOB_TRAP_ITEM = unbound("ELECTRIC_MOB_TRAP_ITEM");
+	public static Supplier<BlockItem> MOB_BEACON_ITEM = unbound("MOB_BEACON_ITEM");
+	public static Supplier<BlockItem> MOB_BEACON_MV_ITEM = unbound("MOB_BEACON_MV_ITEM");
+	public static Supplier<BlockItem> MOB_BEACON_HV_ITEM = unbound("MOB_BEACON_HV_ITEM");
 	public static Supplier<BlockItem> FLUID_TAP_ITEM = unbound("FLUID_TAP_ITEM");
 	public static Supplier<BlockItem> TODO_CLIPBOARD_ITEM = unbound("TODO_CLIPBOARD_ITEM");
 	public static Supplier<BlockItem> INCUBATOR_ITEM = unbound("INCUBATOR_ITEM");
@@ -1293,6 +1300,7 @@ public final class ModContent {
 	public static Supplier<BlockEntityType<?>> MOB_REPELLER_MV_BE = unbound("MOB_REPELLER_MV_BE");
 	public static Supplier<BlockEntityType<?>> MOB_REPELLER_HV_BE = unbound("MOB_REPELLER_HV_BE");
 	public static Supplier<BlockEntityType<?>> ELECTRIC_MOB_TRAP_BE = unbound("ELECTRIC_MOB_TRAP_BE");
+	public static Supplier<BlockEntityType<?>> MOB_BEACON_BE = unbound("MOB_BEACON_BE");
 	public static Supplier<BlockEntityType<?>> FLUID_TAP_BE = unbound("FLUID_TAP_BE");
 	public static Supplier<BlockEntityType<?>> TODO_CLIPBOARD_BE = unbound("TODO_CLIPBOARD_BE");
 	public static Supplier<BlockEntityType<?>> INCUBATOR_BE = unbound("INCUBATOR_BE");

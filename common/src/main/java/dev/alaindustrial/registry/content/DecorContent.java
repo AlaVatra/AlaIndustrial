@@ -19,6 +19,8 @@ import dev.alaindustrial.block.EnrichedUraniumWallTorchBlock;
 import dev.alaindustrial.block.FluidTapBlock;
 import dev.alaindustrial.block.FreshConcreteBlock;
 import dev.alaindustrial.block.MetalStairBlock;
+import dev.alaindustrial.block.MobBeaconBlock;
+import dev.alaindustrial.block.MobBeaconTier;
 import dev.alaindustrial.block.MobRepellerBlock;
 import dev.alaindustrial.block.MobRepellerHvBlock;
 import dev.alaindustrial.block.MobRepellerMvBlock;
@@ -34,6 +36,7 @@ import dev.alaindustrial.block.TemperedIronTrapdoorBlock;
 import dev.alaindustrial.block.TodoClipboardBlock;
 import dev.alaindustrial.block.entity.ElectricMobTrapBlockEntity;
 import dev.alaindustrial.block.entity.FluidTapBlockEntity;
+import dev.alaindustrial.block.entity.MobBeaconBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerHvBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerMvBlockEntity;
@@ -98,6 +101,20 @@ public final class DecorContent {
 	public static final BlockDef<MobRepellerHvBlock> MOB_REPELLER_HV = block("mob_repeller_hv", MobRepellerHvBlock::new,
 			machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL)
 					.lightLevel(ModBlockProperties::repellerLight)), s -> ModContent.MOB_REPELLER_HV = s);
+	// MOD-968 — the Mob Beacon: makes every mob in its zone glow. Three crafted tiers of one class; the light is the
+	// "it runs" signal, identical on all three.
+	public static final BlockDef<MobBeaconBlock> MOB_BEACON = block("mob_beacon",
+			p -> new MobBeaconBlock(MobBeaconTier.LV, p),
+			machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL).lightLevel(ModBlockProperties::beaconLight)),
+			s -> ModContent.MOB_BEACON = s);
+	public static final BlockDef<MobBeaconBlock> MOB_BEACON_MV = block("mob_beacon_mv",
+			p -> new MobBeaconBlock(MobBeaconTier.MV, p),
+			machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL).lightLevel(ModBlockProperties::beaconLight)),
+			s -> ModContent.MOB_BEACON_MV = s);
+	public static final BlockDef<MobBeaconBlock> MOB_BEACON_HV = block("mob_beacon_hv",
+			p -> new MobBeaconBlock(MobBeaconTier.HV, p),
+			machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL).lightLevel(ModBlockProperties::beaconLight)),
+			s -> ModContent.MOB_BEACON_HV = s);
 	// MOD-818 — the Electric Mob Trap: the repeller's opposite, so it sits beside it in this domain (the
 	// utility family of the player-facing docs), not with the item logistics its output lines feed.
 	public static final BlockDef<ElectricMobTrapBlock> ELECTRIC_MOB_TRAP =
@@ -484,6 +501,9 @@ public final class DecorContent {
 			blockItem("mob_repeller", s -> ModContent.MOB_REPELLER_ITEM = s),
 			blockItem("mob_repeller_mv", s -> ModContent.MOB_REPELLER_MV_ITEM = s),
 			blockItem("mob_repeller_hv", s -> ModContent.MOB_REPELLER_HV_ITEM = s),
+			blockItem("mob_beacon", s -> ModContent.MOB_BEACON_ITEM = s),
+			blockItem("mob_beacon_mv", s -> ModContent.MOB_BEACON_MV_ITEM = s),
+			blockItem("mob_beacon_hv", s -> ModContent.MOB_BEACON_HV_ITEM = s),
 			blockItem("tempered_iron_block", s -> ModContent.TEMPERED_IRON_BLOCK_ITEM = s),
 			blockItem("silver_plate_block", s -> ModContent.SILVER_PLATE_BLOCK_ITEM = s),
 			blockItem("tempered_iron_plate_block", s -> ModContent.TEMPERED_IRON_PLATE_BLOCK_ITEM = s),
@@ -609,6 +629,9 @@ public final class DecorContent {
 			// MOD-818 — the Electric Mob Trap.
 			blockEntity("electric_mob_trap", ElectricMobTrapBlockEntity.class, ElectricMobTrapBlockEntity::new,
 					s -> ModContent.ELECTRIC_MOB_TRAP_BE = s, ELECTRIC_MOB_TRAP),
+			// MOD-968 — the Mob Beacon: one type for the three tiers, the entity reads its tier from its block.
+			blockEntity("mob_beacon", MobBeaconBlockEntity.class, MobBeaconBlockEntity::new,
+					s -> ModContent.MOB_BEACON_BE = s, MOB_BEACON, MOB_BEACON_MV, MOB_BEACON_HV),
 			// MOD-837 — the Tap: its buffer and its pouring.
 			blockEntity("fluid_tap", FluidTapBlockEntity.class, FluidTapBlockEntity::new,
 					s -> ModContent.FLUID_TAP_BE = s, FLUID_TAP),
@@ -758,6 +781,10 @@ public final class DecorContent {
 		show(out, ModContent.MOB_REPELLER_ITEM);
 		show(out, ModContent.MOB_REPELLER_MV_ITEM);
 		show(out, ModContent.MOB_REPELLER_HV_ITEM);
+		// MOD-968 — the beacons, which show the mobs the repellers drive off.
+		show(out, ModContent.MOB_BEACON_ITEM);
+		show(out, ModContent.MOB_BEACON_MV_ITEM);
+		show(out, ModContent.MOB_BEACON_HV_ITEM);
 		// MOD-818 — the trap, the repeller's opposite, closes the run.
 		show(out, ModContent.ELECTRIC_MOB_TRAP_ITEM);
 		// MOD-837 — the tap, which also turns the trap's liquid experience back into orbs, right after it.

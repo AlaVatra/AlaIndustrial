@@ -1,0 +1,76 @@
+{
+  "_readme": [
+    "One list for every guard of player-facing coverage (MOD-963 guide book and wiki, MOD-935 blueprints).",
+    "Each row: an item id the player can hold, the surfaces it is deliberately left off (book, wiki, blueprint) and why.",
+    "A row with no reason, an unknown surface, an id the player cannot hold, or a surface where the item is covered after all fails the guard that reads that surface."
+  ],
+  "items": {
+    "assembly_blueprint": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+    },
+    "creative_energy_source": {
+      "surfaces": [
+        "book"
+      ],
+      "reason": "MOD-518: a creative-only tool that survival cannot obtain; the book is a survival walkthrough, while the wiki keeps the page as a reference (gen_guide_book.BOOK_EXCLUDE)."
+    },
+    "high_altitude_wind_mill": {
+      "surfaces": [
+        "book"
+      ],
+      "reason": "A hidden evolution of the wind mill (T2): the book does not announce it before the player meets it; the wiki keeps the page (gen_guide_book.BOOK_EXCLUDE)."
+    },
+    "quarry_bridge_beam": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+    },
+    "quarry_cart": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+    },
+    "quarry_controller": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+    },
+    "quarry_drill_bit": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+    },
+    "quarry_head": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+    },
+    "storm_wind_mill": {
+      "surfaces": [
+        "book"
+      ],
+      "reason": "A hidden evolution of the wind mill (T2): the book does not announce it before the player meets it; the wiki keeps the page (gen_guide_book.BOOK_EXCLUDE)."
+    },
+    "warehouse_shelf": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+    }
+  }
+}

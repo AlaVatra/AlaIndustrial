@@ -1,6 +1,9 @@
 {
   "type": "alaindustrial:compressing",
   "ingredient": "minecraft:snow_block",
+  "input_counts": [
+    4
+  ],
   "result": {
     "id": "minecraft:ice",
     "count": 1

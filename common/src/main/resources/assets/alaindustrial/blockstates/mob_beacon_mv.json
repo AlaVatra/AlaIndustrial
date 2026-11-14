@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "alaindustrial:block/mob_beacon_mv"
+    },
+    "lit=true": {
+      "model": "alaindustrial:block/mob_beacon_mv_lit"
+    }
+  }
+}

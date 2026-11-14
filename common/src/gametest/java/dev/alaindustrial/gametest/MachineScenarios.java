@@ -149,6 +149,18 @@ public final class MachineScenarios {
 								"machine_tc_comp001_neg09_compressor_rejects_partial_coal_dust_batch")
 						.fabricId("MachineGameTest", "tcComp001Neg09_compressorRejectsPartialCoalDustBatch")
 						.ticks(20, 40),
+				RosterEntry.of(MachineScenarios::tcComp001Fun10_compressorCompactsIceIntoPackedIce,
+								"machine_tc_comp001_fun10_compressor_compacts_ice_into_packed_ice")
+						.fabricId("MachineGameTest", "tcComp001Fun10_compressorCompactsIceIntoPackedIce")
+						.ticks(20, 40),
+				RosterEntry.of(MachineScenarios::tcComp001Fun11_compressorCompactsPackedIceIntoBlueIce,
+								"machine_tc_comp001_fun11_compressor_compacts_packed_ice_into_blue_ice")
+						.fabricId("MachineGameTest", "tcComp001Fun11_compressorCompactsPackedIceIntoBlueIce")
+						.ticks(20, 40),
+				RosterEntry.of(MachineScenarios::tcComp001Fun12_compressorCompactsSnowBlocksIntoIce,
+								"machine_tc_comp001_fun12_compressor_compacts_snow_blocks_into_ice")
+						.fabricId("MachineGameTest", "tcComp001Fun12_compressorCompactsSnowBlocksIntoIce")
+						.ticks(20, 40),
 				RosterEntry.of(MachineScenarios::tcComp001Gui06_compressorReportsPartialBatch,
 								"machine_tc_comp001_gui06_compressor_reports_partial_batch")
 						.fabricId("MachineGameTest", "tcComp001Gui06_compressorReportsPartialBatch").ticks(20, 40),
@@ -468,6 +480,18 @@ public final class MachineScenarios {
 
 	public static void tcComp001Neg09_compressorRejectsPartialCoalDustBatch(GameTestHelper helper) {
 		MachineRecipeScenarios.tcComp001Neg09_compressorRejectsPartialCoalDustBatch(helper);
+	}
+
+	public static void tcComp001Fun10_compressorCompactsIceIntoPackedIce(GameTestHelper helper) {
+		MachineRecipeScenarios.tcComp001Fun10_compressorCompactsIceIntoPackedIce(helper);
+	}
+
+	public static void tcComp001Fun11_compressorCompactsPackedIceIntoBlueIce(GameTestHelper helper) {
+		MachineRecipeScenarios.tcComp001Fun11_compressorCompactsPackedIceIntoBlueIce(helper);
+	}
+
+	public static void tcComp001Fun12_compressorCompactsSnowBlocksIntoIce(GameTestHelper helper) {
+		MachineRecipeScenarios.tcComp001Fun12_compressorCompactsSnowBlocksIntoIce(helper);
 	}
 
 	public static void tcComp001Gui06_compressorReportsPartialBatch(GameTestHelper helper) {

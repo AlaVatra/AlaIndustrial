@@ -4,6 +4,7 @@ import dev.alaindustrial.Config;
 import dev.alaindustrial.block.entity.MachineBlockEntity;
 import dev.alaindustrial.block.entity.MonitorCoreBlockEntity;
 import dev.alaindustrial.core.energy.PerTickDemand;
+import dev.alaindustrial.entity.MobBeaconConfig;
 import dev.alaindustrial.registry.ModContent;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -41,6 +42,8 @@ public final class PerTickDemandScenarios {
 		out.put(ModContent.BLOCK_BREAKER, be -> Config.blockBreakerEuPerTick);
 		out.put(ModContent.ELECTRIC_HEATER, be -> Config.electricHeaterEuPerTick);
 		out.put(ModContent.MOB_REPELLER, be -> Config.mobRepellerEuPerTick);
+		out.put(ModContent.MOB_BEACON, be -> MobBeaconConfig.mobBeaconEuPerTick);
+		out.put(ModContent.MOB_BEACON_HV, be -> MobBeaconConfig.mobBeaconEuPerTickHv);
 		out.put(ModContent.THERMAL_CENTRIFUGE,
 				be -> ((MachineBlockEntity) be).effectiveEuPerTick(Config.thermalCentrifugeEuPerTick));
 		out.put(ModContent.RECYCLER, be -> ((MachineBlockEntity) be).effectiveEuPerTick(Config.recyclerEuPerTick));

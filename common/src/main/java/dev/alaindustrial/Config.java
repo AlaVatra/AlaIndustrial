@@ -8,6 +8,7 @@ import dev.alaindustrial.core.apiary.ApiaryConfig;
 import dev.alaindustrial.core.environment.GeneratorConfig;
 import dev.alaindustrial.core.radiation.RadiationConfig;
 import dev.alaindustrial.core.reactor.ReactorConfig;
+import dev.alaindustrial.entity.MobBeaconConfig;
 import dev.alaindustrial.item.ToolConfig;
 import dev.alaindustrial.settlement.SettlementConfig;
 import java.nio.file.Path;
@@ -1548,7 +1549,8 @@ public final class Config {
 	 * must stay BELOW the declarations: entries capture compiled defaults; static init runs in source order.
 	 */
 	public static final KnobRegistry REGISTRY = KnobRegistry.scan(List.of(Config.class, RadiationConfig.class,
-			GeneratorConfig.class, ToolConfig.class, ReactorConfig.class, SettlementConfig.class, ApiaryConfig.class));
+			GeneratorConfig.class, ToolConfig.class, ReactorConfig.class, SettlementConfig.class, ApiaryConfig.class,
+			MobBeaconConfig.class));
 
 	/** Reads and writes {@code config/alaindustrial.json} for {@link #REGISTRY}. */
 	static final ConfigFile FILE = new ConfigFile(REGISTRY);

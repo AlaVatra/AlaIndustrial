@@ -6,6 +6,7 @@ import dev.alaindustrial.KnobSnapshot;
 import dev.alaindustrial.core.apiary.ApiaryConfig;
 import dev.alaindustrial.core.environment.GeneratorConfig;
 import dev.alaindustrial.core.machine.MachineRates;
+import dev.alaindustrial.entity.MobBeaconConfig;
 import dev.alaindustrial.item.ToolConfig;
 import dev.alaindustrial.settlement.SettlementConfig;
 import java.util.Map;
@@ -526,6 +527,42 @@ public final class ServerBalance {
 
 	public static int magnetRange() {
 		return current.intValue("magnetRange", ToolConfig.magnetRange);
+	}
+
+	public static int mobBeaconBuffer() {
+		return current.intValue("mobBeaconBuffer", MobBeaconConfig.mobBeaconBuffer);
+	}
+
+	public static int mobBeaconBufferHv() {
+		return current.intValue("mobBeaconBufferHv", MobBeaconConfig.mobBeaconBufferHv);
+	}
+
+	public static int mobBeaconBufferMv() {
+		return current.intValue("mobBeaconBufferMv", MobBeaconConfig.mobBeaconBufferMv);
+	}
+
+	public static int mobBeaconEuPerTick() {
+		return current.intValue("mobBeaconEuPerTick", MobBeaconConfig.mobBeaconEuPerTick);
+	}
+
+	public static int mobBeaconEuPerTickHv() {
+		return current.intValue("mobBeaconEuPerTickHv", MobBeaconConfig.mobBeaconEuPerTickHv);
+	}
+
+	public static int mobBeaconEuPerTickMv() {
+		return current.intValue("mobBeaconEuPerTickMv", MobBeaconConfig.mobBeaconEuPerTickMv);
+	}
+
+	public static int mobBeaconRange() {
+		return current.intValue("mobBeaconRange", MobBeaconConfig.mobBeaconRange);
+	}
+
+	public static int mobBeaconRangeHv() {
+		return current.intValue("mobBeaconRangeHv", MobBeaconConfig.mobBeaconRangeHv);
+	}
+
+	public static int mobBeaconRangeMv() {
+		return current.intValue("mobBeaconRangeMv", MobBeaconConfig.mobBeaconRangeMv);
 	}
 
 	public static int mobRepellerBuffer() {

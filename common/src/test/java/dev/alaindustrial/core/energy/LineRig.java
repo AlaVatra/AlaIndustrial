@@ -69,6 +69,17 @@ final class LineRig {
 	record Dual(String name, Cell pos, EnergyBuffer buf, long onward, boolean pushBack, boolean pull) {
 	}
 
+	/**
+	 * A foreign block seen only through its live port on the face toward the line (MOD-940, round 2): its own tick is
+	 * driven from outside the rig, and the rig reads it the way {@code EnergyNetwork.tick} does. The roles are taken
+	 * once, at the first tick, as {@code EnergyTopologyCache.refreshIfDirty} files a neighbour by {@code supports*};
+	 * after that a role counts only while the port still says yes ({@code LineEndpoints.supply/demand}). {@code room}
+	 * and {@code offer} are the dry runs of an insert and an extract of everything.
+	 */
+	record Port(String name, Cell pos, EnergyPort port, java.util.function.LongSupplier room,
+			java.util.function.LongSupplier offer) {
+	}
+
 	final String name;
 	final double loss;
 	final Set<Cell> cables = new LinkedHashSet<>();
@@ -76,9 +87,17 @@ final class LineRig {
 	final List<Source> sources = new ArrayList<>();
 	final List<End> ends = new ArrayList<>();
 	final List<Dual> duals = new ArrayList<>();
+	final List<Port> ports = new ArrayList<>();
+	/** The roles each {@link Port} was filed under at the first tick: producer, consumer. */
+	private final Map<String, boolean[]> portRoles = new LinkedHashMap<>();
+	/** The supplying set the producer field was last flooded from (MOD-214: recomputed only when it changes). */
+	private Set<Cell> supplying;
 	/** What the network drew out of the dual-role blocks in the latest tick, and what they handed on in all. */
 	long dualOut;
 	long forwarded;
+	/** What the network put into and drew out of the {@link Port}s in the latest tick. */
+	long portIn;
+	long portOut;
 	/** The boxes that discharge on backup ticks ({@link #battery}). */
 	final Set<String> batteries = new LinkedHashSet<>();
 	final dev.alaindustrial.core.net.DistanceField<Cell> producer = new dev.alaindustrial.core.net.DistanceField<>(
@@ -227,6 +246,57 @@ final class LineRig {
 		return this;
 	}
 
+	/** A {@link Port}: a foreign block at (x, z) whose tick the caller drives. */
+	LineRig port(String id, int x, int z, EnergyPort port, java.util.function.LongSupplier room,
+			java.util.function.LongSupplier offer) {
+		ports.add(new Port(id, new Cell(x, z), port, room, offer));
+		return this;
+	}
+
+	/** The live cable buffer at (x, z), as a foreign block beside it reaches it. */
+	EnergyBuffer cableAt(int x, int z) {
+		return buffers.get(new Cell(x, z));
+	}
+
+	/** A port that counts what the network moves through it ({@link #portIn}, {@link #portOut}). */
+	private EnergyPort countingPort(EnergyPort port) {
+		return new EnergyPort() {
+			@Override
+			public long insert(long maxAmount, Txn txn) {
+				long put = port.insert(maxAmount, txn);
+				portIn += put;
+				return put;
+			}
+
+			@Override
+			public long extract(long maxAmount, Txn txn) {
+				long got = port.extract(maxAmount, txn);
+				portOut += got;
+				return got;
+			}
+
+			@Override
+			public long getAmount() {
+				return port.getAmount();
+			}
+
+			@Override
+			public long getCapacity() {
+				return port.getCapacity();
+			}
+
+			@Override
+			public boolean supportsInsertion() {
+				return port.supportsInsertion();
+			}
+
+			@Override
+			public boolean supportsExtraction() {
+				return port.supportsExtraction();
+			}
+		};
+	}
+
 	/** The dual-role blocks' own tick: hand on out of the line, then offer the rest to the cables beside. */
 	private void dualsTick(Txn txn) {
 		for (Dual d : duals) {
@@ -325,10 +395,89 @@ final class LineRig {
 		field.flood();
 	}
 
+	/**
+	 * Files the {@link Port}s at the first tick, as the topology cache does at its refresh, then answers whether the
+	 * network moves anything this tick: {@code EnergyNetwork.tick} returns at once when no producer was filed, or
+	 * when none of them gives through its port now ({@code LineEndpoints.Supply.isEmpty}) — the energy the cables hold
+	 * waits for a producer.
+	 */
+	private boolean portsCanMove() {
+		if (portRoles.isEmpty()) {
+			for (Port p : ports) {
+				portRoles.put(p.name(), new boolean[] {p.port().supportsExtraction(), p.port().supportsInsertion()});
+			}
+		}
+		if (!sources.isEmpty() || !duals.isEmpty()) {
+			return true;
+		}
+		for (Port p : ports) {
+			if (portRoles.get(p.name())[0] && p.port().supportsExtraction()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * The {@link Port}s as {@code LineEndpoints} reads them this tick: a consumer of unknown need while its port takes
+	 * and it has room, a producer while its port gives; one that holds EU seeds the producer field.
+	 */
+	private void addPorts(List<EnergyLineDistributor.LiveConsumer<Cell>> machines,
+			List<EnergyLineDistributor.LiveProducer<Cell>> producers, List<Cell> sourcePos) {
+		for (Port p : ports) {
+			boolean[] role = portRoles.get(p.name());
+			if (role[1] && p.port().supportsInsertion()) {
+				long room = p.room().getAsLong();
+				if (room > 0) {
+					machines.add(new EnergyLineDistributor.LiveConsumer<>(p.pos(), countingPort(p.port()), room, 0));
+				}
+			}
+			if (role[0] && p.port().supportsExtraction()) {
+				long offer = p.offer().getAsLong();
+				producers.add(
+						new EnergyLineDistributor.LiveProducer<>(p.pos(), countingPort(p.port()), p.pos(), offer));
+				if (offer > 0) {
+					sourcePos.add(p.pos());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Floods the producer field and the endpoints' distances: once on a rig without {@link Port}s, and whenever the
+	 * supplying set changes on one with them (MOD-214, {@code EnergyTopologyCache.updateLiveEndpoints}).
+	 */
+	private void floodProducerField(List<Cell> sourcePos) {
+		Set<Cell> seeds = new LinkedHashSet<>(sourcePos);
+		if (ports.isEmpty() ? !producer.isEmpty() : seeds.equals(supplying)) {
+			return;
+		}
+		supplying = seeds;
+		seed(producer, sourcePos);
+		List<Cell> at = new ArrayList<>();
+		ends.forEach(e -> at.add(e.pos()));
+		ports.forEach(p -> at.add(p.pos()));
+		for (Cell pos : at) {
+			int best = 0;
+			for (Cell n : neighbours(pos)) {
+				Integer d = producer.distanceOrNull(n);
+				if (d != null) {
+					best = best == 0 ? d : Math.min(best, d);
+				}
+			}
+			consumerDistance.put(pos, best);
+		}
+	}
+
 	/** One network tick: the line plan carried out on the rig (ADR-049); the cables create and lose nothing. */
 	void tick() {
 		Txn txn = new Txn();
 		dualsTick(txn);
+		portIn = 0;
+		portOut = 0;
+		if (!ports.isEmpty() && !portsCanMove()) {
+			return; // EnergyNetwork.tick: no producer filed, or none whose port gives now — the line stands still
+		}
 		List<EnergyLineDistributor.LiveConsumer<Cell>> machines = new ArrayList<>();
 		List<EnergyLineDistributor.LiveConsumer<Cell>> stores = new ArrayList<>();
 		long machineRoom = 0;
@@ -370,19 +519,8 @@ final class LineRig {
 				sourcePos.add(d.pos()); // one that can never give seeds no distance (ADR-003: supplying producers)
 			}
 		}
-		if (producer.isEmpty()) {
-			seed(producer, sourcePos);
-			for (End e : ends) {
-				int best = 0;
-				for (Cell n : neighbours(e.pos())) {
-					Integer d = producer.distanceOrNull(n);
-					if (d != null) {
-						best = best == 0 ? d : Math.min(best, d);
-					}
-				}
-				consumerDistance.put(e.pos(), best);
-			}
-		}
+		addPorts(machines, producers, sourcePos);
+		floodProducerField(sourcePos);
 		if (cableList.size() != cables.size()) {
 			cableList = List.copyOf(cables);
 		}
@@ -424,9 +562,9 @@ final class LineRig {
 		}
 		injected += in;
 		lost += drawn - moved;
-		assertEquals(cablesBefore + in + dualOut + discharged - drawn, inCables(),
+		assertEquals(cablesBefore + in + dualOut + portOut + discharged - drawn, inCables(),
 				name + ": the cables neither create nor lose EU");
-		assertEquals(endsBefore + moved - discharged - dualOut, inEnds(),
+		assertEquals(endsBefore + moved - portIn - discharged - dualOut, inEnds(),
 				name + ": what left the cables reached the endpoints");
 		for (End e : ends) {
 			gain.put(e.name(), e.buf().getAmount() - before.get(e.name()));

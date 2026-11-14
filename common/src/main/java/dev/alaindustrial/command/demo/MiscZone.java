@@ -84,7 +84,7 @@ final class MiscZone implements DemoZone {
 		w.set(56, 1, Z, ModContent.TEMPERED_IRON_BLOCK.get());
 	}
 
-	/** The pump chain, x=69..71, with the diamond chest and the mob repeller tier ladder on top. */
+	/** The pump chain, x=69..71, with the diamond chest and the mob repeller and mob beacon tier ladders on top. */
 	private static void pumpChain(StandWriter w) {
 		// The pump chain, x=69..71: pump → geothermal generator → tank, touching so the pump's tank pushes
 		// straight into the generator's. The diamond chest (MOD-599) and the mob repeller tier ladder
@@ -108,6 +108,11 @@ final class MiscZone implements DemoZone {
 		w.set(69, 3, Z, ModContent.MOB_REPELLER.get());
 		w.set(70, 3, Z, ModContent.MOB_REPELLER_MV.get());
 		w.set(71, 3, Z, ModContent.MOB_REPELLER_HV.get());
+		// The mob beacon tier ladder (MOD-968) on top of the repellers, unpowered for the same reason: a live beacon
+		// would outline the stand's own test mobs. Their trim (iron / silver / gold) is the tier readout.
+		w.set(69, 4, Z, ModContent.MOB_BEACON.get());
+		w.set(70, 4, Z, ModContent.MOB_BEACON_MV.get());
+		w.set(71, 4, Z, ModContent.MOB_BEACON_HV.get());
 	}
 
 	/**
