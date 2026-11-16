@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Profil hráče",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Profil hráče",
-              "text": "Obrazovka profilu se statistikami kariéry v modu a postupem mistrovství (40 úrovní, 8 hodností), který roste z práce strojů a mnohem pomaleji z výkonu generátorů."
-            },
-            {
-              "type": "stats",
-              "title": "Parametry",
-              "lines": [
-                "Energie: 1 000 EU práce strojů = 1 bod mistrovství"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Nabíjecí lůžko",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "Libovolná vlna: hodí se kterýkoli z 16 druhů"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Profil hráče",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Profil hráče",
+              "text": "Obrazovka Profil: vyrobená a spotřebovaná energie, úroveň mistrovství (40 úrovní, 8 hodností) a Ala-fragmenty, které se utrácejí za dovednosti na Pracovní stanici."
+            },
+            {
+              "type": "stats",
+              "title": "Parametry",
+              "lines": [
+                "Energie: 1 000 EU práce strojů = 1 bod mistrovství"
+              ]
             }
           ]
         },

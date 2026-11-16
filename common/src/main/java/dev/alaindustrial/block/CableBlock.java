@@ -5,6 +5,8 @@ import dev.alaindustrial.block.entity.CableBlockEntity;
 import dev.alaindustrial.compat.Invulnerability;
 import dev.alaindustrial.core.energy.CableType;
 import dev.alaindustrial.core.energy.EnergyHostRedirect;
+import dev.alaindustrial.core.energy.EnergyLookup;
+import dev.alaindustrial.core.energy.EnergyPort;
 import dev.alaindustrial.core.energy.NetworkManager;
 import dev.alaindustrial.core.energy.ShockGuardMaterial;
 import dev.alaindustrial.core.energy.ShockInsulation;
@@ -693,7 +695,17 @@ public class CableBlock extends AbstractMachineBlock implements HasMachineToolti
 		// player read a working connection as a broken one.
 		// The reactor antenna (MOD-941) is the other: a shell block with an energy port on every face. Its boom joins
 		// a cable through the redirect clause above.
-		return block instanceof ReactorOutletBlock || block instanceof ReactorAntennaBlock;
+		if (block instanceof ReactorOutletBlock || block instanceof ReactorAntennaBlock) {
+			return true;
+		}
+		// Any other block, another mod's battery or machine among them (MOD-983): the arm asks the network's own
+		// lookup, so a working joint is drawn and a face with no port is not. Only a real Level can answer; while a
+		// world generates the reader is not one, and no arm is drawn.
+		if (level instanceof Level world) {
+			EnergyPort port = EnergyLookup.get().find(world, pos.relative(dir), dir.getOpposite());
+			return port != null && (port.supportsInsertion() || port.supportsExtraction());
+		}
+		return false;
 	}
 
 	/**

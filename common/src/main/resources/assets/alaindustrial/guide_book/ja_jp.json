@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "プレイヤープロフィール",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "プレイヤープロフィール",
-              "text": "MODのキャリア統計と熟練の進行（40レベル、8つの称号）を表示するプロフィール画面。熟練は機械の稼働で上がり、発電機の出力ではずっとゆっくり上がります。"
-            },
-            {
-              "type": "stats",
-              "title": "ステータス",
-              "lines": [
-                "エネルギー: 機械の稼働 1 000 EU = 熟練ポイント 1"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "充電ベッド",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "いずれかの羊毛: 16種類のどれでも可"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "プレイヤープロフィール",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "プレイヤープロフィール",
+              "text": "プロフィール画面：生産・消費したエネルギー、熟練レベル（40レベル、8称号）、ワークステーションでスキルに使うAla断片。"
+            },
+            {
+              "type": "stats",
+              "title": "ステータス",
+              "lines": [
+                "エネルギー: 機械の稼働 1 000 EU = 熟練ポイント 1"
+              ]
             }
           ]
         },

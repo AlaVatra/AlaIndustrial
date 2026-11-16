@@ -52,7 +52,7 @@ import org.jspecify.annotations.Nullable;
  * {@link #ALARM_CHECK_TICKS} ticks that its antenna still transmits and goes dark when it does not — the controller is
  * gone, unloaded, or no longer serves it — since no block-removal hook may tell it (they deadlock on 26.2).
  */
-public class ReactorAntennaMastBlock extends Block implements EnergyHostRedirect {
+public class ReactorAntennaMastBlock extends Block implements EnergyHostRedirect, CableArmInlet {
 
 	/** The antenna's facing: the boom points this way, and the antenna is one cell the opposite way. */
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
@@ -143,6 +143,17 @@ public class ReactorAntennaMastBlock extends Block implements EnergyHostRedirect
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return SHAPES[state.getValue(FACING).ordinal() * 64 + joinedMask(state)];
+	}
+
+	/**
+	 * A joining cable carries its own arm through the boom's cell to the copper collar (MOD-948), drawn in the
+	 * cable's own grade: the arm's length is {@link ReactorAntennaGeometry#ARM_BOX}'s, which stays the boom's
+	 * collision box there.
+	 */
+	@Override
+	public float cableArmInlet(BlockState state, Direction side) {
+		double[] arm = ReactorAntennaGeometry.ARM_BOX;
+		return state.getValue(CABLE.get(side)) ? (float) (arm[5] - arm[2]) : 0.0F;
 	}
 
 	/** A boom whose antenna is gone goes too, as the head of a bed does; a cable beside it is joined or let go. */

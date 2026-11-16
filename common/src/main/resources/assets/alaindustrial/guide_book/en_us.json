@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Player Profile",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Player Profile",
-              "text": "A profile screen with career mod statistics and a mastery progression (40 levels, 8 ranks) that levels up from machine work and, far more slowly, from generator output."
-            },
-            {
-              "type": "stats",
-              "title": "Stats",
-              "lines": [
-                "Energy: 1 000 EU of machine work = 1 mastery point"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Charging Bed",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "Any Wool: any of 16 kinds fits"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Player Profile",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Player Profile",
+              "text": "The Profile screen: the energy you produced and used, your mastery level (40 levels, 8 ranks) and the Ala-Fragments you spend on skills at the Workstation."
+            },
+            {
+              "type": "stats",
+              "title": "Stats",
+              "lines": [
+                "Energy: 1 000 EU of machine work = 1 mastery point"
+              ]
             }
           ]
         },

@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Profil du joueur",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Profil du joueur",
-              "text": "Un écran de profil avec les statistiques de carrière de la mod et une progression de maîtrise (40 niveaux, 8 rangs) qui monte grâce au travail des machines et, bien plus lentement, à la production des générateurs."
-            },
-            {
-              "type": "stats",
-              "title": "Statistiques",
-              "lines": [
-                "Énergie : 1 000 EU de travail des machines = 1 point de maîtrise"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Lit de recharge",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "N’importe quelle laine: chacune des 16 variantes convient"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Profil du joueur",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Profil du joueur",
+              "text": "L’écran Profil : l’énergie produite et consommée, le niveau de maîtrise (40 niveaux, 8 rangs) et les Ala-Fragments à dépenser en compétences à la Station de travail."
+            },
+            {
+              "type": "stats",
+              "title": "Statistiques",
+              "lines": [
+                "Énergie : 1 000 EU de travail des machines = 1 point de maîtrise"
+              ]
             }
           ]
         },

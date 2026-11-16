@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -52,6 +53,16 @@ public class CrystalFarmControllerBlock extends HorizontalMachineBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new CrystalFarmControllerBlockEntity(pos, state);
+	}
+
+	/**
+	 * Unlike the other horizontal machines, the controller takes EU through its panel face too, and that face is
+	 * the one a cable can reach: the controller sits in the greenhouse wall with the panel outward. So the arm is
+	 * drawn on every face, the panel included, as the network already trades through it (MOD-732).
+	 */
+	@Override
+	public boolean isCableConnectable(BlockState state, Direction side) {
+		return isCableConnectable();
 	}
 
 	@Override

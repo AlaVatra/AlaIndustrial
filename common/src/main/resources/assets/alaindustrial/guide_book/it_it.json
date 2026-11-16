@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Profilo del giocatore",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Profilo del giocatore",
-              "text": "Una schermata del profilo con le statistiche di carriera della mod e una progressione di maestria (40 livelli, 8 ranghi) che sale con il lavoro delle macchine e, molto più lentamente, con la produzione dei generatori."
-            },
-            {
-              "type": "stats",
-              "title": "Statistiche",
-              "lines": [
-                "Energia: 1 000 EU di lavoro delle macchine = 1 punto maestria"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Letto di ricarica",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "Lana qualsiasi: va bene uno qualsiasi dei 16 tipi"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Profilo del giocatore",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Profilo del giocatore",
+              "text": "La schermata Profilo: l’energia prodotta e consumata, il livello di maestria (40 livelli, 8 gradi) e gli Ala-Frammenti da spendere in abilità alla Stazione di lavoro."
+            },
+            {
+              "type": "stats",
+              "title": "Statistiche",
+              "lines": [
+                "Energia: 1 000 EU di lavoro delle macchine = 1 punto maestria"
+              ]
             }
           ]
         },

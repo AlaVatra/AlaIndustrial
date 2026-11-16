@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Spielerprofil",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Spielerprofil",
-              "text": "Ein Profilbildschirm mit Karrierestatistiken der Mod und einem Meisterschaftsfortschritt (40 Stufen, 8 Ränge), der durch Maschinenarbeit und — weitaus langsamer — durch Generatorleistung aufsteigt."
-            },
-            {
-              "type": "stats",
-              "title": "Werte",
-              "lines": [
-                "Energie: 1 000 EU Maschinenarbeit = 1 Meisterpunkt"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Ladebett",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "Beliebige Wolle: jede der 16 Sorten passt"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Spielerprofil",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Spielerprofil",
+              "text": "Der Bildschirm „Profil“: erzeugte und verbrauchte Energie, die Meisterschaftsstufe (40 Stufen, 8 Ränge) und die Ala-Fragmente für Fähigkeiten an der Arbeitsstation."
+            },
+            {
+              "type": "stats",
+              "title": "Werte",
+              "lines": [
+                "Energie: 1 000 EU Maschinenarbeit = 1 Meisterpunkt"
+              ]
             }
           ]
         },

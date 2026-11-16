@@ -95,6 +95,15 @@ public class StorageModuleBlock extends AbstractMachineBlock {
 	private static final int REFRESH_FLAGS =
 			Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_SKIP_ON_PLACE;
 
+	/**
+	 * A storage module has no energy port, so a cable draws no arm toward it (MOD-732); the machine base it
+	 * extends for its menu would otherwise draw one on every face.
+	 */
+	@Override
+	public boolean isCableConnectable() {
+		return false;
+	}
+
 	public StorageModuleBlock(Properties properties) {
 		super(properties);
 		BlockState state = stateDefinition.any();

@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Profil gracza",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Profil gracza",
-              "text": "Ekran profilu ze statystykami z całej rozgrywki w modzie oraz z progresją mistrzostwa (40 poziomów, 8 rang), która rośnie od pracy maszyn i — znacznie wolniej — od produkcji generatorów."
-            },
-            {
-              "type": "stats",
-              "title": "Statystyki",
-              "lines": [
-                "Energia: 1 000 EU pracy maszyn = 1 punkt mistrzostwa"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Łóżko ładujące",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "Dowolna wełna: pasuje dowolny z 16 rodzajów"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Profil gracza",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Profil gracza",
+              "text": "Ekran Profil: wytworzona i zużyta energia, poziom mistrzostwa (40 poziomów, 8 rang) oraz Ala-Fragmenty wydawane na umiejętności przy Stacji roboczej."
+            },
+            {
+              "type": "stats",
+              "title": "Statystyki",
+              "lines": [
+                "Energia: 1 000 EU pracy maszyn = 1 punkt mistrzostwa"
+              ]
             }
           ]
         },

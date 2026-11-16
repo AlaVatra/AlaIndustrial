@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Spelersprofiel",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Spelersprofiel",
-              "text": "Een profielscherm met de loopbaanstatistieken van de mod en een meesterschapsprogressie (40 niveaus, 8 rangen) die stijgt door machinewerk en, veel langzamer, door de productie van generatoren."
-            },
-            {
-              "type": "stats",
-              "title": "Statistieken",
-              "lines": [
-                "Energie: 1 000 EU machinewerk = 1 meesterschapspunt"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Laadbed",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "Willekeurige wol: elk van de 16 soorten past"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Spelersprofiel",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Spelersprofiel",
+              "text": "Het scherm Profiel: geproduceerde en verbruikte energie, het meesterschapsniveau (40 niveaus, 8 rangen) en de Ala-Fragmenten om aan het Werkstation aan vaardigheden te besteden."
+            },
+            {
+              "type": "stats",
+              "title": "Statistieken",
+              "lines": [
+                "Energie: 1 000 EU machinewerk = 1 meesterschapspunt"
+              ]
             }
           ]
         },

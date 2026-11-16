@@ -1,24 +1,18 @@
 # Changelog
 
-## 0.1.235
+## 0.1.236
 
-<p><img alt="Ala Industrial Minecraft mod: a mob beacon glowing inside a metal frame while nearby mobs show white outlines, with drill, ice and guide book updates" src="https://raw.githubusercontent.com/AlaVatra/AlaIndustrial/v0.1.235-mc26.3/release-media/v0.1.235-mc26.3/changelog.png" width="720"></p>
+<p><img alt="Ala Industrial Minecraft mod: an insulated cable joining another mod&#39;s cable, its arm drawn at the joint" src="https://raw.githubusercontent.com/AlaVatra/AlaIndustrial/v0.1.236-mc26.3/release-media/v0.1.236-mc26.3/changelog.png" width="720"></p>
 
-A new Mob Beacon outlines mobs through walls, the drill shows the area it is about to break, and compressor ice now takes four of the previous step.
-
-### New
-
-- **Drill area outline.** A drill with bore modules now outlines every block it is about to break, in the game's own block outline, so you can aim the whole area.
-- **Mob Beacon.** While powered, it outlines every mob within 16, 32 or 48 blocks through walls, in three sizes crafted up from a vanilla beacon. Power goes in from below only.
+Cables now show their arm toward other mods' energy blocks, the reactor antenna takes a cable in its own look, and the guide book fits small windows.
 
 ### Improved
 
-- **To-do Clipboard in the guide book.** The clipboard now has its own page with the recipe in the in-game guide book, in every language.
-- **Guide Book families.** A family page now pages through the recipes of all its variants, the Wooden Gear included, and notes when any kind of an item fits.
-- **Compressor ice.** Each step now takes 4 of the previous one: snow blocks to ice, ice to packed ice, packed ice to blue ice. Blue ice costs 64 snow blocks, still five times cheaper than crafting.
+- **Guide book.** The Player Profile entry is rewritten in plain words in every language.
 
 ### Bug Fixes
 
-- **Energy with other tech mods, correction.** The mod's cables pass energy into batteries and machines of other mods, but not into their cables. Join the networks through a battery or a machine.
-- **Monitor Wall in the Guide Book.** Its entry is back under Other, with the recipes of the Monitor Core, the Smart Wire, the Monitor Panel and the capacity card.
-- **Translations.** Boat and raft names in Bengali are now fully translated, and leftover English words in Dutch, Indonesian and Turkish are translated too.
+- **Cable arms tell the truth.** The crystal farm controller shows an arm on its panel face, where it takes power; the storage module, which has no energy, shows none.
+- **Reactor antenna.** A joining cable keeps its own look all the way in, with no gap at the joint, and the antenna's socket is larger, framed round the plug.
+- **Guide book on a small window.** Category buttons stay inside the book; extra categories scroll with arrows or the mouse wheel.
+- **Cable arms toward other mods' blocks.** A cable now shows its arm toward another mod's battery, machine or cable when that face has an energy port.
