@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Profil Pemain",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Profil Pemain",
-              "text": "Layar profil berisi statistik karier di mod ini dan progres keahlian (40 level, 8 pangkat) yang naik dari kerja mesin dan, jauh lebih lambat, dari hasil generator."
-            },
-            {
-              "type": "stats",
-              "title": "Statistik",
-              "lines": [
-                "Energi: 1 000 EU kerja mesin = 1 poin keahlian"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Ranjang Pengisi Daya",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "Wol Apa Saja: salah satu dari 16 jenis bisa dipakai"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Profil Pemain",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Profil Pemain",
+              "text": "Layar Profil: energi yang dihasilkan dan dipakai, tingkat keahlian (40 tingkat, 8 pangkat), serta Serpihan Ala yang dibelanjakan untuk kemampuan di Stasiun Kerja."
+            },
+            {
+              "type": "stats",
+              "title": "Statistik",
+              "lines": [
+                "Energi: 1 000 EU kerja mesin = 1 poin keahlian"
+              ]
             }
           ]
         },

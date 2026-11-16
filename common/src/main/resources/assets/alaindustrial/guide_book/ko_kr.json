@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "플레이어 프로필",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "플레이어 프로필",
-              "text": "모드 활동 통계와 숙련 진행도(40레벨, 8개 등급)를 보여주는 프로필 화면입니다. 숙련은 기계 작업으로 오르며, 발전기 생산으로는 훨씬 더 천천히 오릅니다."
-            },
-            {
-              "type": "stats",
-              "title": "정보",
-              "lines": [
-                "에너지: 기계 작업 1 000 EU = 숙련도 점수 1"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "충전 침대",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "아무 양털: 16종 중 아무거나 가능"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "플레이어 프로필",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "플레이어 프로필",
+              "text": "프로필 화면: 생산하고 사용한 에너지, 숙련 레벨(40레벨, 8계급), 워크스테이션에서 스킬에 쓰는 Ala 조각."
+            },
+            {
+              "type": "stats",
+              "title": "정보",
+              "lines": [
+                "에너지: 기계 작업 1 000 EU = 숙련도 점수 1"
+              ]
             }
           ]
         },

@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "Hồ sơ người chơi",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Hồ sơ người chơi",
-              "text": "Màn hình hồ sơ hiển thị thống kê sự nghiệp trong mod và tiến trình tinh thông (40 cấp, 8 danh hiệu), tăng cấp nhờ hoạt động của máy móc và chậm hơn nhiều nhờ sản lượng của máy phát điện."
-            },
-            {
-              "type": "stats",
-              "title": "Thông số",
-              "lines": [
-                "Năng lượng: 1 000 EU máy móc hoạt động = 1 điểm tinh thông"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "Giường sạc",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "Len bất kỳ: dùng loại nào trong 16 loại cũng được"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "Hồ sơ người chơi",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Hồ sơ người chơi",
+              "text": "Màn hình Hồ sơ: năng lượng đã tạo ra và đã dùng, cấp tinh thông (40 cấp, 8 danh hiệu) và Mảnh Ala dùng để mua kỹ năng ở Trạm làm việc."
+            },
+            {
+              "type": "stats",
+              "title": "Thông số",
+              "lines": [
+                "Năng lượng: 1 000 EU máy móc hoạt động = 1 điểm tinh thông"
+              ]
             }
           ]
         },

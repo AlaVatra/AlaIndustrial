@@ -232,6 +232,7 @@ public final class CableAccessoryBlockEntityRenderer implements RenderBoxProvide
 	private static void extractArmReach(CableBlockEntity entity, BlockState blockState, State state) {
 		state.anyReach = false;
 		Collections.fill(state.reach, List.of());
+		state.anyInlet = false;
 		var level = entity.getLevel();
 		if (level == null) {
 			return;
@@ -251,7 +252,9 @@ public final class CableAccessoryBlockEntityRenderer implements RenderBoxProvide
 				}
 			}
 		}
-		if (state.anyReach) {
+		// MOD-948: a straight arm carried into an inlet neighbour (the reactor antenna's boom), in this grade.
+		state.anyInlet = CableArmInletQuads.extract(level, pos, blockState, state.inlet);
+		if (state.anyReach || state.anyInlet) {
 			state.cableSprite = CABLE_SPRITES[entity.cableType().ordinal()];
 			state.fleckSprite = FLECK_SPRITES[entity.cableType().ordinal()];
 			state.sleeveTint = entity.cableType().isInsulated() ? CableColors.sleeve(entity.color()) : 0xFFFFFFFF;
@@ -394,7 +397,7 @@ public final class CableAccessoryBlockEntityRenderer implements RenderBoxProvide
 	 * with — carrying the level's own cardinal shading in the colour, exactly as the baked arm does.
 	 */
 	private void submitArmReach(State state, PoseStack poseStack, SubmitNodeCollector collector) {
-		if (!state.anyReach || state.cableSprite == null) {
+		if (!state.anyReach && !state.anyInlet || state.cableSprite == null) {
 			return;
 		}
 		TextureAtlasSprite sprite = sprites.get(state.cableSprite);
@@ -403,7 +406,14 @@ public final class CableAccessoryBlockEntityRenderer implements RenderBoxProvide
 		int light = state.lightCoords;
 		List<List<CableArmReach.Band>> reach = List.copyOf(state.reach); // the lambda may run after this state is reused
 		CardinalLighting shading = state.shading;
+		float[] inlet = state.anyInlet ? state.inlet.clone() : null; // copied for the same reason as reach
 		collector.submitCustomGeometry(poseStack, RenderTypes.cutoutMovingBlock(), (pose, consumer) -> {
+			if (inlet != null) {
+				CableArmInletQuads.draw(pose, consumer, sprite, tint, light, shading, inlet);
+				if (flecks != null) {
+					CableArmInletQuads.draw(pose, consumer, flecks, 0xFFFFFFFF, light, shading, inlet);
+				}
+			}
 			for (Direction toward : Direction.Plane.HORIZONTAL) {
 				List<CableArmReach.Band> bands = reach.get(toward.get2DDataValue());
 				if (!bands.isEmpty()) {
@@ -700,7 +710,7 @@ public final class CableAccessoryBlockEntityRenderer implements RenderBoxProvide
 	 * {@code OffScreenRendererBoxTest}.
 	 */
 	public AABB getRenderBoundingBox(CableBlockEntity blockEntity) {
-		return new AABB(blockEntity.getBlockPos()).inflate(ARM_REACH_LIMIT, 0.0, ARM_REACH_LIMIT);
+		return new AABB(blockEntity.getBlockPos()).inflate(ARM_REACH_LIMIT); // MOD-948: an inlet arm may go up or down
 	}
 
 	public static final class State extends BlockEntityRenderState {
@@ -725,6 +735,9 @@ public final class CableAccessoryBlockEntityRenderer implements RenderBoxProvide
 		 */
 		private final List<List<CableArmReach.Band>> reach = new ArrayList<>(Collections.nCopies(4, List.of()));
 		private boolean anyReach;
+		/** How far each straight arm runs into an inlet neighbour, by {@code Direction.ordinal()} (MOD-948). */
+		private final float[] inlet = new float[6];
+		private boolean anyInlet;
 		/** This cable grade's texture, set only when some arm continues. */
 		@Nullable
 		private SpriteId cableSprite;

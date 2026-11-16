@@ -13,8 +13,8 @@ public final class ReactorAntennaGeometry {
 
 	/**
 	 * {@code {x0, y0, z0, x1, y1, z1}} of each element: mount plate, boom, feed box, driven element, two directors —
-	 * the mast's own drawing ({@code reactor_antenna_mast.json}). The cable's sleeve and arms are {@link #SLEEVE_BOX}
-	 * and {@link #ARM_BOX}, drawn only while a cable joins.
+	 * the mast's own drawing ({@code reactor_antenna_mast.json}). The cable's sleeve is {@link #SLEEVE_BOX}, drawn only
+	 * while a cable joins; {@link #ARM_BOX} is where the joining cable draws its own arm in (MOD-948).
 	 */
 	public static final double[][] MAST_BOXES = {
 		{5, 11, 15, 11, 15, 16},
@@ -31,8 +31,12 @@ public final class ReactorAntennaGeometry {
 	 */
 	public static final double[] SLEEVE_BOX = {4.5, 4.5, 4.5, 11.5, 11.5, 16};
 
-	/** One arm of the sleeve toward a cable, drawn pointing north from the centre and turned like a facing. */
-	public static final double[] ARM_BOX = {4.75, 4.75, 0, 11.25, 11.25, 4.5};
+	/**
+	 * The arm toward a cable, pointing north from the centre and turned like a facing: the boom's collision and outline
+	 * there, and the box the joining cable draws its own arm over, in its own grade ({@code CableArmInlet},
+	 * MOD-948). Its section is the cable arm's (5..11), so the two meet flush at the cell edge.
+	 */
+	public static final double[] ARM_BOX = {5, 5, 0, 11, 11, 4.5};
 
 	private static final String[] DIRECTIONS = {"DOWN", "UP", "NORTH", "SOUTH", "WEST", "EAST"};
 

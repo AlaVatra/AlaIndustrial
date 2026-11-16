@@ -199,6 +199,8 @@ pitest {
     targetClasses = ['dev.alaindustrial.core.*',
                      'dev.alaindustrial.stats.LevelMath',
                      'dev.alaindustrial.client.guide.GuidePaginator',
+                     // MOD-980: which Guide Book categories fit the left column and how it scrolls.
+                     'dev.alaindustrial.client.guide.GuideTabWindow',
                      // MOD-513: the archive record's client half — the shape filter on what the server
                      // sends and the token swap on the book page. Minecraft-free so GuideRecordTextTest
                      // reaches them; ArchiveRecord itself is already under core.*.

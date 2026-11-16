@@ -62,11 +62,30 @@ class ReactorAntennaGeometryTest {
 				1e-9);
 	}
 
-	/** The sleeve and the arm are drawn by their own models; their boxes are the outline and collision of each. */
+	/** The sleeve is drawn by its own model; its box is the sleeve's outline and collision. */
 	@Test
-	void theSleeveAndArmBoxesAreTheirModels() throws IOException {
+	void theSleeveBoxIsItsModel() throws IOException {
 		assertModelIs("reactor_antenna_mast_sleeve", ReactorAntennaGeometry.SLEEVE_BOX);
-		assertModelIs("reactor_antenna_mast_arm", ReactorAntennaGeometry.ARM_BOX);
+	}
+
+	/**
+	 * The arm in the boom's cell is the joining cable's own arm carried on (MOD-948), so its box has the cable arm's
+	 * section — the copper cable's arm model stands for all grades, which share it — starts at the cell edge, and stays
+	 * under half a cell deep, which is what the cable's render box allows for.
+	 */
+	@Test
+	void theArmBoxIsTheCableArmCarriedOn() throws IOException {
+		double[] arm = ReactorAntennaGeometry.ARM_BOX;
+		Matcher m = NUMBERS.matcher(Files.readString(
+				Path.of("src/main/resources/assets/alaindustrial/models/block/copper_cable_arm.json")));
+		assertTrue(m.find(), "the cable arm model has a box");
+		double from = Double.parseDouble(m.group(2));
+		assertTrue(m.find(), "the cable arm model has a box");
+		double to = Double.parseDouble(m.group(2));
+		assertArrayEquals(new double[] {from, from, 0, to, to}, new double[] {arm[0], arm[1], arm[2], arm[3], arm[4]},
+				1e-9, "the arm's section is the cable arm's, from the cell edge");
+		assertTrue(arm[5] > arm[2] && arm[5] - arm[2] < 8, "the arm stays under half a cell deep");
+		assertEquals(arm[5], ReactorAntennaGeometry.SLEEVE_BOX[2], 1e-9, "the arm ends where the sleeve begins");
 	}
 
 	/**

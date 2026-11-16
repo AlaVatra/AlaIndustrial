@@ -18,8 +18,9 @@ repositories {
     minecraft.mavenizer(it)
     maven fg.forgeMaven
     maven fg.minecraftLibsMaven
-    // Compile-only APIs the common sources name (recipe viewers, WTHIT). None of them has a Forge 26.x
-    // runtime, so the plugins compile into the jar and are never discovered.
+    // Compile-only APIs the common sources name (recipe viewers, WTHIT). The recipe viewers have no Forge
+    // 26.x runtime, so their plugins compile into the jar and are never discovered. WTHIT has Forge builds
+    // since 20.0.1 / 21.0.0: a player who installs it gets the tank plugin, not yet checked on Forge (MOD-939).
     maven { url = 'https://maven.blamejared.com/' }
     maven { url = 'https://maven.shedaniel.me/' }
     maven { url = 'https://maven.architectury.dev/' }

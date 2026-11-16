@@ -6,7 +6,8 @@ package dev.alaindustrial.compat.wthit;
  * <p>WTHIT 20.0.0's {@code SpriteBarComponent} is 100 px wide and clips its fill to {@code fill - 2}
  * pixels ({@code enableScissor(x + 1, …, x + fill - 1, …)}). A fill of 1 or 2 px — a tank 1–3 % full —
  * gives an empty scissor, and the 26.x render pass throws {@code "Scissor size must be >0"}, taking
- * the game down. The fix is upstream (badasintended/wthit#376) but not released.
+ * the game down. WTHIT fixed it upstream (badasintended/wthit#376, released in 20.0.1 and 21.0.0); the floor
+ * stays for players who still run 20.0.0.
  *
  * <p>So a tank that is not empty is never drawn below 3 %: its bar is at most 2 px longer than the
  * truth, only when it is nearly empty, and the {@code stored/capacity} text beside it stays exact.

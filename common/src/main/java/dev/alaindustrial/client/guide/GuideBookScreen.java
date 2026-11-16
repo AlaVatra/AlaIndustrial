@@ -47,6 +47,7 @@ public final class GuideBookScreen extends Screen {
 	private int entry = -1;       // -1 = entry-list mode
 	private int page = 0;         // reflowed screen-page index in entry mode
 	private int listOffset = 0;
+	private final GuideTabColumn tabColumn = new GuideTabColumn(TAB_W, TAB_H, ROW, this::rebuildWidgets); // MOD-980
 
 	// Layout (recomputed each init()).
 	private int panelX, panelY, panelW, panelH;
@@ -114,15 +115,8 @@ public final class GuideBookScreen extends Screen {
 			return;
 		}
 		tab = Math.max(0, Math.min(tab, book.tabs.size() - 1));
-		for (int i = 0; i < book.tabs.size(); i++) {
-			int idx = i;
-			Button b = Button.builder(Component.literal(book.tabs.get(i).title), p -> selectTab(idx))
-					.bounds(tabX, bodyTop + i * ROW, TAB_W, TAB_H).build();
-			if (i == tab) {
-				b.active = false;
-			}
-			addRenderableWidget(b);
-		}
+		tabColumn.build(book.tabs.stream().map(t -> t.title).toList(), tab, tabX, bodyTop, contentBottom,
+				this::selectTab, this::addRenderableWidget);
 
 		Tab cur = book.tabs.get(tab);
 		if (entry < 0) {
@@ -130,6 +124,11 @@ public final class GuideBookScreen extends Screen {
 		} else {
 			buildEntry(cur);
 		}
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+		return tabColumn.wheel(mouseX, mouseY, scrollY) || super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 
 	private void buildList(Tab cur) {
@@ -240,6 +239,7 @@ public final class GuideBookScreen extends Screen {
 		entry = book.tabs.get(i).entries.size() == 1 ? 0 : -1;
 		page = 0;
 		listOffset = 0;
+		tabColumn.followSelection();
 		rebuildWidgets();
 	}
 

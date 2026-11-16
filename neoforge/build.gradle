@@ -134,7 +134,7 @@ dependencies {
     }
 
     // WTHIT tank plugin (MOD-938): API to compile the shared plugin; the full mod only with `-PwithWthit`
-    // (its only build is for 26.2 — opt in on the 26.2 line).
+    // (`wthit_version` names this line's build).
     compileOnly "mcp.mobius.waila:wthit-api:mojmap-${wthit_version}"
     if (project.hasProperty('withWthit')) {
         runtimeOnly "mcp.mobius.waila:wthit:neo-${wthit_version}"

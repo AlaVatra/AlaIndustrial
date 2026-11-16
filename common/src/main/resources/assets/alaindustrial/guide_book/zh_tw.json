@@ -6167,25 +6167,6 @@
           ]
         },
         {
-          "id": "player_profile",
-          "title": "玩家檔案",
-          "icon": "minecraft:player_head",
-          "pages": [
-            {
-              "type": "text",
-              "title": "玩家檔案",
-              "text": "顯示模組生涯統計與精通進度（40 級，8 個頭銜）的檔案介面。精通透過機器運轉提升，透過發電機產出提升則慢得多。"
-            },
-            {
-              "type": "stats",
-              "title": "數據",
-              "lines": [
-                "能量：機器運轉 1 000 EU = 1 點精通"
-              ]
-            }
-          ]
-        },
-        {
           "id": "charging_bed",
           "title": "充電床",
           "icon": "alaindustrial:charging_bed",
@@ -6392,6 +6373,25 @@
               "type": "text",
               "title": "",
               "text": "任意羊毛: 16 種中任意一種均可"
+            }
+          ]
+        },
+        {
+          "id": "player_profile",
+          "title": "玩家檔案",
+          "icon": "minecraft:player_head",
+          "pages": [
+            {
+              "type": "text",
+              "title": "玩家檔案",
+              "text": "檔案畫面：產出與消耗的能量、精通等級（40 級，8 個稱號），以及在工作站用於學習技能的 Ala碎片。"
+            },
+            {
+              "type": "stats",
+              "title": "數據",
+              "lines": [
+                "能量：機器運轉 1 000 EU = 1 點精通"
+              ]
             }
           ]
         },
