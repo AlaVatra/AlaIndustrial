@@ -6604,19 +6604,19 @@
                 },
                 {
                   "grid": [
-                    "minecraft:gold_ingot",
-                    "",
-                    "",
+                    "alaindustrial:silver_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:silver_plate",
                     "alaindustrial:copper_cable",
-                    "",
-                    "",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:copper_cable",
+                    "minecraft:gold_ingot",
                     "minecraft:redstone",
-                    "",
-                    ""
+                    "minecraft:gold_ingot"
                   ],
                   "recipe_type": "有序合成",
                   "result_id": "alaindustrial:smart_wire",
-                  "result_count": 4
+                  "result_count": 6
                 },
                 {
                   "grid": [

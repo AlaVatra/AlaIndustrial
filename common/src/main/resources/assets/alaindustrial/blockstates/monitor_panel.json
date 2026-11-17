@@ -1,12 +1,688 @@
 {
-	"variants": {
-		"facing=north,lit=false": { "model": "alaindustrial:block/monitor_panel_off" },
-		"facing=east,lit=false": { "model": "alaindustrial:block/monitor_panel_off", "y": 90 },
-		"facing=south,lit=false": { "model": "alaindustrial:block/monitor_panel_off", "y": 180 },
-		"facing=west,lit=false": { "model": "alaindustrial:block/monitor_panel_off", "y": 270 },
-		"facing=north,lit=true": { "model": "alaindustrial:block/monitor_panel_on" },
-		"facing=east,lit=true": { "model": "alaindustrial:block/monitor_panel_on", "y": 90 },
-		"facing=south,lit=true": { "model": "alaindustrial:block/monitor_panel_on", "y": 180 },
-		"facing=west,lit=true": { "model": "alaindustrial:block/monitor_panel_on", "y": 270 }
-	}
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_off"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "north",
+            "lit": "false",
+            "stand": "none",
+            "wire_up": "true"
+          },
+          {
+            "facing": "north",
+            "lit": "false",
+            "stand": "none",
+            "wire_down": "true"
+          },
+          {
+            "facing": "north",
+            "lit": "false",
+            "stand": "none",
+            "wire_cw": "true"
+          },
+          {
+            "facing": "north",
+            "lit": "false",
+            "stand": "none",
+            "wire_ccw": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_junction_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "false",
+        "wire_up": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_up_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "false",
+        "wire_cw": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_cw_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "false",
+        "stand": "north|east|south|west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_strut_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "east",
+            "lit": "false",
+            "stand": "none",
+            "wire_up": "true"
+          },
+          {
+            "facing": "east",
+            "lit": "false",
+            "stand": "none",
+            "wire_down": "true"
+          },
+          {
+            "facing": "east",
+            "lit": "false",
+            "stand": "none",
+            "wire_cw": "true"
+          },
+          {
+            "facing": "east",
+            "lit": "false",
+            "stand": "none",
+            "wire_ccw": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_junction_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "false",
+        "wire_up": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_up_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "false",
+        "wire_cw": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_cw_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "false",
+        "stand": "north|east|south|west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_strut_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "south",
+            "lit": "false",
+            "stand": "none",
+            "wire_up": "true"
+          },
+          {
+            "facing": "south",
+            "lit": "false",
+            "stand": "none",
+            "wire_down": "true"
+          },
+          {
+            "facing": "south",
+            "lit": "false",
+            "stand": "none",
+            "wire_cw": "true"
+          },
+          {
+            "facing": "south",
+            "lit": "false",
+            "stand": "none",
+            "wire_ccw": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_junction_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "false",
+        "wire_up": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_up_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "false",
+        "wire_cw": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_cw_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "false",
+        "stand": "north|east|south|west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_strut_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "west",
+            "lit": "false",
+            "stand": "none",
+            "wire_up": "true"
+          },
+          {
+            "facing": "west",
+            "lit": "false",
+            "stand": "none",
+            "wire_down": "true"
+          },
+          {
+            "facing": "west",
+            "lit": "false",
+            "stand": "none",
+            "wire_cw": "true"
+          },
+          {
+            "facing": "west",
+            "lit": "false",
+            "stand": "none",
+            "wire_ccw": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_junction_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "false",
+        "wire_up": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_up_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "false",
+        "wire_cw": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_cw_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "false",
+        "stand": "north|east|south|west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_strut_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "lit": "false",
+        "stand": "north"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_base_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "lit": "false",
+        "stand": "east"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_base_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "lit": "false",
+        "stand": "south"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_base_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "lit": "false",
+        "stand": "west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_base_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_on"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "north",
+            "lit": "true",
+            "stand": "none",
+            "wire_up": "true"
+          },
+          {
+            "facing": "north",
+            "lit": "true",
+            "stand": "none",
+            "wire_down": "true"
+          },
+          {
+            "facing": "north",
+            "lit": "true",
+            "stand": "none",
+            "wire_cw": "true"
+          },
+          {
+            "facing": "north",
+            "lit": "true",
+            "stand": "none",
+            "wire_ccw": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_junction_on"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "true",
+        "wire_up": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_up_on"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "true",
+        "wire_cw": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_cw_on"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "true",
+        "stand": "north|east|south|west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_strut_on"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "east",
+            "lit": "true",
+            "stand": "none",
+            "wire_up": "true"
+          },
+          {
+            "facing": "east",
+            "lit": "true",
+            "stand": "none",
+            "wire_down": "true"
+          },
+          {
+            "facing": "east",
+            "lit": "true",
+            "stand": "none",
+            "wire_cw": "true"
+          },
+          {
+            "facing": "east",
+            "lit": "true",
+            "stand": "none",
+            "wire_ccw": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_junction_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "true",
+        "wire_up": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_up_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "true",
+        "wire_cw": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_cw_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "true",
+        "stand": "north|east|south|west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_strut_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "south",
+            "lit": "true",
+            "stand": "none",
+            "wire_up": "true"
+          },
+          {
+            "facing": "south",
+            "lit": "true",
+            "stand": "none",
+            "wire_down": "true"
+          },
+          {
+            "facing": "south",
+            "lit": "true",
+            "stand": "none",
+            "wire_cw": "true"
+          },
+          {
+            "facing": "south",
+            "lit": "true",
+            "stand": "none",
+            "wire_ccw": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_junction_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "true",
+        "wire_up": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_up_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "true",
+        "wire_cw": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_cw_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "true",
+        "stand": "north|east|south|west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_strut_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_on",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "facing": "west",
+            "lit": "true",
+            "stand": "none",
+            "wire_up": "true"
+          },
+          {
+            "facing": "west",
+            "lit": "true",
+            "stand": "none",
+            "wire_down": "true"
+          },
+          {
+            "facing": "west",
+            "lit": "true",
+            "stand": "none",
+            "wire_cw": "true"
+          },
+          {
+            "facing": "west",
+            "lit": "true",
+            "stand": "none",
+            "wire_ccw": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_junction_on",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "true",
+        "wire_up": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_up_on",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "true",
+        "wire_cw": "true"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_bar_cw_on",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "true",
+        "stand": "north|east|south|west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_strut_on",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "lit": "true",
+        "stand": "north"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_base_on",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "lit": "true",
+        "stand": "east"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_base_on",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "lit": "true",
+        "stand": "south"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_base_on",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "lit": "true",
+        "stand": "west"
+      },
+      "apply": {
+        "model": "alaindustrial:block/monitor_panel_conn_stand_base_on"
+      }
+    }
+  ]
 }

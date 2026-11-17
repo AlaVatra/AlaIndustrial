@@ -44,7 +44,6 @@ Method <dev.alaindustrial.core.monitor.MonitorNetwork.publishAll(dev.alaindustri
 Method <dev.alaindustrial.core.monitor.MonitorNetwork.publishAll(dev.alaindustrial.core.monitor.MonitorReadout)> checks instanceof <dev.alaindustrial.block.entity.MonitorPanelBlockEntity> in (MonitorNetwork.java:239)
 Method <dev.alaindustrial.core.monitor.MonitorNetwork.refreshIfDirty()> checks instanceof <dev.alaindustrial.block.entity.MonitorCoreBlockEntity> in (MonitorNetwork.java:96)
 Method <dev.alaindustrial.core.monitor.MonitorNetwork.refreshIfDirty()> checks instanceof <dev.alaindustrial.block.entity.MonitorPanelBlockEntity> in (MonitorNetwork.java:98)
-Method <dev.alaindustrial.core.monitor.MonitorNetwork.refreshIfDirty()> checks instanceof <dev.alaindustrial.block.entity.SmartWireBlockEntity> in (MonitorNetwork.java:100)
 Method <dev.alaindustrial.core.monitor.MonitorNetwork.tick()> calls method <dev.alaindustrial.block.entity.MonitorCoreBlockEntity.payUpkeep(net.minecraft.world.level.Level, int)> in (MonitorNetwork.java:176)
 Method <dev.alaindustrial.core.monitor.MonitorNetwork.tick()> calls method <dev.alaindustrial.block.entity.MonitorCoreBlockEntity.publishStats(int, boolean)> in (MonitorNetwork.java:178)
 Method <dev.alaindustrial.core.monitor.MonitorNetwork.tick()> calls method <dev.alaindustrial.block.entity.MonitorCoreBlockEntity.trackableTypes()> in (MonitorNetwork.java:165)

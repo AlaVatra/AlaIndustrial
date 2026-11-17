@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:chest",
+    "minecraft:trapped_chest",
+    "minecraft:barrel",
+    "#minecraft:copper_chests",
+    "#minecraft:shulker_boxes",
+    "alaindustrial:iron_chest",
+    "alaindustrial:silver_chest",
+    "alaindustrial:gold_chest",
+    "alaindustrial:electrum_chest",
+    "alaindustrial:diamond_chest",
+    "alaindustrial:shielding_chest",
+    "alaindustrial:storage_module",
+    "alaindustrial:warehouse_shelf",
+    "#c:chests",
+    "#c:barrels",
+    {
+      "id": "#c:shulker_boxes",
+      "required": false
+    }
+  ]
+}

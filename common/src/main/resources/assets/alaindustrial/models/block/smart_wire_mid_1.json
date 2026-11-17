@@ -1,0 +1,60 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "alaindustrial:block/smart_wire_body",
+    "body": "alaindustrial:block/smart_wire_body"
+  },
+  "elements": [
+    {
+      "from": [
+        3.0,
+        2.0,
+        3.0
+      ],
+      "to": [
+        13.0,
+        4.0,
+        8.0
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            1.01562,
+            6.76562,
+            1.60938,
+            6.98438
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            0.39062,
+            6.76562,
+            0.98438,
+            6.98438
+          ],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [
+            1.39062,
+            0.39062,
+            2.60938,
+            0.98438
+          ],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [
+            1.39062,
+            1.01562,
+            2.60938,
+            1.60938
+          ],
+          "texture": "#body"
+        }
+      }
+    }
+  ]
+}

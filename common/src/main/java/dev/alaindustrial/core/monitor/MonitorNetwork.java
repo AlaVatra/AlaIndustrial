@@ -10,8 +10,11 @@ import dev.alaindustrial.core.net.GraphNetwork;
 import dev.alaindustrial.core.net.NodeSet;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,6 +32,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  */
 public final class MonitorNetwork implements GraphNetwork<MonitorNetwork, BlockPos> {
 
+	/**
+	 * How many containers one wall reads (MOD-1014). Not a config knob: the wire's blockstate and its
+	 * models are built for exactly {@code 0..8} lit cores of the ribbon.
+	 */
+	public static final int WIRE_CHANNELS = 8;
+
 	private static final Comparator<BlockPos> POS_ORDER =
 			(a, b) -> PosOrder.compare(a.getX(), a.getY(), a.getZ(), b.getX(), b.getY(), b.getZ());
 
@@ -40,8 +49,21 @@ public final class MonitorNetwork implements GraphNetwork<MonitorNetwork, BlockP
 	private final List<BlockPos> cores = new ArrayList<>();
 	private final List<BlockPos> panels = new ArrayList<>();
 	private final List<BlockPos> containers = new ArrayList<>();
+	/** The wire segments, in geometric order, as the last refresh found them. */
+	private final List<BlockPos> wires = new ArrayList<>();
+	/** The channel key of every container a wire touches, served or not. */
+	private final Map<BlockPos, BlockPos> keyOf = new LinkedHashMap<>();
+	/** The channel keys that got a channel. */
+	private final Set<BlockPos> servedKeys = new LinkedHashSet<>();
 
 	private int cooldown;
+	/**
+	 * Whether the wall runs: exactly one core, and it paid its upkeep on the last scan. The wire lights its
+	 * cores only while this holds, so it goes dark together with the panels (MOD-1014).
+	 */
+	private boolean working;
+	/** The wires do not show the current channels and {@link #working} yet. */
+	private boolean wiresStale;
 
 	public MonitorNetwork(ServerLevel level) {
 		this.level = level;
@@ -83,11 +105,20 @@ public final class MonitorNetwork implements GraphNetwork<MonitorNetwork, BlockP
 	}
 
 	/**
-	 * Sort the nodes into roles and find the containers the wires touch.
+	 * Sort the nodes into roles, find the containers the wires touch and give at most
+	 * {@link #WIRE_CHANNELS} of them a channel.
 	 *
 	 * <p>Everything here is cached until the topology changes: this walks every node and asks the
 	 * world for its block entity, which is exactly the work that must not happen per tick on a wall
 	 * of several hundred panels.
+	 *
+	 * <p><b>Channels (MOD-1014).</b> A channel is one container as the player sees it: both halves of a
+	 * double chest share one ({@link ContainerScan#channelKey}). The first {@link #WIRE_CHANNELS} channels
+	 * in the stable geometric order get served, the same order that decides which panels go dark when the
+	 * cards run out (ADR-006), so the answer is the same after a reload. A container left without a
+	 * channel is not read at all. The answer is drawn on the wires at the end of the tick
+	 * ({@link #showChannelsIfStale}): a plug on each face toward a served container and, while the wall
+	 * runs, the number of used channels on every segment.
 	 */
 	private void refreshIfDirty() {
 		if (!nodeSet.isDirty()) {
@@ -97,7 +128,10 @@ public final class MonitorNetwork implements GraphNetwork<MonitorNetwork, BlockP
 		cores.clear();
 		panels.clear();
 		containers.clear();
-		Set<BlockPos> seenContainers = new LinkedHashSet<>();
+		wires.clear();
+		keyOf.clear();
+		servedKeys.clear();
+		Set<BlockPos> touched = new LinkedHashSet<>();
 		for (BlockPos pos : nodes) {
 			if (!level.isLoaded(pos)) {
 				continue;
@@ -107,47 +141,104 @@ public final class MonitorNetwork implements GraphNetwork<MonitorNetwork, BlockP
 				cores.add(pos);
 			} else if (be instanceof MonitorPanelBlockEntity) {
 				panels.add(pos);
-			} else if (be instanceof SmartWireBlockEntity) {
+			} else if (be instanceof MonitorWire) {
+				wires.add(pos);
 				for (Direction dir : Direction.values()) {
 					BlockPos target = pos.relative(dir).immutable();
-					if (nodes.contains(target) || seenContainers.contains(target)) {
-						continue;
-					}
-					if (ContainerScan.isReadable(level, target)) {
-						seenContainers.add(target);
+					if (!nodes.contains(target) && !touched.contains(target)
+							&& ContainerScan.isReadable(level, target)) {
+						touched.add(target);
 					}
 				}
 			}
 		}
-		containers.addAll(seenContainers);
 		// A stable geometric order, not hash order: it decides which panels go dark when the fitted
-		// cards run out, and that answer must be the same after a reload (ADR-006).
+		// cards run out and which containers get a channel, and both answers must be the same after a
+		// reload (ADR-006).
 		cores.sort(POS_ORDER);
 		panels.sort(POS_ORDER);
-		containers.sort(POS_ORDER);
+		wires.sort(POS_ORDER);
+		List<BlockPos> candidates = new ArrayList<>(touched);
+		candidates.sort(POS_ORDER);
+		Map<BlockPos, BlockPos> channels = new LinkedHashMap<>();
+		for (BlockPos pos : candidates) {
+			BlockPos key = ContainerScan.channelKey(level, pos);
+			keyOf.put(pos, key);
+			if (!channels.containsKey(key) && channels.size() < WIRE_CHANNELS) {
+				channels.put(key, pos);
+			}
+		}
+		// One position per channel: a double chest touched at both halves is read once, not twice.
+		containers.addAll(channels.values());
+		servedKeys.addAll(channels.keySet());
+		wiresStale = true;
 	}
 
-	/** Run one scan if the interval has elapsed. Nothing is transported, so the frame's telemetry gets 0. */
+	/**
+	 * The end of every tick: record whether the wall runs and bring the wires up to date. A change of
+	 * {@link #working} relights or darkens every wire even when the topology did not move.
+	 *
+	 * @return 0, the tick's telemetry: nothing is transported
+	 */
+	private long settle(boolean now) {
+		if (working != now) {
+			working = now;
+			wiresStale = true;
+		}
+		showChannelsIfStale();
+		return 0L;
+	}
+
+	/**
+	 * Draw the served channels on every loaded wire segment, once per change of the channels or of
+	 * {@link #working}, never per tick. The plugs show where the wire is joined whatever the power; the
+	 * fill is the number of channels only while the wall runs, and {@code 0} otherwise. Each segment
+	 * writes only what changed.
+	 */
+	private void showChannelsIfStale() {
+		if (!wiresStale) {
+			return;
+		}
+		wiresStale = false;
+		int fill = working ? servedKeys.size() : 0;
+		for (BlockPos pos : wires) {
+			if (!(level.getBlockEntity(pos) instanceof MonitorWire wire)) {
+				continue;
+			}
+			Set<Direction> plugged = EnumSet.noneOf(Direction.class);
+			for (Direction dir : Direction.values()) {
+				BlockPos key = keyOf.get(pos.relative(dir));
+				if (key != null && servedKeys.contains(key)) {
+					plugged.add(dir);
+				}
+			}
+			wire.showChannels(plugged, fill);
+		}
+	}
+
+	/**
+	 * Run one scan if the interval has elapsed, then bring the wires up to date
+	 * ({@link #settle}, on every way out). A wall with no panels pays no upkeep and so does
+	 * not run: its wire stays dark until the first panel is hung (MOD-1014). Nothing is transported, so the
+	 * frame's telemetry gets 0.
+	 */
 	@Override
 	public long tick() {
 		refreshIfDirty();
 		if (panels.isEmpty()) {
-			return 0L;
+			return settle(false);
 		}
 		if (--cooldown > 0) {
-			return 0L;
+			return settle(working);
 		}
 		cooldown = Math.max(1, Config.monitorScanIntervalTicks);
 
 		// Exactly one core, deliberately: two cores in one wall would each bill their own upkeep and
 		// each claim the same panels, so the wall refuses to run rather than working twice over.
-		if (cores.size() != 1) {
+		if (cores.size() != 1
+				|| !(level.getBlockEntity(cores.getFirst()) instanceof MonitorCoreBlockEntity core)) {
 			publishAll(MonitorReadout.NO_CORE);
-			return 0L;
-		}
-		if (!(level.getBlockEntity(cores.getFirst()) instanceof MonitorCoreBlockEntity core)) {
-			publishAll(MonitorReadout.NO_CORE);
-			return 0L;
+			return settle(false);
 		}
 
 		// The watched types, deduplicated: two panels showing the same item are one demand on the
@@ -208,7 +299,7 @@ public final class MonitorNetwork implements GraphNetwork<MonitorNetwork, BlockP
 				panel.publish(MonitorReadout.OK, tally.total(type));
 			}
 		}
-		return 0L;
+		return settle(powered);
 	}
 
 	/**

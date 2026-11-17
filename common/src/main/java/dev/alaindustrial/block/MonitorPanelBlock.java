@@ -8,13 +8,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -51,6 +55,25 @@ public class MonitorPanelBlock extends BaseEntityBlock {
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty ACTIVE = BlockStateProperties.LIT;
 
+	/*
+	 * Connector flags (MOD-1013): what the model draws on the back of the panel, nothing else. The
+	 * network joins panels by adjacency and never reads these. "cw" and "ccw" are relative to FACING
+	 * ({@code facing.getClockWise()} / {@code getCounterClockWise()}), so a rotated wall keeps them.
+	 */
+	/** A panel with the same facing directly above. */
+	public static final BooleanProperty WIRE_UP = BooleanProperty.create("wire_up");
+	/** A panel with the same facing directly below. */
+	public static final BooleanProperty WIRE_DOWN = BooleanProperty.create("wire_down");
+	/** A panel with the same facing on the {@code facing.getClockWise()} side. */
+	public static final BooleanProperty WIRE_CW = BooleanProperty.create("wire_cw");
+	/** A panel with the same facing on the {@code facing.getCounterClockWise()} side. */
+	public static final BooleanProperty WIRE_CCW = BooleanProperty.create("wire_ccw");
+	/**
+	 * A monitor core directly below, and which way it faces: the panel stands on it. The base of the stand
+	 * is turned with the core's top, the struts with the panel (see {@link MonitorStand}).
+	 */
+	public static final EnumProperty<MonitorStand> STAND = EnumProperty.create("stand", MonitorStand.class);
+
 	private static final VoxelShape NORTH_SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 4.1);
 	private static final VoxelShape EAST_SHAPE = Block.box(11.9, 0.0, 0.0, 16.0, 16.0, 16.0);
 	private static final VoxelShape SOUTH_SHAPE = Block.box(0.0, 0.0, 11.9, 16.0, 16.0, 16.0);
@@ -58,7 +81,9 @@ public class MonitorPanelBlock extends BaseEntityBlock {
 
 	public MonitorPanelBlock(Properties properties) {
 		super(properties);
-		registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(ACTIVE, false));
+		registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(ACTIVE, false)
+				.setValue(WIRE_UP, false).setValue(WIRE_DOWN, false).setValue(WIRE_CW, false)
+				.setValue(WIRE_CCW, false).setValue(STAND, MonitorStand.NONE));
 	}
 
 	/**
@@ -74,13 +99,69 @@ public class MonitorPanelBlock extends BaseEntityBlock {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING, ACTIVE);
+		builder.add(FACING, ACTIVE, WIRE_UP, WIRE_DOWN, WIRE_CW, WIRE_CCW, STAND);
 	}
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
+		BlockState state = defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
 				.setValue(ACTIVE, false);
+		return withConnectors(state, context.getLevel(), context.getClickedPos());
+	}
+
+	/**
+	 * {@code state} with all five connector flags derived from the four in-plane neighbours and the
+	 * block below. The single source of truth for placement and for the once-per-load check in
+	 * {@link MonitorPanelBlockEntity}; {@link #updateShape} applies the same rule one face at a time.
+	 */
+	public static BlockState withConnectors(BlockState state, BlockGetter level, BlockPos pos) {
+		Direction facing = state.getValue(FACING);
+		BlockState below = level.getBlockState(pos.below());
+		return state
+				.setValue(WIRE_UP, joins(facing, level.getBlockState(pos.above())))
+				.setValue(WIRE_DOWN, joins(facing, below))
+				.setValue(WIRE_CW, joins(facing, level.getBlockState(pos.relative(facing.getClockWise()))))
+				.setValue(WIRE_CCW, joins(facing, level.getBlockState(pos.relative(facing.getCounterClockWise()))))
+				.setValue(STAND, standOn(below));
+	}
+
+	/** The stand a panel gets from the block below it: a core, with its facing, or nothing. */
+	private static MonitorStand standOn(BlockState below) {
+		if (below.getBlock() instanceof MonitorCoreBlock && below.hasProperty(MonitorCoreBlock.FACING)) {
+			return MonitorStand.onCoreFacing(below.getValue(MonitorCoreBlock.FACING));
+		}
+		return MonitorStand.NONE;
+	}
+
+	/** A connector is drawn only to a panel of the same wall plane: same block, same facing. */
+	private static boolean joins(Direction facing, BlockState neighbour) {
+		return neighbour.getBlock() instanceof MonitorPanelBlock && neighbour.getValue(FACING) == facing;
+	}
+
+	/**
+	 * Re-derive the one flag that faces the changed neighbour, from the state handed in (no level
+	 * read). The face behind and the face in front carry no connector.
+	 */
+	@Override
+	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks,
+			BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos,
+			BlockState neighbourState, RandomSource random) {
+		Direction facing = state.getValue(FACING);
+		boolean joins = joins(facing, neighbourState);
+		if (directionToNeighbour == Direction.UP) {
+			return state.setValue(WIRE_UP, joins);
+		}
+		if (directionToNeighbour == Direction.DOWN) {
+			return state.setValue(WIRE_DOWN, joins)
+					.setValue(STAND, standOn(neighbourState));
+		}
+		if (directionToNeighbour == facing.getClockWise()) {
+			return state.setValue(WIRE_CW, joins);
+		}
+		if (directionToNeighbour == facing.getCounterClockWise()) {
+			return state.setValue(WIRE_CCW, joins);
+		}
+		return state;
 	}
 
 	@Override
@@ -99,10 +180,19 @@ public class MonitorPanelBlock extends BaseEntityBlock {
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
+	/**
+	 * A mirror turns the facing like a rotation, but it also swaps left and right: the neighbour that
+	 * was on the clockwise side is now on the counter-clockwise one. Up and down stay, and so does the stand:
+	 * it copies the core below, which keeps its own facing through a rotation or a mirror.
+	 */
 	@SuppressWarnings("deprecation")
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
-		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+		BlockState turned = state.rotate(mirror.getRotation(state.getValue(FACING)));
+		if (mirror == Mirror.NONE) {
+			return turned;
+		}
+		return turned.setValue(WIRE_CW, state.getValue(WIRE_CCW)).setValue(WIRE_CCW, state.getValue(WIRE_CW));
 	}
 
 	/**

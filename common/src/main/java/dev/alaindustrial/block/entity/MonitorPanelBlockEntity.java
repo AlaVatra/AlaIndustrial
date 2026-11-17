@@ -35,6 +35,8 @@ public class MonitorPanelBlockEntity extends BlockEntity {
 	private MonitorReadout readout = MonitorReadout.IDLE;
 	private long count;
 	private boolean registered;
+	/** Not persisted: every load re-checks the connector flags once (see {@link #reconcileConnectors}). */
+	private boolean connectorsChecked;
 
 	public MonitorPanelBlockEntity(BlockPos pos, BlockState state) {
 		super(ModContent.MONITOR_PANEL_BE.get(), pos, state);
@@ -74,8 +76,12 @@ public class MonitorPanelBlockEntity extends BlockEntity {
 		if (this.readout == newReadout && this.count == newCount) {
 			return;
 		}
+		boolean readoutMoved = this.readout != newReadout;
 		this.readout = newReadout;
 		this.count = newCount;
+		if (readoutMoved) {
+			updateActiveState();
+		}
 		sync();
 	}
 
@@ -90,6 +96,7 @@ public class MonitorPanelBlockEntity extends BlockEntity {
 		if (!(level instanceof ServerLevel serverLevel)) {
 			return;
 		}
+		reconcileConnectors(serverLevel);
 		updateActiveState();
 		if (registered) {
 			return;
@@ -98,15 +105,49 @@ public class MonitorPanelBlockEntity extends BlockEntity {
 		MonitorNetworkManager.register(serverLevel, worldPosition);
 	}
 
-	/** Keep the chunk model's on/off skin in sync with the persisted watched-item slot. */
+	/**
+	 * Once per load, bring the connector flags (MOD-1013) in line with the neighbours.
+	 *
+	 * <p>A panel saved before the flags existed loads with all of them false, and
+	 * {@code MonitorPanelBlock.updateShape} only runs when a neighbour changes, so an old wall would
+	 * stay bare until rebuilt. Written with {@link net.minecraft.world.level.block.Block#UPDATE_CLIENTS}
+	 * and only when something differs: without the neighbour bit no {@code neighborChanged} fires, so the
+	 * monitor network is not rebuilt for a purely visual change. The flag is set before the write, so
+	 * the write cannot bring this method back.
+	 */
+	private void reconcileConnectors(ServerLevel serverLevel) {
+		if (connectorsChecked) {
+			return;
+		}
+		connectorsChecked = true;
+		BlockState live = serverLevel.getBlockState(worldPosition);
+		if (!(live.getBlock() instanceof MonitorPanelBlock)) {
+			return;
+		}
+		BlockState expected = MonitorPanelBlock.withConnectors(live, serverLevel, worldPosition);
+		if (expected != live) {
+			serverLevel.setBlock(worldPosition, expected, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+		}
+	}
+
+	/**
+	 * Keep the chunk model's on/off skin in step with what the panel can actually do (MOD-1013).
+	 *
+	 * <p>The screen and its wires glow only while the panel shows a live number. A filled panel with no
+	 * core, an unpowered core or too few capacity cards stays dark: the renderer still draws its item and
+	 * the mark that names the cause, so the player sees what is set and why it is not working, while a
+	 * lit screen keeps meaning "this works". Written with {@code UPDATE_CLIENTS} only: the skin is
+	 * visual, and a neighbour update would make the network re-sort itself after every verdict.
+	 */
 	private void updateActiveState() {
 		if (level == null || level.isClientSide()) {
 			return;
 		}
 		BlockState state = getBlockState();
-		boolean active = !filter.isEmpty();
+		boolean active = !filter.isEmpty() && readout == MonitorReadout.OK;
 		if (state.hasProperty(MonitorPanelBlock.ACTIVE) && state.getValue(MonitorPanelBlock.ACTIVE) != active) {
-			level.setBlock(worldPosition, state.setValue(MonitorPanelBlock.ACTIVE, active), 3);
+			level.setBlock(worldPosition, state.setValue(MonitorPanelBlock.ACTIVE, active),
+					net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
 		}
 	}
 

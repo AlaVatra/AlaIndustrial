@@ -1,6 +1,7 @@
 package dev.alaindustrial.gametest;
 
 import dev.alaindustrial.Config;
+import dev.alaindustrial.block.MonitorPanelBlock;
 import dev.alaindustrial.block.entity.MonitorCoreBlockEntity;
 import dev.alaindustrial.block.entity.MonitorPanelBlockEntity;
 import dev.alaindustrial.block.entity.SmartWireBlockEntity;
@@ -41,7 +42,9 @@ public final class MonitorNetworkScenarios {
 				RosterEntry.of(MonitorNetworkScenarios::breakingTheWireCutsTheChestOff,
 						"mod715_monitor_breaking_the_wire_cuts_the_chest_off"),
 				RosterEntry.of(MonitorNetworkScenarios::aPanelBetweenTwoWallsMergesThem,
-						"mod715_monitor_panel_merges_two_walls"));
+						"mod715_monitor_panel_merges_two_walls"),
+				RosterEntry.of(MonitorNetworkScenarios::theScreenGlowsOnlyWhileTheWallWorks,
+						"mod1013_monitor_screen_glows_only_while_working"));
 
 		private Roster() {}
 	}
@@ -125,6 +128,56 @@ public final class MonitorNetworkScenarios {
 			return false;
 		}
 		return true;
+	}
+
+	private static boolean expectLit(GameTestHelper helper, BlockPos pos, boolean lit, String what) {
+		boolean actual = helper.getBlockState(pos).getValue(MonitorPanelBlock.ACTIVE);
+		if (actual != lit) {
+			helper.fail(what + ": panel at " + pos + " is " + (actual ? "lit" : "dark") + ", expected "
+					+ (lit ? "lit" : "dark"));
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * The screen glows only while the panel shows a live number. With the core's buffer empty, or with
+	 * the core gone, the panel goes dark but keeps its item; power coming back lights it again.
+	 *
+	 * @implements MOD-1013-MC06 — a panel glows only while the wall works
+	 */
+	public static void theScreenGlowsOnlyWhileTheWallWorks(GameTestHelper helper) {
+		buildWall(helper);
+		MonitorNetwork network = tickAt(helper, CORE);
+		if (!expect(helper, PANEL, MonitorReadout.OK, 37, "powered wall")
+				|| !expectLit(helper, PANEL, true, "powered wall")) {
+			return;
+		}
+		MonitorCoreBlockEntity core = helper.getBlockEntity(CORE, MonitorCoreBlockEntity.class);
+		core.getEnergyStorage().setAmountUntracked(0L);
+		network.markDirty();
+		tickAt(helper, CORE);
+		if (!expect(helper, PANEL, MonitorReadout.NO_POWER, 0, "core drained")
+				|| !expectLit(helper, PANEL, false, "core drained")) {
+			return;
+		}
+		if (panel(helper, PANEL).getFilter().isEmpty()) {
+			helper.fail("a dark panel must keep the item it watches");
+			return;
+		}
+		core.getEnergyStorage().setAmountUntracked(core.getEnergyStorage().getCapacity());
+		network.markDirty();
+		tickAt(helper, CORE);
+		if (!expect(helper, PANEL, MonitorReadout.OK, 37, "power back")
+				|| !expectLit(helper, PANEL, true, "power back")) {
+			return;
+		}
+		helper.setBlock(CORE, Blocks.AIR);
+		tickAt(helper, PANEL);
+		if (expect(helper, PANEL, MonitorReadout.NO_CORE, 0, "core broken")
+				&& expectLit(helper, PANEL, false, "core broken")) {
+			helper.succeed();
+		}
 	}
 
 	/**
