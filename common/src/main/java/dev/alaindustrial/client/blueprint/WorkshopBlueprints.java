@@ -167,7 +167,8 @@ public final class WorkshopBlueprints {
 	/** The powered core with one card, a smart wire west of it and a chest at its end: indices 0..4. */
 	private static List<Placement> wiredWall() {
 		return join(coreFeed(core(1, true, Map.of())),
-				List.of(cableOf(SMART_WIRE, -1, 0, 0, "west", "east"), chest(-2)));
+				List.of(new Placement(SMART_WIRE, -1, 0, 0, Map.of("west", "device", "east", "wire", "fill", "1")),
+						chest(-2)));
 	}
 
 	/** A monitor panel on top of cell ({@code x}, 0, 0), screen toward the viewer, lit once its filter is in. */

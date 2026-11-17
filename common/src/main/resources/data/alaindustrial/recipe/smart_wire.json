@@ -2,17 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "G": "#c:ingots/gold",
+    "S": "alaindustrial:silver_plate",
+    "E": "alaindustrial:electronic_circuit",
     "C": "alaindustrial:copper_cable",
+    "G": "#c:ingots/gold",
     "R": "minecraft:redstone"
   },
   "pattern": [
-    "G",
-    "C",
-    "R"
+    "SES",
+    "CCC",
+    "GRG"
   ],
   "result": {
     "id": "alaindustrial:smart_wire",
-    "count": 4
+    "count": 6
   }
 }

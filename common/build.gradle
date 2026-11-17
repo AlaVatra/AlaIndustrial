@@ -739,6 +739,10 @@ pitest {
             'dev.alaindustrial.core.monitor.MonitorNetwork',
             'dev.alaindustrial.core.monitor.MonitorNetworkManager',
             'dev.alaindustrial.core.monitor.StockTally',
+            // MOD-1014: the wire as the monitor network sees it. An interface with no body whose one
+            // method takes a Direction set, so L1 cannot call it and it holds no mutant; the channels it
+            // shows are pinned by the both-lane game tests (SmartWireChannelScenarios).
+            'dev.alaindustrial.core.monitor.MonitorWire',
             // MOD-715 batch 1: the network core's node interfaces. Every operation names a Minecraft
             // type (Level, BlockPos, Direction) or a type that does (FluidTank), so L1 cannot call
             // them; their only body is CableNode.lineBuffer's one-line default. The networks that ask

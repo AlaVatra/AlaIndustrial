@@ -1,6 +1,6 @@
 {
-	"parent": "minecraft:item/generated",
-	"textures": {
-		"layer0": "alaindustrial:block/smart_wire"
-	}
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "alaindustrial:item/smart_wire"
+  }
 }

@@ -1,0 +1,110 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "alaindustrial:block/smart_wire_body",
+    "body": "alaindustrial:block/smart_wire_body"
+  },
+  "elements": [
+    {
+      "from": [
+        3.0,
+        2.0,
+        3.0
+      ],
+      "to": [
+        13.0,
+        4.0,
+        13.0
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0.01562,
+            7.14062,
+            1.23438,
+            7.35938
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            0.39062,
+            6.76562,
+            1.60938,
+            6.98438
+          ],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [
+            10.64062,
+            3.35938,
+            11.85938,
+            2.14062
+          ],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        4.0,
+        3.0
+      ],
+      "to": [
+        13.0,
+        5.0,
+        13.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.10938,
+            0.39062,
+            6.89062,
+            0.48438
+          ],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [
+            8.10938,
+            0.39062,
+            6.89062,
+            0.48438
+          ],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [
+            0.39062,
+            6.76562,
+            1.60938,
+            6.85938
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            0.39062,
+            6.76562,
+            1.60938,
+            6.85938
+          ],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [
+            10.64062,
+            2.14062,
+            11.85938,
+            3.35938
+          ],
+          "texture": "#body"
+        }
+      }
+    }
+  ]
+}

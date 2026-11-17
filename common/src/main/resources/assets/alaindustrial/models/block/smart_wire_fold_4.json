@@ -1,0 +1,110 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "alaindustrial:block/smart_wire_body",
+    "body": "alaindustrial:block/smart_wire_body"
+  },
+  "elements": [
+    {
+      "from": [
+        3.0,
+        2.0,
+        3.0
+      ],
+      "to": [
+        13.0,
+        4.0,
+        13.0
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0.01562,
+            7.14062,
+            1.23438,
+            7.35938
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            0.39062,
+            6.76562,
+            1.60938,
+            6.98438
+          ],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [
+            8.51562,
+            3.35938,
+            9.73438,
+            2.14062
+          ],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [
+        3.0,
+        4.0,
+        3.0
+      ],
+      "to": [
+        13.0,
+        5.0,
+        13.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.73438,
+            0.39062,
+            5.51562,
+            0.48438
+          ],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [
+            6.73438,
+            0.39062,
+            5.51562,
+            0.48438
+          ],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [
+            0.39062,
+            6.76562,
+            1.60938,
+            6.85938
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            0.39062,
+            6.76562,
+            1.60938,
+            6.85938
+          ],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [
+            8.51562,
+            2.14062,
+            9.73438,
+            3.35938
+          ],
+          "texture": "#body"
+        }
+      }
+    }
+  ]
+}

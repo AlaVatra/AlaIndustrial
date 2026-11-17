@@ -1,0 +1,69 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "alaindustrial:block/monitor_connectors_on",
+    "body": "alaindustrial:block/monitor_connectors_on"
+  },
+  "elements": [
+    {
+      "from": [
+        6.0,
+        6.0,
+        4.1
+      ],
+      "to": [
+        10.0,
+        10.0,
+        5.1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0.53125,
+            6.03125,
+            0.71875,
+            6.96875
+          ],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [
+            0.03125,
+            15.03125,
+            0.96875,
+            15.96875
+          ],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [
+            0.78125,
+            6.03125,
+            0.96875,
+            6.96875
+          ],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [
+            6.03125,
+            3.03125,
+            6.96875,
+            3.21875
+          ],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [
+            6.03125,
+            3.28125,
+            6.96875,
+            3.46875
+          ],
+          "texture": "#body"
+        }
+      }
+    }
+  ]
+}
