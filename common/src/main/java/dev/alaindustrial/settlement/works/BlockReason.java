@@ -95,14 +95,18 @@ public record BlockReason(String key, List<String> args, boolean joined) {
 	}
 
 	/**
-	 * The cell an {@link #OBSTRUCTED_AT} reason names, as {@code {x, y, z}}, or empty for any other reason or for
-	 * arguments that do not read as a cell (MOD-890: the core's «show it» button outlines that cell in the world).
+	 * The cell an {@link #OBSTRUCTED_AT} or a {@link #NO_ROUTE} reason names, as {@code {x, y, z}}, or empty for any
+	 * other reason or for arguments that do not read as a cell (MOD-890: the core's «show it» button outlines that cell
+	 * in the world; MOD-908: the cell the drone cannot reach gets the same button).
 	 */
 	public static Optional<int[]> obstructedCell(String key, List<String> args) {
-		if (!OBSTRUCTED_AT.equals(key) || args.size() < 2) {
-			return Optional.empty();
+		if (OBSTRUCTED_AT.equals(key) && args.size() >= 2) {
+			return cell(args.get(1));
 		}
-		return cell(args.get(1));
+		if (NO_ROUTE.equals(key) && !args.isEmpty()) {
+			return cell(args.getFirst());
+		}
+		return Optional.empty();
 	}
 
 	/** «12 64 -5» read back into {@code {12, 64, -5}} ({@link #at}), or empty when it is not three whole numbers. */

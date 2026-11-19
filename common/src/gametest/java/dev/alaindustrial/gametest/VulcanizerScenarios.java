@@ -5,6 +5,7 @@ import static dev.alaindustrial.gametest.AlaGameTestHelper.drive;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.block.entity.ElectricHeaterBlockEntity;
+import dev.alaindustrial.block.entity.GeneratorBlockEntity;
 import dev.alaindustrial.block.entity.VulcanizerBlockEntity;
 import dev.alaindustrial.block.entity.VulcanizerStatus;
 import dev.alaindustrial.core.heat.HeatSource;
@@ -23,6 +24,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import dev.alaindustrial.block.ElectricHeaterBlock;
@@ -99,7 +101,15 @@ public final class VulcanizerScenarios {
 				RosterEntry.of(VulcanizerScenarios::skl01ResilientCycleTickPaysTheHeater,
 						"mod751_vulcanizer_coasting_tick_pays_the_heater").ticks(100),
 				RosterEntry.of(VulcanizerScenarios::skl02TrickleWithoutResilientCycleFreezes,
-						"mod751_vulcanizer_trickle_without_skill_freezes").ticks(100));
+						"mod751_vulcanizer_trickle_without_skill_freezes").ticks(100),
+				RosterEntry.of(VulcanizerScenarios::gen01BurningGeneratorHeatsAtLevelOne,
+						"mod988_burning_generator_heats_at_level_one").ticks(20, 40),
+				RosterEntry.of(VulcanizerScenarios::gen02UnfuelledGeneratorGivesNoHeat,
+						"mod988_unfuelled_generator_gives_no_heat").ticks(20, 40),
+				RosterEntry.of(VulcanizerScenarios::gen03FullBufferBurnsOnOnlyForAMachineThatWantsHeat,
+						"mod988_full_buffer_burns_on_only_for_a_machine_that_wants_heat").ticks(20, 40),
+				RosterEntry.of(VulcanizerScenarios::gen04BurnStartAndStopReachTheMachineAtOnce,
+						"mod988_burn_start_and_stop_reach_the_machine_at_once").ticks(20, 40));
 
 		private Roster() {}
 	}
@@ -831,6 +841,182 @@ public final class VulcanizerScenarios {
 		if (ledger.operationTicks() != 0 || be.getDataAccess().get(2) != progress || ledger.heaterSpent() != 0) {
 			helper.fail("without the skill a trickle below one tick's draw must freeze the batch at " + progress
 					+ " and leave the heater untouched; " + ledger.describe());
+			return;
+		}
+		helper.succeed();
+	}
+
+	// --- MOD-988: a burning fuel generator under the machine is a level-1 heat source ---
+
+	/** Progress channel of the shared machine data block; on the generator it carries the burn left. */
+	private static final int DATA_PROGRESS = 2;
+
+	/** A fuel generator in the heat cell under the machine, holding {@code fuel}. */
+	private static GeneratorBlockEntity fuelGenerator(GameTestHelper helper, ItemStack fuel) {
+		GeneratorBlockEntity gen = AlaGameTestHelper.place(helper, HEAT, ModContent.GENERATOR.get(),
+				GeneratorBlockEntity.class);
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, fuel);
+		return gen;
+	}
+
+	/**
+	 * One world tick of the pair, generator first. With {@code fullBuffer} the generator's buffer is topped up to
+	 * capacity before its tick, which is the state a saturated line leaves it in and the one that pauses it.
+	 */
+	private static void tickPair(GeneratorBlockEntity gen, VulcanizerBlockEntity be, GameTestHelper helper,
+			boolean fullBuffer) {
+		if (fullBuffer) {
+			gen.getEnergyStorage().setAmountUntracked(gen.getEnergyStorage().getCapacity());
+		}
+		drive(gen, helper, 1);
+		drive(be, helper, 1);
+	}
+
+	/**
+	 * @implements MOD-988 - a vulcanizer on a burning fuel generator makes a batch at x1 (level 1, a campfire's
+	 *     worth) and names the generator as its heat source.
+	 */
+	public static void gen01BurningGeneratorHeatsAtLevelOne(GameTestHelper helper) {
+		GeneratorBlockEntity gen = fuelGenerator(helper, new ItemStack(Items.COAL, 4));
+		VulcanizerBlockEntity be = placeMachine(helper);
+		be.getEnergyStorage().setAmountUntracked(AMPLE_EU);
+		stock(be, 2);
+
+		for (int i = 0; i < operationTicks() + 3; i++) {
+			tickPair(gen, be, helper, false);
+		}
+
+		if (be.heatSource() != HeatSource.GENERATOR) {
+			helper.fail("a burning generator below must be the heat source, got " + be.heatSource());
+			return;
+		}
+		assertOutput(helper, be, HeatSource.GENERATOR.outputMultiplier());
+		if (!holdsOperations(be, 1)) {
+			helper.fail("one batch on the generator must consume exactly one operation's inputs");
+			return;
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * @implements MOD-988 - a generator with no fuel is no heat source: the stocked machine above waits on heat,
+	 *     spends nothing and keeps its inputs. Fuel in the slot then lights it (the positive control: the same rig
+	 *     does heat, so the empty half is not a dead rig).
+	 */
+	public static void gen02UnfuelledGeneratorGivesNoHeat(GameTestHelper helper) {
+		GeneratorBlockEntity gen = fuelGenerator(helper, ItemStack.EMPTY);
+		VulcanizerBlockEntity be = placeMachine(helper);
+		be.getEnergyStorage().setAmountUntracked(AMPLE_EU);
+		stock(be, 1);
+
+		for (int i = 0; i < 20; i++) {
+			tickPair(gen, be, helper, false);
+		}
+		if (be.heatSource() != HeatSource.NONE || be.status() != VulcanizerStatus.NO_HEAT
+				|| be.getDataAccess().get(DATA_PROGRESS) != 0 || !holdsOperations(be, 1)
+				|| !be.getItem(VulcanizerBlockEntity.OUTPUT_SLOT).isEmpty()) {
+			helper.fail("a cold generator heated the machine: heat=" + be.heatSource() + " status=" + be.status()
+					+ " progress=" + be.getDataAccess().get(DATA_PROGRESS));
+			return;
+		}
+
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL, 1));
+		for (int i = 0; i < 3; i++) {
+			tickPair(gen, be, helper, false);
+		}
+		if (be.heatSource() != HeatSource.GENERATOR || be.status() != VulcanizerStatus.READY) {
+			helper.fail("fuel in the slot must light the generator and heat the machine: heat=" + be.heatSource()
+					+ " status=" + be.status());
+			return;
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * @implements MOD-988 - the owner's rule: with a FULL buffer the generator still burns while the machine above
+	 *     wants its heat, every tick, so the heat never blinks and the batch completes; with the same full buffer
+	 *     and a machine that wants nothing (no inputs) it keeps the old pause and lights no fuel.
+	 */
+	public static void gen03FullBufferBurnsOnOnlyForAMachineThatWantsHeat(GameTestHelper helper) {
+		GeneratorBlockEntity gen = fuelGenerator(helper, new ItemStack(Items.COAL, 4));
+		VulcanizerBlockEntity be = placeMachine(helper);
+		be.getEnergyStorage().setAmountUntracked(AMPLE_EU);
+
+		// One tick to settle: a freshly placed machine reports READY until its first tick, so the generator may
+		// take one coal into the firebox here. That moves fuel, it does not burn it; the pause is what follows.
+		tickPair(gen, be, helper, true);
+		int coalBefore = gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount();
+		int burnBefore = gen.getDataAccess().get(DATA_PROGRESS);
+		// No inputs: nothing wants heat, so the full buffer pauses the generator as before.
+		for (int i = 0; i < 20; i++) {
+			tickPair(gen, be, helper, true);
+		}
+		if (gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount() != coalBefore
+				|| gen.getDataAccess().get(DATA_PROGRESS) != burnBefore || gen.isBurning()) {
+			helper.fail("a full generator under an idle machine must pause: coal "
+					+ coalBefore + "->" + gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount() + " burn "
+					+ burnBefore + "->" + gen.getDataAccess().get(DATA_PROGRESS));
+			return;
+		}
+
+		stock(be, 2);
+		int unheatedTicks = 0;
+		for (int i = 0; i < operationTicks() + 3; i++) {
+			tickPair(gen, be, helper, true);
+			// Two ticks to start (the generator lights, then burns); from then on the heat must hold every tick.
+			if (i >= 2 && be.heatSource() != HeatSource.GENERATOR) {
+				unheatedTicks++;
+			}
+		}
+		if (unheatedTicks != 0) {
+			helper.fail("heat blinked under a full generator: " + unheatedTicks + " ticks without heat");
+			return;
+		}
+		if (gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount() != 3 || !gen.isBurning()) {
+			helper.fail("the generator must burn exactly one coal for the heat, slot holds "
+					+ gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount());
+			return;
+		}
+		assertOutput(helper, be, HeatSource.GENERATOR.outputMultiplier());
+		helper.succeed();
+	}
+
+	/**
+	 * @implements MOD-988 - the generator tells the machine above the moment it lights and the moment it goes out,
+	 *     so neither waits out its idle sleep and no heat sticks after the fire is gone. Only the generator ticks
+	 *     between the checks: what the machine knows there it was told.
+	 */
+	public static void gen04BurnStartAndStopReachTheMachineAtOnce(GameTestHelper helper) {
+		GeneratorBlockEntity gen = fuelGenerator(helper, ItemStack.EMPTY);
+		VulcanizerBlockEntity be = placeMachine(helper);
+		be.getEnergyStorage().setAmountUntracked(AMPLE_EU);
+		stock(be, 1);
+		drive(be, helper, 1); // NO_HEAT: the machine goes to sleep on it
+
+		// A stick burns 100 ticks in a furnace, half a batch: the fire goes out mid-operation.
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.STICK, 1));
+		drive(gen, helper, 2); // lights, then burns
+		if (be.heatSource() != HeatSource.GENERATOR) {
+			helper.fail("lighting did not reach the machine above: heat=" + be.heatSource());
+			return;
+		}
+		for (int i = 0; i < 20; i++) {
+			tickPair(gen, be, helper, false);
+		}
+		int guard = 0;
+		while (gen.getDataAccess().get(DATA_PROGRESS) > 0 && guard++ < 400) {
+			drive(gen, helper, 1);
+		}
+		drive(gen, helper, 1); // the first tick with nothing burning
+		if (be.heatSource() != HeatSource.NONE) {
+			helper.fail("the fire went out but the machine above still sees heat: " + be.heatSource());
+			return;
+		}
+		drive(be, helper, 1);
+		if (be.status() != VulcanizerStatus.NO_HEAT || be.getDataAccess().get(DATA_PROGRESS) != 0
+				|| !holdsOperations(be, 1) || !be.getItem(VulcanizerBlockEntity.OUTPUT_SLOT).isEmpty()) {
+			helper.fail("a cold generator must leave the batch waiting with its inputs: status=" + be.status()
+					+ " progress=" + be.getDataAccess().get(DATA_PROGRESS));
 			return;
 		}
 		helper.succeed();

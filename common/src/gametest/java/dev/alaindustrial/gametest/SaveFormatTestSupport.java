@@ -1,6 +1,7 @@
 package dev.alaindustrial.gametest;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.alaindustrial.block.entity.BlockEntityDataMigrations;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -60,12 +61,24 @@ final class SaveFormatTestSupport {
 	 * not come back with the same value in {@code actual}, as {@code key: expected -> actual}. Lists
 	 * and compounds are left to the caller, which checks them by meaning (items on their indices, a
 	 * block state) rather than by byte shape.
+	 *
+	 * <p>The one scalar that must NOT come back as saved is the format version: a re-save stamps the current
+	 * {@link BlockEntityDataMigrations#DATA_VERSION}, so an old corpus entry is expected to come back with that
+	 * (MOD-987 raised it to 2, and every corpus entry of version 1 then reads it as the current one).
 	 */
 	static List<String> scalarDrift(CompoundTag expected, CompoundTag actual) {
 		List<String> drift = new ArrayList<>();
 		for (String key : expected.keySet()) {
 			Tag want = expected.get(key);
 			if (want instanceof CompoundTag || want instanceof ListTag) {
+				continue;
+			}
+			if (BlockEntityDataMigrations.DATA_VERSION_KEY.equals(key)) {
+				int got = actual.getIntOr(key, -1);
+				if (got != BlockEntityDataMigrations.DATA_VERSION) {
+					drift.add(key + ": re-saved as " + got + ", not the current "
+							+ BlockEntityDataMigrations.DATA_VERSION);
+				}
 				continue;
 			}
 			Tag got = actual.get(key);

@@ -26,6 +26,12 @@ public final class WorldHeatSources {
 				&& heater.canSupplyHeatTick()) {
 			return HeatSource.ELECTRIC_HEATER;
 		}
+		// MOD-988: a fuel generator heats like a campfire, but only while its fuel really burns.
+		if (state.is(ModContent.GENERATOR.get())
+				&& level.getBlockEntity(below) instanceof GeneratorBlockEntity generator
+				&& generator.isBurning()) {
+			return HeatSource.GENERATOR;
+		}
 		if (CampfireBlock.isLitCampfire(state)) {
 			return HeatSource.CAMPFIRE;
 		}

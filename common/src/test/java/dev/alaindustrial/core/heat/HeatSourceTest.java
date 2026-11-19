@@ -20,6 +20,7 @@ class HeatSourceTest {
 		assertHeat(HeatSource.MAGMA, 2);
 		assertHeat(HeatSource.LAVA_CAULDRON, 2);
 		assertHeat(HeatSource.ELECTRIC_HEATER, 3);
+		assertHeat(HeatSource.GENERATOR, 1);
 	}
 
 	/**
@@ -37,6 +38,7 @@ class HeatSourceTest {
 		assertEquals(1, HeatSource.MAGMA.iconIndex());
 		assertEquals(1, HeatSource.LAVA_CAULDRON.iconIndex());
 		assertEquals(2, HeatSource.ELECTRIC_HEATER.iconIndex());
+		assertEquals(3, HeatSource.GENERATOR.iconIndex(), "the generator shares the campfire's level, not its icon");
 	}
 
 	@Test
@@ -49,6 +51,7 @@ class HeatSourceTest {
 				HeatSource.LAVA_CAULDRON.translationKey());
 		assertEquals("gui.alaindustrial.vulcanizer.heat.electric_heater",
 				HeatSource.ELECTRIC_HEATER.translationKey());
+		assertEquals("gui.alaindustrial.vulcanizer.heat.generator", HeatSource.GENERATOR.translationKey());
 	}
 
 	/**
@@ -66,6 +69,33 @@ class HeatSourceTest {
 		assertEquals(3, HeatSource.MAGMA.ordinal());
 		assertEquals(4, HeatSource.LAVA_CAULDRON.ordinal());
 		assertEquals(5, HeatSource.ELECTRIC_HEATER.ordinal());
+		assertEquals(6, HeatSource.GENERATOR.ordinal());
+	}
+
+	/**
+	 * A heated machine takes every source with a level unless it says otherwise (MOD-988): the fuel generator
+	 * asks this before it burns on with a full buffer, so a wrong default would waste fuel or starve a machine.
+	 */
+	@Test
+	void consumerAcceptsEverySourceWithALevelByDefault() {
+		HeatConsumer consumer = new HeatConsumer() {
+			@Override
+			public boolean isWaitingOnHeat() {
+				return true;
+			}
+
+			@Override
+			public int overclockerCount() {
+				return 0;
+			}
+
+			@Override
+			public void onHeatNeighbourChanged() {
+			}
+		};
+		for (HeatSource source : HeatSource.values()) {
+			assertEquals(source.level() > 0, consumer.acceptsHeatFrom(source), source.name());
+		}
 	}
 
 	@Test

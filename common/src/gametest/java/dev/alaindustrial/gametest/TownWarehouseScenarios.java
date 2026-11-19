@@ -366,9 +366,8 @@ public final class TownWarehouseScenarios {
 		}
 		if (!whole) {
 			for (int i = 0; i < plan.size(); i++) {
-				// The shelves of the door's half: the far corner (x = 10) the drone's route search does not reach from
-				// the hall's roof at this distance (NO_ROUTE, MOD-888 task.md, «open»), so the case leaves it standing.
-				if (plan.expected(i).is(ModContent.WAREHOUSE_SHELF.get()) && plan.pos(i).getX() - at.getX() < 8) {
+				// Every shelf, the far corner's too: the route search reaches it through the door (MOD-908).
+				if (plan.expected(i).is(ModContent.WAREHOUSE_SHELF.get())) {
 					level.setBlock(plan.pos(i), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 				}
 			}

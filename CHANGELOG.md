@@ -1,15 +1,20 @@
 # Changelog
 
-## 0.1.237
+## 0.1.238
 
-<p><img alt="Ala Industrial Minecraft mod: smart wire ribbon plugged into a chest next to the monitoring wall core and its wired panels" src="https://raw.githubusercontent.com/AlaVatra/AlaIndustrial/v0.1.237-mc26.2/release-media/v0.1.237-mc26.2/changelog.png" width="720"></p>
+<p><img alt="Ala Industrial Minecraft mod: coal generator window with fuel runtime and burnt fuel statistics" src="https://raw.githubusercontent.com/AlaVatra/AlaIndustrial/v0.1.238-mc26.2/release-media/v0.1.238-mc26.2/changelog.png" width="720"></p>
 
-The monitoring wall gets visible wiring, and the Smart Wire becomes a ribbon that plugs straight into your chests.
+The coal generator now leaves ash, warms a Vulcanizer on top of it and, with the statistics chip, shows how long its fuel lasts.
 
 ### New
 
-- **Monitoring wall wires.** Panels of one wall are linked by visible wires on the back, a panel on the core stands on a strut, and a screen glows only while it shows a live number.
+- **Ash from the generator.** The coal generator now leaves ash in its own slot: one ash for every 8 coal or charcoal burnt.
+- **Generator heat.** A burning generator now heats a Vulcanizer standing on top of it, like a campfire.
+- **Fuel runtime.** With the statistics chip, the generator window shows how long its fuel lasts at the current draw, and the draw itself.
+- **Comparator on the generator.** A comparator now reads how full the generator's fuel slot is, like a furnace.
+- **Burnt fuel counters.** The statistics chip now counts how much of each fuel the generator has burnt.
 
-### Improved
+### Bug Fixes
 
-- **Smart Wire.** A flat ribbon that plugs into chests, barrels and shulker boxes, up to eight per wall, lighting one strand per storage in use. It no longer reads machines and costs more to craft.
+- **Drone routes.** Drones no longer call a reachable stop unreachable, and the dispatcher has a show button for the stop's spot.
+- **No wasted fuel.** Under a light load the generator now burns only as much fuel as the line actually draws.

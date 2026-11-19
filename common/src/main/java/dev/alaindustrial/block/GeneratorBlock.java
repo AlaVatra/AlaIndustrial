@@ -4,7 +4,10 @@ import dev.alaindustrial.block.entity.GeneratorBlockEntity;
 import dev.alaindustrial.registry.ModSounds;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.Containers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -29,6 +32,25 @@ public class GeneratorBlock extends LitMachineBlock implements MachineHumProvide
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
 			BlockEntityType<T> type) {
 		return humMachineTicker(level);
+	}
+
+	/** MOD-991: a comparator reads the fuel slot, by the vanilla container rule. */
+	@Override
+	protected boolean hasAnalogOutputSignal(BlockState state) {
+		return true;
+	}
+
+	@Override
+	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
+		return level.getBlockEntity(pos) instanceof GeneratorBlockEntity generator ? generator.comparatorSignal() : 0;
+	}
+
+	/** Comparators reading through a wall must see the slot gone when the block is broken (as a furnace). */
+	@Override
+	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos,
+			boolean movedByPiston) {
+		super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+		Containers.updateNeighboursAfterDestroy(state, level, pos);
 	}
 
 	@Override

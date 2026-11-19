@@ -47,6 +47,14 @@ public final class GeneratorConfig {
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
 			doc = "Fuel (solid-burnable) generator output in EU/t while burning.")
 	public static int fuelEuPerTick = 8;
+	/**
+	 * Pieces of coal the fuel generator burns per ash it leaves (MOD-987). A block of coal counts as nine; the
+	 * fuels that leave ash at all are the two item tags {@code alaindustrial:ash_fuels} and
+	 * {@code alaindustrial:ash_fuel_blocks}.
+	 */
+	@Knob(section = Section.GENERATORS, min = 1,
+			doc = "Fuel generator: pieces of coal or charcoal burnt per ash it leaves (a block of coal counts as 9).")
+	public static int generatorFuelPerAsh = 8;
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
 			doc = "Geothermal (lava) generator output in EU/t while burning lava.")
 	public static int geothermalEuPerTick = 16;

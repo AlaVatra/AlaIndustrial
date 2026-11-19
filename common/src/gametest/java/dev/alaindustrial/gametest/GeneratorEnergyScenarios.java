@@ -978,7 +978,7 @@ public final class GeneratorEnergyScenarios {
 	 * the cap−1 leg proves the boundary is actually reached and enforced.
 	 * Mirrors: GeneratorGameTest.tcGen001Fun02_bufferCapsAtMax
 	 *
-	 * @implements TC-GEN-001-FUN02 — buffer tops off to exactly {@code generatorBuffer} from cap−1 (BVA leg).
+	 * @implements TC-GEN-001-FUN02 — buffer tops off to exactly {@code generatorBuffer} from one burn tick short.
 	 * Body: {@link GeneratorEnergyScenarios#generatorBufferCapsAtMaxBva}.
 	 */
 	public static void generatorBufferCapsAtMaxBva(GameTestHelper helper) {
@@ -986,7 +986,8 @@ public final class GeneratorEnergyScenarios {
 		if (be(helper, GEN) instanceof GeneratorBlockEntity gen) {
 			long cap = gen.getEnergyStorage().getCapacity();
 			gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL, 64));
-			gen.getEnergyStorage().setAmountUntracked(cap - 1); // BVA: one EU short
+			// BVA: one burn tick short; a smaller gap holds the burn instead (MOD-986).
+			gen.getEnergyStorage().setAmountUntracked(cap - GeneratorBlockEntity.effectiveEuPerTick());
 			// A few ticks: the burn must start and produce EU, topping the buffer off to exactly cap.
 			for (int i = 0; i < 5; i++) {
 				gen.serverTick(helper.getLevel(), gen.getBlockPos(),
@@ -994,7 +995,7 @@ public final class GeneratorEnergyScenarios {
 			}
 			long got = gen.getEnergyStorage().getAmount();
 			if (got != cap) {
-				helper.fail("generator buffer did not settle at cap: expected " + cap + " (from cap-1) got " + got);
+				helper.fail("generator buffer did not settle at cap: expected " + cap + " (one tick short) got " + got);
 				return;
 			}
 			helper.succeed();

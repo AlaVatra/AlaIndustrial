@@ -111,6 +111,15 @@ public final class ThermalCentrifugeBlockEntity extends MachineBlockEntity
 		return status.waitsOnHeat();
 	}
 
+	/**
+	 * Only the Electric Heater runs this machine (see {@link #diagnose}), so a fuel generator below must not burn on
+	 * for it with a full buffer (MOD-988): that fuel would heat nothing.
+	 */
+	@Override
+	public boolean acceptsHeatFrom(HeatSource source) {
+		return source == HeatSource.ELECTRIC_HEATER;
+	}
+
 	/** Called from the block's neighbour callback, for both the heater below and the redstone signal. */
 	@Override
 	public void onHeatNeighbourChanged() {

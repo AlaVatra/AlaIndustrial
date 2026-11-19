@@ -46,12 +46,15 @@ class NeedIconTest {
 	}
 
 	@Test
-	void anObstructionNamesItsCellAndNothingElseDoes() {
+	void anObstructionAndAnUnreachableCellNameTheirCellAndNothingElseDoes() {
 		BlockReason reason = BlockReason.obstructed("block.alaindustrial.town_dispatcher", 871, 64, -4120);
 		assertArrayEquals(new int[] {871, 64, -4120},
 				BlockReason.obstructedCell(reason.key(), reason.args()).orElseThrow());
 		BlockReason noRoute = BlockReason.noRoute(1, 2, 3);
-		assertTrue(BlockReason.obstructedCell(noRoute.key(), noRoute.args()).isEmpty());
+		assertArrayEquals(new int[] {1, 2, 3}, BlockReason.obstructedCell(noRoute.key(), noRoute.args()).orElseThrow(),
+				"the cell the drone cannot reach gets the same «show it» button (MOD-908)");
+		BlockReason noPlan = BlockReason.of(BlockReason.NO_PLAN);
+		assertTrue(BlockReason.obstructedCell(noPlan.key(), noPlan.args()).isEmpty());
 		assertTrue(BlockReason.cell("12 x 5").isEmpty());
 		assertTrue(BlockReason.cell("12 5").isEmpty());
 	}

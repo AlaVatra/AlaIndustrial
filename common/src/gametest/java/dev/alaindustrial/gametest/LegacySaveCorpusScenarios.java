@@ -144,7 +144,12 @@ public final class LegacySaveCorpusScenarios {
 				registries, generatorTag);
 		if (!energy(helper, "generator", generator.getEnergyStorage().getAmount(), 1234L)
 				|| !item(helper, "generator", generator, 0, Items.COAL, 12)
-				|| !item(helper, "generator", generator, 1, ModContent.STATS_CHIP.get(), 1)
+				// MOD-987: the ash slot went in after the fuel slot; the v1 -> v2 rung moves the chip one slot up.
+				|| !item(helper, "generator", generator, generator.upgradeSlotStart(),
+						ModContent.STATS_CHIP.get(), 1)
+				|| !check(helper, generator.getItem(GeneratorBlockEntity.ASH_SLOT).isEmpty(),
+						"generator: the old first chip stayed in the ash slot: "
+								+ generator.getItem(GeneratorBlockEntity.ASH_SLOT))
 				|| !owner(helper, "generator", generator.getOwner())
 				|| !noDrift(helper, "generator", generatorTag, generator, registries)) {
 			return;

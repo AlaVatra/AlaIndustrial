@@ -9,9 +9,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * C2S: «show it» at an «In the way: X at x y z» line of the core's «Construction» tab (MOD-890). Nothing in it is
- * trusted: the server answers only one of the town's own with its core's screen open, and only for a cell one of the
- * town's stopped jobs names ({@link TownObstructionService}).
+ * C2S: «show it» at an «In the way: X at x y z» or «The drone cannot reach x y z» line of the core's «Construction» tab
+ * (MOD-890) or of the dispatcher's screen (MOD-908). Nothing in it is trusted: the server answers only one of the
+ * town's own with one of those screens open, and only for a cell one of the town's stopped jobs names
+ * ({@link TownObstructionService}).
  *
  * @param pos the cell the line names
  */

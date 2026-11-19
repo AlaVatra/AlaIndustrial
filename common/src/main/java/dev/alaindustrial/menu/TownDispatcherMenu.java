@@ -235,6 +235,11 @@ public class TownDispatcherMenu extends MachineMenu {
 		this.bill = source;
 	}
 
+	/** Server side: the dispatcher this menu shows; null on the client. */
+	public @Nullable TownDispatcherBlockEntity dispatcher() {
+		return dispatcher;
+	}
+
 	/** Whether {@code player} may take and put here (R95). */
 	public boolean mayControl(Player player) {
 		return dispatcher != null ? dispatcher.mayControl(player) : channel(Channel.CONTROL) != 0;

@@ -4,6 +4,7 @@ import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.block.entity.MachineBlockEntity;
 import dev.alaindustrial.block.entity.machine.MachineChannels;
 import dev.alaindustrial.block.entity.machine.SlotLayout;
+import dev.alaindustrial.core.environment.FuelRuntime;
 import dev.alaindustrial.item.energy.ItemEnergy;
 import dev.alaindustrial.item.misc.OverclockerChipItem;
 import dev.alaindustrial.menu.stats.StatsWindow;
@@ -11,6 +12,7 @@ import dev.alaindustrial.network.MachineStatsPayload;
 import dev.alaindustrial.network.NetworkDispatcher;
 import dev.alaindustrial.registry.ContentManifest;
 import dev.alaindustrial.registry.ModTags;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -426,7 +428,9 @@ public abstract class MachineMenu extends AbstractContainerMenu {
 		return new MachineStatsPayload(containerId, be.activeTicks(),
 				be.getEnergyStorage().getTotalEnergyIn(), be.getEnergyStorage().getTotalEnergyOut(),
 				be.getEnergyStorage().getTotalEnergyGenerated(), be.getEnergyStorage().getTotalEnergyConsumed(),
-				window.eu(), window.ticks(), be.peakEuRate(), be.countDirectConnections(), be.totalItemsProcessed());
+				window.eu(), window.ticks(), be.peakEuRate(), be.countDirectConnections(), be.totalItemsProcessed(),
+				be instanceof FuelRuntime.Source source ? Optional.ofNullable(source.fuelReadout()) : Optional.empty(),
+				be instanceof FuelRuntime.Source source ? Optional.ofNullable(source.fuelBurnt()) : Optional.empty());
 	}
 
 	/** Client-side: accept a snapshot addressed to THIS menu. A stale packet for another screen is dropped. */

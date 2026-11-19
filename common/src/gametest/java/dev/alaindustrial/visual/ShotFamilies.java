@@ -87,6 +87,13 @@ public final class ShotFamilies {
                     "Statistics panel (MOD-125): docked left of the GUI with nothing printed over it, "
                             + "every row inside the frame, the close cross centred on its plate, and the "
                             + "no-chip state saying a chip is needed instead of showing an empty box")},
+            new Object[] {"gui_generator_runtime", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
+                    "Generator with the statistics chip (MOD-990): under the slot and the flame two lines, "
+                            + "\"Fuel lasts ~1 h 26 min\" and \"Load 2.0 of 8 EU/t\", clear of the energy bar, the "
+                            + "slot and the Inventory label; in _stats the panel shows the same load and span as "
+                            + "rows under Now, and \"Fuel burnt 46\" under the working time (MOD-992) in place of "
+                            + "the Peak row, every row inside the frame; the 16 coal sit in the fuel slot and 4 ash "
+                            + "in the ash slot right of the flame (MOD-987), each item square in its frame")},
             new Object[] {"gui_stats_modal_", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
                     "Statistics panel dragged over a screen's own control and clicked there (MOD-693): the "
                             + "panel is drawn above the control with nothing of it printed on top, and the "
