@@ -47,4 +47,14 @@ public interface HeatConsumer {
 	 * starts on the next tick instead of waiting out its idle-sleep poll.
 	 */
 	void onHeatNeighbourChanged();
+
+	/**
+	 * Whether {@code source} below would actually heat this machine (MOD-988). The fuel generator asks it
+	 * before it burns on with a full buffer for the machine above: fuel spent on heat a machine cannot take
+	 * would be pure waste. Every source with a level counts by default; a machine that runs on one source
+	 * only says so here.
+	 */
+	default boolean acceptsHeatFrom(HeatSource source) {
+		return source.level() > 0;
+	}
 }

@@ -1,11 +1,20 @@
 package dev.alaindustrial.client.screen;
 
 import dev.alaindustrial.client.ReadoutFormat;
+import dev.alaindustrial.core.environment.FuelRuntime;
+import dev.alaindustrial.core.environment.FuelTally;
 import dev.alaindustrial.menu.MachineMenu;
 import dev.alaindustrial.network.MachineStatsPayload;
 import net.minecraft.client.gui.Font;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.util.FormattedCharSequence;
 
 /**
@@ -74,6 +83,8 @@ final class StatsPanelReadout {
 					ReadoutFormat.compact(stats.itemsProcessed()),
 					stats.itemsProcessed(), false);
 		}
+		// MOD-992: what a fuel generator has done is the fuel it burnt, so its count sits here too.
+		y = stats.fuelBurnt().isPresent() ? fuelBurntRow(px, y, stats.fuelBurnt().get()) : y;
 
 		y = drawEnergyRows(px, y, stats);
 
@@ -85,9 +96,23 @@ final class StatsPanelReadout {
 		y = statRow(px, y, "gui.alaindustrial.stats.now",
 				ReadoutFormat.rate(stats.euOverWindow(), stats.windowTicks()) + " EU/t",
 				stats.euOverWindow(), false, stale);
-		if (stats.peakEuRate() > 0) {
+		// A fuel generator's peak is its full output, which the Load row below already reads ("of 8 EU/t"); its
+		// row gives way to the burnt-fuel row above, so the panel keeps its height (MOD-992).
+		if (stats.peakEuRate() > 0 && stats.fuel().isEmpty()) {
 			y = statRow(px, y, "gui.alaindustrial.stats.peak",
 					stats.peakEuRate() + " EU/t", stats.peakEuRate(), false);
+		}
+		// MOD-990: a fuel generator says how hard the line pulls on it and how long its fuel lasts at that.
+		// No separator of their own: they answer the same "at what rate" as the two rows above, and the
+		// panel's height holds exactly these rows under a generator's energy block.
+		if (stats.fuel().isPresent()) {
+			FuelRuntime.Readout fuel = stats.fuel().get();
+			y = statRow(px, y, "gui.alaindustrial.stats.load", FuelRuntimeText.loadValue(fuel).getString(),
+					0, false, stale);
+			y = fuel.ticksLeft() >= 0
+					? statRow(px, y, "gui.alaindustrial.stats.fuel_lasts",
+							FuelRuntimeText.span(fuel.ticksLeft()).getString(), 0, false, stale)
+					: noteRow(px, y, FuelRuntimeText.noSpan(fuel.ticksLeft()));
 		}
 
 		y += 3;
@@ -142,6 +167,44 @@ final class StatsPanelReadout {
 			y += 10;
 		}
 		return y;
+	}
+
+	/**
+	 * "Fuel burnt 46" (MOD-992), and on hover the kinds burnt most, each by its own name ("Coal: 34"), with the
+	 * rest as one line: the panel has no height for a row per kind. A kind whose item is gone from the game (its
+	 * mod was removed) shows its id.
+	 */
+	private int fuelBurntRow(int px, int y, FuelTally.Top burnt) {
+		int next = statRow(px, y, "gui.alaindustrial.stats.fuel_burnt", ReadoutFormat.compact(burnt.total()),
+				burnt.total(), false);
+		if (mouseY >= y - 1 && mouseY < y + STAT_ROW_H - 1 && mouseX >= px + 7 && mouseX < px + PANEL_W - 7) {
+			List<Component> lines = new ArrayList<>();
+			for (FuelTally.Entry kind : burnt.kinds()) {
+				lines.add(Component.translatable("gui.alaindustrial.stats.fuel_burnt_kind", fuelName(kind.id()),
+						ReadoutFormat.exact(kind.count())));
+			}
+			if (burnt.rest() > 0L) {
+				lines.add(Component.translatable("gui.alaindustrial.stats.fuel_burnt_other",
+						ReadoutFormat.exact(burnt.rest())));
+			}
+			graphics.setComponentTooltipForNextFrame(font, lines, mouseX, mouseY);
+		}
+		return next;
+	}
+
+	/** The item's own name for a burnt kind's id, or the id itself when no such item exists. */
+	private static Component fuelName(String id) {
+		Identifier key = Identifier.tryParse(id);
+		Item item = key == null ? Items.AIR : BuiltInRegistries.ITEM.getOptional(key).orElse(Items.AIR);
+		return item == Items.AIR ? Component.literal(id) : new ItemStack(item).getHoverName();
+	}
+
+	/** A row that is one phrase with no value column ("Waiting for a consumer"), cut to the panel's width. */
+	private int noteRow(int px, int y, Component text) {
+		FormattedCharSequence line = font.split(text, STAT_TEXT_W).stream().findFirst()
+				.orElse(FormattedCharSequence.EMPTY);
+		graphics.text(font, line, px + 9, y, GuiStyle.TEXT_DIM, false);
+		return y + STAT_ROW_H;
 	}
 
 	private int statRow(int px, int y, String labelKey, String value, long exact, boolean tooltip) {

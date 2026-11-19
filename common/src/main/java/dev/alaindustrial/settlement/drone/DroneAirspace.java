@@ -28,8 +28,9 @@ import org.jspecify.annotations.Nullable;
  * is gone.
  *
  * <p><b>The cost is bounded</b>: the search box is the nest and the target with {@link #MARGIN} blocks around and
- * {@link #HEADROOM} over the higher of them, the search stops after {@link #MAX_NODES} cells, and a nest spreads it
- * over ticks, {@link #NODES_PER_TICK} cells a tick. The measured numbers are in MOD-858's research.
+ * {@link #HEADROOM} over the higher of them, and the building's own box; the route search may expand every cell of
+ * that box once ({@link #routeBudget}), and a nest spreads it over ticks, {@link #NODES_PER_TICK} cells a tick. The
+ * measured numbers are in MOD-858's and MOD-908's research.
  */
 public final class DroneAirspace {
 
@@ -41,7 +42,11 @@ public final class DroneAirspace {
 	public static final int HEADROOM = 6;
 	/** Blocks of room the search box keeps round the building the drone works on: out of its door and over its roof. */
 	public static final int AROUND_BUILDING = 2;
-	/** Cells one route search may expand at most. */
+	/**
+	 * Cells the search for a way in ({@link #lifts}) expands at most, three times over. The route search has no such
+	 * cap below its box: a box round a building twenty blocks from the nest holds more open cells than this, and a
+	 * search that gave up there called a cell behind the building's door unreachable (MOD-908).
+	 */
 	public static final int MAX_NODES = 6000;
 	/** Cells a route search expands in one tick: a longer search goes on next tick. */
 	public static final int NODES_PER_TICK = 800;
@@ -102,7 +107,16 @@ public final class DroneAirspace {
 		DroneRoute.Cells cells = probe == null ? chunkCells(level, b[0], b[2], b[3], b[5])
 				: (x, y, z) -> open(level, at.set(x, y, z), probe);
 		return DroneRoute.plan(nest.getX(), nest.getY(), nest.getZ(), target.getX(), target.getY(), target.getZ(),
-				cells, b[0], b[1], b[2], b[3], b[4], b[5], MAX_NODES);
+				cells, b[0], b[1], b[2], b[3], b[4], b[5], routeBudget(b));
+	}
+
+	/**
+	 * Cells a route search in box {@code b} may expand: every cell of the box, so it says «no route» only when none is
+	 * left to try (MOD-908). A* expands a cell at most once, so this bounds it as tightly as a fixed number would.
+	 */
+	static int routeBudget(int[] b) {
+		long volume = (long) (b[3] - b[0] + 1) * (b[4] - b[1] + 1) * (b[5] - b[2] + 1);
+		return (int) Math.max(1L, Math.min(Integer.MAX_VALUE, volume));
 	}
 
 	/**

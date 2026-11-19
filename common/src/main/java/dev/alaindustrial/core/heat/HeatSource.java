@@ -14,7 +14,12 @@ public enum HeatSource {
 	LAVA(2, 1),
 	MAGMA(2, 1),
 	LAVA_CAULDRON(2, 1),
-	ELECTRIC_HEATER(3, 2);
+	ELECTRIC_HEATER(3, 2),
+	/**
+	 * A fuel generator that is burning right now (MOD-988): level 1, a campfire's worth. Declared last so the
+	 * ordinals the screen already reads keep their meaning.
+	 */
+	GENERATOR(1, 3);
 
 	private static final HeatSource[] VALUES = values();
 	private final int level;

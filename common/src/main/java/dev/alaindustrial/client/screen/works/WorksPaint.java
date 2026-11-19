@@ -23,7 +23,7 @@ import net.minecraft.world.item.Items;
  * The drawing primitives of the core's «Construction» tab (owner's round 3 of 0.1.219, R3-3): a card's face, its chip
  * and bar, a button with an item, a plan slot, a line of words fitted to its width.
  */
-final class WorksPaint {
+public final class WorksPaint {
 
 	private static final int LINE = 10;
 
@@ -126,7 +126,7 @@ final class WorksPaint {
 	}
 
 	/** What a block-in-the-way line's «show it» button shows (MOD-890): the spyglass of «Find» (R142). */
-	static ItemStack spotIcon() {
+	public static ItemStack spotIcon() {
 		return new ItemStack(Items.SPYGLASS);
 	}
 
@@ -134,7 +134,7 @@ final class WorksPaint {
 	 * The picture of a small button whose top-left is ({@code x}, {@code y}): half size, centred on a whole pixel
 	 * (MOD-890: it sat one pixel off the button's top and left edges and two off its bottom and right).
 	 */
-	static void smallButtonIcon(GuiGraphicsExtractor graphics, ItemStack stack, int x, int y) {
+	public static void smallButtonIcon(GuiGraphicsExtractor graphics, ItemStack stack, int x, int y) {
 		int inset = SettlementCoreLayout.smallIconInset(SettlementCoreLayout.WORKS_SMALL_BUTTON);
 		smallIcon(graphics, stack, x + inset, y + inset);
 	}

@@ -7,6 +7,8 @@ import dev.alaindustrial.client.screen.tabs.PageText;
 import dev.alaindustrial.client.screen.tabs.SideTabStrip;
 import dev.alaindustrial.client.screen.tabs.TabPage;
 import dev.alaindustrial.client.screen.works.ConstructionTab;
+import dev.alaindustrial.client.screen.works.TownWorksClient;
+import dev.alaindustrial.client.screen.works.WorksPaint;
 import dev.alaindustrial.item.misc.RestorationPlan;
 import dev.alaindustrial.item.misc.RestorationPlanItem;
 import dev.alaindustrial.menu.TownDispatcherMenu;
@@ -17,11 +19,13 @@ import dev.alaindustrial.settlement.drone.DispatcherViews;
 import dev.alaindustrial.settlement.drone.StartReadiness;
 import dev.alaindustrial.settlement.plan.PlanSheetHints;
 import dev.alaindustrial.settlement.plan.PlanSheetRules;
+import dev.alaindustrial.settlement.works.BlockReason;
 import dev.alaindustrial.settlement.works.ConstructionRow;
 import dev.alaindustrial.settlement.works.WorkJournal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Supplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -32,6 +36,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
@@ -155,6 +160,12 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 	private int scroll;
 	/** How far the checklist scrolls at most, as of the last frame. */
 	private int taskScrollMax;
+	/** The «show it» buttons drawn this frame (MOD-908): where they are in the window and the cell each names. */
+	private final List<ShowButton> showButtons = new ArrayList<>();
+
+	/** A «show it» button at ({@code x}, {@code y}) of the window, for the cell {@code cell} names. */
+	private record ShowButton(int x, int y, int[] cell) {
+	}
 
 	public TownDispatcherScreen(TownDispatcherMenu menu, Inventory inventory, Component title) {
 		super(menu, inventory, title, TownDispatcherMenu.IMAGE_WIDTH, TownDispatcherMenu.IMAGE_HEIGHT);
@@ -243,8 +254,9 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 		int colour = reason != null || status.blocking() ? GuiStyle.STATUS_BLOCKING : GuiStyle.TEXT_DIM;
 		drawFittedStatus(graphics, line, STATUS_Y, INNER_LEFT, INNER_RIGHT, colour);
 		DispatcherView view = view();
+		showButtons.clear();
 		switch (tab) {
-			case TASK -> drawChecklist(graphics, view);
+			case TASK -> drawChecklist(graphics, view, mouseX, mouseY);
 			case BUFFER -> paragraph(graphics, Component.translatable(key("buffer.hint")), INNER_LEFT + 4,
 					TownDispatcherMenu.BUFFER_Y + 3 * 18 + 4, INNER_RIGHT - INNER_LEFT - 8, 1.0f,
 					GuiStyle.TEXT_DIM, 4);
@@ -262,7 +274,7 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 	 * The four steps of a first restoration; an open step says what to do next. Drawn inside the framed area only
 	 * (scissor), shifted up by the scroll; a taller list gets a scroll bar and the wheel.
 	 */
-	private void drawChecklist(GuiGraphicsExtractor graphics, DispatcherView view) {
+	private void drawChecklist(GuiGraphicsExtractor graphics, DispatcherView view, int mouseX, int mouseY) {
 		DispatcherView.Checklist list = view.checklist();
 		boolean owner = this.menu.viewerControls();
 		scroll = Math.max(0, Math.min(scroll, taskScrollMax));
@@ -319,7 +331,7 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 				title = title.copy().append(": ").append(ConstructionTab.component(order.name()));
 			}
 		}
-		y = step(graphics, y, list.restored() || list.jobs() && !list.stalled(), title, notes);
+		y = step(graphics, y, list.restored() || list.jobs() && !list.stalled(), title, notes, mouseX, mouseY);
 		graphics.disableScissor();
 		int area = PANEL_BOTTOM - STEPS_TOP - 2;
 		int content = y - first;
@@ -339,6 +351,16 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 	 * step's top.
 	 */
 	private int step(GuiGraphicsExtractor graphics, int y, boolean done, Component title, List<Component> notes) {
+		return step(graphics, y, done, title, notes, -1, -1);
+	}
+
+	/**
+	 * {@link #step(GuiGraphicsExtractor, int, boolean, Component, List)}, a note that names a cell («In the way: X at
+	 * x y z», «The drone cannot reach x y z») carrying a «show it» button at the right of its first line, as on the
+	 * core's screen (MOD-908).
+	 */
+	private int step(GuiGraphicsExtractor graphics, int y, boolean done, Component title, List<Component> notes,
+			int mouseX, int mouseY) {
 		if (done) {
 			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, DONE, this.leftPos + INNER_LEFT + 4, this.topPos + y - 1,
 					10, 10, GuiStyle.STATUS_GOOD_TICK);
@@ -350,9 +372,15 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 		int lines = paragraph(graphics, title, STEP_TEXT_X, y, width, 1.0f, done ? GuiStyle.STATUS_GOOD : GuiStyle.TEXT,
 				2);
 		int at = y + lines * LINE_H;
+		int small = SettlementCoreLayout.WORKS_SMALL_BUTTON;
 		for (Component note : notes) {
-			int used = paragraph(graphics, note, STEP_TEXT_X, at, width, HINT_SCALE, GuiStyle.TEXT_DIM, 3);
-			at += Math.round(used * LINE_H * HINT_SCALE);
+			Optional<int[]> cell = cellOf(note);
+			if (cell.isPresent() && at >= STEPS_TOP - 3 && at + small <= PANEL_BOTTOM) {
+				showButton(graphics, STEP_TEXT_X + width - small, at - 1, cell.get(), mouseX, mouseY);
+			}
+			int used = paragraph(graphics, note, STEP_TEXT_X, at, cell.isPresent() ? width - small - 3 : width,
+					HINT_SCALE, GuiStyle.TEXT_DIM, 3);
+			at += Math.max(Math.round(used * LINE_H * HINT_SCALE), cell.isPresent() ? small + 1 : 0);
 		}
 		return at + 4;
 	}
@@ -434,8 +462,15 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 					.append(ConstructionTab.component(order.name()));
 			drawFittedStatus(graphics, name, y + 1, INNER_LEFT + 4, textRight,
 					order.taken() ? GuiStyle.STATUS_GOOD : GuiStyle.TEXT);
+			Optional<int[]> cell = BlockReason.obstructedCell(order.step().key(), order.step().args());
+			int stepRight = textRight;
+			if (cell.isPresent()) {
+				// MOD-908: the stop's cell, outlined by the same «show it» as on the core's screen.
+				stepRight = textRight - SettlementCoreLayout.WORKS_SMALL_BUTTON - 2;
+				showButton(graphics, stepRight + 2, y + 10, cell.get(), mouseX, mouseY);
+			}
 			paragraph(graphics, ConstructionTab.component(order.step()), INNER_LEFT + 10, y + 11,
-					textRight - INNER_LEFT - 10, HINT_SCALE,
+					stepRight - INNER_LEFT - 10, HINT_SCALE,
 					order.blocked() ? GuiStyle.STATUS_BLOCKING : GuiStyle.TEXT_DIM, 1);
 			if (this.menu.viewerControls()) {
 				for (int b = 0; b < ORDER_BUTTONS.length; b++) {
@@ -674,6 +709,28 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 		return Component.translatable(which.key());
 	}
 
+	/** The cell a stop's line names, read from its key and arguments; empty for any other line (MOD-908). */
+	private static Optional<int[]> cellOf(Component line) {
+		if (!(line.getContents() instanceof TranslatableContents text)) {
+			return Optional.empty();
+		}
+		List<String> args = new ArrayList<>();
+		for (Object arg : text.getArgs()) {
+			args.add(arg instanceof Component component ? component.getString() : String.valueOf(arg));
+		}
+		return BlockReason.obstructedCell(text.getKey(), args);
+	}
+
+	/** A «show it» button at ({@code x}, {@code y}) of the window for {@code cell}, remembered for a click. */
+	private void showButton(GuiGraphicsExtractor graphics, int x, int y, int[] cell, int mouseX, int mouseY) {
+		int size = SettlementCoreLayout.WORKS_SMALL_BUTTON;
+		boolean hovered = isHovering(x, y, size, size, mouseX, mouseY);
+		graphics.fill(this.leftPos + x, this.topPos + y, this.leftPos + x + size, this.topPos + y + size,
+				hovered ? GuiStyle.BUTTON_ACTIVE : GuiStyle.BUTTON);
+		WorksPaint.smallButtonIcon(graphics, WorksPaint.spotIcon(), this.leftPos + x, this.topPos + y);
+		showButtons.add(new ShowButton(x, y, cell));
+	}
+
 	// --- input ---
 
 	private boolean overAssemble(double mouseX, double mouseY) {
@@ -697,6 +754,15 @@ public class TownDispatcherScreen extends MachineScreen<TownDispatcherMenu> {
 				AbstractWidget.playButtonClickSound(this.minecraft.getSoundManager());
 			}
 			return true;
+		}
+		for (ShowButton show : showButtons) {
+			int size = SettlementCoreLayout.WORKS_SMALL_BUTTON;
+			if (isHovering(show.x(), show.y(), size, size, event.x(), event.y())) {
+				// The server checks the cell is in this town's way and outlines it for this player alone (MOD-908).
+				TownWorksClient.showObstruction(show.cell()[0], show.cell()[1], show.cell()[2]);
+				AbstractWidget.playButtonClickSound(this.minecraft.getSoundManager());
+				return true;
+			}
 		}
 		int row = orderRowAt(event.x(), event.y());
 		if (row >= 0 && this.minecraft.gameMode != null) {

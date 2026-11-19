@@ -279,6 +279,11 @@ public final class MachineGuiStands {
                 ModContent.GENERATOR_MENU.get(), "LV Generator",
                 CAP, CAP, 0, BURN);
 
+        // MOD-990: with the statistics chip, the window's two extra lines (fuel span, load) and the same two
+        // rows in the statistics panel. The snapshot is the one a 2 EU/t line on 16 coal would send.
+        shootGeneratorRuntime(context, "gui_generator_runtime", CAP / 2, CAP, BURN / 2, BURN, false);
+        shootGeneratorRuntime(context, "gui_generator_runtime_stats", CAP / 2, CAP, BURN / 2, BURN, true);
+
         // ── Geothermal Generator — three states ──────────────────────────────────────
         // State 1: empty — no lava in tank, no energy
         shootMenuWithState(context, "gui_geothermal_empty",
@@ -633,6 +638,53 @@ public final class MachineGuiStands {
         awaitMenuScreen(context);
         java.nio.file.Path path = takeCleanScreenshot(context, name);
         LOG.info("[GUITEST][MOD-125] screenshot {} -> {}", name, path.toAbsolutePath());
+    }
+
+    /**
+     * MOD-990: the generator screen with a statistics chip fitted and a statistics snapshot handed to the menu, as
+     * the server sends it with the chip in: a line drawing 2 EU/t from a generator with 16 coal (the span reads
+     * about an hour and a half). With {@code panelOpen} the statistics panel is expanded too, showing the load and
+     * span rows and, from MOD-992, the burnt-fuel row (34 coal and 12 oak planks: "46").
+     */
+    private static void shootGeneratorRuntime(ClientGameTestContext context, String name, int energy, int capacity,
+                                              int progress, int maxProgress, boolean panelOpen) {
+        LOG.info("[GUITEST][MOD-990] opening {} (fuel runtime, panel={})", name, panelOpen);
+        context.runOnClient(mc -> {
+            MenuScreens.create(ModContent.GENERATOR_MENU.get(), mc, 0, Component.literal("LV Generator"));
+            if (mc.gui.screen() instanceof AbstractContainerScreen<?> acs
+                    && acs.getMenu() instanceof MachineMenu menu) {
+                menu.injectTestData(energy, capacity, progress, maxProgress);
+                for (net.minecraft.world.inventory.Slot s : menu.slots) {
+                    if (s instanceof MachineMenu.UpgradeSlot up
+                            && up.kind() == dev.alaindustrial.menu.UpgradeSlotKind.STATS) {
+                        s.set(new ItemStack(ModContent.STATS_CHIP.get()));
+                        break;
+                    }
+                }
+                // MOD-987: the 16 coal in the fuel slot and the ash they left so far in the slot right of the flame.
+                menu.getSlot(dev.alaindustrial.block.entity.GeneratorBlockEntity.FUEL_SLOT)
+                        .set(new ItemStack(net.minecraft.world.item.Items.COAL, 16));
+                menu.getSlot(dev.alaindustrial.block.entity.GeneratorBlockEntity.ASH_SLOT)
+                        .set(new ItemStack(ModContent.ASH.get(), 4));
+                long fuelTicks = 16L * 1600L;
+                long ticksLeft = (fuelTicks * 8L + energy) / 2L;
+                menu.acceptStats(new dev.alaindustrial.network.MachineStatsPayload(menu.containerId,
+                        36_000L, 0L, 72_000L, 90_000L, 0L, 80L, 40, 8, 1 << 16, 0L,
+                        java.util.Optional.of(new dev.alaindustrial.core.environment.FuelRuntime.Readout(
+                                ticksLeft, 1200L, 600, 8)),
+                        // MOD-992: 34 coal and 12 oak planks burnt so far, as the server names them.
+                        java.util.Optional.of(new dev.alaindustrial.core.environment.FuelTally.Top(java.util.List.of(
+                                new dev.alaindustrial.core.environment.FuelTally.Entry("minecraft:coal", 34L),
+                                new dev.alaindustrial.core.environment.FuelTally.Entry("minecraft:oak_planks", 12L)),
+                                0L))));
+                if (panelOpen) {
+                    menu.toggleStatsPanel();
+                }
+            }
+        });
+        awaitMenuScreen(context);
+        java.nio.file.Path path = takeCleanScreenshot(context, name);
+        LOG.info("[GUITEST][MOD-990] screenshot {} -> {}", name, path.toAbsolutePath());
     }
 
     /**

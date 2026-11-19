@@ -215,6 +215,16 @@ public final class ModTags {
 		 */
 		public static final TagKey<Item> NO_AUTO_CHARGE = key("no_auto_charge");
 
+		/**
+		 * Fuel that leaves ash in the fuel generator, one unit per piece (MOD-987): coal and charcoal. A tag
+		 * carries no number, so the blocks of nine sit in {@link #ASH_FUEL_BLOCKS}; a datapack adds another
+		 * mod's coal to the tag it belongs in without a code change.
+		 */
+		public static final TagKey<Item> ASH_FUELS = key("ash_fuels");
+
+		/** Fuel that counts as nine pieces of {@link #ASH_FUELS} (MOD-987): the block of coal. */
+		public static final TagKey<Item> ASH_FUEL_BLOCKS = key("ash_fuel_blocks");
+
 		/** What the incubator accepts as irradiation fuel (MOD-118) — uranium ingots today. */
 		public static final TagKey<Item> INCUBATOR_FUEL = key("incubator_fuel");
 

@@ -3,6 +3,7 @@ package dev.alaindustrial.block.entity;
 import java.util.List;
 import java.util.function.Consumer;
 import dev.alaindustrial.item.energy.ItemEnergy;
+import dev.alaindustrial.registry.ModContent;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -58,7 +59,7 @@ public final class BlockEntityDataMigrations {
 	 * {@link #DATA_VERSION_KEY}. Bumped when the SHAPE or the MEANING of stored data changes — never
 	 * for adding a key, which is absent-safe and needs no rung. See the class doc for the recipe.
 	 */
-	public static final int DATA_VERSION = 1;
+	public static final int DATA_VERSION = 2;
 
 	/**
 	 * NBT key holding {@link #DATA_VERSION}. Absent means "written before MOD-556", i.e. version 0 —
@@ -83,7 +84,8 @@ public final class BlockEntityDataMigrations {
 	 * {@code STEPS.size() == DATA_VERSION}).
 	 */
 	private static final List<Step> STEPS = List.of(
-			new Step(0, BlockEntityDataMigrations::v0ToV1RenumberBatteryBoxSlots));
+			new Step(0, BlockEntityDataMigrations::v0ToV1RenumberBatteryBoxSlots),
+			new Step(1, BlockEntityDataMigrations::v1ToV2ShiftGeneratorUpgradeSlots));
 
 	/** Number of rungs on the ladder — the oracle the version pin compares against. */
 	public static int stepCount() {
@@ -135,5 +137,37 @@ public final class BlockEntityDataMigrations {
 			box.setItem(slot, box.getItem(slot - 1));
 		}
 		box.setItem(BatteryBoxBlockEntity.DISCHARGE_SLOT, ItemStack.EMPTY);
+	}
+
+	/**
+	 * v1 → v2: a fuel generator saved before MOD-987 holds its upgrade chips one slot too low.
+	 *
+	 * <p>The ash slot went in right after the fuel slot, and the upgrade block follows the machine slots, so the
+	 * chips moved from 1…4 to 2…5. The arms of the panel are typed by position (mute, overclocker, statistics), so
+	 * every chip of an old save has to move one slot up, not only the one that would land in the ash slot: an old
+	 * save puts its first chip into what is now the ash slot and the other three into the arm before their own.
+	 * The whole run moves; the container grew by one, so the chip of the old last arm lands in the new last slot.
+	 *
+	 * <p>Two shapes are left alone. Ash in the ash slot is a save of the new layout that an older jar opened and
+	 * wrote back: it kept the slots as they were, so the chips are already in place. A filled last slot is a
+	 * layout the old one cannot be — the old container ended one slot earlier — and shifting it would overwrite
+	 * the chip there, so nothing is ever lost. Every other shape below version 2 is the old layout: the current
+	 * jar stamps 2, and an older jar writes its own five slots. That is also why the one shape both layouts share
+	 * (empty ash slot, an empty last arm) is decided by the version rather than by the content; a second pass over
+	 * repaired data with a full panel returns at the last-slot check and destroys nothing in any case.
+	 */
+	private static void v1ToV2ShiftGeneratorUpgradeSlots(EnergyBlockEntity be) {
+		if (!(be instanceof GeneratorBlockEntity generator)) {
+			return;
+		}
+		int last = generator.getContainerSize() - 1;
+		if (generator.getItem(GeneratorBlockEntity.ASH_SLOT).is(ModContent.ASH.get())
+				|| !generator.getItem(last).isEmpty()) {
+			return;
+		}
+		for (int slot = last; slot > GeneratorBlockEntity.ASH_SLOT; slot--) {
+			generator.setItem(slot, generator.getItem(slot - 1));
+		}
+		generator.setItem(GeneratorBlockEntity.ASH_SLOT, ItemStack.EMPTY);
 	}
 }

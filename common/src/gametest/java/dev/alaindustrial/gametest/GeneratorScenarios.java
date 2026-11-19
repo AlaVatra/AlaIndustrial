@@ -3,9 +3,16 @@ package dev.alaindustrial.gametest;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.block.entity.BatteryBoxBlockEntity;
 import dev.alaindustrial.block.entity.GeneratorBlockEntity;
+import dev.alaindustrial.block.entity.machine.MachineChannels;
+import dev.alaindustrial.core.energy.EnergyTransactions;
+import dev.alaindustrial.core.environment.DrawMeter;
+import dev.alaindustrial.core.environment.FuelRuntime;
+import dev.alaindustrial.core.environment.FuelTally;
 import dev.alaindustrial.core.environment.GeneratorConfig;
+import net.minecraft.server.level.ServerPlayer;
 import dev.alaindustrial.registry.ModContent;
 import java.util.List;
+import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +29,9 @@ import dev.alaindustrial.block.entity.MaceratorBlockEntity;
 import dev.alaindustrial.core.energy.NetworkManager;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComparatorBlock;
+import net.minecraft.world.level.block.entity.ComparatorBlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import dev.alaindustrial.menu.GeneratorMenu;
@@ -91,13 +101,24 @@ public final class GeneratorScenarios {
 				RosterEntry.of(GeneratorScenarios::tcGen001Neg03_fullBufferPausesBurn,
 								"tc_gen001_neg03_full_buffer_pauses_burn")
 						.fabricId("GeneratorGameTest", "tcGen001Neg03_fullBufferPausesBurn").ticks(20, 100),
+				RosterEntry.of(GeneratorScenarios::lightLoadBurnsOnlyWhatTheLineDraws,
+								"mod986_light_load_burns_only_what_the_line_draws")
+						.ticks(20, 100),
 				RosterEntry.of(GeneratorScenarios::tcGen001Neg05_fullAdjacentConsumerDoesNotDrainGenerator,
 								"tc_gen001_neg05_full_adjacent_consumer_does_not_drain_generator")
 						.fabricId("GeneratorGameTest", "tcGen001Neg05_fullAdjacentConsumerDoesNotDrainGenerator")
 						.ticks(20, 100),
 				RosterEntry.of(GeneratorScenarios::tcGen001Prf01_ratePerTickMatchesConfig,
 								"tc_gen001_prf01_rate_per_tick_matches_config")
-						.fabricId("GeneratorGameTest", "tcGen001Prf01_ratePerTickMatchesConfig").ticks(20, 100));
+						.fabricId("GeneratorGameTest", "tcGen001Prf01_ratePerTickMatchesConfig").ticks(20, 100),
+				RosterEntry.of(GeneratorScenarios::comparatorReadsFuelSlot, "mod991_comparator_reads_fuel_slot")
+						.ticks(60, 60),
+				RosterEntry.of(GeneratorScenarios::fuelRuntimeFollowsTheChipAndTheDraw,
+								"mod990_fuel_runtime_follows_the_chip_and_the_draw")
+						.ticks(20, 60),
+				RosterEntry.of(GeneratorScenarios::fuelBurntCountsByKindOnlyWithTheChip,
+								"mod992_fuel_burnt_counts_by_kind_only_with_the_chip")
+						.ticks(20, 60));
 
 		private Roster() {}
 	}
@@ -133,7 +154,8 @@ public final class GeneratorScenarios {
 		GeneratorBlockEntity gen = placeGenerator(helper);
 		long cap = gen.getEnergyStorage().getCapacity();
 		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL, 64));
-		gen.getEnergyStorage().setAmountUntracked(cap - 1); // BVA: max-1
+		// BVA: one burn tick short. A gap smaller than one tick's output holds the burn instead (MOD-986).
+		gen.getEnergyStorage().setAmountUntracked(cap - GeneratorBlockEntity.effectiveEuPerTick());
 		drive(gen, helper, 5);
 		long amount = gen.getEnergyStorage().getAmount();
 		if (amount != cap) {
@@ -170,6 +192,42 @@ public final class GeneratorScenarios {
 		if (!(burn1 > 0 && burn1 == burn2)) {
 			helper.fail("full buffer must freeze burn: burn1=" + burn1 + " burn2=" + burn2);
 		}
+		helper.succeed();
+	}
+
+	/**
+	 * A light load burns only the fuel it draws (MOD-986). A buffer with less room than one burn tick makes holds
+	 * the burn, and a line drawing a few EU a tick from a nearly full buffer costs burn ticks worth what it drew,
+	 * not one burn tick per game tick with the rest thrown away.
+	 *
+	 * @covers R-NRG-11
+	 */
+	public static void lightLoadBurnsOnlyWhatTheLineDraws(GameTestHelper helper) {
+		GeneratorBlockEntity gen = placeGenerator(helper);
+		int euPerTick = GeneratorBlockEntity.effectiveEuPerTick();
+		long cap = gen.getEnergyStorage().getCapacity();
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL, 64));
+		drive(gen, helper, 1); // start a burn so burnTime > 0
+
+		// Room for less than one burn tick: the burn holds.
+		gen.getEnergyStorage().setAmountUntracked(cap - (euPerTick - 1));
+		int held1 = gen.getDataAccess().get(2); // index 2 = progress = burnTime
+		drive(gen, helper, 3);
+		int held2 = gen.getDataAccess().get(2);
+		helper.assertTrue(held1 > 0 && held1 == held2, "a gap smaller than one burn tick must hold the burn: "
+				+ held1 + " -> " + held2);
+
+		// A light draw from a nearly full buffer: what burns matches what the line took, within one burn tick.
+		long lightDraw = Math.max(1, euPerTick / 3);
+		int ticks = 60;
+		int before = gen.getDataAccess().get(2);
+		drawEachTick(gen, helper, lightDraw, ticks);
+		int after = gen.getDataAccess().get(2);
+		long burnt = (long) (before - after) * euPerTick;
+		long drawn = lightDraw * ticks;
+		helper.assertTrue(after > 0, "the coal ran out mid-test, the rig is wrong: burnTime " + after);
+		helper.assertTrue(burnt <= drawn + euPerTick, "a light load wasted fuel: burnt " + burnt + " EU of fuel for "
+				+ drawn + " EU drawn");
 		helper.succeed();
 	}
 
@@ -517,4 +575,186 @@ public final class GeneratorScenarios {
 		helper.succeed();
 	}
 
+	/**
+	 * @implements MOD-991 - a real comparator behind the generator reads the fuel slot by the vanilla container
+	 *     rule (empty 0, half a stack 8, a full stack 15), and the reading drops to 7 when the generator burns
+	 *     one item of the half stack. The comparator only changes when the generator tells its neighbours, so
+	 *     this also proves the notification on a slot write and on burning.
+	 */
+	public static void comparatorReadsFuelSlot(GameTestHelper helper) {
+		GeneratorBlockEntity gen = placeGenerator(helper);
+		// A full buffer pauses burning (TC-GEN-001-NEG03), so the slot holds still until the buffer is emptied.
+		gen.getEnergyStorage().setAmountUntracked(gen.getEnergyStorage().getCapacity());
+		BlockPos comparatorPos = POS.south();
+		helper.setBlock(comparatorPos.below(), Blocks.STONE.defaultBlockState());
+		// A comparator reads the block its FACING points at: north of it is the generator.
+		helper.setBlock(comparatorPos, Blocks.COMPARATOR.defaultBlockState()
+				.setValue(ComparatorBlock.FACING, Direction.NORTH));
+		helper.runAfterDelay(4, () -> {
+			expectComparator(helper, comparatorPos, 0, "an empty fuel slot");
+			gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL, 64));
+			helper.runAfterDelay(4, () -> {
+				expectComparator(helper, comparatorPos, 15, "a full stack of coal");
+				gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL, 32));
+				helper.runAfterDelay(4, () -> {
+					expectComparator(helper, comparatorPos, 8, "half a stack of coal");
+					gen.getEnergyStorage().setAmountUntracked(0); // room again: the next tick burns one coal
+					helper.runAfterDelay(6, () -> {
+						int left = gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount();
+						helper.assertTrue(left == 31, "the generator must have burnt exactly one coal, has " + left);
+						expectComparator(helper, comparatorPos, 7, "31 coal after one was burnt");
+						helper.succeed();
+					});
+				});
+			});
+		});
+	}
+
+	private static void expectComparator(GameTestHelper helper, BlockPos comparatorPos, int expected, String what) {
+		ComparatorBlockEntity comparator = helper.getBlockEntity(comparatorPos, ComparatorBlockEntity.class);
+		int read = comparator.getOutputSignal();
+		helper.assertTrue(read == expected, "comparator behind " + what + " must read " + expected + ", reads " + read);
+	}
+
+	/**
+	 * MOD-990: the fuel span and the load are worked out only with the statistics chip, and then they follow the
+	 * line's real draw. Without the chip the generator keeps nothing and the menu's snapshot carries no fuel line
+	 * (the menu sends no snapshot at all then: {@code MachineMenu.broadcastChanges}). With the chip, a line drawing
+	 * 2 EU/t reads "2 of 8 EU/t" and the span is every EU still to come over 2 EU/t, worked out here from the
+	 * vanilla burn time of coal, not from the class under test; a line that stops drawing reads "waiting".
+	 *
+	 * @implements MOD-990-RUNTIME — span and load from the real draw, only with the statistics chip
+	 * @covers MOD-990
+	 */
+	public static void fuelRuntimeFollowsTheChipAndTheDraw(GameTestHelper helper) {
+		GeneratorBlockEntity gen = placeGenerator(helper);
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL, 16));
+		ServerPlayer player = AlaGameTestHelper.survivalPlayer(helper);
+		GeneratorMenu menu = new GeneratorMenu(1, player.getInventory(), gen,
+				ContainerLevelAccess.create(helper.getLevel(), gen.getBlockPos()));
+		long now = helper.getLevel().getGameTime();
+
+		// No chip: a line draws, and nothing is measured or worked out.
+		drawEachTick(gen, helper, 2L, 100);
+		helper.assertTrue(!gen.hasStatsChip(), "the rig needs a generator without the statistics chip");
+		helper.assertTrue(gen.fuelReadout() == null, "no chip, yet the generator worked out " + gen.fuelReadout());
+		helper.assertTrue(menu.statsSnapshot(gen, now).fuel().isEmpty(), "no chip, yet the snapshot has a fuel line");
+
+		// The chip: 2 EU/t drawn, from a window that starts when the chip went in.
+		gen.setItem(gen.upgradeSlotStart() + 2, new ItemStack(ModContent.STATS_CHIP.get()));
+		drawEachTick(gen, helper, 2L, 200);
+		FuelRuntime.Readout fuel = menu.statsSnapshot(gen, now + 1).fuel().orElse(null);
+		helper.assertTrue(fuel != null, "a chipped generator's snapshot carries no fuel line");
+		int euPerTick = Math.max(1, Math.round(GeneratorConfig.fuelEuPerTick * Config.globalEuRateMultiplier));
+		helper.assertTrue(fuel.euPerTick() == euPerTick, "full output " + fuel.euPerTick() + ", expected " + euPerTick);
+		helper.assertTrue(fuel.drawTicks() > 0 && fuel.drawEu() == 2L * fuel.drawTicks(),
+				"a 2 EU/t line reads " + fuel.drawEu() + " EU over " + fuel.drawTicks() + " ticks");
+		long burnLeft = gen.getDataAccess().get(MachineChannels.PROGRESS.ordinal());
+		long coalTicks = 1600L; // vanilla burn time of coal; the rig's generator has no owner, so no Steady Hands
+		long fuelEu = (burnLeft + coalTicks * gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount()) * euPerTick;
+		long expected = (fuelEu + gen.getEnergyStorage().getAmount()) / 2L;
+		helper.assertTrue(Math.abs(fuel.ticksLeft() - expected) <= 1L,
+				"at 2 EU/t the fuel lasts " + expected + " ticks, the readout says " + fuel.ticksLeft());
+
+		// The line stops drawing: once the window has rolled past the old load, the fuel waits.
+		drawEachTick(gen, helper, 0L, DrawMeter.SAMPLE_EVERY * DrawMeter.SAMPLES + DrawMeter.SAMPLE_EVERY);
+		FuelRuntime.Readout idle = gen.fuelReadout();
+		helper.assertTrue(idle != null && idle.ticksLeft() == FuelRuntime.WAITING,
+				"a generator nothing draws from reads " + idle + ", not waiting");
+		helper.succeed();
+	}
+
+	/**
+	 * MOD-992: the statistics chip counts the fuel burnt by kind, and only the chip. Without it a burnt stick
+	 * leaves no tally, no save key and nothing in the snapshot. With it, one coal and two oak planks read as
+	 * such, and the EU the panel shows as generated is every burn tick at the full output, worked out here from
+	 * the vanilla burn times, with a stretch of full-buffer pause in the middle that must not open a gap. The
+	 * tally survives a save and load, and a save from before the task loads with an empty tally.
+	 *
+	 * @implements MOD-992-TALLY — burnt fuel by kind, only with the statistics chip, kept across a reload
+	 * @covers MOD-992
+	 */
+	public static void fuelBurntCountsByKindOnlyWithTheChip(GameTestHelper helper) {
+		GeneratorBlockEntity gen = placeGenerator(helper);
+		ServerPlayer player = AlaGameTestHelper.survivalPlayer(helper);
+		GeneratorMenu menu = new GeneratorMenu(1, player.getInventory(), gen,
+				ContainerLevelAccess.create(helper.getLevel(), gen.getBlockPos()));
+		var registries = helper.getLevel().registryAccess();
+		long now = helper.getLevel().getGameTime();
+		int euPerTick = Math.max(1, Math.round(GeneratorConfig.fuelEuPerTick * Config.globalEuRateMultiplier));
+
+		// No chip: a stick burns out (100 ticks) and nothing is counted, saved or put in the snapshot.
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.STICK));
+		drawEachTick(gen, helper, euPerTick, 110);
+		helper.assertTrue(!gen.hasStatsChip(), "the rig needs a generator without the statistics chip");
+		helper.assertTrue(gen.getItem(GeneratorBlockEntity.FUEL_SLOT).isEmpty(), "the stick was not burnt");
+		helper.assertTrue(gen.fuelBurntTally().isEmpty(), "no chip, yet the generator counted "
+				+ gen.fuelBurntTally().counts());
+		helper.assertTrue(!gen.saveCustomOnly(registries).contains("StatsFuelBurnt"),
+				"no chip, yet the save carries a burnt-fuel key");
+		helper.assertTrue(menu.statsSnapshot(gen, now).fuelBurnt().isEmpty(),
+				"no chip, yet the snapshot carries burnt fuel");
+
+		// The chip: one coal, then two oak planks; the line draws the full output, stops long enough for the
+		// buffer to fill and the burn to pause, then draws again until the second plank is burning.
+		gen.setItem(gen.upgradeSlotStart() + 2, new ItemStack(ModContent.STATS_CHIP.get()));
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL));
+		drawEachTick(gen, helper, euPerTick, 1);
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.OAK_PLANKS, 2));
+		drawEachTick(gen, helper, euPerTick, 600);
+		drawEachTick(gen, helper, 0L, 600);
+		helper.assertTrue(gen.getEnergyStorage().getCapacity() - gen.getEnergyStorage().getAmount()
+						< GeneratorBlockEntity.effectiveEuPerTick(),
+				"the pause needs a buffer with no room for a burn tick, the rig has "
+						+ gen.getEnergyStorage().getAmount());
+		drawEachTick(gen, helper, euPerTick, 1000);
+		helper.assertTrue(gen.getItem(GeneratorBlockEntity.FUEL_SLOT).isEmpty(), "the second plank was not taken");
+
+		Map<String, Long> expected = Map.of("minecraft:coal", 1L, "minecraft:oak_planks", 2L);
+		helper.assertTrue(gen.fuelBurntTally().counts().equals(expected) && gen.fuelBurntTally().other() == 0L,
+				"burnt by kind " + gen.fuelBurntTally().counts() + ", expected " + expected);
+		FuelTally.Top top = menu.statsSnapshot(gen, now + 1).fuelBurnt().orElse(null);
+		FuelTally.Top expectedTop = new FuelTally.Top(List.of(new FuelTally.Entry("minecraft:oak_planks", 2L),
+				new FuelTally.Entry("minecraft:coal", 1L)), 0L);
+		helper.assertTrue(expectedTop.equals(top), "the snapshot's burnt fuel reads " + top);
+
+		// Generated EU = every burn tick at the full output: coal 1600 and plank 300 (vanilla), the second plank
+		// as far as it has burnt. The pause burnt nothing and generated nothing, so the two agree.
+		long plankLeft = gen.getDataAccess().get(MachineChannels.PROGRESS.ordinal());
+		long burnTicks = 1600L + 300L + (300L - plankLeft);
+		long generated = gen.getEnergyStorage().getTotalEnergyGenerated();
+		helper.assertTrue(generated == burnTicks * euPerTick,
+				"generated " + generated + " EU, the fuel burnt " + burnTicks + " ticks at " + euPerTick + " EU/t");
+		helper.assertTrue(menu.statsSnapshot(gen, now + 2).energyGenerated() == generated,
+				"the snapshot's generated EU differs from the counter");
+
+		// Save and load: the tally comes back; a save without the key (before MOD-992) starts from zero.
+		CompoundTag tag = gen.saveCustomOnly(registries);
+		helper.assertTrue(tag.contains("StatsFuelBurnt"), "a chipped generator that burnt fuel saves no tally");
+		GeneratorBlockEntity restored = new GeneratorBlockEntity(gen.getBlockPos(),
+				helper.getLevel().getBlockState(gen.getBlockPos()));
+		restored.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, registries, tag));
+		helper.assertTrue(restored.fuelBurntTally().counts().equals(expected),
+				"after a reload the tally reads " + restored.fuelBurntTally().counts());
+		helper.assertTrue(restored.getEnergyStorage().getTotalEnergyGenerated() == generated,
+				"after a reload the generated EU reads " + restored.getEnergyStorage().getTotalEnergyGenerated());
+		CompoundTag old = tag.copy();
+		old.remove("StatsFuelBurnt");
+		GeneratorBlockEntity fromOld = new GeneratorBlockEntity(gen.getBlockPos(),
+				helper.getLevel().getBlockState(gen.getBlockPos()));
+		fromOld.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, registries, old));
+		helper.assertTrue(fromOld.fuelBurntTally().isEmpty(), "an old save loads with a tally "
+				+ fromOld.fuelBurntTally().counts());
+		helper.succeed();
+	}
+
+	/** Tick the generator {@code ticks} times, drawing {@code eu} out of it after each tick as a line would. */
+	private static void drawEachTick(GeneratorBlockEntity gen, GameTestHelper helper, long eu, int ticks) {
+		for (int i = 0; i < ticks; i++) {
+			drive(gen, helper, 1);
+			if (eu > 0L) {
+				EnergyTransactions.get().runCommitting(txn -> gen.getEnergyStorage().extract(eu, txn));
+			}
+		}
+	}
 }

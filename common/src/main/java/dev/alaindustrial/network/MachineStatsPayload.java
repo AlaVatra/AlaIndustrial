@@ -1,6 +1,9 @@
 package dev.alaindustrial.network;
 
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.core.environment.FuelRuntime;
+import dev.alaindustrial.core.environment.FuelTally;
+import java.util.Optional;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -40,6 +43,11 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
  * @param peakEuRate highest per-tick rate since the block entity loaded (session, never persisted)
  * @param connections direct-face connections, sources in the low 16 bits and sinks in the next 16
  * @param itemsProcessed completed operations, lifetime (carried now, drawn when the machines task lands)
+ * @param fuel a fuel generator's span and load (MOD-990): how long the fuel lasts at the line's real draw, and
+ *     that draw against the full output; empty for every other block. Carried here and not on a GUI channel
+ *     because the span in ticks passes 32767 with two pieces of coal
+ * @param fuelBurnt a fuel generator's burnt fuel by kind (MOD-992): the kinds burnt most, most first, by item
+ *     id, and every other piece as one figure; empty for every other block and before anything burnt
  */
 public record MachineStatsPayload(
 		int containerId,
@@ -52,23 +60,78 @@ public record MachineStatsPayload(
 		int windowTicks,
 		int peakEuRate,
 		int connections,
-		long itemsProcessed) implements CustomPacketPayload {
+		long itemsProcessed,
+		Optional<FuelRuntime.Readout> fuel,
+		Optional<FuelTally.Top> fuelBurnt) implements CustomPacketPayload {
+
+	/** One burnt kind on the wire: the item id and the pieces. */
+	private static final StreamCodec<RegistryFriendlyByteBuf, FuelTally.Entry> FUEL_KIND_CODEC =
+			StreamCodec.composite(
+					ByteBufCodecs.STRING_UTF8, FuelTally.Entry::id,
+					ByteBufCodecs.VAR_LONG, FuelTally.Entry::count,
+					FuelTally.Entry::new);
+
+	/** {@link FuelTally.Top} on the wire, never more than {@link FuelTally#SHOWN_KINDS} kinds. */
+	private static final StreamCodec<RegistryFriendlyByteBuf, FuelTally.Top> FUEL_BURNT_CODEC = StreamCodec.composite(
+			FUEL_KIND_CODEC.apply(ByteBufCodecs.list(FuelTally.SHOWN_KINDS)), FuelTally.Top::kinds,
+			ByteBufCodecs.VAR_LONG, FuelTally.Top::rest,
+			FuelTally.Top::new);
+
+	/** {@link FuelRuntime.Readout} on the wire; the span's two negative sentinels travel as they are. */
+	private static final StreamCodec<RegistryFriendlyByteBuf, FuelRuntime.Readout> FUEL_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_LONG, FuelRuntime.Readout::ticksLeft,
+			ByteBufCodecs.VAR_LONG, FuelRuntime.Readout::drawEu,
+			ByteBufCodecs.VAR_INT, FuelRuntime.Readout::drawTicks,
+			ByteBufCodecs.VAR_INT, FuelRuntime.Readout::euPerTick,
+			FuelRuntime.Readout::new);
 
 	public static final Type<MachineStatsPayload> TYPE = new Type<>(Industrialization.id("machine_stats"));
 
-	public static final StreamCodec<RegistryFriendlyByteBuf, MachineStatsPayload> CODEC = StreamCodec.composite(
-			ByteBufCodecs.VAR_INT, MachineStatsPayload::containerId,
-			ByteBufCodecs.VAR_LONG, MachineStatsPayload::activeTicks,
-			ByteBufCodecs.VAR_LONG, MachineStatsPayload::energyIn,
-			ByteBufCodecs.VAR_LONG, MachineStatsPayload::energyOut,
-			ByteBufCodecs.VAR_LONG, MachineStatsPayload::energyGenerated,
-			ByteBufCodecs.VAR_LONG, MachineStatsPayload::energyConsumed,
-			ByteBufCodecs.VAR_LONG, MachineStatsPayload::euOverWindow,
-			ByteBufCodecs.VAR_INT, MachineStatsPayload::windowTicks,
-			ByteBufCodecs.VAR_INT, MachineStatsPayload::peakEuRate,
-			ByteBufCodecs.VAR_INT, MachineStatsPayload::connections,
-			ByteBufCodecs.VAR_LONG, MachineStatsPayload::itemsProcessed,
-			MachineStatsPayload::new);
+	private static final StreamCodec<RegistryFriendlyByteBuf, Optional<FuelRuntime.Readout>> FUEL_FIELD =
+			ByteBufCodecs.optional(FUEL_CODEC);
+
+	private static final StreamCodec<RegistryFriendlyByteBuf, Optional<FuelTally.Top>> FUEL_BURNT_FIELD =
+			ByteBufCodecs.optional(FUEL_BURNT_CODEC);
+
+	/**
+	 * Written field by field rather than with {@code StreamCodec.composite}: thirteen fields pass the twelve
+	 * that 26.2's {@code composite} takes, and one body keeps this file the same on both lines.
+	 */
+	public static final StreamCodec<RegistryFriendlyByteBuf, MachineStatsPayload> CODEC =
+			StreamCodec.ofMember(MachineStatsPayload::write, MachineStatsPayload::read);
+
+	private void write(RegistryFriendlyByteBuf buf) {
+		ByteBufCodecs.VAR_INT.encode(buf, containerId);
+		ByteBufCodecs.VAR_LONG.encode(buf, activeTicks);
+		ByteBufCodecs.VAR_LONG.encode(buf, energyIn);
+		ByteBufCodecs.VAR_LONG.encode(buf, energyOut);
+		ByteBufCodecs.VAR_LONG.encode(buf, energyGenerated);
+		ByteBufCodecs.VAR_LONG.encode(buf, energyConsumed);
+		ByteBufCodecs.VAR_LONG.encode(buf, euOverWindow);
+		ByteBufCodecs.VAR_INT.encode(buf, windowTicks);
+		ByteBufCodecs.VAR_INT.encode(buf, peakEuRate);
+		ByteBufCodecs.VAR_INT.encode(buf, connections);
+		ByteBufCodecs.VAR_LONG.encode(buf, itemsProcessed);
+		FUEL_FIELD.encode(buf, fuel);
+		FUEL_BURNT_FIELD.encode(buf, fuelBurnt);
+	}
+
+	private static MachineStatsPayload read(RegistryFriendlyByteBuf buf) {
+		return new MachineStatsPayload(
+				ByteBufCodecs.VAR_INT.decode(buf),
+				ByteBufCodecs.VAR_LONG.decode(buf),
+				ByteBufCodecs.VAR_LONG.decode(buf),
+				ByteBufCodecs.VAR_LONG.decode(buf),
+				ByteBufCodecs.VAR_LONG.decode(buf),
+				ByteBufCodecs.VAR_LONG.decode(buf),
+				ByteBufCodecs.VAR_LONG.decode(buf),
+				ByteBufCodecs.VAR_INT.decode(buf),
+				ByteBufCodecs.VAR_INT.decode(buf),
+				ByteBufCodecs.VAR_INT.decode(buf),
+				ByteBufCodecs.VAR_LONG.decode(buf),
+				FUEL_FIELD.decode(buf),
+				FUEL_BURNT_FIELD.decode(buf));
+	}
 
 	/** Sources among the six direct faces (unpacked from {@link #connections}). */
 	public int sources() {

@@ -2,6 +2,7 @@ package dev.alaindustrial.gametest;
 
 import dev.alaindustrial.Config;
 import dev.alaindustrial.block.entity.ElectricHeaterBlockEntity;
+import dev.alaindustrial.block.entity.GeneratorBlockEntity;
 import dev.alaindustrial.block.entity.ThermalCentrifugeBlockEntity;
 import dev.alaindustrial.block.entity.ThermalCentrifugeStatus;
 import dev.alaindustrial.core.machine.MachineRates;
@@ -14,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -81,7 +83,9 @@ public final class ThermalCentrifugeScenarios {
 						.ticks(600),
 				RosterEntry.of(ThermalCentrifugeScenarios::sta01SpinSurvivesReload,
 								"thermal_centrifuge_spin_survives_reload")
-						.fabricId("ThermalCentrifugeGameTest", "tcCentr001Sta01_spinSurvivesReload").ticks(300));
+						.fabricId("ThermalCentrifugeGameTest", "tcCentr001Sta01_spinSurvivesReload").ticks(300),
+				RosterEntry.of(ThermalCentrifugeScenarios::gen01FullGeneratorDoesNotBurnForTheCentrifuge,
+						"mod988_full_generator_does_not_burn_for_the_centrifuge").ticks(20, 40));
 
 		private Roster() {}
 	}
@@ -732,6 +736,36 @@ public final class ThermalCentrifugeScenarios {
 		if (tampered.spinPermille() != 1000 || !tampered.isAtSpeed()) {
 			helper.fail("an out-of-range saved spin must clamp to a full rotor, got "
 					+ tampered.spinPermille() + " permille");
+			return;
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * @implements MOD-988 - a fuel generator is no heat source for this machine (only the Electric Heater is), so a
+	 *     generator with a full buffer under a centrifuge that is spinning up, and so "waiting on heat", keeps its
+	 *     pause and lights no fuel. The precondition is asserted first, or the scenario would pass on an idle rig.
+	 */
+	public static void gen01FullGeneratorDoesNotBurnForTheCentrifuge(GameTestHelper helper) {
+		GeneratorBlockEntity gen = AlaGameTestHelper.place(helper, HEAT, ModContent.GENERATOR.get(),
+				GeneratorBlockEntity.class);
+		gen.setItem(GeneratorBlockEntity.FUEL_SLOT, new ItemStack(Items.COAL, 4));
+		ThermalCentrifugeBlockEntity be = placeMachine(helper);
+		stock(be, 1);
+		signal(helper, true);
+		driveFunded(be, null, helper, 1);
+		if (!be.isWaitingOnHeat()) {
+			helper.fail("precondition: a signalled, stocked centrifuge must be waiting on heat, status=" + be.status());
+			return;
+		}
+		for (int i = 0; i < 20; i++) {
+			gen.getEnergyStorage().setAmountUntracked(gen.getEnergyStorage().getCapacity());
+			drive(gen, helper, 1);
+			driveFunded(be, null, helper, 1);
+		}
+		if (gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount() != 4 || gen.isBurning()) {
+			helper.fail("a full generator burned fuel for a centrifuge it cannot heat: coal="
+					+ gen.getItem(GeneratorBlockEntity.FUEL_SLOT).getCount() + " burning=" + gen.isBurning());
 			return;
 		}
 		helper.succeed();
