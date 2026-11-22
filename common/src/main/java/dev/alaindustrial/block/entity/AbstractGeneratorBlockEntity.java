@@ -219,6 +219,15 @@ public abstract class AbstractGeneratorBlockEntity extends MachineBlockEntity {
 	}
 
 	/**
+	 * {@code credited} EU of this tick's production reached the buffer (MOD-999): {@link #produce}'s rate after the
+	 * global multiplier, cut to the room the buffer had. Called only when that is more than zero, on the server,
+	 * before the push. A generator that pairs its fuel with the energy it really gave hooks in here; the default
+	 * does nothing.
+	 */
+	protected void onCredited(Level level, long credited) {
+	}
+
+	/**
 	 * A generator that pools its buffer with touching generators of its kind (the thermoelectric row, MOD-811)
 	 * gathers the row's energy here, after its own production and before the push, so what it gathered leaves on
 	 * the same tick. The default gathers nothing.
@@ -271,6 +280,7 @@ public abstract class AbstractGeneratorBlockEntity extends MachineBlockEntity {
 			if (room > 0) {
 				long credited = Math.min(room, (long) made);
 				energy.produceInternal(credited);
+				onCredited(level, credited);
 				changed = true;
 				// MOD-133: attribute the EU actually credited (not `made` before the cap) to the owner —
 				// career statistics + per-generator breakdown. No-op without an owner or off-server; the

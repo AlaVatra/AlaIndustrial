@@ -6,6 +6,7 @@ import dev.alaindustrial.client.compat.RecipeViewerLayout;
 import dev.alaindustrial.recipe.AlaProcessingRecipe;
 import dev.alaindustrial.registry.ModRecipes;
 import java.util.List;
+import java.util.Set;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -18,7 +19,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
 
@@ -27,6 +30,17 @@ final class AlaProcessingJeiCategory implements IRecipeCategory<RecipeHolder<Ala
 	private final Component title;
 	private final IDrawable icon;
 	private final IDrawable arrow;
+
+	/**
+	 * The electric-furnace cards whose result the furnace makes only after a press of its result button
+	 * (MOD-1018, {@code SmeltingChoiceIndex}); set by the plugin each time it registers the recipes.
+	 */
+	private static volatile Set<ResourceKey<Recipe<?>>> choiceOnly = Set.of();
+
+	/** Called by the plugin from {@code registerRecipes}, before JEI lays out any card. */
+	static void setChoiceOnly(Set<ResourceKey<Recipe<?>>> ids) {
+		choiceOnly = Set.copyOf(ids);
+	}
 
 	AlaProcessingJeiCategory(IRecipeHolderType<AlaProcessingRecipe> recipeType, Block iconBlock,
 			Component title, IGuiHelper guiHelper) {
@@ -87,9 +101,15 @@ final class AlaProcessingJeiCategory implements IRecipeCategory<RecipeHolder<Ala
 						.toList());
 			}
 		}
-		builder.addOutputSlot(RecipeViewerLayout.outputXs(1).getFirst(), RecipeViewerLayout.SLOT_Y)
+		IRecipeSlotBuilder output = builder.addOutputSlot(RecipeViewerLayout.outputXs(1).getFirst(),
+						RecipeViewerLayout.SLOT_Y)
 				.setOutputSlotBackground()
 				.add(recipe.result());
+		// MOD-1018: a result the furnace makes only after a press of its result button says so, as REI does.
+		if (choiceOnly.contains(holder.id())) {
+			Component note = Component.translatable(RecipeViewerLayout.RESULT_CHOICE_NOTE_KEY);
+			output.addRichTooltipCallback((view, tooltip) -> tooltip.add(note));
+		}
 		// MOD-537: the optional bonus output gets its own slot; the two-slot row already exists for
 		// the alloy smelter, so the geometry needs no widening. MOD-960: a bonus that is a gamble says so
 		// in the slot's tooltip, the same line REI shows.

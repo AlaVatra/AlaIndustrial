@@ -1,6 +1,7 @@
 package dev.alaindustrial.stats;
 
 import dev.alaindustrial.Config;
+import dev.alaindustrial.registry.ModCriteria;
 import dev.alaindustrial.skill.OwnerPresence;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -197,6 +198,9 @@ public final class PlayerStatsTracker {
 
 		if (highest > prevHighest) {
 			playLevelUp(player); // one chime per flush, regardless of how many levels were crossed
+		}
+		if (!delta.byGenerator.isEmpty()) {
+			ModCriteria.fireLavaMillionIfReached(player, mergedGenerators); // MOD-1001: the geothermal million
 		}
 	}
 

@@ -3,6 +3,8 @@ package dev.alaindustrial.network;
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.core.environment.FuelRuntime;
 import dev.alaindustrial.core.environment.FuelTally;
+import dev.alaindustrial.core.environment.LavaBurnTally;
+import io.netty.buffer.ByteBuf;
 import java.util.Optional;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -48,6 +50,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
  *     because the span in ticks passes 32767 with two pieces of coal
  * @param fuelBurnt a fuel generator's burnt fuel by kind (MOD-992): the kinds burnt most, most first, by item
  *     id, and every other piece as one figure; empty for every other block and before anything burnt
+ * @param lavaBurnt a geothermal generator's burnt lava in whole mB and the EU it gave (MOD-999); empty for every
+ *     other block and before any lava burnt
  */
 public record MachineStatsPayload(
 		int containerId,
@@ -62,7 +66,8 @@ public record MachineStatsPayload(
 		int connections,
 		long itemsProcessed,
 		Optional<FuelRuntime.Readout> fuel,
-		Optional<FuelTally.Top> fuelBurnt) implements CustomPacketPayload {
+		Optional<FuelTally.Top> fuelBurnt,
+		Optional<LavaBurnTally.Shown> lavaBurnt) implements CustomPacketPayload {
 
 	/** One burnt kind on the wire: the item id and the pieces. */
 	private static final StreamCodec<RegistryFriendlyByteBuf, FuelTally.Entry> FUEL_KIND_CODEC =
@@ -77,13 +82,25 @@ public record MachineStatsPayload(
 			ByteBufCodecs.VAR_LONG, FuelTally.Top::rest,
 			FuelTally.Top::new);
 
+	/** What a generator burns (MOD-1000), as its ordinal. */
+	private static final StreamCodec<ByteBuf, FuelRuntime.Kind> FUEL_KIND_ORDINAL =
+			ByteBufCodecs.VAR_INT.map(FuelRuntime.Kind::byOrdinal, FuelRuntime.Kind::ordinal);
+
 	/** {@link FuelRuntime.Readout} on the wire; the span's two negative sentinels travel as they are. */
 	private static final StreamCodec<RegistryFriendlyByteBuf, FuelRuntime.Readout> FUEL_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_LONG, FuelRuntime.Readout::ticksLeft,
 			ByteBufCodecs.VAR_LONG, FuelRuntime.Readout::drawEu,
 			ByteBufCodecs.VAR_INT, FuelRuntime.Readout::drawTicks,
 			ByteBufCodecs.VAR_INT, FuelRuntime.Readout::euPerTick,
+			FUEL_KIND_ORDINAL, FuelRuntime.Readout::kind,
 			FuelRuntime.Readout::new);
+
+	/** {@link LavaBurnTally.Shown} on the wire. */
+	private static final StreamCodec<RegistryFriendlyByteBuf, LavaBurnTally.Shown> LAVA_BURNT_CODEC =
+			StreamCodec.composite(
+					ByteBufCodecs.VAR_LONG, LavaBurnTally.Shown::mb,
+					ByteBufCodecs.VAR_LONG, LavaBurnTally.Shown::eu,
+					LavaBurnTally.Shown::new);
 
 	public static final Type<MachineStatsPayload> TYPE = new Type<>(Industrialization.id("machine_stats"));
 
@@ -93,8 +110,11 @@ public record MachineStatsPayload(
 	private static final StreamCodec<RegistryFriendlyByteBuf, Optional<FuelTally.Top>> FUEL_BURNT_FIELD =
 			ByteBufCodecs.optional(FUEL_BURNT_CODEC);
 
+	private static final StreamCodec<RegistryFriendlyByteBuf, Optional<LavaBurnTally.Shown>> LAVA_BURNT_FIELD =
+			ByteBufCodecs.optional(LAVA_BURNT_CODEC);
+
 	/**
-	 * Written field by field rather than with {@code StreamCodec.composite}: thirteen fields pass the twelve
+	 * Written field by field rather than with {@code StreamCodec.composite}: fourteen fields pass the twelve
 	 * that 26.2's {@code composite} takes, and one body keeps this file the same on both lines.
 	 */
 	public static final StreamCodec<RegistryFriendlyByteBuf, MachineStatsPayload> CODEC =
@@ -114,6 +134,7 @@ public record MachineStatsPayload(
 		ByteBufCodecs.VAR_LONG.encode(buf, itemsProcessed);
 		FUEL_FIELD.encode(buf, fuel);
 		FUEL_BURNT_FIELD.encode(buf, fuelBurnt);
+		LAVA_BURNT_FIELD.encode(buf, lavaBurnt);
 	}
 
 	private static MachineStatsPayload read(RegistryFriendlyByteBuf buf) {
@@ -130,7 +151,8 @@ public record MachineStatsPayload(
 				ByteBufCodecs.VAR_INT.decode(buf),
 				ByteBufCodecs.VAR_LONG.decode(buf),
 				FUEL_FIELD.decode(buf),
-				FUEL_BURNT_FIELD.decode(buf));
+				FUEL_BURNT_FIELD.decode(buf),
+				LAVA_BURNT_FIELD.decode(buf));
 	}
 
 	/** Sources among the six direct faces (unpacked from {@link #connections}). */

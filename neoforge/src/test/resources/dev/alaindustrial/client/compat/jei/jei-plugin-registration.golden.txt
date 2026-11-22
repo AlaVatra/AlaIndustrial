@@ -59,6 +59,7 @@ click GalvanicBathScreen 86 35 24 17 -> alaindustrial:galvanic_bath
 click GeothermalGeneratorScreen 82 38 10 7 -> alaindustrial:machine_info
 click HoneyCentrifugeScreen 39 35 24 17 -> alaindustrial:honey_centrifuging
 click IncubatorScreen 112 20 24 16 -> alaindustrial:mutation_transform,alaindustrial:mutation_duplicate,alaindustrial:mutation_create
+click IronFurnaceScreen 79 34 24 17 -> minecraft:smelting
 click MaceratorScreen 82 38 25 9 -> alaindustrial:maceration
 click PolymerizerScreen 79 35 24 17 -> alaindustrial:polymerizing
 click SawmillScreen 82 20 22 12 -> alaindustrial:sawing_planks,alaindustrial:sawing_sticks,alaindustrial:sawing_slabs,alaindustrial:sawing_stairs,alaindustrial:sawing_sawdust

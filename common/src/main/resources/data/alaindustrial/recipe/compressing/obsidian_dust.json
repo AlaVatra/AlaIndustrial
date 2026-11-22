@@ -1,0 +1,9 @@
+{
+  "type": "alaindustrial:compressing",
+  "ingredient": "#c:dusts/obsidian",
+  "result": {
+    "id": "minecraft:obsidian",
+    "count": 1
+  },
+  "energy": 260
+}

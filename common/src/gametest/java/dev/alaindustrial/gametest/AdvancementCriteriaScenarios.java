@@ -7,6 +7,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.advancement.GeothermalMilestoneTrigger;
 import dev.alaindustrial.advancement.MutationCompletedTrigger;
 import dev.alaindustrial.advancement.NetworkEnergizedTrigger;
 import dev.alaindustrial.advancement.ReactorMilestone;
@@ -174,6 +175,9 @@ public final class AdvancementCriteriaScenarios {
 		problems.addAll(roundTrip(ops, "reactor_milestone", ReactorMilestoneTrigger.TriggerInstance.CODEC,
 				ReactorMilestoneTrigger.TriggerInstance::player, ",\"milestone\":\"steam\"",
 				"\"milestone\":\"steam\""));
+		problems.addAll(roundTrip(ops, "geothermal_milestone", GeothermalMilestoneTrigger.TriggerInstance.CODEC,
+				GeothermalMilestoneTrigger.TriggerInstance::player, ",\"milestone\":\"station\"",
+				"\"milestone\":\"station\""));
 		if (!problems.isEmpty()) {
 			helper.fail(String.join("; ", problems));
 			return;

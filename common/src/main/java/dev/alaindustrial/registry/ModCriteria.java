@@ -1,6 +1,8 @@
 package dev.alaindustrial.registry;
 
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.advancement.GeothermalMilestone;
+import dev.alaindustrial.advancement.GeothermalMilestoneTrigger;
 import dev.alaindustrial.advancement.MutationCompletedTrigger;
 import dev.alaindustrial.advancement.NetworkEnergizedTrigger;
 import dev.alaindustrial.advancement.ReactorMilestone;
@@ -8,6 +10,7 @@ import dev.alaindustrial.advancement.ReactorMilestoneTrigger;
 import dev.alaindustrial.core.energy.EnergyNetwork;
 import dev.alaindustrial.core.energy.NetworkManager;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -17,6 +20,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -65,11 +69,16 @@ public final class ModCriteria {
 	/** The reactor branch's criterion (MOD-473). */
 	public static Supplier<ReactorMilestoneTrigger> REACTOR_MILESTONE = unbound("REACTOR_MILESTONE");
 
+	/** The geothermal chain's criterion (MOD-1001). */
+	public static Supplier<GeothermalMilestoneTrigger> GEOTHERMAL_MILESTONE = unbound("GEOTHERMAL_MILESTONE");
+
 	/** Every criterion, in one shared registration order. Both loaders replay this list. */
 	public static final List<CriterionDef<?>> TRIGGERS = List.of(
 			new CriterionDef<>("network_energized", NetworkEnergizedTrigger::new, t -> NETWORK_ENERGIZED = t),
 			new CriterionDef<>("mutation_completed", MutationCompletedTrigger::new, t -> MUTATION_COMPLETED = t),
-			new CriterionDef<>("reactor_milestone", ReactorMilestoneTrigger::new, t -> REACTOR_MILESTONE = t));
+			new CriterionDef<>("reactor_milestone", ReactorMilestoneTrigger::new, t -> REACTOR_MILESTONE = t),
+			new CriterionDef<>("geothermal_milestone", GeothermalMilestoneTrigger::new,
+					t -> GEOTHERMAL_MILESTONE = t));
 
 	/**
 	 * Fabric registration: the {@code TRIGGER_TYPES} registry stays writable during init, so every entry of
@@ -110,6 +119,39 @@ public final class ModCriteria {
 		ServerPlayer player = level.getServer().getPlayerList().getPlayer(owner);
 		if (player != null) {
 			REACTOR_MILESTONE.get().trigger(player, milestone);
+		}
+	}
+
+	/**
+	 * Credits {@code owner} with a step of the geothermal chain, if they are online (MOD-1001): the same rule as
+	 * {@link #fireReactorMilestone}, for the same reason. A generator burns lava on its own tick with nobody in the
+	 * event, so the player who placed it is credited; an offline owner gets it the next time the generator burns
+	 * while they are online.
+	 */
+	public static void fireGeothermalMilestone(ServerLevel level, @Nullable UUID owner,
+			GeothermalMilestone milestone) {
+		if (owner == null) {
+			return;
+		}
+		ServerPlayer player = level.getServer().getPlayerList().getPlayer(owner);
+		if (player != null) {
+			GEOTHERMAL_MILESTONE.get().trigger(player, milestone);
+		}
+	}
+
+	/** The geothermal generator's id in the career statistics' per-generator breakdown (MOD-1001). */
+	private static final Identifier GEOTHERMAL_GENERATOR = Industrialization.id("geothermal_generator");
+
+	/**
+	 * Credits {@code player} with the geothermal chain's million (MOD-1001) once their career EU from geothermal
+	 * generators reaches {@link GeothermalMilestone#LAVA_MILLION_EU}. Called when their career statistics take in
+	 * new production, so the count is the one the statistics already keep and save per player, with no counter of
+	 * its own and no statistics chip; it follows that count's rules (the owner online and not in creative).
+	 */
+	public static void fireLavaMillionIfReached(ServerPlayer player, Map<Identifier, Long> producedByGenerator) {
+		Long fromLava = producedByGenerator.get(GEOTHERMAL_GENERATOR);
+		if (fromLava != null && fromLava >= GeothermalMilestone.LAVA_MILLION_EU) {
+			GEOTHERMAL_MILESTONE.get().trigger(player, GeothermalMilestone.LAVA_MILLION);
 		}
 	}
 

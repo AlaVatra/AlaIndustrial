@@ -246,6 +246,9 @@ public final class ModTags {
 		/** Upgrades that belong in the statistics arm — the statistics chip (MOD-125). */
 		public static final TagKey<Item> UPGRADE_STATS = key("upgrade/stats");
 
+		/** Upgrades that belong in the geothermal generator's cistern arm — the cistern chip (MOD-996). */
+		public static final TagKey<Item> UPGRADE_CISTERN = key("upgrade/cistern");
+
 		/**
 		 * Fibre the Galvanic Bath plates with silver to make flux thread (MOD-127): vanilla string and
 		 * our own cotton fibre (MOD-280). A tag rather than two recipes because the two are meant to be

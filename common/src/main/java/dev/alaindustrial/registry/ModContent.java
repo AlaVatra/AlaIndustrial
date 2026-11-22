@@ -16,6 +16,7 @@ import dev.alaindustrial.menu.DiamondChestMenu;
 import dev.alaindustrial.menu.DistillationColumnMenu;
 import dev.alaindustrial.menu.DoubleChestMenu;
 import dev.alaindustrial.menu.ElectricFurnaceMenu;
+import dev.alaindustrial.menu.IronFurnaceMenu;
 import dev.alaindustrial.menu.ElectricHeaterMenu;
 import dev.alaindustrial.menu.ElectricMobTrapMenu;
 import dev.alaindustrial.menu.ElectrumChestMenu;
@@ -571,6 +572,7 @@ public final class ModContent {
 	public static Supplier<Item> MUTE_CHIP = unbound("MUTE_CHIP");
 	/** MOD-125: fitted to a machine's upgrade panel, it is what makes that machine keep statistics. */
 	public static Supplier<Item> STATS_CHIP = unbound("STATS_CHIP");
+	public static Supplier<Item> CISTERN_CHIP = unbound("CISTERN_CHIP");
 	/** Soul Vessel (MOD-278): the repeller's upgrade currency, filled by the player's own kills. */
 	public static Supplier<Item> SOUL_VESSEL = unbound("SOUL_VESSEL");
 	// Overclocker chips (MOD-392/393): three tiers, one per panel arm slot. Each shortens the operation
@@ -637,6 +639,10 @@ public final class ModContent {
 	public static Supplier<Item> IODINE = unbound("IODINE");
 	public static Supplier<Item> IODINE_TABLETS = unbound("IODINE_TABLETS");
 	public static Supplier<Item> LAPIS_DUST = unbound("LAPIS_DUST");
+	/** MOD-995: what a geothermal generator leaves per bucket of lava burnt; nine craft into obsidian dust. */
+	public static Supplier<Item> OBSIDIAN_SHAVINGS = unbound("OBSIDIAN_SHAVINGS");
+	/** MOD-995: nine obsidian shavings; the compressor presses it into a block of obsidian. */
+	public static Supplier<Item> OBSIDIAN_DUST = unbound("OBSIDIAN_DUST");
 	public static Supplier<Item> TIN_DUST = unbound("TIN_DUST");
 	public static Supplier<Item> RAW_TIN = unbound("RAW_TIN");
 	public static Supplier<Item> TIN_INGOT = unbound("TIN_INGOT");
@@ -1331,6 +1337,7 @@ public final class ModContent {
 	public static Supplier<MenuType<MoonlitSolarPanelMenu>> MOONLIT_SOLAR_PANEL_MENU =
 			unbound("MOONLIT_SOLAR_PANEL_MENU");
 	public static Supplier<MenuType<ElectricFurnaceMenu>> ELECTRIC_FURNACE_MENU = unbound("ELECTRIC_FURNACE_MENU");
+	public static Supplier<MenuType<IronFurnaceMenu>> IRON_FURNACE_MENU = unbound("IRON_FURNACE_MENU");
 	public static Supplier<MenuType<ExtractorMenu>> EXTRACTOR_MENU = unbound("EXTRACTOR_MENU");
 	public static Supplier<MenuType<CompressorMenu>> COMPRESSOR_MENU = unbound("COMPRESSOR_MENU");
 	public static Supplier<MenuType<RecyclerMenu>> RECYCLER_MENU = unbound("RECYCLER_MENU");

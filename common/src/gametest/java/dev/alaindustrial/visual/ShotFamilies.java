@@ -94,6 +94,11 @@ public final class ShotFamilies {
                             + "rows under Now, and \"Fuel burnt 46\" under the working time (MOD-992) in place of "
                             + "the Peak row, every row inside the frame; the 16 coal sit in the fuel slot and 4 ash "
                             + "in the ash slot right of the flame (MOD-987), each item square in its frame")},
+            new Object[] {"gui_geothermal_catalysed", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
+                    "Geothermal generator burning a catalysed bucket (MOD-997, MOD-995): the flame above the "
+                            + "catalyst slot is lit orange, 12 blaze powder sit in that slot left of the lava slot, "
+                            + "a lava bucket in the lava slot, 3 buckets in the container slot and 7 obsidian shavings "
+                            + "in the slot right of it, each item square in its frame, the lava gauge half full")},
             new Object[] {"gui_stats_modal_", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
                     "Statistics panel dragged over a screen's own control and clicked there (MOD-693): the "
                             + "panel is drawn above the control with nothing of it printed on top, and the "

@@ -19,7 +19,12 @@ public enum HeatSource {
 	 * A fuel generator that is burning right now (MOD-988): level 1, a campfire's worth. Declared last so the
 	 * ordinals the screen already reads keep their meaning.
 	 */
-	GENERATOR(1, 3);
+	GENERATOR(1, 3),
+	/**
+	 * A geothermal generator that is burning lava right now (MOD-994): level 2, a lava block's worth, so the
+	 * Electric Heater stays the only level-3 source. Its own icon column; appended for the same reason.
+	 */
+	GEOTHERMAL_GENERATOR(2, 4);
 
 	private static final HeatSource[] VALUES = values();
 	private final int level;

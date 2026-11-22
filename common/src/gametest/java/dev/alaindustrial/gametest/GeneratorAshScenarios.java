@@ -259,7 +259,7 @@ public final class GeneratorAshScenarios {
 	 */
 	public static void oldSavesKeepFuelChargeAndChips(GameTestHelper helper) {
 		RegistryAccess registries = helper.getLevel().registryAccess();
-		helper.assertTrue(BlockEntityDataMigrations.DATA_VERSION == 2, "the ash slot is format version 2, the ladder"
+		helper.assertTrue(BlockEntityDataMigrations.DATA_VERSION >= 2, "the ash slot is format version 2, the ladder"
 				+ " reads " + BlockEntityDataMigrations.DATA_VERSION);
 		String items = "Items:[{Slot:0b,id:\"minecraft:coal\",count:20},"
 				+ "{Slot:1b,id:\"alaindustrial:mute_chip\",count:1},"
@@ -283,7 +283,8 @@ public final class GeneratorAshScenarios {
 			CompoundTag resaved = old.saveCustomOnly(registries);
 			helper.assertTrue(resaved.getIntOr("BurnTime", -1) == 900 && resaved.getIntOr("BurnDuration", -1) == 1600,
 					what + ": the burn came back as " + resaved);
-			helper.assertTrue(resaved.getIntOr(BlockEntityDataMigrations.DATA_VERSION_KEY, -1) == 2,
+			helper.assertTrue(resaved.getIntOr(BlockEntityDataMigrations.DATA_VERSION_KEY, -1)
+					== BlockEntityDataMigrations.DATA_VERSION,
 					what + ": re-saved without the current version");
 
 			// The re-save is the new layout: loading it again moves nothing.

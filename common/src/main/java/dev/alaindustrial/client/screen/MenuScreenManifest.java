@@ -102,6 +102,8 @@ public final class MenuScreenManifest {
 			screen(() -> ModContent.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new),
 			screen(() -> ModContent.MOONLIT_SOLAR_PANEL_MENU.get(), MoonlitSolarPanelScreen::new),
 			screen(() -> ModContent.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new),
+			// MOD-1018: the iron furnace - the vanilla furnace screen plus the result button.
+			screen(() -> ModContent.IRON_FURNACE_MENU.get(), IronFurnaceScreen::new),
 			screen(() -> ModContent.EXTRACTOR_MENU.get(), ExtractorScreen::new),
 			screen(() -> ModContent.COMPRESSOR_MENU.get(), CompressorScreen::new),
 			screen(() -> ModContent.RECYCLER_MENU.get(), RecyclerScreen::new),

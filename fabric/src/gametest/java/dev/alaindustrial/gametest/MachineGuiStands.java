@@ -7,6 +7,8 @@ import dev.alaindustrial.block.entity.ElectricHeaterBlockEntity;
 import dev.alaindustrial.block.entity.ElectricHeaterStatus;
 import dev.alaindustrial.item.ToolConfig;
 import dev.alaindustrial.menu.MachineMenu;
+import dev.alaindustrial.menu.ResultChoiceMenu;
+import dev.alaindustrial.network.ResultChoicePayload;
 import dev.alaindustrial.menu.SolarPanelMenu;
 import dev.alaindustrial.block.entity.ComponentRepairBenchBlockEntity;
 import dev.alaindustrial.core.machine.RepairStatus;
@@ -14,6 +16,7 @@ import dev.alaindustrial.block.entity.AbstractProcessingMachineBlockEntity;
 import dev.alaindustrial.block.entity.ProcessingMachineStatus;
 import dev.alaindustrial.registry.ModContent;
 import dev.alaindustrial.registry.ModItems;
+import java.util.List;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -21,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -174,6 +178,16 @@ public final class MachineGuiStands {
                 ModContent.ELECTRIC_FURNACE_MENU.get(), "Electric Furnace",
                 CAP, CAP, BURN, BURN);
 
+        // MOD-1018: the result button by the output slot, shown when the input has two results or more.
+        shootWithResultChoice(context, "gui_electric_furnace_result_choice",
+                ModContent.ELECTRIC_FURNACE_MENU.get(), "Electric Furnace");
+
+        // ── Iron Furnace (MOD-1018): its own menu type since the result button — the vanilla furnace
+        // screen with the button, and without it (one result: no button) ────────────────────────────
+        shootMenu(context, "gui_iron_furnace", ModContent.IRON_FURNACE_MENU.get(), "Iron Furnace");
+        shootWithResultChoice(context, "gui_iron_furnace_result_choice",
+                ModContent.IRON_FURNACE_MENU.get(), "Iron Furnace");
+
         // ── Electric Heater (MOD-418) — the two rungs that change what the machine above gets ───────
         // The block's own catalogue frame can only ever show a cold, unattached heater, because the
         // stand opens it from a bare block: warm-up 0 %, both lower rows a dash. That leaves the whole
@@ -299,6 +313,9 @@ public final class MachineGuiStands {
         shootMenuWithState(context, "gui_geothermal_full",
                 ModContent.GEOTHERMAL_GENERATOR_MENU.get(), "Geothermal Generator",
                 CAP, CAP, TANK, TANK);
+
+        // State 4 (MOD-995, MOD-997): a catalysed bucket burning, blaze powder waiting, shavings piled up.
+        shootGeothermalCatalysed(context, "gui_geothermal_catalysed", CAP / 2, CAP, TANK / 2, TANK);
 
         // ── Macerator — three states ─────────────────────────────────────────────────
         // State 1: empty — no input, no energy
@@ -554,6 +571,28 @@ public final class MachineGuiStands {
      * MenuScreens#create} does nothing and the screenshot shows an empty world — a clear visual
      * signal that the binding in {@link dev.alaindustrial.IndustrializationClient} is missing.
      */
+    /**
+     * MOD-1018: a furnace screen whose input has two results — ours (tempered iron) and another mod's (an iron
+     * nugget standing in for it) — so the result button by the output slot is drawn. The options are handed to
+     * the client menu the way the server's {@code ResultChoicePayload} would be.
+     */
+    private static void shootWithResultChoice(ClientGameTestContext context, String name,
+                                              MenuType<?> type, String displayName) {
+        LOG.info("[GUITEST][MOD-1018] opening {} with two results", name);
+        context.runOnClient(mc -> {
+            MenuScreens.create(type, mc, 0, Component.literal(displayName));
+            if (mc.gui.screen() instanceof AbstractContainerScreen<?> acs
+                    && acs.getMenu() instanceof ResultChoiceMenu menu) {
+                menu.acceptResultChoices(new ResultChoicePayload(acs.getMenu().containerId, List.of(
+                        new ResultChoicePayload.Entry(new ItemStack(ModContent.TEMPERED_IRON.get()), "alaindustrial"),
+                        new ResultChoicePayload.Entry(new ItemStack(Items.IRON_NUGGET), "othermod")), 0));
+            }
+        });
+        awaitMenuScreen(context);
+        java.nio.file.Path path = takeCleanScreenshot(context, name);
+        LOG.info("[GUITEST] screenshot {} -> {}", name, path.toAbsolutePath());
+    }
+
     private static void shootMenu(ClientGameTestContext context, String name,
                                   MenuType<?> type, String displayName) {
         LOG.info("[GUITEST] opening {}", name);
@@ -676,7 +715,8 @@ public final class MachineGuiStands {
                         java.util.Optional.of(new dev.alaindustrial.core.environment.FuelTally.Top(java.util.List.of(
                                 new dev.alaindustrial.core.environment.FuelTally.Entry("minecraft:coal", 34L),
                                 new dev.alaindustrial.core.environment.FuelTally.Entry("minecraft:oak_planks", 12L)),
-                                0L))));
+                                0L)),
+                        java.util.Optional.empty()));
                 if (panelOpen) {
                     menu.toggleStatsPanel();
                 }
@@ -685,6 +725,37 @@ public final class MachineGuiStands {
         awaitMenuScreen(context);
         java.nio.file.Path path = takeCleanScreenshot(context, name);
         LOG.info("[GUITEST][MOD-990] screenshot {} -> {}", name, path.toAbsolutePath());
+    }
+
+    /**
+     * Geothermal variant of {@link #shootMenuWithState} (MOD-995, MOD-997): also lights the catalyst channel and
+     * fills the four machine slots, so the frame shows the lit flame above the catalyst slot, blaze powder in it,
+     * a lava bucket waiting, the empty buckets and the obsidian shavings right of them.
+     */
+    private static void shootGeothermalCatalysed(ClientGameTestContext context, String name, int energy,
+                                                 int capacity, int progress, int maxProgress) {
+        LOG.info("[GUITEST][MOD-997] opening {} (catalysed)", name);
+        context.runOnClient(mc -> {
+            MenuScreens.create(ModContent.GEOTHERMAL_GENERATOR_MENU.get(), mc, 0,
+                    Component.literal("Geothermal Generator"));
+            if (mc.gui.screen() instanceof AbstractContainerScreen<?> acs
+                    && acs.getMenu() instanceof MachineMenu menu) {
+                menu.injectTestData(energy, capacity, progress, maxProgress);
+                menu.setData(
+                        dev.alaindustrial.block.entity.GeothermalGeneratorBlockEntity.Channel.CATALYST.ordinal(), 1);
+                menu.getSlot(dev.alaindustrial.block.entity.GeothermalGeneratorBlockEntity.INPUT_SLOT)
+                        .set(new ItemStack(net.minecraft.world.item.Items.LAVA_BUCKET));
+                menu.getSlot(dev.alaindustrial.block.entity.GeothermalGeneratorBlockEntity.OUTPUT_SLOT)
+                        .set(new ItemStack(net.minecraft.world.item.Items.BUCKET, 3));
+                menu.getSlot(dev.alaindustrial.block.entity.GeothermalGeneratorBlockEntity.SHAVINGS_SLOT)
+                        .set(new ItemStack(ModContent.OBSIDIAN_SHAVINGS.get(), 7));
+                menu.getSlot(dev.alaindustrial.block.entity.GeothermalGeneratorBlockEntity.CATALYST_SLOT)
+                        .set(new ItemStack(net.minecraft.world.item.Items.BLAZE_POWDER, 12));
+            }
+        });
+        awaitMenuScreen(context);
+        java.nio.file.Path path = takeCleanScreenshot(context, name);
+        LOG.info("[GUITEST][MOD-997] screenshot {} -> {}", name, path.toAbsolutePath());
     }
 
     /**

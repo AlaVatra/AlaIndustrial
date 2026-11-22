@@ -92,6 +92,7 @@ import dev.alaindustrial.menu.ElectricFurnaceMenu;
 import dev.alaindustrial.menu.ElectricHeaterMenu;
 import dev.alaindustrial.menu.ExtractorMenu;
 import dev.alaindustrial.menu.GalvanicBathMenu;
+import dev.alaindustrial.menu.IronFurnaceMenu;
 import dev.alaindustrial.menu.MaceratorMenu;
 import dev.alaindustrial.menu.PolymerizerMenu;
 import dev.alaindustrial.menu.QuarryControllerMenu;
@@ -444,6 +445,8 @@ public final class ProcessingContent {
 	private static final List<MenuDef<?>> MENUS = List.of(
 			menu("macerator", MaceratorMenu::new, s -> ModContent.MACERATOR_MENU = s),
 			menu("electric_furnace", ElectricFurnaceMenu::new, s -> ModContent.ELECTRIC_FURNACE_MENU = s),
+			// MOD-1018: the iron furnace's own menu (the vanilla furnace's, plus the result button).
+			menu("iron_furnace", IronFurnaceMenu::new, s -> ModContent.IRON_FURNACE_MENU = s),
 			menu("extractor", ExtractorMenu::new, s -> ModContent.EXTRACTOR_MENU = s),
 			menu("compressor", CompressorMenu::new, s -> ModContent.COMPRESSOR_MENU = s),
 			menu("recycler", RecyclerMenu::new, s -> ModContent.RECYCLER_MENU = s),

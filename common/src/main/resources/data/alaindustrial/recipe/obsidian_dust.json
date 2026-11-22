@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "alaindustrial:obsidian_shavings",
+    "alaindustrial:obsidian_shavings",
+    "alaindustrial:obsidian_shavings",
+    "alaindustrial:obsidian_shavings",
+    "alaindustrial:obsidian_shavings",
+    "alaindustrial:obsidian_shavings",
+    "alaindustrial:obsidian_shavings",
+    "alaindustrial:obsidian_shavings",
+    "alaindustrial:obsidian_shavings"
+  ],
+  "result": {
+    "id": "alaindustrial:obsidian_dust"
+  }
+}

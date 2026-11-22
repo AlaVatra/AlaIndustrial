@@ -5,8 +5,9 @@ import dev.alaindustrial.core.environment.FuelRuntime;
 import net.minecraft.network.chat.Component;
 
 /**
- * The words a fuel generator's span and load are shown in (MOD-990), shared by the statistics panel and the
- * generator's own window so the two never say it differently. Every unit comes from the language files.
+ * The words a fuel generator's span and load are shown in (MOD-990; the geothermal generator's, MOD-1000), shared
+ * by the statistics panel and the generator's own window so the two never say it differently. Every unit comes
+ * from the language files.
  */
 final class FuelRuntimeText {
 
@@ -25,10 +26,22 @@ final class FuelRuntimeText {
 		};
 	}
 
-	/** The line that stands in for a span: no fuel at all, or nothing drawing from the generator. */
-	static Component noSpan(long ticksLeft) {
-		return Component.translatable(ticksLeft == FuelRuntime.EMPTY
-				? "gui.alaindustrial.stats.fuel_empty" : "gui.alaindustrial.stats.fuel_waiting");
+	/**
+	 * The line that stands in for a span: no fuel at all ("No lava" for the geothermal generator, MOD-1000), or
+	 * nothing drawing from the generator.
+	 */
+	static Component noSpan(FuelRuntime.Readout fuel) {
+		if (fuel.ticksLeft() != FuelRuntime.EMPTY) {
+			return Component.translatable("gui.alaindustrial.stats.fuel_waiting");
+		}
+		return Component.translatable(fuel.kind() == FuelRuntime.Kind.LAVA
+				? "gui.alaindustrial.stats.lava_empty" : "gui.alaindustrial.stats.fuel_empty");
+	}
+
+	/** The statistics row's label for a span: "Fuel lasts", or "Lava lasts" for the geothermal one (MOD-1000). */
+	static String lastsLabelKey(FuelRuntime.Readout fuel) {
+		return fuel.kind() == FuelRuntime.Kind.LAVA
+				? "gui.alaindustrial.stats.lava_lasts" : "gui.alaindustrial.stats.fuel_lasts";
 	}
 
 	/** "2.5 of 8 EU/t": the line's draw against the full output. */
@@ -41,7 +54,7 @@ final class FuelRuntimeText {
 	static Component lastsLine(FuelRuntime.Readout fuel) {
 		return fuel.ticksLeft() >= 0
 				? Component.translatable("gui.alaindustrial.generator.fuel_lasts", span(fuel.ticksLeft()))
-				: noSpan(fuel.ticksLeft());
+				: noSpan(fuel);
 	}
 
 	/** The window's second line: "Load 2.5 of 8 EU/t". */

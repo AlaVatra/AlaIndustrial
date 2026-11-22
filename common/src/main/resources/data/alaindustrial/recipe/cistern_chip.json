@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "V": "alaindustrial:vacuum_capsule",
+    "P": "#c:plates/iron",
+    "E": "alaindustrial:empty_chip",
+    "O": "minecraft:obsidian"
+  },
+  "pattern": [
+    " V ",
+    "PEP",
+    " O "
+  ],
+  "result": { "id": "alaindustrial:cistern_chip" }
+}

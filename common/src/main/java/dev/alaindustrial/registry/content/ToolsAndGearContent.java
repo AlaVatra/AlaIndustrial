@@ -106,6 +106,8 @@ public final class ToolsAndGearContent {
 					s -> ModContent.MUTATION_CHIP_CREATE = s),
 			hint("mute_chip", s -> ModContent.MUTE_CHIP = s),
 			hint("stats_chip", s -> ModContent.STATS_CHIP = s),
+			// MOD-996 — the geothermal generator's cistern: its lava tank, doubled.
+			hint("cistern_chip", s -> ModContent.CISTERN_CHIP = s),
 			// Soul Vessel (MOD-278): the repeller's upgrade currency. stacksTo(1) is not a balance knob —
 			// the kill counter is a stack component, and stacks with different components never merge, so a
 			// stackable vessel would only ever look broken.
@@ -354,6 +356,7 @@ public final class ToolsAndGearContent {
 		show(out, ModContent.ENERGY_CLOT_III);
 		show(out, ModContent.MUTE_CHIP);
 		show(out, ModContent.STATS_CHIP);
+		show(out, ModContent.CISTERN_CHIP);
 		// Evolution chips: not upgrade-panel parts, but the same "a chip you apply to a block" idea.
 		show(out, ModContent.EMPTY_CHIP);
 		show(out, ModContent.ALIGNMENT_CHIP_DAY);

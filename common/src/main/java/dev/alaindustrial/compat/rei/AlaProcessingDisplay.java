@@ -35,6 +35,11 @@ public class AlaProcessingDisplay extends BasicDisplay {
 	private final double chance;
 	/** Chance of the bonus output, the second output entry (MOD-960); 1 when there is none or it always drops. */
 	private final double secondaryChance;
+	/**
+	 * Whether the electric furnace makes this result only after a press of its result button (MOD-1018); set by the
+	 * server-side filler from {@code SmeltingChoiceIndex}, false for every other card.
+	 */
+	private final boolean resultChoice;
 
 	/** Build a display from a live recipe (the common case, used by the server-side filler). */
 	public AlaProcessingDisplay(AlaProcessingRecipe recipe) {
@@ -50,7 +55,21 @@ public class AlaProcessingDisplay extends BasicDisplay {
 		this(inputsOf(recipe),
 				outputsOf(recipe),
 				recipe.kind(), energy, recipe.chance(),
-				recipe.secondaryResult().map(AlaProcessingRecipe.SecondaryOutput::chance).orElse(1.0));
+				recipe.secondaryResult().map(AlaProcessingRecipe.SecondaryOutput::chance).orElse(1.0), false);
+	}
+
+	/** This display marked as a result picked with the furnace's result button (MOD-1018), or as it is. */
+	public AlaProcessingDisplay withResultChoice(boolean choice) {
+		if (choice == resultChoice) {
+			return this;
+		}
+		return new AlaProcessingDisplay(getInputEntries(), getOutputEntries(), kind, energy, chance, secondaryChance,
+				choice);
+	}
+
+	/** Whether the furnace makes this result only after a press of its result button (MOD-1018). */
+	public boolean resultChoice() {
+		return resultChoice;
 	}
 
 	/**
@@ -93,12 +112,13 @@ public class AlaProcessingDisplay extends BasicDisplay {
 	}
 
 	private AlaProcessingDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs,
-			ModRecipes.Kind kind, int energy, double chance, double secondaryChance) {
+			ModRecipes.Kind kind, int energy, double chance, double secondaryChance, boolean resultChoice) {
 		super(inputs, outputs);
 		this.kind = kind;
 		this.energy = energy;
 		this.chance = chance;
 		this.secondaryChance = secondaryChance;
+		this.resultChoice = resultChoice;
 	}
 
 	/** Chance the bonus output (the second output entry) drops per operation, 1 when it always does (MOD-960). */
@@ -145,8 +165,8 @@ public class AlaProcessingDisplay extends BasicDisplay {
 	}
 
 	/**
-	 * Round-trips a display as {inputs, outputs, kind id, energy, chance, secondary chance}; kind resolves back
-	 * via id.
+	 * Round-trips a display as {inputs, outputs, kind id, energy, chance, secondary chance, result choice}; kind
+	 * resolves back via id.
 	 */
 	public static final DisplaySerializer<AlaProcessingDisplay> SERIALIZER = DisplaySerializer.of(
 			RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -162,7 +182,10 @@ public class AlaProcessingDisplay extends BasicDisplay {
 							.forGetter(d -> d.chance),
 					// MOD-960, optional for the same reason: an older display had no gamble on its bonus.
 					com.mojang.serialization.Codec.DOUBLE.optionalFieldOf("secondary_chance", 1.0)
-							.forGetter(d -> d.secondaryChance)
+							.forGetter(d -> d.secondaryChance),
+					// MOD-1018, optional for the same reason: an older display marked no result as a choice.
+					com.mojang.serialization.Codec.BOOL.optionalFieldOf("result_choice", false)
+							.forGetter(d -> d.resultChoice)
 			).apply(instance, AlaProcessingDisplay::fromParts)),
 			StreamCodec.composite(
 					EntryIngredient.streamCodec().apply(ByteBufCodecs.list()), BasicDisplay::getInputEntries,
@@ -171,10 +194,12 @@ public class AlaProcessingDisplay extends BasicDisplay {
 					ByteBufCodecs.INT, d -> d.energy,
 					ByteBufCodecs.DOUBLE, d -> d.chance,
 					ByteBufCodecs.DOUBLE, d -> d.secondaryChance,
+					ByteBufCodecs.BOOL, d -> d.resultChoice,
 					AlaProcessingDisplay::fromParts));
 
 	private static AlaProcessingDisplay fromParts(List<EntryIngredient> inputs, List<EntryIngredient> outputs,
-			String kindId, int energy, double chance, double secondaryChance) {
-		return new AlaProcessingDisplay(inputs, outputs, ModRecipes.byId(kindId), energy, chance, secondaryChance);
+			String kindId, int energy, double chance, double secondaryChance, boolean resultChoice) {
+		return new AlaProcessingDisplay(inputs, outputs, ModRecipes.byId(kindId), energy, chance, secondaryChance,
+				resultChoice);
 	}
 }

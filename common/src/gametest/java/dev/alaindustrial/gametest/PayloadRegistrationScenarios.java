@@ -5,6 +5,7 @@ import dev.alaindustrial.network.ConfigSyncPayload;
 import dev.alaindustrial.network.DrillColumnTogglePayload;
 import dev.alaindustrial.network.FluxweaveStepAssistPayload;
 import dev.alaindustrial.network.MachineStatsPayload;
+import dev.alaindustrial.network.ResultChoicePayload;
 import dev.alaindustrial.network.MagnetFilterSamplePayload;
 import dev.alaindustrial.network.NetworkAnalyzerPayload;
 import dev.alaindustrial.network.ReactorLogPayload;
@@ -79,6 +80,7 @@ public final class PayloadRegistrationScenarios {
 		table.put(NetworkAnalyzerPayload.TYPE, Direction.CLIENTBOUND);
 		table.put(ZonePreviewPayload.TYPE, Direction.CLIENTBOUND);
 		table.put(MachineStatsPayload.TYPE, Direction.CLIENTBOUND);
+		table.put(ResultChoicePayload.TYPE, Direction.CLIENTBOUND);
 		table.put(ReactorZonePayload.TYPE, Direction.CLIENTBOUND);
 		table.put(ReactorLogPayload.TYPE, Direction.CLIENTBOUND);
 		table.put(TeleportStationsPayload.TYPE, Direction.CLIENTBOUND);

@@ -3,6 +3,10 @@ package dev.alaindustrial.block.entity;
 import dev.alaindustrial.Config;
 import dev.alaindustrial.compat.FurnaceFuel;
 import dev.alaindustrial.block.IronFurnaceBlock;
+import dev.alaindustrial.block.entity.machine.ResultChoiceHost;
+import dev.alaindustrial.block.entity.machine.ResultChooser;
+import dev.alaindustrial.menu.IronFurnaceMenu;
+import dev.alaindustrial.recipe.ResultOptions;
 import dev.alaindustrial.registry.ModContent;
 import com.mojang.serialization.Codec;
 import java.util.ArrayList;
@@ -22,7 +26,6 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.FurnaceMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -30,16 +33,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Iron Furnace block entity — a fuel-burning smelter that runs every vanilla {@code minecraft:smelting}
@@ -53,10 +54,14 @@ import net.minecraft.world.phys.Vec3;
  * fields are {@code private}, so a subclass cannot change the smelting speed without an
  * AccessWidener (Fabric) plus an AccessTransformer (NeoForge) — neither of which the loader-neutral
  * {@code common} module can carry. Re-implementing the small burn/cook loop here (mechanics, not
- * copied code) keeps the speed fully configurable and works identically on both loaders. The GUI is
- * still 100 % vanilla: {@link #createMenu} returns a stock {@link FurnaceMenu} (vanilla
- * {@code MenuType.FURNACE}), so the vanilla {@code FurnaceScreen} opens with no client registration —
- * only the title differs (from {@link #getDefaultName()}).
+ * copied code) keeps the speed fully configurable and works identically on both loaders. The GUI looks
+ * like the vanilla furnace's but is the mod's own {@link IronFurnaceMenu} since MOD-1018: a stock
+ * {@code FurnaceMenu} could not carry the result button, and the client opens a screen by the menu's type.
+ *
+ * <p><b>Result button (MOD-1018).</b> When the input has several distinct furnace results — ours and other
+ * mods' — the player picks one by the output slot; the choice is a {@link ResultChooser} field, saved under
+ * {@code result_choice}. Our namespace comes first, so the default is our result whatever order the game loaded
+ * the recipes in.
  *
  * <p>Smelting experience works as in the vanilla furnace (MOD-971): every smelt banks its recipe, a player
  * taking from the result slot is paid the banked experience ({@link #awardUsedRecipesAndPopExperience}), and
@@ -64,7 +69,7 @@ import net.minecraft.world.phys.Vec3;
  * leaves the experience banked. The bank is saved under {@code recipes_used}; a furnace saved without it loads
  * with an empty bank. The electric furnace grants no experience.
  */
-public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
+public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, ResultChoiceHost {
 	public static final int INPUT_SLOT = 0;
 	public static final int FUEL_SLOT = 1;
 	public static final int RESULT_SLOT = 2;
@@ -100,11 +105,13 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 	/** Ticks needed to finish one item; kept in sync with {@link Config#ironFurnaceCookTime}. */
 	private int cookTotal = Config.ironFurnaceCookTime;
 
-	/** Vanilla smelting lookup (same call the electric furnace uses for its vanilla fallback). */
-	private final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> quickCheck =
-			RecipeManager.createCheck(RecipeType.SMELTING);
+	/** The furnace's results for its input and the player's choice among them (MOD-1018); vanilla smelting only. */
+	private final ResultChooser chooser = new ResultChooser(RecipeType.SMELTING, false);
 
-	/** The 4 values a vanilla {@link FurnaceMenu} reads: lit time, lit duration, cook progress, cook total. */
+	/**
+	 * The 4 values a vanilla {@code FurnaceMenu} reads, and so {@link IronFurnaceMenu}: lit time, lit duration,
+	 * cook progress, cook total.
+	 */
 	private final ContainerData dataAccess = new ContainerData() {
 		@Override
 		public int get(int index) {
@@ -151,10 +158,8 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 		ItemStack input = be.items.get(INPUT_SLOT);
 		ItemStack fuel = be.items.get(FUEL_SLOT);
 
-		RecipeHolder<SmeltingRecipe> recipe = input.isEmpty()
-				? null
-				: be.quickCheck.getRecipeFor(new SingleRecipeInput(input), level).orElse(null);
-		boolean canCook = recipe != null && be.canAcceptResult(recipe.value());
+		ResultOptions.Option recipe = input.isEmpty() ? null : be.chooser.selected(level, input);
+		boolean canCook = recipe != null && be.canAcceptResult(recipe.result());
 
 		// Light fresh fuel only when there is something to cook and the fire has gone out.
 		if (be.litTime <= 0 && canCook && !fuel.isEmpty()) {
@@ -206,9 +211,8 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 		}
 	}
 
-	/** True if this recipe's result fits in the output slot (empty, or same item under the stack cap). */
-	private boolean canAcceptResult(SmeltingRecipe recipe) {
-		ItemStack result = recipe.assemble(new SingleRecipeInput(items.get(INPUT_SLOT)));
+	/** True if this result fits in the output slot (empty, or same item under the stack cap). */
+	private boolean canAcceptResult(ItemStack result) {
 		if (result.isEmpty()) {
 			return false;
 		}
@@ -221,9 +225,9 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 	}
 
 	/** Consume one input, add one result to the output slot and bank the recipe for its smelting experience. */
-	private void smelt(RecipeHolder<SmeltingRecipe> recipe) {
+	private void smelt(ResultOptions.Option recipe) {
 		ItemStack input = items.get(INPUT_SLOT);
-		ItemStack result = recipe.value().assemble(new SingleRecipeInput(input));
+		ItemStack result = recipe.result();
 		ItemStack out = items.get(RESULT_SLOT);
 		if (out.isEmpty()) {
 			items.set(RESULT_SLOT, result.copy());
@@ -307,7 +311,33 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 
 	@Override
 	protected AbstractContainerMenu createMenu(int syncId, Inventory playerInventory) {
-		return new FurnaceMenu(syncId, playerInventory, this, dataAccess);
+		return new IronFurnaceMenu(syncId, playerInventory, this, dataAccess);
+	}
+
+	// --- result button (MOD-1018) ---
+
+	@Override
+	public ResultChooser resultChooser() {
+		return chooser;
+	}
+
+	@Override
+	public ItemStack resultChoiceInput() {
+		return items.get(INPUT_SLOT);
+	}
+
+	@Override
+	public @Nullable ServerLevel resultChoiceLevel() {
+		return level instanceof ServerLevel sl ? sl : null;
+	}
+
+	/** One press of the result button; a different result restarts the item cooking, as a new input would. */
+	@Override
+	public void cycleResult() {
+		if (level instanceof ServerLevel sl && chooser.cycle(sl, items.get(INPUT_SLOT))) {
+			cookProgress = 0;
+		}
+		setChanged();
 	}
 
 	@Override
@@ -360,6 +390,7 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 		output.putInt("lit_duration", litDuration);
 		output.putInt("cook_progress", cookProgress);
 		output.store("recipes_used", RECIPES_USED_CODEC, recipesUsed);
+		chooser.save(output);
 	}
 
 	@Override
@@ -374,5 +405,7 @@ public class IronFurnaceBlockEntity extends BaseContainerBlockEntity implements 
 		recipesUsed.clear();
 		recipesUsed.putAll(input.read("recipes_used", RECIPES_USED_CODEC).orElse(Map.of()));
 		cookTotal = Math.max(1, Config.ironFurnaceCookTime);
+		// A furnace saved before MOD-1018 has no choice and runs its default result.
+		chooser.load(input);
 	}
 }

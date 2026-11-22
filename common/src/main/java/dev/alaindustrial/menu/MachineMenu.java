@@ -5,6 +5,7 @@ import dev.alaindustrial.block.entity.MachineBlockEntity;
 import dev.alaindustrial.block.entity.machine.MachineChannels;
 import dev.alaindustrial.block.entity.machine.SlotLayout;
 import dev.alaindustrial.core.environment.FuelRuntime;
+import dev.alaindustrial.core.environment.LavaBurnTally;
 import dev.alaindustrial.item.energy.ItemEnergy;
 import dev.alaindustrial.item.misc.OverclockerChipItem;
 import dev.alaindustrial.menu.stats.StatsWindow;
@@ -430,7 +431,8 @@ public abstract class MachineMenu extends AbstractContainerMenu {
 				be.getEnergyStorage().getTotalEnergyGenerated(), be.getEnergyStorage().getTotalEnergyConsumed(),
 				window.eu(), window.ticks(), be.peakEuRate(), be.countDirectConnections(), be.totalItemsProcessed(),
 				be instanceof FuelRuntime.Source source ? Optional.ofNullable(source.fuelReadout()) : Optional.empty(),
-				be instanceof FuelRuntime.Source source ? Optional.ofNullable(source.fuelBurnt()) : Optional.empty());
+				be instanceof FuelRuntime.Source source ? Optional.ofNullable(source.fuelBurnt()) : Optional.empty(),
+				be instanceof LavaBurnTally.Source lava ? Optional.ofNullable(lava.lavaBurnt()) : Optional.empty());
 	}
 
 	/** Client-side: accept a snapshot addressed to THIS menu. A stale packet for another screen is dropped. */
@@ -692,6 +694,12 @@ public abstract class MachineMenu extends AbstractContainerMenu {
 		@Override
 		public boolean mayPlace(ItemStack stack) {
 			return kind.accepts(stack);
+		}
+
+		/** A machine may hold a chip in place (MOD-996); the client stub is no machine, a refusal snaps back. */
+		@Override
+		public boolean mayPickup(Player player) {
+			return !(container instanceof MachineBlockEntity machine) || machine.mayRemoveUpgrade(getItem());
 		}
 	}
 

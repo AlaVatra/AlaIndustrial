@@ -75,6 +75,8 @@ public final class ModDataComponents {
 	public static final Identifier TELEPORTER_LOG_ID = Industrialization.id("teleporter_log");
 	public static final Identifier FLUID_TANK_CONTENTS_ID = Industrialization.id("fluid_tank_contents");
 	public static final Identifier DISTILLATION_COLUMN_CONTENTS_ID = Industrialization.id("distillation_column_contents");
+	/** MOD-998 — the lava a broken geothermal generator carries, in mB. */
+	public static final Identifier STORED_LAVA_ID = Industrialization.id("stored_lava");
 	public static final Identifier MAGNET_ENABLED_ID = Industrialization.id("magnet_enabled");
 	public static final Identifier CABLE_COLOR_ID = Industrialization.id("cable_color");
 	public static final Identifier ITEM_MODULES_ID = Industrialization.id("item_modules");
@@ -204,6 +206,14 @@ public final class ModDataComponents {
 	 */
 	public static Supplier<DataComponentType<dev.alaindustrial.item.fluid.DistillationColumnContents>> DISTILLATION_COLUMN_CONTENTS = () -> {
 		throw new IllegalStateException("ModDataComponents.DISTILLATION_COLUMN_CONTENTS read before its loader bound it");
+	};
+
+	/**
+	 * The lava a broken geothermal generator carries (MOD-998): its tank and its burn reserve folded into one
+	 * volume in mB. Absent on an empty generator, so a fresh one stacks as before.
+	 */
+	public static Supplier<DataComponentType<Long>> STORED_LAVA = () -> {
+		throw new IllegalStateException("ModDataComponents.STORED_LAVA read before its loader bound it");
 	};
 
 	/**
@@ -710,6 +720,14 @@ public final class ModDataComponents {
 				.build();
 	}
 
+	/** Build the {@code stored_lava} type both loaders register (MOD-998). */
+	public static DataComponentType<Long> createStoredLava() {
+		return DataComponentType.<Long>builder()
+				.persistent(Codec.LONG)
+				.networkSynchronized(ByteBufCodecs.VAR_LONG)
+				.build();
+	}
+
 	/** Build the {@code network_scan} type both loaders register. */
 	public static DataComponentType<NetworkScanData> createNetworkScan() {
 		return DataComponentType.<NetworkScanData>builder()
@@ -882,5 +900,6 @@ public final class ModDataComponents {
 			new ComponentDef<>(APIARY_MAP_POINTS_ID, ModDataComponents::createApiaryMapPoints,
 					c -> APIARY_MAP_POINTS = c),
 			new ComponentDef<>(JETPACK_HOVER_ID, ModDataComponents::createJetpackHover, c -> JETPACK_HOVER = c),
-			new ComponentDef<>(TODO_LIST_ID, ModDataComponents::createTodoList, c -> TODO_LIST = c));
+			new ComponentDef<>(TODO_LIST_ID, ModDataComponents::createTodoList, c -> TODO_LIST = c),
+			new ComponentDef<>(STORED_LAVA_ID, ModDataComponents::createStoredLava, c -> STORED_LAVA = c));
 }

@@ -6,14 +6,19 @@ import dev.alaindustrial.core.machine.MachineRates;
 import dev.alaindustrial.recipe.AlaProcessingRecipe;
 import dev.alaindustrial.recipe.AlloyingRecipe;
 import dev.alaindustrial.recipe.PolymerizingRecipe;
+import dev.alaindustrial.recipe.SmeltingChoiceIndex;
 import dev.alaindustrial.recipe.VanillaSmeltingMirror;
+import dev.alaindustrial.registry.ModRecipes;
 import dev.architectury.utils.GameInstance;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import me.shedaniel.rei.api.common.plugins.REICommonPlugin;
 import me.shedaniel.rei.api.common.registry.display.ServerDisplayRegistry;
@@ -58,8 +63,11 @@ public class AlaReiCommonPlugin implements REICommonPlugin {
 		// One filler claims every AlaProcessingRecipe (all four machines share the class); each display
 		// routes itself to the right category via its recipe kind. REI iterates the server recipe
 		// manager, builds the displays here, and syncs them to clients.
+		// MOD-1018: an electric-furnace card the result button has to pick is marked, by the furnace's own order.
+		ResultChoiceCards choiceCards = new ResultChoiceCards();
 		registry.beginRecipeFiller(AlaProcessingRecipe.class)
-				.fill(holder -> new AlaProcessingDisplay(holder.value()));
+				.fill(holder -> new AlaProcessingDisplay(holder.value()).withResultChoice(
+						holder.value().kind() == ModRecipes.SMELTING && choiceCards.get().contains(holder.id())));
 		// MOD-086: the electric furnace also runs every vanilla smelt (RecipeType.SMELTING fallback), so
 		// its category lists those too — otherwise players opening it see only the mod's recipes and
 		// cannot tell the machine smelts ores, food and sand as well. Each vanilla recipe is mirrored
@@ -82,7 +90,8 @@ public class AlaReiCommonPlugin implements REICommonPlugin {
 					if (mirror == null || VanillaSmeltingMirror.isCoveredByModSmelting(mirror, coverage.get())) {
 						return List.of();
 					}
-					return List.of(new AlaProcessingDisplay(mirror, vanillaSmeltEu()));
+					return List.of(new AlaProcessingDisplay(mirror, vanillaSmeltEu())
+							.withResultChoice(choiceCards.get().contains(holder.id())));
 				});
 		// MOD-019: the Polymerizer's own recipe family — a fluid volume in, an item out.
 		registry.beginRecipeFiller(PolymerizingRecipe.class)
@@ -118,6 +127,23 @@ public class AlaReiCommonPlugin implements REICommonPlugin {
 	 * the recipe map REI is iterating. One instance per {@code registerDisplays} call, so a datapack
 	 * reload rebuilds it instead of answering from the previous world's recipes.
 	 */
+	/**
+	 * The electric-furnace cards whose result needs the furnace's result button (MOD-1018), built once per REI reload
+	 * on first use, from the same server recipes and for the same reason as {@link ModSmeltingCoverage}.
+	 */
+	private static final class ResultChoiceCards {
+		private Set<ResourceKey<Recipe<?>>> ids;
+
+		Set<ResourceKey<Recipe<?>>> get() {
+			if (ids == null) {
+				MinecraftServer server = GameInstance.getServer();
+				ids = server == null ? Set.of()
+						: SmeltingChoiceIndex.choiceOnly(server.getRecipeManager().getRecipes());
+			}
+			return ids;
+		}
+	}
+
 	private static final class ModSmeltingCoverage {
 		private Map<Item, ItemStack> coverage;
 

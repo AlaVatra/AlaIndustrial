@@ -9,6 +9,7 @@ import static dev.alaindustrial.registry.content.ContentDeclarations.endBlocks;
 import static dev.alaindustrial.registry.content.ContentDeclarations.hiddenFromPlayers;
 import static dev.alaindustrial.registry.content.ContentDeclarations.machine;
 import static dev.alaindustrial.registry.content.ContentDeclarations.menu;
+import static dev.alaindustrial.registry.content.ContentDeclarations.registeredBlock;
 import static dev.alaindustrial.registry.content.TabEntries.show;
 
 import dev.alaindustrial.block.ConcentratorSectionBlock;
@@ -47,6 +48,7 @@ import dev.alaindustrial.block.entity.ThermoelectricGeneratorBlockEntity;
 import dev.alaindustrial.block.entity.WaterMillBlockEntity;
 import dev.alaindustrial.block.entity.WindMillBlockEntity;
 import dev.alaindustrial.compat.LineBlockProps;
+import dev.alaindustrial.item.energy.GeothermalGeneratorBlockItem;
 import dev.alaindustrial.menu.CreativeEnergySourceMenu;
 import dev.alaindustrial.menu.DaylightSolarPanelMenu;
 import dev.alaindustrial.menu.GeneratorMenu;
@@ -188,7 +190,10 @@ public final class EnergyGenerationContent {
 	private static final List<ItemDef> ITEMS = List.of(
 			// Block items.
 			blockItem("generator", s -> ModContent.GENERATOR_ITEM = s),
-			blockItem("geothermal_generator", s -> ModContent.GEOTHERMAL_GENERATOR_ITEM = s),
+			// MOD-998 — its own item class: the tooltip shows the lava a broken generator carries.
+			blockItem("geothermal_generator",
+					p -> new GeothermalGeneratorBlockItem(registeredBlock("geothermal_generator"),
+							p.useBlockDescriptionPrefix()), s -> ModContent.GEOTHERMAL_GENERATOR_ITEM = s),
 			blockItem("solar_panel", s -> ModContent.SOLAR_PANEL_ITEM = s),
 			blockItem("moonlit_solar_panel", s -> ModContent.MOONLIT_SOLAR_PANEL_ITEM = s),
 			blockItem("daylight_solar_panel", s -> ModContent.DAYLIGHT_SOLAR_PANEL_ITEM = s),

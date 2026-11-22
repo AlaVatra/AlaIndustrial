@@ -14,7 +14,7 @@ import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.inventory.ContainerInput;
-import net.minecraft.world.inventory.FurnaceMenu;
+import net.minecraft.world.inventory.AbstractFurnaceMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.TagValueInput;
@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
  * <p>Raw gold is smelted because its vanilla recipe is worth exactly 1.0 experience, so every expected total is a
  * whole number and no random roll is involved. The furnace is ticked synchronously and the orbs are counted in the
  * same tick, before any of them can move or merge with an orb of another test; an orb's points are its value
- * times its merge count. The player is a real survival mock taking through the stock furnace menu the iron furnace
+ * times its merge count. The player is a real survival mock taking through the furnace menu the iron furnace
  * opens, so the take goes through the result slot exactly as a click in the game does.
  */
 public final class IronFurnaceExperienceScenarios {
@@ -69,7 +69,7 @@ public final class IronFurnaceExperienceScenarios {
 		IronFurnaceBlockEntity furnace = loadedFurnace(helper, FURNACE);
 		smeltUntil(helper, FURNACE, furnace, 3);
 		ServerPlayer player = player(helper);
-		FurnaceMenu menu = menu(furnace, player);
+		AbstractFurnaceMenu menu = menu(furnace, player);
 
 		menu.clicked(RESULT, 0, ContainerInput.PICKUP, player);
 		helper.assertTrue(menu.getCarried().is(Items.GOLD_INGOT) && menu.getCarried().getCount() == 3,
@@ -93,7 +93,7 @@ public final class IronFurnaceExperienceScenarios {
 		IronFurnaceBlockEntity furnace = loadedFurnace(helper, FURNACE);
 		smeltUntil(helper, FURNACE, furnace, 2);
 		ServerPlayer player = player(helper);
-		FurnaceMenu menu = menu(furnace, player);
+		AbstractFurnaceMenu menu = menu(furnace, player);
 
 		menu.clicked(RESULT, 0, ContainerInput.QUICK_MOVE, player);
 		helper.assertTrue(furnace.getItem(RESULT).isEmpty()
@@ -119,7 +119,7 @@ public final class IronFurnaceExperienceScenarios {
 
 		smeltUntil(helper, FURNACE, furnace, 1);
 		ServerPlayer player = player(helper);
-		FurnaceMenu menu = menu(furnace, player);
+		AbstractFurnaceMenu menu = menu(furnace, player);
 		menu.clicked(RESULT, 0, ContainerInput.PICKUP, player);
 		assertPoints(helper, 3, "a player take after an automated one (two banked smelts plus one)");
 		helper.succeed();
@@ -212,8 +212,8 @@ public final class IronFurnaceExperienceScenarios {
 		return player;
 	}
 
-	private static FurnaceMenu menu(IronFurnaceBlockEntity furnace, ServerPlayer player) {
-		return (FurnaceMenu) furnace.createMenu(1, player.getInventory(), player);
+	private static AbstractFurnaceMenu menu(IronFurnaceBlockEntity furnace, ServerPlayer player) {
+		return (AbstractFurnaceMenu) furnace.createMenu(1, player.getInventory(), player);
 	}
 
 	/** The experience points lying in this test's cells, an orb counted as its value times its merge count. */

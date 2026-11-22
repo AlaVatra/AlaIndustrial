@@ -6,7 +6,17 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "alaindustrial:geothermal_generator"
+          "name": "alaindustrial:geothermal_generator",
+          "modifier": [
+            {
+              "type": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": [
+                "alaindustrial:stored_lava",
+                "minecraft:max_stack_size"
+              ]
+            }
+          ]
         }
       ],
       "condition": {

@@ -1,6 +1,7 @@
 package dev.alaindustrial.block.entity;
 
 import dev.alaindustrial.block.entity.ElectricHeaterBlockEntity;
+import dev.alaindustrial.block.entity.machine.FireHeat;
 import dev.alaindustrial.core.heat.HeatSource;
 import dev.alaindustrial.registry.ModContent;
 import net.minecraft.core.BlockPos;
@@ -26,11 +27,12 @@ public final class WorldHeatSources {
 				&& heater.canSupplyHeatTick()) {
 			return HeatSource.ELECTRIC_HEATER;
 		}
-		// MOD-988: a fuel generator heats like a campfire, but only while its fuel really burns.
-		if (state.is(ModContent.GENERATOR.get())
-				&& level.getBlockEntity(below) instanceof GeneratorBlockEntity generator
-				&& generator.isBurning()) {
-			return HeatSource.GENERATOR;
+		// MOD-988, MOD-994: a fuel generator (a campfire's worth) or a geothermal one (a lava block's worth) heats,
+		// but only while it really burns.
+		if ((state.is(ModContent.GENERATOR.get()) || state.is(ModContent.GEOTHERMAL_GENERATOR.get()))
+				&& level.getBlockEntity(below) instanceof FireHeat.Host generator
+				&& generator.fireHeat().isBurning()) {
+			return generator.fireHeat().source();
 		}
 		if (CampfireBlock.isLitCampfire(state)) {
 			return HeatSource.CAMPFIRE;

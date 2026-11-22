@@ -466,6 +466,7 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:choke plain : none
 == alaindustrial:choke_advanced plain : none
 == alaindustrial:choke_reinforced plain : none
+== alaindustrial:cistern_chip plain : none
 == alaindustrial:coal_dust plain : none
 == alaindustrial:component_repair_bench plain
 -- plain eu
@@ -3193,6 +3194,8 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:oak_iron_chest_boat plain : none
 == alaindustrial:oak_shielding_chest_boat plain : none
 == alaindustrial:oak_silver_chest_boat plain : none
+== alaindustrial:obsidian_dust plain : none
+== alaindustrial:obsidian_shavings plain : none
 == alaindustrial:oil_bucket plain : none
 == alaindustrial:oil_slime_spawn_egg plain : none
 == alaindustrial:overclocker_chip_i plain

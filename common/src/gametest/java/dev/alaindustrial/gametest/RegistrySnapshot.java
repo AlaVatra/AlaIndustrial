@@ -516,6 +516,7 @@ final class RegistrySnapshot {
 			"data_component_type soul_vessel_kills",
 			"data_component_type step_assist_enabled",
 			"data_component_type stored_energy",
+			"data_component_type stored_lava",
 			"data_component_type teleporter_log",
 			"data_component_type teleporter_owner",
 			"data_component_type teleporter_points",
@@ -640,6 +641,7 @@ final class RegistrySnapshot {
 			"menu honey_centrifuge",
 			"menu incubator",
 			"menu iron_chest",
+			"menu iron_furnace",
 			"menu lightning_rod_generator",
 			"menu macerator",
 			"menu magnet",
@@ -725,6 +727,7 @@ final class RegistrySnapshot {
 			"sound_event water_mill_hum",
 			"sound_event wind_mill_hum",
 			"sound_event worn_rotor_creak",
+			"trigger_type geothermal_milestone",
 			"trigger_type mutation_completed",
 			"trigger_type network_energized",
 			"trigger_type reactor_milestone");

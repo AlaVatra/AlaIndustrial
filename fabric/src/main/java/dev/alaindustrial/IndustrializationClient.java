@@ -272,6 +272,11 @@ public class IndustrializationClient implements ClientModInitializer {
 		net.fabricmc.fabric.api.client.rendering.v1.level.LevelExtractionEvents.AFTER_BLOCK_OUTLINE_EXTRACTION
 				.register((context, hit) -> {
 					net.minecraft.client.renderer.state.level.LevelRenderState levelState = context.levelState();
+					// MOD-1017: a mod that renders a second world through LevelExtractor.extract (a portal mod)
+					// can hand over no level state; there is no outline to restyle then.
+					if (levelState == null || context.level() == null) {
+						return;
+					}
 					net.minecraft.client.renderer.state.level.BlockOutlineRenderState outline =
 							levelState.blockOutlineRenderState;
 					if (outline == null) {

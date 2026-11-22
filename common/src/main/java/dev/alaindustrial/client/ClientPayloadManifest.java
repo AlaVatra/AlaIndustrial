@@ -16,6 +16,7 @@ import dev.alaindustrial.client.screen.works.TownWorksClient;
 import dev.alaindustrial.network.ArchiveRecordPayload;
 import dev.alaindustrial.network.ConfigSyncPayload;
 import dev.alaindustrial.network.MachineStatsPayload;
+import dev.alaindustrial.network.ResultChoicePayload;
 import dev.alaindustrial.network.NetworkAnalyzerPayload;
 import dev.alaindustrial.network.ReactorLogPayload;
 import dev.alaindustrial.network.ReactorZonePayload;
@@ -123,6 +124,8 @@ public final class ClientPayloadManifest {
 			inline(ZonePreviewPayload.TYPE, ZonePreviewRenderer::receive),
 			// MOD-125: machine statistics for the open screen's panel.
 			inline(MachineStatsPayload.TYPE, MachineStatsClient::receive),
+			// MOD-1018: the options of the open furnace's result button.
+			queued(ResultChoicePayload.TYPE, ResultChoiceClient::receive),
 			// MOD-620: the reactor controller's «Core» tab.
 			inline(ReactorZonePayload.TYPE, ReactorZoneClient::receive),
 			// MOD-622: the reactor controller's «Log» tab.
