@@ -3,6 +3,7 @@
   "values": [
     "#alaindustrial:upgrade/mute",
     "#alaindustrial:upgrade/overclock",
-    "#alaindustrial:upgrade/stats"
+    "#alaindustrial:upgrade/stats",
+    "#alaindustrial:upgrade/cistern"
   ]
 }

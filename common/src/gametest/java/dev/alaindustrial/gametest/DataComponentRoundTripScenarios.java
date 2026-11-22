@@ -101,6 +101,8 @@ public final class DataComponentRoundTripScenarios {
 		s.put(ModDataComponents.BLUEPRINT_SUBSTITUTE_ID, true);
 		s.put(ModDataComponents.CAPSULE_FLUID_ID, BuiltInRegistries.FLUID.wrapAsHolder(Fluids.LAVA));
 		s.put(ModDataComponents.FLUID_TANK_CONTENTS_ID, tank(Fluids.WATER, 3_000L));
+		// MOD-998: the lava a broken geothermal generator carries, in mB.
+		s.put(ModDataComponents.STORED_LAVA_ID, 7_750L);
 		s.put(ModDataComponents.DISTILLATION_COLUMN_CONTENTS_ID, new DistillationColumnContents(
 				Optional.of(tank(Fluids.WATER, 1_200L)), Optional.empty(), Optional.of(tank(Fluids.LAVA, 7L)), 42));
 		s.put(ModDataComponents.TELEPORTER_PRIVATE_ID, true);

@@ -46,7 +46,13 @@ public enum UpgradeSlotKind {
 	 * <p>Declared LAST so the ordinals of the four real arms stay put; {@link #byIndex} maps positions
 	 * explicitly and never returns this one.
 	 */
-	OVERCLOCK_UNSUPPORTED(null);
+	OVERCLOCK_UNSUPPORTED(null),
+	/**
+	 * What arm 1 becomes on the geothermal generator (MOD-996): the overclocker does nothing to a generator, so
+	 * that free arm takes the cistern chip, which doubles the lava tank. One arm, so one cistern per generator.
+	 * Declared after {@link #OVERCLOCK_UNSUPPORTED} for the same reason: {@link #byIndex} never returns it.
+	 */
+	CISTERN(ModTags.Items.UPGRADE_CISTERN);
 
 	@Nullable
 	private final TagKey<Item> accepted;

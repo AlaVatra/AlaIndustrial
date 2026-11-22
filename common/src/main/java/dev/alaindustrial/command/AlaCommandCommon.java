@@ -102,7 +102,7 @@ public final class AlaCommandCommon {
 							return Command.SINGLE_SUCCESS;
 						}));
 		tree.then(configTree());
-		tree.then(profileTree());
+		tree.then(profileTree()).then(RecipeConflictCommand.tree());
 		if (demoEnabled) {
 			tree.then(demoTree());
 			tree.then(flyTree());

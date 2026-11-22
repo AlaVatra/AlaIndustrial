@@ -353,7 +353,41 @@
                 "minecraft:smooth_stone"
               ],
               "result_id": "alaindustrial:geothermal_generator",
-              "result_count": 1
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "minecraft:smooth_stone",
+                    "minecraft:smooth_stone",
+                    "minecraft:smooth_stone",
+                    "minecraft:smooth_stone",
+                    "alaindustrial:generator",
+                    "minecraft:smooth_stone",
+                    "minecraft:smooth_stone",
+                    "alaindustrial:electronic_circuit",
+                    "minecraft:smooth_stone"
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:geothermal_generator",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:obsidian_shavings",
+                    "alaindustrial:obsidian_shavings",
+                    "alaindustrial:obsidian_shavings",
+                    "alaindustrial:obsidian_shavings",
+                    "alaindustrial:obsidian_shavings",
+                    "alaindustrial:obsidian_shavings",
+                    "alaindustrial:obsidian_shavings",
+                    "alaindustrial:obsidian_shavings",
+                    "alaindustrial:obsidian_shavings"
+                  ],
+                  "recipe_type": "Výroba bez vzoru",
+                  "result_id": "alaindustrial:obsidian_dust",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -6920,6 +6954,36 @@
                   "result_count": 1
                 }
               ]
+            }
+          ]
+        },
+        {
+          "id": "cistern_chip",
+          "title": "Čip Cisterna",
+          "icon": "alaindustrial:cistern_chip",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Čip Cisterna",
+              "text": "Vylepšení geotermálního generátoru, které zdvojnásobí nádrž lávy z 10 na 20 kbelíků."
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Výroba podle vzoru",
+              "grid": [
+                "",
+                "alaindustrial:vacuum_capsule",
+                "",
+                "alaindustrial:iron_plate",
+                "alaindustrial:empty_chip",
+                "alaindustrial:iron_plate",
+                "",
+                "minecraft:obsidian",
+                ""
+              ],
+              "result_id": "alaindustrial:cistern_chip",
+              "result_count": 1
             }
           ]
         },

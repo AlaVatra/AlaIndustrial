@@ -370,7 +370,7 @@ public final class FluidMachineScenarios {
 			helper.fail("expected buffer cap " + GeneratorConfig.geothermalBuffer + " but was " + cap);
 		}
 		geo.setItem(GeothermalGeneratorBlockEntity.INPUT_SLOT, new ItemStack(Items.LAVA_BUCKET, 64));
-		geo.getEnergyStorage().setAmountUntracked(cap - 1); // BVA: max-1
+		geo.getEnergyStorage().setAmountUntracked(cap - geo.effectiveEuPerTick()); // BVA: one burn tick short, MOD-1000
 		drive(geo, helper, 5);
 		long amount = geo.getEnergyStorage().getAmount();
 		if (amount != cap) {

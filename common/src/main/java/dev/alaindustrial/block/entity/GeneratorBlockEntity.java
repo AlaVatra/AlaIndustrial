@@ -6,7 +6,7 @@ import dev.alaindustrial.core.environment.DrawMeter;
 import dev.alaindustrial.core.environment.FuelRuntime;
 import dev.alaindustrial.core.environment.FuelTally;
 import dev.alaindustrial.core.environment.GeneratorConfig;
-import dev.alaindustrial.core.heat.HeatConsumer;
+import dev.alaindustrial.block.entity.machine.FireHeat;
 import dev.alaindustrial.core.heat.HeatSource;
 import dev.alaindustrial.skill.SkillMachine;
 import dev.alaindustrial.core.energy.EnergyTier;
@@ -35,7 +35,8 @@ import org.jspecify.annotations.Nullable;
  * LV fuel generator: burns a furnace fuel item into EU. Built on {@link AbstractGeneratorBlockEntity};
  * {@code progress}/{@code maxProgress} expose the current burn for the GUI.
  */
-public class GeneratorBlockEntity extends AbstractGeneratorBlockEntity implements MenuProvider, FuelRuntime.Source {
+public class GeneratorBlockEntity extends AbstractGeneratorBlockEntity implements MenuProvider, FuelRuntime.Source,
+		FireHeat.Host {
 	public static final int FUEL_SLOT = 0;
 	/**
 	 * Where the burnt coal leaves its ash (MOD-987): an output slot, taken by hand or by automation on a working
@@ -54,11 +55,8 @@ public class GeneratorBlockEntity extends AbstractGeneratorBlockEntity implement
 
 	private int burnTime;
 	private int burnDuration;
-	/**
-	 * Whether fuel really burned on the last tick (MOD-988): the heat a machine standing on the generator gets.
-	 * Not the burn left: a paused generator has burn left and no fire. Not saved, the first tick sets it again.
-	 */
-	private boolean burning;
+	/** The heat the machine standing on the generator gets while fuel really burns (MOD-988), level 1. */
+	private final FireHeat fireHeat = new FireHeat(HeatSource.GENERATOR);
 
 	/**
 	 * Units of ash-giving fuel burnt since the last ash (MOD-987), always below
@@ -101,7 +99,7 @@ public class GeneratorBlockEntity extends AbstractGeneratorBlockEntity implement
 		// rest away (MOD-986). MOD-988: unless the machine on top waits for this fire's heat; then the fuel goes
 		// into heat, every tick, so the heat stays steady instead of blinking with the buffer.
 		boolean mayBurn = energy.getCapacity() - energy.getAmount() >= effectiveEuPerTick()
-				|| heatWantedAbove(level, pos);
+				|| fireHeat.wantedAbove(level, pos);
 		if (burnTime > 0 && mayBurn) {
 			burnTime--;
 			made = GeneratorConfig.fuelEuPerTick;
@@ -141,7 +139,7 @@ public class GeneratorBlockEntity extends AbstractGeneratorBlockEntity implement
 		}
 		this.maxProgress = burnDuration;
 		this.progress = burnTime;
-		setBurning(level, pos, made > 0);
+		fireHeat.update(level, pos, made > 0);
 		return made;
 	}
 
@@ -152,32 +150,12 @@ public class GeneratorBlockEntity extends AbstractGeneratorBlockEntity implement
 
 	/** Whether fuel burned on the last tick: the generator is a heat source for the machine on top (MOD-988). */
 	public boolean isBurning() {
-		return burning;
+		return fireHeat.isBurning();
 	}
 
-	/**
-	 * Whether the machine on top takes this generator's heat and waits for it now (MOD-988). Asked only with a full
-	 * buffer, where the answer decides between burning and pausing: one block-entity lookup and the machine's own
-	 * status, nothing heavier.
-	 */
-	private static boolean heatWantedAbove(Level level, BlockPos pos) {
-		return level.getBlockEntity(pos.above()) instanceof HeatConsumer consumer
-				&& consumer.acceptsHeatFrom(HeatSource.GENERATOR) && consumer.isWaitingOnHeat();
-	}
-
-	/**
-	 * Records whether the fire burns and tells the machine on top the moment that changes (MOD-988). The lit state
-	 * is written with {@code UPDATE_CLIENTS} only and notifies no neighbour, so without this a machine asleep on
-	 * "no heat" would notice the fire one idle sleep late, and one still running would keep a heat that is gone.
-	 */
-	private void setBurning(Level level, BlockPos pos, boolean now) {
-		if (burning == now) {
-			return;
-		}
-		burning = now;
-		if (level.getBlockEntity(pos.above()) instanceof HeatConsumer consumer) {
-			consumer.onHeatNeighbourChanged();
-		}
+	@Override
+	public FireHeat fireHeat() {
+		return fireHeat;
 	}
 
 	/**

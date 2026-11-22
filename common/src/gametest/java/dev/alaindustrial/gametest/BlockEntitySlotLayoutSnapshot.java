@@ -55,7 +55,7 @@ final class BlockEntitySlotLayoutSnapshot {
 			"galvanic_bath: size=10 upgrades=5 battery=9 menu=yes overclockable=yes batteryFed=yes",
 			"garden_drone_station: size=13 upgrades=8 battery=12 menu=yes overclockable=no batteryFed=yes",
 			"generator: size=6 upgrades=2 battery=- menu=yes overclockable=no batteryFed=no",
-			"geothermal_generator: size=6 upgrades=2 battery=- menu=yes overclockable=no batteryFed=no",
+			"geothermal_generator: size=8 upgrades=4 battery=- menu=yes overclockable=no batteryFed=no",
 			"gold_chest: size=54 upgrades=- battery=- menu=yes overclockable=no batteryFed=no",
 			"high_altitude_wind_mill: size=5 upgrades=1 battery=- menu=yes overclockable=no batteryFed=no",
 			"honey_centrifuge: size=9 upgrades=4 battery=8 menu=yes overclockable=yes batteryFed=yes",

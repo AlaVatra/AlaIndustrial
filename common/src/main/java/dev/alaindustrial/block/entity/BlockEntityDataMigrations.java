@@ -59,7 +59,7 @@ public final class BlockEntityDataMigrations {
 	 * {@link #DATA_VERSION_KEY}. Bumped when the SHAPE or the MEANING of stored data changes — never
 	 * for adding a key, which is absent-safe and needs no rung. See the class doc for the recipe.
 	 */
-	public static final int DATA_VERSION = 2;
+	public static final int DATA_VERSION = 3;
 
 	/**
 	 * NBT key holding {@link #DATA_VERSION}. Absent means "written before MOD-556", i.e. version 0 —
@@ -85,7 +85,8 @@ public final class BlockEntityDataMigrations {
 	 */
 	private static final List<Step> STEPS = List.of(
 			new Step(0, BlockEntityDataMigrations::v0ToV1RenumberBatteryBoxSlots),
-			new Step(1, BlockEntityDataMigrations::v1ToV2ShiftGeneratorUpgradeSlots));
+			new Step(1, BlockEntityDataMigrations::v1ToV2ShiftGeneratorUpgradeSlots),
+			new Step(2, BlockEntityDataMigrations::v2ToV3ShiftGeothermalUpgradeSlots));
 
 	/** Number of rungs on the ladder — the oracle the version pin compares against. */
 	public static int stepCount() {
@@ -169,5 +170,44 @@ public final class BlockEntityDataMigrations {
 			generator.setItem(slot, generator.getItem(slot - 1));
 		}
 		generator.setItem(GeneratorBlockEntity.ASH_SLOT, ItemStack.EMPTY);
+	}
+
+	/**
+	 * v2 → v3: a geothermal generator saved before MOD-995/MOD-997 holds its upgrade chips two slots too low.
+	 *
+	 * <p>The shavings slot (MOD-995) and the catalyst slot (MOD-997) went in after the two lava slots, and the upgrade
+	 * block follows the machine slots, so the chips moved from 2…5 to 4…7. The arms are typed by position, so the
+	 * whole run moves two slots up; the container grew by two, so the chips of the old last two arms land in the new
+	 * last two slots. The tank ({@code FluidTankMb}) and the burn reserve ({@code LavaTicks}) are not slots and are
+	 * left as they were: an old world keeps every drop of its lava.
+	 *
+	 * <p>Shapes left alone, as in {@link #v1ToV2ShiftGeneratorUpgradeSlots}: shavings in the shavings slot or blaze
+	 * powder in the catalyst slot is a save of the new layout an older jar opened and wrote back (an upgrade arm never
+	 * holds either), and a filled slot among the last two is a layout the old one cannot be — shifting would overwrite
+	 * it. A second pass over repaired data with a full panel returns there too, so nothing is ever lost.
+	 */
+	private static void v2ToV3ShiftGeothermalUpgradeSlots(EnergyBlockEntity be) {
+		if (!(be instanceof GeothermalGeneratorBlockEntity geo)) {
+			return;
+		}
+		int first = GeothermalGeneratorBlockEntity.SHAVINGS_SLOT;
+		int shift = GeothermalGeneratorBlockEntity.SLOT_COUNT - first;
+		int last = geo.getContainerSize() - 1;
+		ItemStack catalyst = geo.getItem(GeothermalGeneratorBlockEntity.CATALYST_SLOT);
+		if (geo.getItem(first).is(ModContent.OBSIDIAN_SHAVINGS.get())
+				|| GeothermalGeneratorBlockEntity.isCatalyst(catalyst)) {
+			return;
+		}
+		for (int slot = last; slot > last - shift; slot--) {
+			if (!geo.getItem(slot).isEmpty()) {
+				return;
+			}
+		}
+		for (int slot = last; slot >= GeothermalGeneratorBlockEntity.SLOT_COUNT; slot--) {
+			geo.setItem(slot, geo.getItem(slot - shift));
+		}
+		for (int slot = first; slot < GeothermalGeneratorBlockEntity.SLOT_COUNT; slot++) {
+			geo.setItem(slot, ItemStack.EMPTY);
+		}
 	}
 }

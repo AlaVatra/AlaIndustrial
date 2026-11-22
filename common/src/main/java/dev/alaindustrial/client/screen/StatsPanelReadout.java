@@ -3,6 +3,7 @@ package dev.alaindustrial.client.screen;
 import dev.alaindustrial.client.ReadoutFormat;
 import dev.alaindustrial.core.environment.FuelRuntime;
 import dev.alaindustrial.core.environment.FuelTally;
+import dev.alaindustrial.core.environment.LavaBurnTally;
 import dev.alaindustrial.menu.MachineMenu;
 import dev.alaindustrial.network.MachineStatsPayload;
 import net.minecraft.client.gui.Font;
@@ -83,8 +84,8 @@ final class StatsPanelReadout {
 					ReadoutFormat.compact(stats.itemsProcessed()),
 					stats.itemsProcessed(), false);
 		}
-		// MOD-992: what a fuel generator has done is the fuel it burnt, so its count sits here too.
-		y = stats.fuelBurnt().isPresent() ? fuelBurntRow(px, y, stats.fuelBurnt().get()) : y;
+		// MOD-992, MOD-999: what a generator has done is the fuel or the lava it burnt, so its count sits here too.
+		y = burntRow(px, y, stats);
 
 		y = drawEnergyRows(px, y, stats);
 
@@ -96,8 +97,8 @@ final class StatsPanelReadout {
 		y = statRow(px, y, "gui.alaindustrial.stats.now",
 				ReadoutFormat.rate(stats.euOverWindow(), stats.windowTicks()) + " EU/t",
 				stats.euOverWindow(), false, stale);
-		// A fuel generator's peak is its full output, which the Load row below already reads ("of 8 EU/t"); its
-		// row gives way to the burnt-fuel row above, so the panel keeps its height (MOD-992).
+		// A fuel or geothermal generator's peak is its full output, which the Load row below reads ("of 8 EU/t"); it
+		// gives way to the burnt-fuel or burnt-lava row above, so the panel keeps its height (MOD-992, MOD-999).
 		if (stats.peakEuRate() > 0 && stats.fuel().isEmpty()) {
 			y = statRow(px, y, "gui.alaindustrial.stats.peak",
 					stats.peakEuRate() + " EU/t", stats.peakEuRate(), false);
@@ -110,9 +111,9 @@ final class StatsPanelReadout {
 			y = statRow(px, y, "gui.alaindustrial.stats.load", FuelRuntimeText.loadValue(fuel).getString(),
 					0, false, stale);
 			y = fuel.ticksLeft() >= 0
-					? statRow(px, y, "gui.alaindustrial.stats.fuel_lasts",
+					? statRow(px, y, FuelRuntimeText.lastsLabelKey(fuel),
 							FuelRuntimeText.span(fuel.ticksLeft()).getString(), 0, false, stale)
-					: noteRow(px, y, FuelRuntimeText.noSpan(fuel.ticksLeft()));
+					: noteRow(px, y, FuelRuntimeText.noSpan(fuel));
 		}
 
 		y += 3;
@@ -169,6 +170,14 @@ final class StatsPanelReadout {
 		return y;
 	}
 
+	/** The one row a generator's burnt fuel (MOD-992) or burnt lava (MOD-999) takes; none for any other block. */
+	private int burntRow(int px, int y, MachineStatsPayload stats) {
+		if (stats.fuelBurnt().isPresent()) {
+			return fuelBurntRow(px, y, stats.fuelBurnt().get());
+		}
+		return stats.lavaBurnt().isPresent() ? lavaBurntRow(px, y, stats.lavaBurnt().get()) : y;
+	}
+
 	/**
 	 * "Fuel burnt 46" (MOD-992), and on hover the kinds burnt most, each by its own name ("Coal: 34"), with the
 	 * rest as one line: the panel has no height for a row per kind. A kind whose item is gone from the game (its
@@ -186,6 +195,28 @@ final class StatsPanelReadout {
 			if (burnt.rest() > 0L) {
 				lines.add(Component.translatable("gui.alaindustrial.stats.fuel_burnt_other",
 						ReadoutFormat.exact(burnt.rest())));
+			}
+			graphics.setComponentTooltipForNextFrame(font, lines, mouseX, mouseY);
+		}
+		return next;
+	}
+
+	/**
+	 * "Lava burnt 3 B 250 mB" (MOD-999): whole buckets and the part, never rounded up. On hover the exact figure and
+	 * the EU one bucket gave on average; the panel has no height for a second row.
+	 */
+	private int lavaBurntRow(int px, int y, LavaBurnTally.Shown burnt) {
+		String value = Component.translatable("gui.alaindustrial.stats.lava_burnt_value",
+				ReadoutFormat.exact(burnt.buckets()), burnt.partMb()).getString();
+		int next = statRow(px, y, "gui.alaindustrial.stats.lava_burnt", value, 0, false);
+		if (mouseY >= y - 1 && mouseY < y + STAT_ROW_H - 1 && mouseX >= px + 7 && mouseX < px + PANEL_W - 7) {
+			List<Component> lines = new ArrayList<>();
+			lines.add(Component.translatable("gui.alaindustrial.stats.lava_burnt_exact",
+					ReadoutFormat.exact(burnt.buckets()), burnt.partMb()));
+			long perBucket = burnt.euPerBucket();
+			if (perBucket >= 0L) {
+				lines.add(Component.translatable("gui.alaindustrial.stats.lava_eu_per_bucket",
+						ReadoutFormat.exact(perBucket)));
 			}
 			graphics.setComponentTooltipForNextFrame(font, lines, mouseX, mouseY);
 		}

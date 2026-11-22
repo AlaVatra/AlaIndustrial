@@ -1,0 +1,27 @@
+{
+  "parent": "alaindustrial:geothermal_power",
+  "display": {
+    "icon": {
+      "id": "minecraft:lava_bucket"
+    },
+    "title": {
+      "translate": "advancements.alaindustrial.first_lava.title"
+    },
+    "description": {
+      "translate": "advancements.alaindustrial.first_lava.description"
+    }
+  },
+  "criteria": {
+    "first_lava": {
+      "trigger": "alaindustrial:geothermal_milestone",
+      "conditions": {
+        "milestone": "first_lava"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "first_lava"
+    ]
+  ]
+}

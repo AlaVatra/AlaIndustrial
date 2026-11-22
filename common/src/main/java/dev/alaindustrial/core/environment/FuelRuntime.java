@@ -3,9 +3,9 @@ package dev.alaindustrial.core.environment;
 import org.jspecify.annotations.Nullable;
 
 /**
- * How long a fuel generator's fuel lasts at the load the line really draws (MOD-990), and how that span is
- * shown in plain units. No Minecraft imports, so the L1 lane pins the rule; the block entity and the screens
- * call these methods, so the tested code is the production code.
+ * How long a fuel generator's fuel lasts at the load the line really draws (MOD-990; the geothermal generator's
+ * lava, MOD-1000), and how that span is shown in plain units. No Minecraft imports, so the L1 lane pins the
+ * rule; the block entity and the screens call these methods, so the tested code is the production code.
  *
  * <p><b>Why the real draw and not the full output.</b> The generator burns only while its buffer has room: with
  * one machine drawing 2 EU/t from an 8 EU/t generator it pauses three ticks in four, and the fuel lasts four
@@ -36,10 +36,34 @@ public final class FuelRuntime {
 	}
 
 	/**
-	 * What the statistics carry for a fuel generator: the span ({@link #ticksLeft}, with its two sentinels),
-	 * the line's draw over the window, and the full output the draw is set against ("load 2 of 8 EU/t").
+	 * What a generator burns, for the words its span is shown in (MOD-1000): "Fuel lasts" or "Lava lasts". The
+	 * rule is the same for both; only the source of the burn ticks differs. Its ordinal is the wire format.
 	 */
-	public record Readout(long ticksLeft, long drawEu, int drawTicks, int euPerTick) {
+	public enum Kind {
+		/** A furnace fuel item (the fuel generator, MOD-990). */
+		FUEL,
+		/** Lava from a tank (the geothermal generator, MOD-1000). */
+		LAVA;
+
+		private static final Kind[] VALUES = values();
+
+		/** The kind with this ordinal; anything out of range reads as {@link #FUEL}. */
+		public static Kind byOrdinal(int ordinal) {
+			return ordinal >= 0 && ordinal < VALUES.length ? VALUES[ordinal] : FUEL;
+		}
+	}
+
+	/**
+	 * What the statistics carry for a fuel generator: the span ({@link #ticksLeft}, with its two sentinels),
+	 * the line's draw over the window, the full output the draw is set against ("load 2 of 8 EU/t"), and what
+	 * burns ({@link Kind}).
+	 */
+	public record Readout(long ticksLeft, long drawEu, int drawTicks, int euPerTick, Kind kind) {
+
+		/** A furnace fuel generator's readout (MOD-990). */
+		public Readout(long ticksLeft, long drawEu, int drawTicks, int euPerTick) {
+			this(ticksLeft, drawEu, drawTicks, euPerTick, Kind.FUEL);
+		}
 	}
 
 	/** A block that answers {@link Readout}; {@code null} while it measures nothing (no statistics chip). */

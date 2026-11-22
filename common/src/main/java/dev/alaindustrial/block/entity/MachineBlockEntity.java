@@ -434,6 +434,15 @@ public abstract class MachineBlockEntity extends EnergyBlockEntity implements Wo
 		return upgrades.stack(i);
 	}
 
+	/**
+	 * Whether a player may take {@code chip} out of the upgrade panel now (MOD-996). Always, unless a machine
+	 * holds something only that chip makes room for: the geothermal generator keeps its cistern while the lava
+	 * is over the plain tank.
+	 */
+	public boolean mayRemoveUpgrade(ItemStack chip) {
+		return true;
+	}
+
 	// --- Battery drawer (MOD-679): one slot whose item the machine drains into its own buffer ---
 
 	/** Whether this machine has a battery drawer. */

@@ -1,4 +1,16 @@
 {
 	"type": "minecraft:block",
-	"pools": [{ "rolls": 1.0, "entries": [{ "type": "minecraft:item", "name": "alaindustrial:geothermal_generator" }], "conditions": [{ "condition": "minecraft:survives_explosion" }] }]
+	"pools": [{
+		"rolls": 1.0,
+		"entries": [{
+			"type": "minecraft:item",
+			"name": "alaindustrial:geothermal_generator",
+			"functions": [{
+				"function": "minecraft:copy_components",
+				"source": "block_entity",
+				"include": ["alaindustrial:stored_lava", "minecraft:max_stack_size"]
+			}]
+		}],
+		"conditions": [{ "condition": "minecraft:survives_explosion" }]
+	}]
 }

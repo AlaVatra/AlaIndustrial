@@ -9,6 +9,10 @@ import dev.alaindustrial.client.screen.GuiRect;
 import dev.alaindustrial.client.screen.MachineScreen;
 import dev.alaindustrial.recipe.AlaProcessingRecipe;
 import dev.alaindustrial.recipe.ChargedCraftRecipe;
+import dev.alaindustrial.recipe.SmeltingChoiceIndex;
+import dev.alaindustrial.client.screen.IronFurnaceScreen;
+import dev.alaindustrial.menu.IronFurnaceMenu;
+import mezz.jei.api.registration.IRecipeTransferRegistration;
 import dev.alaindustrial.recipe.VanillaSmeltingMirror;
 import dev.alaindustrial.registry.ModContent;
 import dev.alaindustrial.registry.ModRecipes;
@@ -97,6 +101,8 @@ public class AlaJeiPlugin implements IModPlugin {
 			// cannot tell the machine smelts ores, food and sand as well.
 			if (kind == ModRecipes.SMELTING) {
 				machineRecipes.addAll(VanillaSmeltingMirror.mirrorAll(recipes));
+				// MOD-1018: the cards the furnace's result button has to pick, by the furnace's own order.
+				AlaProcessingJeiCategory.setChoiceOnly(SmeltingChoiceIndex.choiceOnly(recipes));
 			}
 			counts.put(kind.id(), machineRecipes.size());
 			registration.addRecipes(AlaJeiRecipeTypes.byKind(kind), machineRecipes);
@@ -146,6 +152,17 @@ public class AlaJeiPlugin implements IModPlugin {
 		// Iron furnace (MOD-115) — fuel-burning, runs the same vanilla smelting recipes, so it is a
 		// station for the built-in smelting category too. It works no family of ours, hence ModContent.
 		registration.addCraftingStation(RecipeTypes.SMELTING, ModContent.IRON_FURNACE.get());
+	}
+
+	/**
+	 * MOD-1018: the iron furnace's menu has its own type now, so JEI's "+" that moved a smelt into the stock furnace
+	 * menu no longer reaches it; this restores it. Slots as in the vanilla furnace menu: 0 the input, then the
+	 * player's 36 from slot 3.
+	 */
+	@Override
+	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+		registration.addRecipeTransferHandler(IronFurnaceMenu.class, ModContent.IRON_FURNACE_MENU.get(),
+				RecipeTypes.SMELTING, 0, 1, 3, 36);
 	}
 
 	@Override
@@ -199,6 +216,9 @@ public class AlaJeiPlugin implements IModPlugin {
 						JeiRecipeForms.of(form).type());
 			}
 		}
+		// MOD-1018: the iron furnace opens its own screen now, so its arrow needs the click area the stock furnace
+		// screen had. The rect covers the arrow measured on the vanilla 26.3 furnace.png (x 80..101, y 35..49).
+		registration.addRecipeClickArea(IronFurnaceScreen.class, 79, 34, 24, 17, RecipeTypes.SMELTING);
 		// MOD-080: keep JEI's item grid clear of the upgrade panel + gear tab on every machine screen.
 		registration.addGuiContainerHandler((Class) MachineScreen.class, new AlaJeiGuiExtraAreasHandler());
 		// MOD-628: the teleporter remote is not a machine screen, but its tab strip sticks out the same way.

@@ -2,6 +2,7 @@ package dev.alaindustrial.client.compat.rei;
 
 import dev.alaindustrial.client.compat.RecipeCategoryTitle;
 import dev.alaindustrial.client.screen.GuiRect;
+import dev.alaindustrial.client.screen.IronFurnaceScreen;
 import dev.alaindustrial.client.screen.MachineScreen;
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.client.compat.MachineRecipeViewerTargets;
@@ -150,6 +151,10 @@ public class AlaReiPlugin implements REIClientPlugin {
 				registerClickArea(registry, area.screenClass(), area.rect(), ReiRecipeForms.categoryId(form));
 			}
 		}
+		// MOD-1018: the iron furnace opens its own screen now; its arrow (x 80..101, y 35..49 on the vanilla 26.3
+		// furnace.png) opens the vanilla smelting category, as the stock furnace screen's does.
+		registerClickArea(registry, IronFurnaceScreen.class, new GuiRect(79, 34, 24, 17),
+				CategoryIdentifier.of("minecraft", "plugins/smelting"));
 		// MOD-080: keep REI's item grid clear of the upgrade panel + gear tab on every machine screen.
 		registry.exclusionZones().register((Class) MachineScreen.class, new AlaReiExclusionZones());
 		// MOD-628: the teleporter remote is not a machine screen, but its tab strip sticks out the same way.

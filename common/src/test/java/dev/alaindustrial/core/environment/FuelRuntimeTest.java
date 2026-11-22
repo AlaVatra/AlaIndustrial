@@ -147,4 +147,28 @@ class FuelRuntimeTest {
 		meter.tick(11L);
 		assertEquals(new DrawMeter.Window(1L, 1), meter.window(), "the counter went back: only 10 -> 11 counts");
 	}
+
+	/**
+	 * MOD-1000: the geothermal generator's lava runs on the same rule. A full tank of ten buckets (1000 burn ticks
+	 * each at 16 EU/t) and a full 4000 EU buffer, drawn at 4 EU/t, last (160000 + 4000) / 4 ticks: a quarter load
+	 * stretches the lava four times, the buffer is spent at the draw.
+	 */
+	@Test
+	void lavaRunsOnTheSameRule() {
+		long tenBuckets = 10L * 1000L;
+		assertEquals((tenBuckets * 16L + 4000L) / 4L, FuelRuntime.ticksLeft(tenBuckets, 16, 4000L, 4L * 600L, 600));
+		assertEquals(tenBuckets, FuelRuntime.ticksLeft(tenBuckets, 16, 0L, 16L * 600L, 600),
+				"full load: tick for tick");
+	}
+
+	/** MOD-1000: what burns travels with the readout; a fuel generator's readout says fuel, an unknown kind too. */
+	@Test
+	void readoutKindDefaultsToFuelAndRoundTripsItsOrdinal() {
+		assertEquals(FuelRuntime.Kind.FUEL, new FuelRuntime.Readout(1L, 2L, 3, 8).kind());
+		for (FuelRuntime.Kind kind : FuelRuntime.Kind.values()) {
+			assertEquals(kind, FuelRuntime.Kind.byOrdinal(kind.ordinal()));
+		}
+		assertEquals(FuelRuntime.Kind.FUEL, FuelRuntime.Kind.byOrdinal(-1));
+		assertEquals(FuelRuntime.Kind.FUEL, FuelRuntime.Kind.byOrdinal(FuelRuntime.Kind.values().length));
+	}
 }

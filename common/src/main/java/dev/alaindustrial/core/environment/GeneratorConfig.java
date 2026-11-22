@@ -62,6 +62,28 @@ public final class GeneratorConfig {
 			doc = "Ticks of burn a geothermal generator gets per bucket of lava (20 ticks = 1 second).")
 	public static int geothermalBurnTicks = 1000;
 	/**
+	 * Buckets of lava the geothermal generator burns per obsidian shaving it leaves (MOD-995). Counted by buckets,
+	 * so a catalysed bucket (MOD-997) is still one bucket.
+	 */
+	@Knob(section = Section.GENERATORS, min = 1,
+			doc = "Geothermal generator: buckets of lava burnt per obsidian shaving it leaves.")
+	public static int geothermalBucketsPerShaving = 1;
+	/**
+	 * Output of a bucket burnt with blaze powder, in percent of {@link #geothermalEuPerTick} (MOD-997): 150 makes
+	 * 24 EU/t from 16, under the LV cap of 32.
+	 */
+	@Knob(section = Section.GENERATORS, min = 100,
+			doc = "Geothermal generator: output in EU/t while a blaze-catalysed bucket burns, in percent of the plain"
+					+ " output.")
+	public static int geothermalCatalystRatePercent = 150;
+	/**
+	 * EU of a bucket burnt with blaze powder, in percent of a plain bucket (MOD-997): 125 makes 20 000 EU from
+	 * 16 000. The balance check against a blaze rod burnt in the fuel generator is in MOD-997's research.md.
+	 */
+	@Knob(section = Section.GENERATORS, min = 100,
+			doc = "Geothermal generator: EU of a blaze-catalysed bucket of lava, in percent of a plain bucket.")
+	public static int geothermalCatalystEuPercent = 125;
+	/**
 	 * EU/t per adjacent vanilla-water block on the mill's four horizontal sides (0..4 EU/t, no fuel). Reads
 	 * the world directly, never the fluid system.
 	 */

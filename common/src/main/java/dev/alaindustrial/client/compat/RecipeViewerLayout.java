@@ -74,6 +74,12 @@ public final class RecipeViewerLayout {
 	/** Lang key of the tooltip on a bonus-output slot, {@code "Chance: %s%%"} (MOD-960); JEI and REI both use it. */
 	public static final String SECONDARY_CHANCE_KEY = "jei.alaindustrial.secondary_chance";
 
+	/**
+	 * Lang key of the output-slot tooltip line on an electric-furnace card whose result the furnace makes only after
+	 * a press of its result button (MOD-1018); JEI and REI both use it.
+	 */
+	public static final String RESULT_CHOICE_NOTE_KEY = "jei.alaindustrial.result_choice_note";
+
 	/** Whether a bonus output's chance is stated on its slot: below 1 it is a gamble, at 1 it always drops. */
 	public static boolean showsSecondaryChance(double chance) {
 		return chance < 1.0;

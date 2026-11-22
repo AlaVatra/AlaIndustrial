@@ -1,0 +1,28 @@
+{
+  "parent": "alaindustrial:lava_million",
+  "display": {
+    "icon": {
+      "id": "alaindustrial:geothermal_generator"
+    },
+    "title": {
+      "translate": "advancements.alaindustrial.geothermal_station.title"
+    },
+    "description": {
+      "translate": "advancements.alaindustrial.geothermal_station.description"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "station": {
+      "trigger": "alaindustrial:geothermal_milestone",
+      "conditions": {
+        "milestone": "station"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "station"
+    ]
+  ]
+}

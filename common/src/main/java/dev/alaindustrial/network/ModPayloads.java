@@ -128,6 +128,8 @@ public final class ModPayloads {
 			clientbound(ZonePreviewPayload.TYPE, ZonePreviewPayload.CODEC),
 			// MOD-125: one machine's career statistics, pushed from its open menu every 40 ticks.
 			clientbound(MachineStatsPayload.TYPE, MachineStatsPayload.CODEC),
+			// MOD-1018: the options of a furnace's result button, from its open menu when they change.
+			clientbound(ResultChoicePayload.TYPE, ResultChoicePayload.CODEC),
 			// MOD-620: the reactor's core, stack by stack, at most once a second from an open controller.
 			clientbound(ReactorZonePayload.TYPE, ReactorZonePayload.CODEC),
 			// MOD-622: the reactor's event log, at most twice a second from an open controller.

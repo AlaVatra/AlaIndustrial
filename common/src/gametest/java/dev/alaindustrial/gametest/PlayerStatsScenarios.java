@@ -6,6 +6,7 @@ import dev.alaindustrial.block.HorizontalMachineBlock;
 import dev.alaindustrial.block.entity.GeothermalGeneratorBlockEntity;
 import dev.alaindustrial.block.entity.MaceratorBlockEntity;
 import dev.alaindustrial.block.entity.PumpBlockEntity;
+import dev.alaindustrial.block.entity.VulcanizerBlockEntity;
 import dev.alaindustrial.core.fluid.FluidAmounts;
 import dev.alaindustrial.registry.ModContent;
 import dev.alaindustrial.stats.PlayerModStats;
@@ -296,6 +297,10 @@ public final class PlayerStatsScenarios {
 	 * That version was written first, mutation-tested, and found to pass against a mutant that credited
 	 * gross production outside the cap gate. This version fails against exactly that mutant.
 	 *
+	 * <p>Since MOD-1000 a geothermal generator with less room than one burn tick holds its lava, so the only burn
+	 * that meets a partly full buffer is the one it keeps up for a machine on top waiting for its heat (MOD-994):
+	 * a stocked vulcanizer stands on it here, and that burn is what the cap must bite on.
+	 *
 	 * @implements only EU that fit in the buffer is attributed — never gross production.
 	 */
 	public static void bufferCapLimitsAttributedProduction(GameTestHelper helper) {
@@ -309,6 +314,21 @@ public final class PlayerStatsScenarios {
 		geo.setItem(GeothermalGeneratorBlockEntity.INPUT_SLOT, new ItemStack(Items.LAVA_BUCKET));
 		long room = 5L; // < geothermalEuPerTick (16), so the cap must bite on the very first tick
 		geo.getEnergyStorage().setAmountUntracked(geo.getEnergyStorage().getCapacity() - room);
+		// A machine on top waiting for heat: the generator burns with less room than one tick (MOD-994).
+		helper.setBlock(GEO.above(), ModContent.VULCANIZER.get().defaultBlockState());
+		if (!(be(helper, GEO.above()) instanceof VulcanizerBlockEntity vulcanizer)) {
+			helper.fail("vulcanizer block entity missing");
+			return;
+		}
+		vulcanizer.getEnergyStorage().setAmountUntracked(vulcanizer.getEnergyStorage().getCapacity());
+		vulcanizer.setItem(VulcanizerBlockEntity.RAW_RUBBER_SLOT, new ItemStack(ModContent.RAW_RUBBER.get()));
+		vulcanizer.setItem(VulcanizerBlockEntity.SULFUR_SLOT, new ItemStack(ModContent.SULFUR_DUST.get(), 4));
+		BlockPos top = vulcanizer.getBlockPos();
+		vulcanizer.serverTick(helper.getLevel(), top, helper.getLevel().getBlockState(top)); // NO_HEAT: waits
+		if (!vulcanizer.isWaitingOnHeat()) {
+			helper.fail("precondition: the stocked vulcanizer must wait on heat, status=" + vulcanizer.status());
+			return;
+		}
 
 		BlockPos abs = geo.getBlockPos();
 		geo.serverTick(helper.getLevel(), abs, helper.getLevel().getBlockState(abs));

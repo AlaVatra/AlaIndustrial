@@ -84,6 +84,12 @@ public class AlaProcessingCategory implements DisplayCategory<AlaProcessingDispl
 						RecipeViewerLayout.secondaryChancePercent(display.secondaryChance()));
 				entries = entries.map(stack -> stack.copy().tooltip(line));
 			}
+			// MOD-1018: a result the electric furnace makes only after a press of its result button says so, the
+			// same line JEI shows.
+			if (i == 0 && display.resultChoice()) {
+				Component note = Component.translatable(RecipeViewerLayout.RESULT_CHOICE_NOTE_KEY);
+				entries = entries.map(stack -> stack.copy().tooltip(note));
+			}
 			widgets.add(Widgets.createSlot(point).entries(entries).markOutput());
 		}
 

@@ -368,6 +368,10 @@ pitest {
                      // name<->constant mapping the JSON depends on can be asserted on the L1 lane
                      // (ReactorMilestoneTest); added here WITH the class, not a release later.
                      'dev.alaindustrial.advancement.ReactorMilestone',
+                     // MOD-1001: the geothermal chain's step names and thresholds, and the "running at the
+                     // same time" rule of its Station step (GeothermalMilestoneTest).
+                     'dev.alaindustrial.advancement.GeothermalMilestone',
+                     'dev.alaindustrial.advancement.GeothermalStation',
                      // MOD-603: the concentrator's generated cell table. Minecraft-free because it is
                      // nothing but numbers, and in the run rather than excluded because L1 CAN reach
                      // it: ConcentratorCellGeometryTest asserts the eight cells really are the eight
@@ -743,6 +747,10 @@ pitest {
             // method takes a Direction set, so L1 cannot call it and it holds no mutant; the channels it
             // shows are pinned by the both-lane game tests (SmartWireChannelScenarios).
             'dev.alaindustrial.core.monitor.MonitorWire',
+            // MOD-1018: the furnace menus' result-button contract. An interface with no body whose methods
+            // take and return ResultChoicePayload, a record of ItemStacks, so L1 cannot call it and it holds no
+            // mutant; the press and the options are covered by the both-lane ResultChoiceScenarios.
+            'dev.alaindustrial.menu.ResultChoiceMenu',
             // MOD-715 batch 1: the network core's node interfaces. Every operation names a Minecraft
             // type (Level, BlockPos, Direction) or a type that does (FluidTank), so L1 cannot call
             // them; their only body is CableNode.lineBuffer's one-line default. The networks that ask

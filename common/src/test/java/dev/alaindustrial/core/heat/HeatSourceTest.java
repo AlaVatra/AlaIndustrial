@@ -21,6 +21,7 @@ class HeatSourceTest {
 		assertHeat(HeatSource.LAVA_CAULDRON, 2);
 		assertHeat(HeatSource.ELECTRIC_HEATER, 3);
 		assertHeat(HeatSource.GENERATOR, 1);
+		assertHeat(HeatSource.GEOTHERMAL_GENERATOR, 2);
 	}
 
 	/**
@@ -39,6 +40,8 @@ class HeatSourceTest {
 		assertEquals(1, HeatSource.LAVA_CAULDRON.iconIndex());
 		assertEquals(2, HeatSource.ELECTRIC_HEATER.iconIndex());
 		assertEquals(3, HeatSource.GENERATOR.iconIndex(), "the generator shares the campfire's level, not its icon");
+		assertEquals(4, HeatSource.GEOTHERMAL_GENERATOR.iconIndex(),
+				"the geothermal generator shares the lava's level, not its icon");
 	}
 
 	@Test
@@ -52,6 +55,8 @@ class HeatSourceTest {
 		assertEquals("gui.alaindustrial.vulcanizer.heat.electric_heater",
 				HeatSource.ELECTRIC_HEATER.translationKey());
 		assertEquals("gui.alaindustrial.vulcanizer.heat.generator", HeatSource.GENERATOR.translationKey());
+		assertEquals("gui.alaindustrial.vulcanizer.heat.geothermal_generator",
+				HeatSource.GEOTHERMAL_GENERATOR.translationKey());
 	}
 
 	/**
@@ -70,6 +75,7 @@ class HeatSourceTest {
 		assertEquals(4, HeatSource.LAVA_CAULDRON.ordinal());
 		assertEquals(5, HeatSource.ELECTRIC_HEATER.ordinal());
 		assertEquals(6, HeatSource.GENERATOR.ordinal());
+		assertEquals(7, HeatSource.GEOTHERMAL_GENERATOR.ordinal());
 	}
 
 	/**

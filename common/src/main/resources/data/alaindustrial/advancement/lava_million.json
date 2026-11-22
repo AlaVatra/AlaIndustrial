@@ -1,0 +1,28 @@
+{
+  "parent": "alaindustrial:first_lava",
+  "display": {
+    "icon": {
+      "id": "minecraft:magma_block"
+    },
+    "title": {
+      "translate": "advancements.alaindustrial.lava_million.title"
+    },
+    "description": {
+      "translate": "advancements.alaindustrial.lava_million.description"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "million": {
+      "trigger": "alaindustrial:geothermal_milestone",
+      "conditions": {
+        "milestone": "lava_million"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "million"
+    ]
+  ]
+}

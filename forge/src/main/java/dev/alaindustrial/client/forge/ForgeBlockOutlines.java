@@ -22,6 +22,10 @@ public final class ForgeBlockOutlines {
 
 	/** Swaps the extracted outline's shape for the first shared outline that answers, if any. */
 	public static void replace(LevelRenderState levelState) {
+		// MOD-1017: a mod that extracts a second world (a portal mod) can pass no level state.
+		if (levelState == null) {
+			return;
+		}
 		BlockOutlineRenderState outline = levelState.blockOutlineRenderState;
 		ClientLevel level = Minecraft.getInstance().level;
 		if (outline == null || outline.customRenderer() != null || level == null) {

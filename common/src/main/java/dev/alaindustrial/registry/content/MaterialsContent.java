@@ -349,7 +349,10 @@ public final class MaterialsContent {
 			item("carbon_briquette", CarbonBriquetteItem::new, s -> ModContent.CARBON_BRIQUETTE = s),
 			plain("ceramic_plate", s -> ModContent.CERAMIC_PLATE = s),
 			// MOD-638 — what a shovel takes off a soot layer; the compressor presses 16 into a briquette.
-			plain("soot", s -> ModContent.SOOT = s));
+			plain("soot", s -> ModContent.SOOT = s),
+			// MOD-995 — the geothermal generator's byproduct: shavings per bucket of lava, nine of them a dust.
+			plain("obsidian_shavings", s -> ModContent.OBSIDIAN_SHAVINGS = s),
+			plain("obsidian_dust", s -> ModContent.OBSIDIAN_DUST = s));
 
 	private static final List<BlockEntityDef<?>> BLOCK_ENTITIES = List.of();
 
@@ -460,6 +463,8 @@ public final class MaterialsContent {
 		show(out, ModContent.DIAMOND_DUST);
 		show(out, ModContent.EMERALD_DUST);
 		show(out, ModContent.LAPIS_DUST);
+		show(out, ModContent.OBSIDIAN_SHAVINGS);
+		show(out, ModContent.OBSIDIAN_DUST);
 		// Uranium's raw ore/dust/ingot live in the nuclear line below (11); only its plate is a
 		// plain material here.
 		show(out, ModContent.URANIUM_PLATE);
@@ -541,6 +546,8 @@ public final class MaterialsContent {
 		show(out, ModContent.DIAMOND_DUST);
 		show(out, ModContent.EMERALD_DUST);
 		show(out, ModContent.LAPIS_DUST);
+		show(out, ModContent.OBSIDIAN_SHAVINGS);
+		show(out, ModContent.OBSIDIAN_DUST);
 		show(out, ModContent.TIN_DUST);
 		show(out, ModContent.SILVER_DUST);
 		show(out, ModContent.NICKEL_DUST);
@@ -575,6 +582,7 @@ public final class MaterialsContent {
 		show(out, ModContent.EMPTY_CHIP);
 		show(out, ModContent.MUTE_CHIP);
 		show(out, ModContent.STATS_CHIP);
+		show(out, ModContent.CISTERN_CHIP);
 		show(out, ModContent.OVERCLOCKER_CHIP_I);
 		show(out, ModContent.OVERCLOCKER_CHIP_II);
 		show(out, ModContent.OVERCLOCKER_CHIP_III);
