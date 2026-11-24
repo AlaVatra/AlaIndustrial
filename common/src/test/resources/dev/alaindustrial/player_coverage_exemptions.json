@@ -18,6 +18,27 @@
       ],
       "reason": "MOD-518: a creative-only tool that survival cannot obtain; the book is a survival walkthrough, while the wiki keeps the page as a reference (gen_guide_book.BOOK_EXCLUDE)."
     },
+    "elevator_shaft": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-769: the spec is written (docs/blocks/utility/elevator.md) but stays at status spec until the owner has ridden the elevator in game (owner decision 2026-11-22: an early in-game check first). Remove the row when the spec turns implemented."
+    },
+    "elevator_station": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-769: the spec is written (docs/blocks/utility/elevator.md) but stays at status spec until the owner has ridden the elevator in game (owner decision 2026-11-22: an early in-game check first). Remove the row when the spec turns implemented."
+    },
+    "elevator_winch": {
+      "surfaces": [
+        "book",
+        "wiki"
+      ],
+      "reason": "MOD-769: the spec is written (docs/blocks/utility/elevator.md) but stays at status spec until the owner has ridden the elevator in game (owner decision 2026-11-22: an early in-game check first). Remove the row when the spec turns implemented."
+    },
     "high_altitude_wind_mill": {
       "surfaces": [
         "book"

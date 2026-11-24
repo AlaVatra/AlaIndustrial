@@ -1,0 +1,193 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "alaindustrial:block/escalator_skirt",
+    "skirt": "alaindustrial:block/escalator_skirt",
+    "underside": "alaindustrial:block/escalator_underside"
+  },
+  "elements": [
+    {
+      "__comment": "wall_w",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        2,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "__comment": "wall_e",
+      "from": [
+        14,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "west"
+        },
+        "south": {
+          "uv": [
+            14,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt"
+        },
+        "up": {
+          "uv": [
+            14,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            14,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "__comment": "shell",
+      "from": [
+        2,
+        0,
+        0
+      ],
+      "to": [
+        14,
+        13,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            3,
+            14,
+            16.0
+          ],
+          "texture": "#underside",
+          "cullface": "north"
+        },
+        "down": {
+          "uv": [
+            2,
+            0.0,
+            14,
+            16.0
+          ],
+          "texture": "#underside",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "V": "alaindustrial:invar_plate",
+    "E": "alaindustrial:electronic_circuit",
+    "D": "alaindustrial:escalator_drive",
+    "R": "alaindustrial:reinforced_bearing"
+  },
+  "pattern": [
+    "VEV",
+    " D ",
+    " R "
+  ],
+  "result": {
+    "id": "alaindustrial:escalator_drive_mv"
+  }
+}

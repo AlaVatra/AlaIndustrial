@@ -4,6 +4,8 @@ import dev.alaindustrial.Config;
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.KnobSnapshot;
 import dev.alaindustrial.core.apiary.ApiaryConfig;
+import dev.alaindustrial.core.elevator.ElevatorConfig;
+import dev.alaindustrial.core.escalator.EscalatorConfig;
 import dev.alaindustrial.core.environment.GeneratorConfig;
 import dev.alaindustrial.core.machine.MachineRates;
 import dev.alaindustrial.entity.MobBeaconConfig;
@@ -209,6 +211,18 @@ public final class ServerBalance {
 		return current.intValue("distillationColumnDuration", Config.distillationColumnDuration);
 	}
 
+	public static int elevatorBuffer() {
+		return current.intValue("elevatorBuffer", ElevatorConfig.elevatorBuffer);
+	}
+
+	public static int elevatorCostPerBlock() {
+		return current.intValue("elevatorCostPerBlock", ElevatorConfig.elevatorCostPerBlock);
+	}
+
+	public static int elevatorMaxHeight() {
+		return current.intValue("elevatorMaxHeight", ElevatorConfig.elevatorMaxHeight);
+	}
+
 	public static int electricBowBuffer() {
 		return current.intValue("electricBowBuffer", ToolConfig.electricBowBuffer);
 	}
@@ -319,6 +333,30 @@ public final class ServerBalance {
 
 	public static int energyPackBuffer() {
 		return current.intValue("energyPackBuffer", ToolConfig.energyPackBuffer);
+	}
+
+	public static int escalatorBufferLv() {
+		return current.intValue("escalatorBufferLv", EscalatorConfig.escalatorBufferLv);
+	}
+
+	public static int escalatorBufferMv() {
+		return current.intValue("escalatorBufferMv", EscalatorConfig.escalatorBufferMv);
+	}
+
+	public static int escalatorMaxSectionsLv() {
+		return current.intValue("escalatorMaxSectionsLv", EscalatorConfig.escalatorMaxSectionsLv);
+	}
+
+	public static int escalatorMaxSectionsMv() {
+		return current.intValue("escalatorMaxSectionsMv", EscalatorConfig.escalatorMaxSectionsMv);
+	}
+
+	public static double escalatorSpeedLv() {
+		return current.doubleValue("escalatorSpeedLv", EscalatorConfig.escalatorSpeedLv);
+	}
+
+	public static double escalatorSpeedMv() {
+		return current.doubleValue("escalatorSpeedMv", EscalatorConfig.escalatorSpeedMv);
 	}
 
 	public static int euPerXp() {

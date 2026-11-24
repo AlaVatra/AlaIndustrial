@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "down=false,up=false": {
+      "model": "alaindustrial:block/elevator_shaft_single"
+    },
+    "down=true,up=false": {
+      "model": "alaindustrial:block/elevator_shaft_top"
+    },
+    "down=false,up=true": {
+      "model": "alaindustrial:block/elevator_shaft_bottom"
+    },
+    "down=true,up=true": {
+      "model": "alaindustrial:block/elevator_shaft"
+    }
+  }
+}

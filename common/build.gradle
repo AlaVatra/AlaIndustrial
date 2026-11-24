@@ -858,6 +858,9 @@ pitest {
             // MOD-787: the block breaker's moving parts, written by
             // tools/model_sources/block_breaker/build_block_breaker.py — generated number tables like the above.
             'dev.alaindustrial.client.render.BlockBreakerGeometry',
+            // MOD-769: the elevator's cabin and rope, written by
+            // tools/model_sources/elevator/build_elevator.py — a generated number table like the above.
+            'dev.alaindustrial.client.render.ElevatorGeometry',
             // MOD-787: the fake-player seam — its one method takes a ServerLevel and returns a ServerPlayer,
             // so L1 cannot call it; the both-lane block breaker scenarios break through it on each loader.
             'dev.alaindustrial.core.world.FakePlayers',

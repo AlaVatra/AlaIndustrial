@@ -12,6 +12,9 @@ import static dev.alaindustrial.registry.content.TabEntries.show;
 
 import dev.alaindustrial.block.ConcreteRailBeamBlock;
 import dev.alaindustrial.block.ElectricMobTrapBlock;
+import dev.alaindustrial.block.EscalatorDriveBlock;
+import dev.alaindustrial.block.EscalatorLandingBlock;
+import dev.alaindustrial.block.EscalatorSectionBlock;
 import dev.alaindustrial.block.EngravedLetterPlateBlock;
 import dev.alaindustrial.block.EngravedPlateBlock;
 import dev.alaindustrial.block.EnrichedUraniumTorchBlock;
@@ -35,6 +38,7 @@ import dev.alaindustrial.block.TemperedIronScaffoldBlock;
 import dev.alaindustrial.block.TemperedIronTrapdoorBlock;
 import dev.alaindustrial.block.TodoClipboardBlock;
 import dev.alaindustrial.block.entity.ElectricMobTrapBlockEntity;
+import dev.alaindustrial.block.entity.EscalatorDriveBlockEntity;
 import dev.alaindustrial.block.entity.FluidTapBlockEntity;
 import dev.alaindustrial.block.entity.MobBeaconBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerBlockEntity;
@@ -42,6 +46,7 @@ import dev.alaindustrial.block.entity.MobRepellerHvBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerMvBlockEntity;
 import dev.alaindustrial.block.entity.TodoClipboardBlockEntity;
 import dev.alaindustrial.compat.LineBlockProps;
+import dev.alaindustrial.core.energy.EnergyTier;
 import dev.alaindustrial.menu.ElectricMobTrapMenu;
 import dev.alaindustrial.menu.MobRepellerHvMenu;
 import dev.alaindustrial.menu.MobRepellerMenu;
@@ -494,6 +499,25 @@ public final class DecorContent {
 					.noCollision().noOcclusion(),
 			s -> ModContent.TODO_CLIPBOARD = s);
 
+	// MOD-969 — the escalator: the drive is the bottom landing set into the floor and runs the band (two tiers of one
+	// class), the sections are the steps (two blocks tall, like a door: stair and glass balustrade), the landing closes
+	// the chain at the top. The section is not a full block (R-PHY-05); a piston pops it, as it does a door.
+	public static final BlockDef<EscalatorDriveBlock> ESCALATOR_DRIVE = block("escalator_drive",
+			p -> new EscalatorDriveBlock(EnergyTier.LV, p),
+			machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL)), s -> ModContent.ESCALATOR_DRIVE = s);
+	public static final BlockDef<EscalatorDriveBlock> ESCALATOR_DRIVE_MV = block("escalator_drive_mv",
+			p -> new EscalatorDriveBlock(EnergyTier.MV, p),
+			machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL)), s -> ModContent.ESCALATOR_DRIVE_MV = s);
+	public static final BlockDef<EscalatorSectionBlock> ESCALATOR_SECTION = block("escalator_section",
+			EscalatorSectionBlock::new,
+			machine(MapColor.TERRACOTTA_LIGHT_BLUE,
+					p -> LineBlockProps.popsOnPush(p).strength(2.0f, 6.0f).sound(SoundType.METAL).noOcclusion()),
+			s -> ModContent.ESCALATOR_SECTION = s);
+	public static final BlockDef<EscalatorLandingBlock> ESCALATOR_LANDING = block("escalator_landing",
+			EscalatorLandingBlock::new,
+			machine(MapColor.TERRACOTTA_LIGHT_BLUE, p -> p.strength(2.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.ESCALATOR_LANDING = s);
+
 	/** This domain's blocks, in declaration order — collected since {@code beginBlocks()} above. */
 	private static final List<BlockDef<?>> BLOCKS = endBlocks();
 
@@ -617,7 +641,12 @@ public final class DecorContent {
 			blockItem("hazard_stripe_block", s -> ModContent.HAZARD_STRIPE_BLOCK_ITEM = s),
 			// MOD-905 — blank clipboards stack to 16; a written one carries max_stack_size 1 from its block entity.
 			blockItem("todo_clipboard", p -> new TodoClipboardItem(registeredBlock("todo_clipboard"), p.stacksTo(16)),
-					s -> ModContent.TODO_CLIPBOARD_ITEM = s));
+					s -> ModContent.TODO_CLIPBOARD_ITEM = s),
+			// MOD-969 — the escalator's four blocks.
+			blockItem("escalator_drive", s -> ModContent.ESCALATOR_DRIVE_ITEM = s),
+			blockItem("escalator_drive_mv", s -> ModContent.ESCALATOR_DRIVE_MV_ITEM = s),
+			blockItem("escalator_section", s -> ModContent.ESCALATOR_SECTION_ITEM = s),
+			blockItem("escalator_landing", s -> ModContent.ESCALATOR_LANDING_ITEM = s));
 
 	private static final List<BlockEntityDef<?>> BLOCK_ENTITIES = List.of(
 			blockEntity("mob_repeller", MobRepellerBlockEntity.class, MobRepellerBlockEntity::new,
@@ -637,7 +666,10 @@ public final class DecorContent {
 					s -> ModContent.FLUID_TAP_BE = s, FLUID_TAP),
 			// MOD-905 — the to-do clipboard: its list and its owner.
 			blockEntity("todo_clipboard", TodoClipboardBlockEntity.class, TodoClipboardBlockEntity::new,
-					s -> ModContent.TODO_CLIPBOARD_BE = s, TODO_CLIPBOARD));
+					s -> ModContent.TODO_CLIPBOARD_BE = s, TODO_CLIPBOARD),
+			// MOD-969 — the escalator drive: one type for both tiers, the entity reads its tier from its block.
+			blockEntity("escalator_drive", EscalatorDriveBlockEntity.class, EscalatorDriveBlockEntity::new,
+					s -> ModContent.ESCALATOR_DRIVE_BE = s, ESCALATOR_DRIVE, ESCALATOR_DRIVE_MV));
 
 	private static final List<MenuDef<?>> MENUS = List.of(
 			// MOD-278 — the guard field, one menu per tier (same class, tier-specific client factory:
@@ -794,6 +826,15 @@ public final class DecorContent {
 	/** The sound absorber (MOD-804): next to the repellers, the other block that acts on its surroundings. */
 	public static void soundAbsorber(Sink out) {
 		show(out, ModContent.SOUND_ABSORBER_ITEM);
+	}
+
+	/** The escalator (MOD-969): its drive landings, the top landing, then the section (the one shaped model). */
+	public static void escalator(Sink out) {
+		show(out, ModContent.ESCALATOR_DRIVE_ITEM);
+		show(out, ModContent.ESCALATOR_DRIVE_MV_ITEM);
+		show(out, ModContent.ESCALATOR_LANDING_ITEM);
+		// Shaped, so it closes the group (MOD-574): cubes first.
+		show(out, ModContent.ESCALATOR_SECTION_ITEM);
 	}
 
 	/** The to-do clipboard (MOD-905): a plan on the wall of the base, beside the other blocks a base is fitted with. */

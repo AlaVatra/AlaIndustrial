@@ -233,6 +233,13 @@
     "alaindustrial:quarry_head",
     "alaindustrial:quarry_bridge_beam",
     "alaindustrial:quarry_cart",
-    "alaindustrial:quarry_shell"
+    "alaindustrial:quarry_shell",
+    "alaindustrial:elevator_winch",
+    "alaindustrial:elevator_shaft",
+    "alaindustrial:elevator_station",
+    "alaindustrial:escalator_section",
+    "alaindustrial:escalator_drive",
+    "alaindustrial:escalator_drive_mv",
+    "alaindustrial:escalator_landing"
   ]
 }

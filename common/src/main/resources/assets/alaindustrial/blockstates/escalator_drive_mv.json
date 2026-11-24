@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,mode=off": {
+      "model": "alaindustrial:block/escalator_drive_mv"
+    },
+    "facing=north,mode=ready": {
+      "model": "alaindustrial:block/escalator_drive_mv_on"
+    },
+    "facing=north,mode=running": {
+      "model": "alaindustrial:block/escalator_drive_mv_on"
+    },
+    "facing=east,mode=off": {
+      "model": "alaindustrial:block/escalator_drive_mv",
+      "y": 90
+    },
+    "facing=east,mode=ready": {
+      "model": "alaindustrial:block/escalator_drive_mv_on",
+      "y": 90
+    },
+    "facing=east,mode=running": {
+      "model": "alaindustrial:block/escalator_drive_mv_on",
+      "y": 90
+    },
+    "facing=south,mode=off": {
+      "model": "alaindustrial:block/escalator_drive_mv",
+      "y": 180
+    },
+    "facing=south,mode=ready": {
+      "model": "alaindustrial:block/escalator_drive_mv_on",
+      "y": 180
+    },
+    "facing=south,mode=running": {
+      "model": "alaindustrial:block/escalator_drive_mv_on",
+      "y": 180
+    },
+    "facing=west,mode=off": {
+      "model": "alaindustrial:block/escalator_drive_mv",
+      "y": 270
+    },
+    "facing=west,mode=ready": {
+      "model": "alaindustrial:block/escalator_drive_mv_on",
+      "y": 270
+    },
+    "facing=west,mode=running": {
+      "model": "alaindustrial:block/escalator_drive_mv_on",
+      "y": 270
+    }
+  }
+}

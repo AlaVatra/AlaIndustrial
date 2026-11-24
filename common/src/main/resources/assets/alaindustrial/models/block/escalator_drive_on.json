@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "north": "alaindustrial:block/escalator_drive_side",
+    "east": "alaindustrial:block/escalator_drive_side",
+    "south": "alaindustrial:block/escalator_drive_side",
+    "west": "alaindustrial:block/escalator_drive_side",
+    "down": "alaindustrial:block/escalator_drive_side",
+    "up": "alaindustrial:block/escalator_drive_top_on",
+    "particle": "alaindustrial:block/escalator_drive_side"
+  }
+}

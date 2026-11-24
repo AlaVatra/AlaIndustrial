@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "#c:plates/tempered_iron",
+    "C": "alaindustrial:copper_coil",
+    "I": "alaindustrial:iron_gear",
+    "M": "alaindustrial:machine_casing",
+    "B": "alaindustrial:basic_bearing"
+  },
+  "pattern": [
+    "PCP",
+    "IMI",
+    "PBP"
+  ],
+  "result": {
+    "id": "alaindustrial:escalator_drive"
+  }
+}

@@ -4,6 +4,7 @@ import dev.alaindustrial.attachment.PlayerDataCarryOver;
 import dev.alaindustrial.block.CableDyeing;
 import dev.alaindustrial.block.OilLiquidBlock;
 import dev.alaindustrial.block.entity.TownDispatcherBlockEntity;
+import dev.alaindustrial.block.entity.elevator.ElevatorRescue;
 import dev.alaindustrial.block.entity.reactor.ReactorCraterWaves;
 import dev.alaindustrial.chat.WelcomeMessage;
 import dev.alaindustrial.command.demo.DemoStandDropSweeper;
@@ -155,7 +156,9 @@ public final class ServerHookRoster {
 			// MOD-695: the server's balance, so the client's tooltips and screens show its numbers.
 			ConfigSync::sendOnJoin,
 			// MOD-827: the player's record is taken in this world, so no shift worker is given it later.
-			RecordNumberLedger::notePlayerOnJoin);
+			RecordNumberLedger::notePlayerOnJoin,
+			// MOD-769: a player who left in a moving elevator cabin is set down on it, not left in the shaft's air.
+			ElevatorRescue::onPlayerJoin);
 
 	/**
 	 * A server level unloaded. MOD-401: one sweep over everything that holds per-level state instead of

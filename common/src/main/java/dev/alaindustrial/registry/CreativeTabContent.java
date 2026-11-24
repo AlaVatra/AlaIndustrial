@@ -216,6 +216,8 @@ public final class CreativeTabContent {
 		DecorContent.metalBlocks(out);
 		DecorContent.mobRepellers(out);
 		DecorContent.soundAbsorber(out);
+		// MOD-969 — the escalator, the next block that fits out a base.
+		DecorContent.escalator(out);
 		// MOD-905 - the to-do clipboard, a block a base is fitted with; shaped, so it lands among the models.
 		DecorContent.todoClipboard(out);
 		ProcessingContent.stations(out);

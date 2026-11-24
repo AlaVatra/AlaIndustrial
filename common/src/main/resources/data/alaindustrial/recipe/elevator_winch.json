@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "K": "alaindustrial:tempered_iron_chain",
+    "G": "alaindustrial:iron_gear",
+    "O": "alaindustrial:copper_coil",
+    "M": "alaindustrial:machine_casing",
+    "L": "alaindustrial:reinforced_glass",
+    "B": "alaindustrial:basic_bearing"
+  },
+  "pattern": [
+    "KGK",
+    "OMO",
+    "LBL"
+  ],
+  "result": {
+    "id": "alaindustrial:elevator_winch"
+  }
+}

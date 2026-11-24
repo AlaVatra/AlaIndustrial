@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "alaindustrial:block/escalator_landing"
+    },
+    "facing=east": {
+      "model": "alaindustrial:block/escalator_landing",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "alaindustrial:block/escalator_landing",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "alaindustrial:block/escalator_landing",
+      "y": 270
+    }
+  }
+}
