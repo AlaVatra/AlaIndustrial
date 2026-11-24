@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "#c:plates/tempered_iron",
+    "H": "alaindustrial:hazard_stripe_block"
+  },
+  "pattern": [
+    "PHP"
+  ],
+  "result": {
+    "id": "alaindustrial:escalator_landing"
+  }
+}

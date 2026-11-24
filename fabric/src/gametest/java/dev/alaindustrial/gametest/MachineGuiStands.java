@@ -143,6 +143,9 @@ public final class MachineGuiStands {
         // ── Apiary Map — the list full with a Nether row, and empty with its hint (MOD-923) ──
         ApiaryMapGuiStand.shoot(context);
 
+        // ── Elevator panel — every kind of floor button, two columns, a broken shaft (MOD-769) ──
+        ElevatorPanelGuiStand.shoot(context);
+
         // ── Machines without custom screens (one shot each) ──────────────────────────
         shootMenu(context, "gui_moonlit_solar_panel", ModContent.MOONLIT_SOLAR_PANEL_MENU.get(), "Moonlit Solar Panel");
 

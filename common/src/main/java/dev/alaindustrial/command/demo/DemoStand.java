@@ -164,6 +164,7 @@ public final class DemoStand {
 			new MachinesZone(),
 			new CableRunsZone(),
 			new TransportZone(),
+			new ElevatorZone(),
 			new OreWallZone(),
 			new MiscZone(),
 			new LossLaneZone(),
@@ -175,7 +176,9 @@ public final class DemoStand {
 			new MetalFamilyZone(),
 			new ShowcaseZone(),
 			new ItemlessRowZone(),
-			new MonitorWallZone());
+			new MonitorWallZone(),
+			// MOD-969 — a short working escalator in the free rows in front of the bench.
+			new EscalatorZone());
 
 	/** Clear the stand envelope above the floor, sweep the entities that spilled, then build everything. */
 	public static void buildAll(ServerLevel level, BlockPos origin) {

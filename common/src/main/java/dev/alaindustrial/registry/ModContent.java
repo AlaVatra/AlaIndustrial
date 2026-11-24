@@ -20,6 +20,7 @@ import dev.alaindustrial.menu.IronFurnaceMenu;
 import dev.alaindustrial.menu.ElectricHeaterMenu;
 import dev.alaindustrial.menu.ElectricMobTrapMenu;
 import dev.alaindustrial.menu.ElectrumChestMenu;
+import dev.alaindustrial.menu.ElevatorPanelMenu;
 import dev.alaindustrial.menu.EnergyCondenserMenu;
 import dev.alaindustrial.menu.ExtractorMenu;
 import dev.alaindustrial.menu.FermenterMenu;
@@ -282,6 +283,11 @@ public final class ModContent {
 	public static Supplier<Block> MOB_BEACON = unbound("MOB_BEACON");
 	public static Supplier<Block> MOB_BEACON_MV = unbound("MOB_BEACON_MV");
 	public static Supplier<Block> MOB_BEACON_HV = unbound("MOB_BEACON_HV");
+	// MOD-969 — the escalator: two drive tiers, the step section and the top landing.
+	public static Supplier<Block> ESCALATOR_DRIVE = unbound("ESCALATOR_DRIVE");
+	public static Supplier<Block> ESCALATOR_DRIVE_MV = unbound("ESCALATOR_DRIVE_MV");
+	public static Supplier<Block> ESCALATOR_SECTION = unbound("ESCALATOR_SECTION");
+	public static Supplier<Block> ESCALATOR_LANDING = unbound("ESCALATOR_LANDING");
 	/** The Tap (MOD-837): lets any fluid out of a tank or pipe; liquid experience comes out as orbs. */
 	public static Supplier<Block> FLUID_TAP = unbound("FLUID_TAP");
 	/** The to-do clipboard (MOD-905): a list of items with counts and notes, hung on any face of a block. */
@@ -428,6 +434,10 @@ public final class ModContent {
 	public static Supplier<Block> QUARRY_CART = unbound("QUARRY_CART");
 	public static Supplier<Block> QUARRY_SHELL = unbound("QUARRY_SHELL");
 	public static Supplier<Block> REINFORCED_PLATE_BLOCK = unbound("REINFORCED_PLATE_BLOCK");
+	/** MOD-769 — the elevator: winch (the shaft's lid), shaft frame and landing station. */
+	public static Supplier<Block> ELEVATOR_WINCH = unbound("ELEVATOR_WINCH");
+	public static Supplier<Block> ELEVATOR_SHAFT = unbound("ELEVATOR_SHAFT");
+	public static Supplier<Block> ELEVATOR_STATION = unbound("ELEVATOR_STATION");
 	public static Supplier<Block> REINFORCED_PLATE_SLAB = unbound("REINFORCED_PLATE_SLAB");
 	public static Supplier<Block> REINFORCED_PLATE_STAIRS = unbound("REINFORCED_PLATE_STAIRS");
 	public static Supplier<Block> HAZARD_STRIPE_BLOCK = unbound("HAZARD_STRIPE_BLOCK");
@@ -1061,6 +1071,10 @@ public final class ModContent {
 	public static Supplier<BlockItem> MOB_BEACON_ITEM = unbound("MOB_BEACON_ITEM");
 	public static Supplier<BlockItem> MOB_BEACON_MV_ITEM = unbound("MOB_BEACON_MV_ITEM");
 	public static Supplier<BlockItem> MOB_BEACON_HV_ITEM = unbound("MOB_BEACON_HV_ITEM");
+	public static Supplier<BlockItem> ESCALATOR_DRIVE_ITEM = unbound("ESCALATOR_DRIVE_ITEM");
+	public static Supplier<BlockItem> ESCALATOR_DRIVE_MV_ITEM = unbound("ESCALATOR_DRIVE_MV_ITEM");
+	public static Supplier<BlockItem> ESCALATOR_SECTION_ITEM = unbound("ESCALATOR_SECTION_ITEM");
+	public static Supplier<BlockItem> ESCALATOR_LANDING_ITEM = unbound("ESCALATOR_LANDING_ITEM");
 	public static Supplier<BlockItem> FLUID_TAP_ITEM = unbound("FLUID_TAP_ITEM");
 	public static Supplier<BlockItem> TODO_CLIPBOARD_ITEM = unbound("TODO_CLIPBOARD_ITEM");
 	public static Supplier<BlockItem> INCUBATOR_ITEM = unbound("INCUBATOR_ITEM");
@@ -1187,6 +1201,9 @@ public final class ModContent {
 	public static Supplier<BlockItem> QUARRY_CART_ITEM = unbound("QUARRY_CART_ITEM");
 	public static Supplier<Item> QUARRY_DRILL_BIT = unbound("QUARRY_DRILL_BIT");
 	public static Supplier<BlockItem> REINFORCED_PLATE_BLOCK_ITEM = unbound("REINFORCED_PLATE_BLOCK_ITEM");
+	public static Supplier<BlockItem> ELEVATOR_WINCH_ITEM = unbound("ELEVATOR_WINCH_ITEM");
+	public static Supplier<BlockItem> ELEVATOR_SHAFT_ITEM = unbound("ELEVATOR_SHAFT_ITEM");
+	public static Supplier<BlockItem> ELEVATOR_STATION_ITEM = unbound("ELEVATOR_STATION_ITEM");
 	public static Supplier<BlockItem> REINFORCED_PLATE_SLAB_ITEM = unbound("REINFORCED_PLATE_SLAB_ITEM");
 	public static Supplier<BlockItem> REINFORCED_PLATE_STAIRS_ITEM = unbound("REINFORCED_PLATE_STAIRS_ITEM");
 	public static Supplier<BlockItem> HAZARD_STRIPE_BLOCK_ITEM = unbound("HAZARD_STRIPE_BLOCK_ITEM");
@@ -1292,6 +1309,8 @@ public final class ModContent {
 	public static Supplier<BlockEntityType<?>> WAREHOUSE_SHELF_BE = unbound("WAREHOUSE_SHELF_BE");
 	/** MOD-950 — the quarry's one ticking object: it reads the frame and holds its buffer. */
 	public static Supplier<BlockEntityType<?>> QUARRY_CONTROLLER_BE = unbound("QUARRY_CONTROLLER_BE");
+	/** MOD-769 — the elevator winch: it reads the shaft, holds the buffer and runs the cabin. */
+	public static Supplier<BlockEntityType<?>> ELEVATOR_WINCH_BE = unbound("ELEVATOR_WINCH_BE");
 	public static Supplier<BlockEntityType<?>> ELECTRIC_HEATER_BE = unbound("ELECTRIC_HEATER_BE");
 	public static Supplier<BlockEntityType<?>> CHARGE_PAD_BE = unbound("CHARGE_PAD_BE");
 	public static Supplier<BlockEntityType<?>> VACUUM_COLLECTOR_BE = unbound("VACUUM_COLLECTOR_BE");
@@ -1301,6 +1320,7 @@ public final class ModContent {
 	public static Supplier<BlockEntityType<?>> MOB_REPELLER_HV_BE = unbound("MOB_REPELLER_HV_BE");
 	public static Supplier<BlockEntityType<?>> ELECTRIC_MOB_TRAP_BE = unbound("ELECTRIC_MOB_TRAP_BE");
 	public static Supplier<BlockEntityType<?>> MOB_BEACON_BE = unbound("MOB_BEACON_BE");
+	public static Supplier<BlockEntityType<?>> ESCALATOR_DRIVE_BE = unbound("ESCALATOR_DRIVE_BE");
 	public static Supplier<BlockEntityType<?>> FLUID_TAP_BE = unbound("FLUID_TAP_BE");
 	public static Supplier<BlockEntityType<?>> TODO_CLIPBOARD_BE = unbound("TODO_CLIPBOARD_BE");
 	public static Supplier<BlockEntityType<?>> INCUBATOR_BE = unbound("INCUBATOR_BE");
@@ -1392,6 +1412,8 @@ public final class ModContent {
 	public static Supplier<MenuType<ChargePadMenu>> CHARGE_PAD_MENU = unbound("CHARGE_PAD_MENU");
 	public static Supplier<MenuType<VacuumCollectorMenu>> VACUUM_COLLECTOR_MENU =
 			unbound("VACUUM_COLLECTOR_MENU");
+	/** Elevator floor panel (MOD-769): one button per floor of the shaft. */
+	public static Supplier<MenuType<ElevatorPanelMenu>> ELEVATOR_PANEL_MENU = unbound("ELEVATOR_PANEL_MENU");
 	/** Teleporter station screen (MOD-093): EU bar, owner, private/public toggle. */
 	public static Supplier<MenuType<TeleporterStationMenu>> TELEPORTER_STATION_MENU =
 			unbound("TELEPORTER_STATION_MENU");

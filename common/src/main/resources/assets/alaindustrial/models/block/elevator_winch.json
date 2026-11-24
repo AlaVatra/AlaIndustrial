@@ -1,0 +1,200 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "winch_band": "alaindustrial:block/elevator_winch_band",
+  "winch_bottom": "alaindustrial:block/elevator_winch_bottom",
+  "winch_front": "alaindustrial:block/elevator_winch_front",
+  "winch_side": "alaindustrial:block/elevator_winch_side",
+  "winch_top": "alaindustrial:block/elevator_winch_top",
+  "particle": "alaindustrial:block/elevator_winch_band"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    2,
+    16
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      14,
+      16,
+      16
+     ],
+     "texture": "#winch_band"
+    },
+    "east": {
+     "uv": [
+      0,
+      14,
+      16,
+      16
+     ],
+     "texture": "#winch_band"
+    },
+    "south": {
+     "uv": [
+      0,
+      14,
+      16,
+      16
+     ],
+     "texture": "#winch_band"
+    },
+    "west": {
+     "uv": [
+      0,
+      14,
+      16,
+      16
+     ],
+     "texture": "#winch_band"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#winch_band"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#winch_bottom",
+     "cullface": "down"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    2,
+    0
+   ],
+   "to": [
+    16,
+    13,
+    16
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      3,
+      16,
+      14
+     ],
+     "texture": "#winch_front",
+     "cullface": "north"
+    },
+    "east": {
+     "uv": [
+      0,
+      3,
+      16,
+      14
+     ],
+     "texture": "#winch_side",
+     "cullface": "east"
+    },
+    "south": {
+     "uv": [
+      0,
+      3,
+      16,
+      14
+     ],
+     "texture": "#winch_side",
+     "cullface": "south"
+    },
+    "west": {
+     "uv": [
+      0,
+      3,
+      16,
+      14
+     ],
+     "texture": "#winch_side",
+     "cullface": "west"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    13,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      0,
+      16,
+      3
+     ],
+     "texture": "#winch_band",
+     "cullface": "north"
+    },
+    "east": {
+     "uv": [
+      0,
+      0,
+      16,
+      3
+     ],
+     "texture": "#winch_band",
+     "cullface": "east"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      3
+     ],
+     "texture": "#winch_band",
+     "cullface": "south"
+    },
+    "west": {
+     "uv": [
+      0,
+      0,
+      16,
+      3
+     ],
+     "texture": "#winch_band",
+     "cullface": "west"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#winch_top",
+     "cullface": "up"
+    }
+   }
+  }
+ ]
+}

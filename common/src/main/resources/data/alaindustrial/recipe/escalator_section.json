@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass_pane",
+    "R": "alaindustrial:rubber",
+    "I": "alaindustrial:iron_gear",
+    "P": "#c:plates/tempered_iron"
+  },
+  "pattern": [
+    "GRG",
+    "IPI",
+    "P P"
+  ],
+  "result": {
+    "id": "alaindustrial:escalator_section",
+    "count": 2
+  }
+}

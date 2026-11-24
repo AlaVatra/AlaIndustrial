@@ -1811,6 +1811,51 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 -- shift no-eu
 "ℹ " {#AAAAAA} + tooltip.alaindustrial.electrum_to_diamond_chest_upgrade.purpose {#AAAAAA}
 == alaindustrial:electrum_wall plain : none
+== alaindustrial:elevator_shaft plain
+-- plain eu
+"ℹ Glass shaft the cabin" {#AAAAAA}
+"rides in, joins by itself" {#AAAAAA}
+-- shift eu
+"ℹ Glass shaft the cabin" {#AAAAAA}
+"rides in, joins by itself" {#AAAAAA}
+-- plain no-eu
+"ℹ Glass shaft the cabin" {#AAAAAA}
+"rides in, joins by itself" {#AAAAAA}
+-- shift no-eu
+"ℹ Glass shaft the cabin" {#AAAAAA}
+"rides in, joins by itself" {#AAAAAA}
+== alaindustrial:elevator_station plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_station.purpose {#AAAAAA}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_station.purpose {#AAAAAA}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_station.purpose {#AAAAAA}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_station.purpose {#AAAAAA}
+== alaindustrial:elevator_winch plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_winch.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.buffer(<"10 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_climb_cost(<"8" {#FFFFFF}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_winch.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.buffer(<"10 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_climb_cost(<"8" {#FFFFFF}>) {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_max_height(<"64" {#FFFFFF}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_winch.purpose {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_climb_cost(<"8" {#FFFFFF}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_winch.purpose {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_climb_cost(<"8" {#FFFFFF}>) {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.elevator_max_height(<"64" {#FFFFFF}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:emerald_dust plain : none
 == alaindustrial:empty_can plain : none
 == alaindustrial:empty_chip plain : none
@@ -1939,6 +1984,68 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:engraved_plate_8 plain : none
 == alaindustrial:engraved_plate_9 plain : none
 == alaindustrial:enriched_uranium_torch plain : none
+== alaindustrial:escalator_drive plain
+-- plain eu
+"ℹ Set into the floor below the first" {#AAAAAA}
+"step, runs the band while someone rides" {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_sections(<"8" {#FFFFFF}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ Set into the floor below the first" {#AAAAAA}
+"step, runs the band while someone rides" {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_sections(<"8" {#FFFFFF}>) {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.buffer(<"2 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ Set into the floor below the first" {#AAAAAA}
+"step, runs the band while someone rides" {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_sections(<"8" {#FFFFFF}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ Set into the floor below the first" {#AAAAAA}
+"step, runs the band while someone rides" {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_sections(<"8" {#FFFFFF}>) {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:escalator_drive_mv plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_drive_mv.purpose {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_sections(<"16" {#FFFFFF}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_drive_mv.purpose {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_sections(<"16" {#FFFFFF}>) {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_mv(<"MV" {#55FF55}>) {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.buffer(<"8 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_drive_mv.purpose {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_sections(<"16" {#FFFFFF}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_drive_mv.purpose {#AAAAAA}
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_sections(<"16" {#FFFFFF}>) {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_mv(<"MV" {#55FF55}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:escalator_landing plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_landing.purpose {#AAAAAA}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_landing.purpose {#AAAAAA}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_landing.purpose {#AAAAAA}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_landing.purpose {#AAAAAA}
+== alaindustrial:escalator_section plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_section.purpose {#AAAAAA}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_section.purpose {#AAAAAA}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_section.purpose {#AAAAAA}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.escalator_section.purpose {#AAAAAA}
 == alaindustrial:extractor plain
 -- plain eu
 "ℹ " {#AAAAAA} + tooltip.alaindustrial.extractor.purpose {#AAAAAA}

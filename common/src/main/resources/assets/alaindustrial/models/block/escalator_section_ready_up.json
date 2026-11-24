@@ -1,0 +1,380 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "alaindustrial:block/escalator_skirt",
+    "skirt": "alaindustrial:block/escalator_skirt",
+    "underside": "alaindustrial:block/escalator_underside",
+    "tread": "alaindustrial:block/escalator_tread",
+    "riser": "alaindustrial:block/escalator_riser",
+    "arrow": "alaindustrial:block/escalator_arrow"
+  },
+  "elements": [
+    {
+      "__comment": "wall_w",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        2,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            2,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            2,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            2,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            2,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "__comment": "wall_e",
+      "from": [
+        14,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "west"
+        },
+        "south": {
+          "uv": [
+            14,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt"
+        },
+        "up": {
+          "uv": [
+            14,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            14,
+            0.0,
+            16.0,
+            16.0
+          ],
+          "texture": "#skirt",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "__comment": "tread_low",
+      "from": [
+        2,
+        0,
+        8
+      ],
+      "to": [
+        14,
+        5,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            2,
+            0,
+            14,
+            5
+          ],
+          "texture": "#riser",
+          "cullface": "south"
+        },
+        "up": {
+          "uv": [
+            2,
+            8,
+            14,
+            16
+          ],
+          "texture": "#tread"
+        },
+        "down": {
+          "uv": [
+            2,
+            8,
+            14,
+            16.0
+          ],
+          "texture": "#underside",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "__comment": "tread_high",
+      "from": [
+        2,
+        0,
+        0
+      ],
+      "to": [
+        14,
+        13,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            3,
+            14,
+            16.0
+          ],
+          "texture": "#underside",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            2,
+            0,
+            14,
+            8
+          ],
+          "texture": "#riser"
+        },
+        "up": {
+          "uv": [
+            2,
+            8,
+            14,
+            16
+          ],
+          "texture": "#tread"
+        },
+        "down": {
+          "uv": [
+            2,
+            0.0,
+            14,
+            8
+          ],
+          "texture": "#underside",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "__comment": "arrow_low",
+      "from": [
+        5,
+        5,
+        9
+      ],
+      "to": [
+        11,
+        5.5,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            10.5,
+            11,
+            11
+          ],
+          "texture": "#arrow"
+        },
+        "east": {
+          "uv": [
+            9,
+            10.5,
+            15,
+            11
+          ],
+          "texture": "#arrow"
+        },
+        "south": {
+          "uv": [
+            5,
+            10.5,
+            11,
+            11
+          ],
+          "texture": "#arrow"
+        },
+        "west": {
+          "uv": [
+            9,
+            10.5,
+            15,
+            11
+          ],
+          "texture": "#arrow"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#arrow"
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "__comment": "arrow_high",
+      "from": [
+        5,
+        13,
+        1
+      ],
+      "to": [
+        11,
+        13.5,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            2.5,
+            11,
+            3
+          ],
+          "texture": "#arrow"
+        },
+        "east": {
+          "uv": [
+            1,
+            2.5,
+            7,
+            3
+          ],
+          "texture": "#arrow"
+        },
+        "south": {
+          "uv": [
+            5,
+            2.5,
+            11,
+            3
+          ],
+          "texture": "#arrow"
+        },
+        "west": {
+          "uv": [
+            1,
+            2.5,
+            7,
+            3
+          ],
+          "texture": "#arrow"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#arrow"
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

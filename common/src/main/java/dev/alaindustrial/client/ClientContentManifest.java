@@ -21,6 +21,7 @@ import dev.alaindustrial.block.entity.HighAltitudeWindMillBlockEntity;
 import dev.alaindustrial.block.entity.IncubatorBlockEntity;
 import dev.alaindustrial.block.entity.IronChestBlockEntity;
 import dev.alaindustrial.block.entity.MobWheelBlockEntity;
+import dev.alaindustrial.block.entity.ElevatorWinchBlockEntity;
 import dev.alaindustrial.block.entity.QuarryControllerBlockEntity;
 import dev.alaindustrial.block.entity.RadiantSolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.ReactorDoorBlockEntity;
@@ -66,6 +67,7 @@ import dev.alaindustrial.client.render.NetworkOverlayRenderer;
 import dev.alaindustrial.client.render.ObstructionHighlight;
 import dev.alaindustrial.client.render.PiezoPlateTint;
 import dev.alaindustrial.client.render.PiezoPlateXray;
+import dev.alaindustrial.client.render.ElevatorWinchRenderer;
 import dev.alaindustrial.client.render.QuarryFrameRenderer;
 import dev.alaindustrial.client.render.RadiantSolarPanelBlockEntityRenderer;
 import dev.alaindustrial.client.render.ReactorDoorBlockEntityRenderer;
@@ -353,6 +355,9 @@ public final class ClientContentManifest {
 			// MOD-950 - the formed quarry frame in the designer's model, drawn from its controller head.
 			renderer(ContentManifest.blockEntity("quarry_controller", QuarryControllerBlockEntity.class),
 					QuarryFrameRenderer::new),
+			// MOD-769 — the elevator's cabin, ropes and counterweight, drawn by the winch from its trip.
+			renderer(ContentManifest.blockEntity("elevator_winch", ElevatorWinchBlockEntity.class),
+					ElevatorWinchRenderer::new),
 			// Garden Drone (MOD-277): the drone is geometry this renderer places above its station,
 			// not an entity.
 			renderer(ContentManifest.blockEntity("garden_drone_station", GardenDroneStationBlockEntity.class),
@@ -412,7 +417,11 @@ public final class ClientContentManifest {
 			// MOD-905 — the to-do clipboard's list, written on its sheet.
 			renderer(ContentManifest.blockEntity("todo_clipboard",
 							dev.alaindustrial.block.entity.TodoClipboardBlockEntity.class),
-					dev.alaindustrial.client.render.TodoClipboardRenderer::new));
+					dev.alaindustrial.client.render.TodoClipboardRenderer::new),
+			// MOD-969: the escalator's moving treads, arrow lights and handrails, drawn by its drive for the chain.
+			renderer(ContentManifest.blockEntity("escalator_drive",
+					dev.alaindustrial.block.entity.EscalatorDriveBlockEntity.class),
+					dev.alaindustrial.client.render.EscalatorDriveRenderer::new));
 
 	// ─────────────────────────────────────────────────────────────────────────────────────────
 	// Model layers

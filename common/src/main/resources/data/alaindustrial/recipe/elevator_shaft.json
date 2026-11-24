@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": "#c:plates/tempered_iron",
+    "G": "alaindustrial:reinforced_glass"
+  },
+  "pattern": [
+    "P P",
+    "GGG",
+    "P P"
+  ],
+  "result": {
+    "id": "alaindustrial:elevator_shaft",
+    "count": 4
+  }
+}

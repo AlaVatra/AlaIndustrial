@@ -453,6 +453,22 @@
   },
   "worn_rotor_creak": {
     "subtitle": "subtitles.alaindustrial.worn_rotor_creak",
-    "sounds": [{ "name": "alaindustrial:worn_rotor_creak", "stream": false, "preload": true }]
+    "sounds": [
+      {
+        "name": "alaindustrial:worn_rotor_creak",
+        "stream": false,
+        "preload": true
+      }
+    ]
+  },
+  "escalator_hum": {
+    "subtitle": "subtitles.alaindustrial.escalator_hum",
+    "sounds": [
+      {
+        "name": "alaindustrial:escalator_hum",
+        "stream": false,
+        "preload": true
+      }
+    ]
   }
 }

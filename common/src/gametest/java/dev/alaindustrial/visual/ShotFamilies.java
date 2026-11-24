@@ -148,6 +148,12 @@ public final class ShotFamilies {
                             + "the dimension only on a row from another one, a 'Cross out' button at the right of "
                             + "every row inside the panel; an empty map shows its hint lines wrapped inside the "
                             + "panel")},
+            new Object[] {"gui_elevator_panel_", new Family(ShotGroup.GUI, List.of("R-GUI-01", "R-GUI-03"),
+                    "Elevator floor panel (MOD-769): one button per floor laid out like a cabin's panel, Floor 1 at "
+                            + "the bottom and the top floor at the top, up to eight in a column; the cabin's floor "
+                            + "gold-rimmed and marked 'here', an open floor dark with its price, a shut floor grey "
+                            + "(its price red when the winch lacks the EU); a broken shaft shuts every button and "
+                            + "says why under them in red, all inside the panel")},
             new Object[] {"gui_settlement_core_", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
                     "Settlement core (MOD-831, MOD-842): the energy bar on the left, the readout beside it "
                             + "(power state, radius, houses, workers, upkeep, owner; no tier row) inside the "

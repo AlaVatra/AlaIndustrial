@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "#c:plates/tempered_iron",
+    "C": "alaindustrial:electronic_circuit",
+    "G": "alaindustrial:reinforced_glass",
+    "D": "minecraft:iron_door",
+    "E": "alaindustrial:copper_cable"
+  },
+  "pattern": [
+    "PCP",
+    "GDG",
+    "PEP"
+  ],
+  "result": {
+    "id": "alaindustrial:elevator_station"
+  }
+}

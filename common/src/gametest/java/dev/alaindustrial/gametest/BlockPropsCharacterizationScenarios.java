@@ -57,6 +57,7 @@ public final class BlockPropsCharacterizationScenarios {
 			"diesel push=pops ticks=none",
 			"enriched_uranium_torch push=pops ticks=none",
 			"enriched_uranium_wall_torch push=pops ticks=none",
+			"escalator_section push=pops ticks=none",
 			"fuel_oil push=pops ticks=none",
 			"hive_attachment push=pops ticks=none",
 			"honey push=pops ticks=none",

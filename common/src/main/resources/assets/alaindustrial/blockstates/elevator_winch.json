@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "assembled=false,facing=north,lit=false": {
+      "model": "alaindustrial:block/elevator_winch_fault"
+    },
+    "assembled=false,facing=north,lit=true": {
+      "model": "alaindustrial:block/elevator_winch_fault"
+    },
+    "assembled=true,facing=north,lit=false": {
+      "model": "alaindustrial:block/elevator_winch"
+    },
+    "assembled=true,facing=north,lit=true": {
+      "model": "alaindustrial:block/elevator_winch"
+    },
+    "assembled=false,facing=east,lit=false": {
+      "model": "alaindustrial:block/elevator_winch_fault",
+      "y": 90
+    },
+    "assembled=false,facing=east,lit=true": {
+      "model": "alaindustrial:block/elevator_winch_fault",
+      "y": 90
+    },
+    "assembled=true,facing=east,lit=false": {
+      "model": "alaindustrial:block/elevator_winch",
+      "y": 90
+    },
+    "assembled=true,facing=east,lit=true": {
+      "model": "alaindustrial:block/elevator_winch",
+      "y": 90
+    },
+    "assembled=false,facing=south,lit=false": {
+      "model": "alaindustrial:block/elevator_winch_fault",
+      "y": 180
+    },
+    "assembled=false,facing=south,lit=true": {
+      "model": "alaindustrial:block/elevator_winch_fault",
+      "y": 180
+    },
+    "assembled=true,facing=south,lit=false": {
+      "model": "alaindustrial:block/elevator_winch",
+      "y": 180
+    },
+    "assembled=true,facing=south,lit=true": {
+      "model": "alaindustrial:block/elevator_winch",
+      "y": 180
+    },
+    "assembled=false,facing=west,lit=false": {
+      "model": "alaindustrial:block/elevator_winch_fault",
+      "y": 270
+    },
+    "assembled=false,facing=west,lit=true": {
+      "model": "alaindustrial:block/elevator_winch_fault",
+      "y": 270
+    },
+    "assembled=true,facing=west,lit=false": {
+      "model": "alaindustrial:block/elevator_winch",
+      "y": 270
+    },
+    "assembled=true,facing=west,lit=true": {
+      "model": "alaindustrial:block/elevator_winch",
+      "y": 270
+    }
+  }
+}

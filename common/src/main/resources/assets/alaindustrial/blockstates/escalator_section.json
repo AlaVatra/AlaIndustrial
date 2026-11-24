@@ -1,0 +1,1444 @@
+{
+  "variants": {
+    "bottom=false,facing=north,fast=false,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=false,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=false,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=true,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper"
+    },
+    "bottom=false,facing=north,fast=true,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top"
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=false,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 90
+    },
+    "bottom=false,facing=east,fast=true,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 90
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=false,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 180
+    },
+    "bottom=false,facing=south,fast=true,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 180
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=false,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper",
+      "y": 270
+    },
+    "bottom=false,facing=west,fast=true,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_top",
+      "y": 270
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=false,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=false,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=true,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom"
+    },
+    "bottom=true,facing=north,fast=true,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single"
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=false,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 90
+    },
+    "bottom=true,facing=east,fast=true,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 90
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=false,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 180
+    },
+    "bottom=true,facing=south,fast=true,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 180
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=false,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_off",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_off_last",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=lower,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_running",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=off,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=off,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=off,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=off,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=ready,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=ready,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=ready,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=ready,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=running,reversed=false,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=running,reversed=false,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=running,reversed=true,top=false": {
+      "model": "alaindustrial:block/escalator_section_upper_bottom",
+      "y": 270
+    },
+    "bottom=true,facing=west,fast=true,half=upper,mode=running,reversed=true,top=true": {
+      "model": "alaindustrial:block/escalator_section_upper_single",
+      "y": 270
+    }
+  }
+}

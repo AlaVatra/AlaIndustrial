@@ -20,6 +20,9 @@ import dev.alaindustrial.block.CesuBlock;
 import dev.alaindustrial.block.ChargePadBlock;
 import dev.alaindustrial.block.DiamondChestBlock;
 import dev.alaindustrial.block.ElectrumChestBlock;
+import dev.alaindustrial.block.ElevatorShaftBlock;
+import dev.alaindustrial.block.ElevatorStationBlock;
+import dev.alaindustrial.block.ElevatorWinchBlock;
 import dev.alaindustrial.block.EnergyCondenserBlock;
 import dev.alaindustrial.block.GoldChestBlock;
 import dev.alaindustrial.block.IronChestBlock;
@@ -36,6 +39,7 @@ import dev.alaindustrial.block.entity.CesuBlockEntity;
 import dev.alaindustrial.block.entity.ChargePadBlockEntity;
 import dev.alaindustrial.block.entity.DiamondChestBlockEntity;
 import dev.alaindustrial.block.entity.ElectrumChestBlockEntity;
+import dev.alaindustrial.block.entity.ElevatorWinchBlockEntity;
 import dev.alaindustrial.block.entity.EnergyCondenserBlockEntity;
 import dev.alaindustrial.block.entity.GoldChestBlockEntity;
 import dev.alaindustrial.block.entity.IronChestBlockEntity;
@@ -56,6 +60,7 @@ import dev.alaindustrial.menu.ChargePadMenu;
 import dev.alaindustrial.menu.DiamondChestMenu;
 import dev.alaindustrial.menu.DoubleChestMenu;
 import dev.alaindustrial.menu.ElectrumChestMenu;
+import dev.alaindustrial.menu.ElevatorPanelMenu;
 import dev.alaindustrial.menu.EnergyCondenserMenu;
 import dev.alaindustrial.menu.GoldChestMenu;
 import dev.alaindustrial.menu.IronChestMenu;
@@ -80,6 +85,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 
+// size-justified: a declarative table under the §10 norm of 600 lines per domain (MOD-711); the elevator's
+// blocks (MOD-769) took it over 500.
 /**
  * The Storage domain of the content manifest (MOD-711; coding.md §1, owner decision D5). Storage: energy stores
  * from the battery box up, the chests and the storage module, item pipes, and the monitoring wall that watches a
@@ -173,6 +180,20 @@ public final class StorageContent {
 			block("vacuum_collector", VacuumCollectorBlock::new,
 					machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL)),
 					s -> ModContent.VACUUM_COLLECTOR = s);
+	// MOD-769 — the elevator (variant A, owner 2026-11-22): a glass shaft of frames that join by themselves, a station
+	// with the doors and the call panel on every floor, and the winch as the shaft's lid. Frames and stations collide
+	// only with their walls and do not occlude (the inside is the cabin's way); the winch is a whole machine cell.
+	public static final BlockDef<ElevatorWinchBlock> ELEVATOR_WINCH =
+			block("elevator_winch", ElevatorWinchBlock::new,
+					machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL)), s -> ModContent.ELEVATOR_WINCH = s);
+	public static final BlockDef<ElevatorShaftBlock> ELEVATOR_SHAFT =
+			block("elevator_shaft", ElevatorShaftBlock::new,
+					machine(p -> p.strength(2.0f, 6.0f).sound(SoundType.GLASS).noOcclusion()),
+					s -> ModContent.ELEVATOR_SHAFT = s);
+	public static final BlockDef<ElevatorStationBlock> ELEVATOR_STATION =
+			block("elevator_station", ElevatorStationBlock::new,
+					machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL).noOcclusion()),
+					s -> ModContent.ELEVATOR_STATION = s);
 
 	/** This domain's blocks, in declaration order — collected since {@code beginBlocks()} above. */
 	private static final List<BlockDef<?>> BLOCKS = endBlocks();
@@ -281,7 +302,11 @@ public final class StorageContent {
 			chestUpgrade("gold_to_electrum_chest_upgrade", ChestUpgrade.GOLD_TO_ELECTRUM,
 					s -> ModContent.GOLD_TO_ELECTRUM_CHEST_UPGRADE = s),
 			chestUpgrade("electrum_to_diamond_chest_upgrade", ChestUpgrade.ELECTRUM_TO_DIAMOND,
-					s -> ModContent.ELECTRUM_TO_DIAMOND_CHEST_UPGRADE = s));
+					s -> ModContent.ELECTRUM_TO_DIAMOND_CHEST_UPGRADE = s),
+			// MOD-769 — the elevator, appended at the tail.
+			blockItem("elevator_winch", s -> ModContent.ELEVATOR_WINCH_ITEM = s),
+			blockItem("elevator_shaft", s -> ModContent.ELEVATOR_SHAFT_ITEM = s),
+			blockItem("elevator_station", s -> ModContent.ELEVATOR_STATION_ITEM = s));
 
 	private static ItemDef chestUpgrade(String id, ChestUpgrade upgrade, Consumer<Supplier<Item>> bind) {
 		return item(id, p -> new ChestUpgradeItem(p, upgrade), bind);
@@ -329,7 +354,10 @@ public final class StorageContent {
 			blockEntity("shielding_chest", ShieldingChestBlockEntity.class, ShieldingChestBlockEntity::new,
 					s -> ModContent.SHIELDING_CHEST_BE = s, SHIELDING_CHEST),
 			blockEntity("vacuum_collector", VacuumCollectorBlockEntity.class, VacuumCollectorBlockEntity::new,
-					s -> ModContent.VACUUM_COLLECTOR_BE = s, VACUUM_COLLECTOR));
+					s -> ModContent.VACUUM_COLLECTOR_BE = s, VACUUM_COLLECTOR),
+			// MOD-769 — the elevator's one ticking object: the winch runs the cabin.
+			blockEntity("elevator_winch", ElevatorWinchBlockEntity.class, ElevatorWinchBlockEntity::new,
+					s -> ModContent.ELEVATOR_WINCH_BE = s, ELEVATOR_WINCH));
 
 	private static final List<MenuDef<?>> MENUS = List.of(
 			menu("battery_box", BatteryBoxMenu::new, s -> ModContent.BATTERY_BOX_MENU = s),
@@ -356,7 +384,9 @@ public final class StorageContent {
 			menu("monitor_core", MonitorCoreMenu::new,
 					s -> ModContent.MONITOR_CORE_MENU = s),
 			// MOD-802 — the vacuum collector's 3x3 buffer.
-			menu("vacuum_collector", VacuumCollectorMenu::new, s -> ModContent.VACUUM_COLLECTOR_MENU = s));
+			menu("vacuum_collector", VacuumCollectorMenu::new, s -> ModContent.VACUUM_COLLECTOR_MENU = s),
+			// MOD-769 — the elevator's floor panel: one button per floor, opened at the station the cabin stands at.
+			menu("elevator_panel", ElevatorPanelMenu::new, s -> ModContent.ELEVATOR_PANEL_MENU = s));
 
 	/** Everything this domain declares; {@link dev.alaindustrial.registry.ContentManifest#DOMAINS} joins it in. */
 	public static final Domain DOMAIN = new Domain("Storage", BLOCKS, ITEMS, BLOCK_ENTITIES, MENUS);
@@ -480,5 +510,9 @@ public final class StorageContent {
 		show(out, ModContent.MONITOR_PANEL_ITEM);
 		show(out, ModContent.SMART_WIRE_ITEM);
 		show(out, ModContent.CAPACITY_CARD);
+		// MOD-769 — the elevator in the order it is built: station, shaft frame, winch.
+		show(out, ModContent.ELEVATOR_STATION_ITEM);
+		show(out, ModContent.ELEVATOR_SHAFT_ITEM);
+		show(out, ModContent.ELEVATOR_WINCH_ITEM);
 	}
 }

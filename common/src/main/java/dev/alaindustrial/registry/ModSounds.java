@@ -145,6 +145,8 @@ public final class ModSounds {
 	public static Supplier<SoundEvent> CHEST_UPGRADE = unbound("CHEST_UPGRADE");
 	/** The quiet one-shot of a refused chest upgrade: wrong rung, wrong block, one item on a pair (MOD-944). */
 	public static Supplier<SoundEvent> CHEST_UPGRADE_REFUSED = unbound("CHEST_UPGRADE_REFUSED");
+	/** The escalator's running drive (MOD-969, pattern C): a soft motor hum and the even ticking of the steps. */
+	public static Supplier<SoundEvent> ESCALATOR_HUM = unbound("ESCALATOR_HUM");
 
 	/**
 	 * Every sound event, in one shared registration order. Both loaders replay this list; see
@@ -257,7 +259,10 @@ public final class ModSounds {
 			// MOD-944 — a one-shot of the in-place chest upgrade; variable like the chest's own open/close.
 			variableRange("chest_upgrade", s -> CHEST_UPGRADE = s),
 			// MOD-944 — the refusal: its own soft error buzz, the vanilla locked-chest sound read as a door.
-			variableRange("chest_upgrade_refused", s -> CHEST_UPGRADE_REFUSED = s));
+			variableRange("chest_upgrade_refused", s -> CHEST_UPGRADE_REFUSED = s),
+			// MOD-969 — the escalator's band; the owner chose the candidate motor_steps (2026-11-22). One drive runs a
+			// band, so the range follows the volume like any single machine.
+			variableRange("escalator_hum", s -> ESCALATOR_HUM = s));
 
 	private ModSounds() {
 	}
