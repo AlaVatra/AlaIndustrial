@@ -94,7 +94,7 @@ public final class ComponentBlueprints {
 	 * All on the crafting table (0, position 1): the copper coil from cable and tin, then the resonance coil
 	 * around it; the choke from invar plates, coils and a circuit; the reinforced choke around the choke and
 	 * the advanced one around that. Then the resonance chip bouncing off a plain solar panel (1, position 2,
-	 * BAD), going into a daylight panel in the same cell, which grows into the mirror concentrator (GOOD).
+	 * BAD), going into a daylight panel in the same cell, which grows into the Reinforced Solar Panel (GOOD).
 	 */
 	public static final BlueprintDef COILS_AND_CHOKES = new BlueprintDef("coils_and_chokes",
 			List.of(COPPER_COIL, CHOKE, CHOKE_REINFORCED, CHOKE_ADVANCED, RESONANCE_COIL, RESONANCE_CHIP),
@@ -114,9 +114,8 @@ public final class ComponentBlueprints {
 							motions(1, "+" + RESONANCE_CHIP, "-" + RESONANCE_CHIP)),
 					new Step(List.of(table(0, 0), panelAt(DAYLIGHT_SOLAR_PANEL, 2)), 1, 2, List.of(), Verdict.NONE,
 							motions(1, "+" + RESONANCE_CHIP)),
-					new Step(List.of(table(0, 0), new Placement(RADIANT_SOLAR_PANEL, 2, 0, 0,
-							Map.of("assembled", "false", "facing", "south"))), 1, 2, List.of(), Verdict.GOOD,
-							List.of())));
+					new Step(List.of(table(0, 0), new Placement(REINFORCED_SOLAR_PANEL, 2, 0, 0, Map.of())), 1, 2,
+							List.of(), Verdict.GOOD, List.of())));
 
 	/**
 	 * Grass (0, position 1) giving cotton seeds; the seeds planted on a trellis over wet farmland (lower half

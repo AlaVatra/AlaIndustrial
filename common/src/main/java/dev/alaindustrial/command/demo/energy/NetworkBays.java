@@ -8,24 +8,18 @@ import static dev.alaindustrial.command.demo.energy.Expectation.delivers;
 import static dev.alaindustrial.command.demo.energy.Expectation.discharges;
 import static dev.alaindustrial.command.demo.energy.Expectation.fed;
 import static dev.alaindustrial.command.demo.energy.Expectation.nearFirst;
-import static dev.alaindustrial.command.demo.energy.Expectation.notMoreThan;
 import static dev.alaindustrial.command.demo.energy.Expectation.underFed;
 import static dev.alaindustrial.command.demo.energy.Expectation.when;
 import static net.minecraft.core.Direction.EAST;
 import static net.minecraft.core.Direction.NORTH;
 import static net.minecraft.core.Direction.SOUTH;
-import static net.minecraft.core.Direction.WEST;
 
-import dev.alaindustrial.block.ConcentratorPart;
-import dev.alaindustrial.block.ConcentratorStructure;
 import dev.alaindustrial.registry.ModContent;
 import java.util.List;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 
 /**
  * Bays E16–E30 of the energy stand (MOD-799): lines with loss, storage at night and on a short generator, the
- * consumers with an unknown need, a multiblock generator touched through several cells, mixed cable grades, and
+ * consumers with an unknown need, the full-block solar panels of both branches, mixed cable grades, and
  * two gaps the owner can close with a cable to split or merge networks. Same slot rules as {@link PriorityBays}.
  */
 final class NetworkBays {
@@ -34,7 +28,7 @@ final class NetworkBays {
 
 	static List<Bay> all() {
 		return List.of(copperTen(), copperTwenty(), nightSolar(), unknownNeeds(), unknownNearerShort(),
-				concentrator(), mixedGrades(), electrumTrunk(), gapSplit(), gapMerge(), boxCoversShortSource(),
+				fullBlockSolar(), mixedGrades(), electrumTrunk(), gapSplit(), gapMerge(), boxCoversShortSource(),
 				sourceOffBoxFeeds(), boxBehindSource(), machineOnEveryCable(), shortBusFourMachines());
 	}
 
@@ -103,36 +97,20 @@ final class NetworkBays {
 	}
 
 	/**
-	 * Two Radiant concentrators side by side (ADR-027): A meets its line through one cell, B through all six
-	 * outer faces of its bottom tier. The network counts B's host once, so B's box gains no more than A's.
+	 * The two full-block third rungs (MOD-1031) on one line with a charged box and a machine: by day the Reinforced
+	 * Solar Panel feeds it, at night the Bronze Lunar Panel, and the box covers what either falls short of.
+	 * {@code /time set midnight} shows the night case.
 	 */
-	private static Bay concentrator() {
-		return EnergyStand.slot(20, "E21", "Concentrator 1 vs 6 cells", w -> {
-			concentratorAt(w, "GA", 1, 1);
-			w.cable(3, 2);
-			w.store("BA", 3, 3, NORTH, 0L);
-			concentratorAt(w, "GB", 6, 1);
-			w.run(5, 1, 5, 3);
-			w.run(6, 3, 8, 3);
-			w.run(8, 2, 8, 1);
-			w.store("BB", 9, 1, WEST, 0L);
-		}, notMoreThan("BB", "BA", 1.15));
-	}
-
-	/** A grown panel at bay-local {@code (x, 1, z)} plus its seven sections, assembled facing north. */
-	private static void concentratorAt(BayWriter w, String name, int x, int z) {
-		BlockPos core = w.at(x, 1, z);
-		w.place(core, ModContent.RADIANT_SOLAR_PANEL.get().defaultBlockState());
-		for (ConcentratorPart part : ConcentratorPart.CELLS) {
-			if (part != ConcentratorPart.CORE) {
-				w.place(core.offset(part.worldOffset(Direction.NORTH)),
-						ModContent.CONCENTRATOR_SECTION.get().defaultBlockState());
-			}
-		}
-		if (!w.dry()) {
-			ConcentratorStructure.tryAssemble(w.level(), core);
-		}
-		w.generator(name, core);
+	private static Bay fullBlockSolar() {
+		return EnergyStand.slot(20, "E21", "T3 solar day and night", w -> {
+			w.set(1, 1, 1, ModContent.REINFORCED_SOLAR_PANEL.get());
+			w.generator("GD", w.at(1, 1, 1));
+			w.set(3, 1, 1, ModContent.BRONZE_LUNAR_PANEL.get());
+			w.generator("GN", w.at(3, 1, 1));
+			w.run(1, 2, 5, 2);
+			w.store("B1", 0, 2, EAST, 10_000L);
+			w.machine("M1", 6, 2, EAST);
+		}, fed("M1"));
 	}
 
 	/** Gold, then copper, then tin to the far machine, a machine on the gold and one on the copper. */

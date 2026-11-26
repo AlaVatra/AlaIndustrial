@@ -44,6 +44,7 @@ import dev.alaindustrial.block.entity.MobBeaconBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerHvBlockEntity;
 import dev.alaindustrial.block.entity.MobRepellerMvBlockEntity;
+import dev.alaindustrial.block.entity.QuarrySocketBlockEntity;
 import dev.alaindustrial.block.entity.TodoClipboardBlockEntity;
 import dev.alaindustrial.compat.LineBlockProps;
 import dev.alaindustrial.core.energy.EnergyTier;
@@ -669,7 +670,11 @@ public final class DecorContent {
 					s -> ModContent.TODO_CLIPBOARD_BE = s, TODO_CLIPBOARD),
 			// MOD-969 — the escalator drive: one type for both tiers, the entity reads its tier from its block.
 			blockEntity("escalator_drive", EscalatorDriveBlockEntity.class, EscalatorDriveBlockEntity::new,
-					s -> ModContent.ESCALATOR_DRIVE_BE = s, ESCALATOR_DRIVE, ESCALATOR_DRIVE_MV));
+					s -> ModContent.ESCALATOR_DRIVE_BE = s, ESCALATOR_DRIVE, ESCALATOR_DRIVE_MV),
+			// MOD-1025 — the quarry's socket foundation, only while it is the socket: where Forge lends its ports.
+			blockEntity("quarry_socket", QuarrySocketBlockEntity.class, QuarrySocketBlockEntity::new,
+					s -> ModContent.QUARRY_SOCKET_BE = s, QUARRY_FOUNDATION, INVAR_QUARRY_FOUNDATION,
+					NETHERITE_ALLOY_QUARRY_FOUNDATION));
 
 	private static final List<MenuDef<?>> MENUS = List.of(
 			// MOD-278 — the guard field, one menu per tier (same class, tier-specific client factory:

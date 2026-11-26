@@ -23,6 +23,7 @@ public final class AutomationBlueprints {
 	private static final String ASSEMBLY_BLUEPRINT = "alaindustrial:assembly_blueprint";
 	private static final String CHIP = "alaindustrial:stats_chip";
 	private static final String CORE_BARREL = "alaindustrial:core_barrel";
+	private static final String DRILL_ROW_MODULE = "alaindustrial:drill_row_module";
 
 	private static final String PAPER = "minecraft:paper";
 	private static final String LAPIS_DUST = "alaindustrial:lapis_dust";
@@ -102,7 +103,7 @@ public final class AutomationBlueprints {
 	 * Indices: 0 lower half, 1 upper half, 2 cable, 3 generator, 4..6 the stone column.
 	 */
 	public static final BlueprintDef COLUMN_DRILL = new BlueprintDef("column_drill",
-			List.of(CORE_BARREL),
+			List.of(CORE_BARREL, DRILL_ROW_MODULE),
 			List.of(
 					new Step(List.of(table()), 0, 1, List.of(), Verdict.NONE, motions(0,
 							"+" + INVAR_PLATE, "+" + INVAR_PLATE, "+" + INVAR_PLATE,
@@ -121,7 +122,13 @@ public final class AutomationBlueprints {
 							List.of(new ItemMotion(ELECTRIC_DRILL, 5, true),
 									new ItemMotion(COBBLESTONE, 4, false),
 									new ItemMotion(COBBLESTONE, 5, false),
-									new ItemMotion(COBBLESTONE, 6, false)))));
+									new ItemMotion(COBBLESTONE, 6, false))),
+					new Step(List.of(table()), 0, 1, List.of(), Verdict.NONE, motions(0,
+							"+" + CORE_BARREL, "+" + IRRADIATED_DIAMOND, "+" + IRRADIATED_DIAMOND,
+							"+" + CHOKE_REINFORCED, "+" + MODULE_BLANK, "+" + ADVANCED_CIRCUIT,
+							"-" + DRILL_ROW_MODULE)),
+					new Step(upgradeRig(true), 1, 2, List.of(Flow.energy(3, 0)), Verdict.GOOD,
+							motions(1, "+" + DRILL_ROW_MODULE, "-" + ELECTRIC_DRILL))));
 
 	private AutomationBlueprints() {
 	}

@@ -320,6 +320,44 @@ public final class QuarryDigScenarios {
 	}
 
 	/**
+	 * MOD-1025 (ADR-054): another mod's pipe finds the socket's lent inventory and tank on every loader, asked the
+	 * way that mod asks — on Forge through the block entity's capability, on Fabric and NeoForge through the block
+	 * lookup. Only the socket carries a block entity: the foundation above it has none, and the socket loses its own
+	 * once the frame comes apart. Hand-wired on each lane with that lane's probes ({@link
+	 * BlockCapabilityParityScenarios.Probes}).
+	 */
+	public static void theSocketIsSeenByAnotherModsPipe(GameTestHelper helper,
+			BlockCapabilityParityScenarios.Probes probes) {
+		Rig rig = ready(helper);
+		rig.scanNow();
+		BlockPos socket = rig.socket();
+		BlockPos above = socket.above();
+		var level = rig.level();
+		if (!probes.item().present(level, socket, Direction.WEST)
+				|| !probes.fluid().present(level, socket, Direction.WEST)) {
+			helper.fail("another mod's pipe must find the socket's inventory and tank on its west face: item "
+					+ probes.item().present(level, socket, Direction.WEST) + ", fluid "
+					+ probes.fluid().present(level, socket, Direction.WEST));
+			return;
+		}
+		if (!level.getBlockState(socket).hasBlockEntity() || level.getBlockState(above).hasBlockEntity()
+				|| level.getBlockEntity(above) != null || probes.item().present(level, above, Direction.WEST)) {
+			helper.fail("only the socket carries a block entity and lends; the foundation above it: "
+					+ level.getBlockState(above));
+			return;
+		}
+		rig.set(rig.at(FAR + 1, BASE + 3, FAR + 1), Blocks.AIR.defaultBlockState());
+		rig.scanNow();
+		if (probes.item().present(level, socket, Direction.WEST) || level.getBlockEntity(socket) != null
+				|| level.getBlockState(socket).hasBlockEntity()) {
+			helper.fail("a loose frame's foundation lends nothing and carries no block entity");
+			return;
+		}
+		rig.hold().release();
+		helper.succeed();
+	}
+
+	/**
 	 * The step survives the frame coming apart and standing again: a scaffold taken out and put back does not send
 	 * the quarry to the start of its pit.
 	 *

@@ -36,6 +36,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
+// size-justified: the whole winch — shaft scan and floors, the call queue, a trip and its catches, the fares and
+// the panel's reads; MOD-1030 put the refused-press check before the scan and the riders count out for the panel.
 /**
  * The elevator's winch (MOD-769): the lid of the glass shaft. It reads the tube under it
  * ({@link ElevatorShaft}), holds the EU buffer, takes the calls of the stations and drives the cabin inside the tube.
@@ -80,6 +82,7 @@ public class ElevatorWinchBlockEntity extends EnergyBlockEntity {
 	private @Nullable ElevatorTrip trip;
 	private final Deque<Call> calls = new ArrayDeque<>();
 	private int scanCooldown;
+	private int scans;
 	private boolean justLoaded = true;
 	/** The last thing the winch told a player: read by the gametests, which watch no chat. */
 	private @Nullable Component lastNotice;
@@ -214,6 +217,7 @@ public class ElevatorWinchBlockEntity extends EnergyBlockEntity {
 	}
 
 	private void rescan(ServerLevel level) {
+		scans++;
 		scanCooldown = trip != null ? SCAN_TICKS_RUNNING : SCAN_TICKS;
 		shaft = ElevatorShaft.scan(level, worldPosition, ElevatorConfig.elevatorMaxHeight);
 		if (shaft.valid() && !shaft.floors().equals(floors)) {
@@ -323,6 +327,9 @@ public class ElevatorWinchBlockEntity extends EnergyBlockEntity {
 		if (!(level instanceof ServerLevel serverLevel)) {
 			return false;
 		}
+		if (!standsAt(here) || index < 0 || index >= floors.size()) { // no scan for a press refused anyway (MOD-1030)
+			return false;
+		}
 		rescan(serverLevel);
 		List<Integer> all = shaft.floors();
 		if (!shaft.valid() || !standsAt(here) || index < 0 || index >= all.size() || all.get(index) == here) {
@@ -373,7 +380,7 @@ public class ElevatorWinchBlockEntity extends EnergyBlockEntity {
 			scanCooldown = 1;
 			return;
 		}
-		long fare = fareTo(floor);
+		long fare = fareTo(floor, riders());
 		if (energy.getAmount() < fare) {
 			refuse(level, caller, Component.translatable("message.alaindustrial.elevator.no_energy", fare,
 					energy.getAmount()));
@@ -405,11 +412,20 @@ public class ElevatorWinchBlockEntity extends EnergyBlockEntity {
 		return level == null ? Integer.MIN_VALUE : ElevatorShaft.firstGap(level, worldPosition, low, high);
 	}
 
-	/** What a trip from where the cabin stands to {@code floor} costs, with what stands on its floor now. */
-	public long fareTo(int floor) {
+	/** A trip from where the cabin stands to {@code floor} with {@code riders} aboard ({@link #riders}). */
+	public long fareTo(int floor, int riders) {
 		int blocks = (int) Math.ceil(Math.abs(floor - cabinY) - EPS);
-		int riders = level == null ? 0 : ElevatorCarry.riders(level, cabinCell(cabinY), cabinY);
 		return ElevatorFare.fare(tariff(), blocks, floor > cabinY, riders);
+	}
+
+	/** How many ride on the cabin's floor now: counted once for every fare a panel shows (MOD-1030). */
+	public int riders() {
+		return level == null ? 0 : ElevatorCarry.riders(level, cabinCell(cabinY), cabinY);
+	}
+
+	/** Shaft scans since the block entity loaded: what a test counts (MOD-1030), never read by the game. */
+	public int scans() {
+		return scans;
 	}
 
 	/** "Floor 3": floors are numbered from the bottom, one up. */

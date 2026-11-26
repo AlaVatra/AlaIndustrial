@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * once: the teleport fade and the Energy Pack readout.
  *
  * <p>The layers are registered by hand today ({@code HudElementRegistry.addLast} in
- * {@code IndustrializationClient}, in the order root inspection, concentrator assembly, teleport fade,
+ * {@code IndustrializationClient}, in the order root inspection, teleport fade,
  * energy pack, electric drill). MOD-706 moves that list into {@code ClientContentManifest.HUD_LAYERS};
  * this frame is the before-and-after witness that the order did not change: the readout, registered
  * after the fade, has to stay legible ON TOP of the darkened world. NeoForge has no client lane, so its

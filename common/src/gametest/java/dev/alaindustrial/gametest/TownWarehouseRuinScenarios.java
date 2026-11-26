@@ -43,7 +43,7 @@ public final class TownWarehouseRuinScenarios {
 	public static final class Roster {
 		public static final List<RosterEntry> ENTRIES = List.of(
 				RosterEntry.of(TownWarehouseRuinScenarios::aDesertWarehouseRuinIsRestoredByTheDronesAlone,
-						"town_warehouse_ruin_desert_ruin_is_restored_by_the_drones_alone").ticks(48000));
+						"town_warehouse_ruin_desert_ruin_is_restored_by_the_drones_alone").ticks(4000));
 
 		private Roster() {}
 	}
@@ -55,6 +55,15 @@ public final class TownWarehouseRuinScenarios {
 	private static final String NAME = "settlement.alaindustrial.building.warehouse";
 	/** South of the rig's hall and two blocks lower, as the owner's warehouse lay from his hall (MOD-908). */
 	private static final BlockPos OFFSET = new BlockPos(0, -2, -20);
+	/**
+	 * Town ticks per game tick (MOD-976). The rig is the only thing that ticks the town ({@code Rig.tick}), and the
+	 * restoration takes about 30 000 town ticks (measured 29 680). At one per game tick that was 30 000 game ticks of
+	 * a lane whose world already holds two thousand cases: this case held its batch of fifty for about 7.5 minutes on
+	 * each loader of the build server, a third of the full gate. Every step of the town counts its own calls
+	 * (flight legs, the route search spread over ticks, the sleep gate), so sixteen calls a game tick are sixteen
+	 * town ticks, and the check below still runs after each of them. The case logs how many it took.
+	 */
+	private static final int TOWN_TICKS_PER_GAME_TICK = 16;
 
 	/**
 	 * @implements MOD-908-RESTORE — the desert warehouse ruin, its plan learned and every material in the buffer, is
@@ -97,11 +106,16 @@ public final class TownWarehouseRuinScenarios {
 		Settlement town = registry.find(rig.town()).orElseThrow();
 		Optional<String> refused = TownOrders.place(level, town, 1, "test");
 		helper.assertTrue(refused.isEmpty(), "the order on the warehouse must be placed: " + refused);
+		long started = helper.getTick();
+		long[] townTicks = {0};
 		helper.onEachTick(() -> {
-			rig.tick();
-			for (WorkJob job : rig.works().queue().jobs()) {
-				helper.assertTrue(job.reason().map(BlockReason::key).filter(BlockReason.NO_ROUTE::equals).isEmpty(),
-						"no job of the warehouse may stop «the drone cannot reach»: " + job);
+			for (int i = 0; i < TOWN_TICKS_PER_GAME_TICK; i++) {
+				rig.tick();
+				townTicks[0]++;
+				for (WorkJob job : rig.works().queue().jobs()) {
+					helper.assertTrue(job.reason().map(BlockReason::key).filter(BlockReason.NO_ROUTE::equals)
+							.isEmpty(), "no job of the warehouse may stop «the drone cannot reach»: " + job);
+				}
 			}
 		});
 		helper.succeedWhen(() -> {
@@ -114,6 +128,8 @@ public final class TownWarehouseRuinScenarios {
 			TownBuilding after = rig.works().buildings().get(1);
 			helper.assertTrue(after.everRestored() && after.state() == BuildingState.INTACT
 					&& after.missingKeys().isEmpty(), "the warehouse must stand restored: " + after);
+			Industrialization.LOGGER.info("[ala-towns] measure: desert warehouse ruin restored in {} town ticks, "
+					+ "{} game ticks", townTicks[0], helper.getTick() - started);
 			hold.release();
 			rig.release();
 		});

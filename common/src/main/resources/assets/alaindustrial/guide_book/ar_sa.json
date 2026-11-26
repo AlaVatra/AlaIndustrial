@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "الكابلات",
-              "text": "تربط الكابلات الكتل في شبكة طاقة واحدة وتنقل EU. وكل كابل يفقد جزءا من الطاقة مع المسافة — فكلما طال الخط زاد الفاقد.\n\nهناك ثلاث درجات، وهي تختلف فيما بينها:\n• القصدير — ضيق (8 EU/t) لكنه شبه عديم الفاقد: لمزارع الألواح الشمسية\n• النحاس — الخيار العام لكل الاستخدامات (12 EU/t)\n• الذهب — الأوسع (48 EU/t)، لكن بفاقد أعلى\n\nلا تخلط الدرجات في خط واحد: فالشبكة كلها تعمل بأقوى كابل فيها، بما في ذلك فاقده."
+              "text": "تربط الكابلات الكتل في شبكة طاقة واحدة وتنقل EU. وكل كابل يفقد جزءا من الطاقة مع المسافة — فكلما طال الخط زاد الفاقد.\n\nهناك أربع درجات، وهي تختلف فيما بينها:\n• القصدير — ضيق (8 EU/t) لكنه شبه عديم الفاقد: لمزارع الألواح الشمسية\n• النحاس — الخيار العام لكل الاستخدامات (12 EU/t)\n• الذهب — أوسع (48 EU/t)، لكن بفاقد أعلى\n• الإلكتروم — الأوسع (192 EU/t) وبأقل فاقد: لخطوط HV، مقابل وصفة صنع مكلفة\n\nلا تخلط الدرجات في خط واحد: فالشبكة كلها تعمل بأقوى كابل فيها، بما في ذلك فاقده."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "أجزاء الغلاف",
-              "text": "- زجاج مفاعل: نافذة، لكن بما لا يزيد على ثلث الجدران\n- باب معادلة ضغط المفاعل: يفتح بإشارة ريدستون ويغلق نفسه\n- مدخل المفاعل: حيث يعبر أنبوب الماء الجدار\n- مخرج المفاعل: حيث يوصل الكابل\n- مصباح مفاعل: يضيء الغرفة وحدها، ولا يضيء الخارج أبدا"
+              "text": "- زجاج مفاعل: نافذة، لكن بما لا يزيد على 30 % من الغلاف\n- باب معادلة ضغط المفاعل: يفتح بإشارة ريدستون ويغلق نفسه\n- مدخل المفاعل: حيث يعبر أنبوب الماء الجدار\n- مخرج المفاعل: حيث يوصل الكابل\n- مصباح مفاعل: يضيء الغرفة وحدها، ولا يضيء الخارج أبدا"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "الطاقة",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "لوحة قمرية برونزية",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "لوحة قمرية برونزية",
+              "text": "الدرجة الثالثة من الفرع الليلي — كتلة كاملة يتبع إنتاجها طور القمر، 10 EU/t عند البدر، وتواصل العمل في الطقس السيئ؛ لا تُنال إلا بالتطور."
+            },
+            {
+              "type": "stats",
+              "title": "المواصفات",
+              "lines": [
+                "الطاقة: 10 EU/t (ليل)",
+                "الاحتياطي: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "عنفة رياح",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "مركّز المرايا",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "مركّز المرايا",
-              "text": "الدرجة الثالثة من فرع النهار — ضعف اللوحة الشمسية النهارية، ويزيد نصفا آخر عند الظهيرة؛ وتنطوي المرايا حين لا يكون هناك ما تجمعه."
-            },
-            {
-              "type": "stats",
-              "title": "المواصفات",
-              "lines": [
-                "الطاقة: 8 EU/t (نهار)",
-                "الاحتياطي: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "الوصفة",
-              "recipe_type": "تصنيع مرتب",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "لوحة شمسية قمرية",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "لوحة شمسية معززة",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "لوحة شمسية معززة",
+              "text": "الدرجة الثالثة من الفرع النهاري — كتلة كاملة يتبع إنتاجها ارتفاع الشمس، 12 EU/t عند الظهيرة؛ لا تُنال إلا بالتطور."
+            },
+            {
+              "type": "stats",
+              "title": "المواصفات",
+              "lines": [
+                "الطاقة: 12 EU/t (نهار)",
+                "الاحتياطي: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "رافعة المصعد",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "رافعة المصعد",
+              "text": "مصعد عمودي يعمل بالطاقة: بئر زجاجي من الإطارات، ومحطة بأبواب ولوحة استدعاء في كل طابق، ورافعة فوقه كغطاء؛ تُدفع كل رحلة كاملة عند انطلاق المقصورة، ولا تُفتح إلا الأبواب حيث تقف المقصورة."
+            },
+            {
+              "type": "stats",
+              "title": "المواصفات",
+              "lines": [
+                "الطاقة: 50 EU + 8 EU لكل كتلة",
+                "الاحتياطي: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "الوصفة",
+              "recipe_type": "تصنيع مرتب",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "تصنيع مرتب",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "تصنيع مرتب",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "تصنيع مرتب",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "سرير الشحن",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "محرك السلم المتحرك",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "محرك السلم المتحرك",
+              "text": "شريط مائل من أقسام الدرجات مع درابزين: ينقل اللاعبين والوحوش والعناصر طابقًا واحدًا صعودًا أو نزولًا ما دام في محركه EU. يشغّل محرك LV حتى 8 أقسام، ومحرك MV حتى 16 وبسرعة أكبر."
+            },
+            {
+              "type": "stats",
+              "title": "المواصفات",
+              "lines": [
+                "الطاقة: 1 EU/t + 0.5 EU/t لكل قسم (فقط أثناء وجود راكب)",
+                "الاحتياطي: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "الوصفة",
+              "recipe_type": "تصنيع مرتب",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "تصنيع مرتب",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "تصنيع مرتب",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "تصنيع مرتب",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "تصنيع مرتب",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "رقاقة تطور شمسي",
-              "text": "ثلاث رقاقات تطور — شمسية (نهار) وقمرية (ليل) ورنين (الدرجة الثالثة) — تطور الألواح الشمسية وعنفات الرياح الأساسية إلى الفئة T2، واللوحة الشمسية النهارية من الفئة T2 إلى ما بعدها، مع نقل الطاقة المتراكمة فيها."
+              "text": "ثلاث رقاقات تطور — شمسية (نهار) وقمرية (ليل) ورنين (الدرجة الثالثة) — تطور الألواح الشمسية وعنفات الرياح الأساسية إلى الفئة T2، وكلتا لوحتي الفئة T2 إلى ما بعدها، مع نقل الطاقة المتراكمة فيها."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "تصنيع مرتب",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "কেবল",
-              "text": "কেবল ব্লকগুলোকে বিদ্যুৎ নেটওয়ার্কে যুক্ত করে এবং EU বহন করে। প্রতিটি কেবলই দূরত্বে শক্তি হারায় — লাইন যত লম্বা, ক্ষতি তত বেশি।\n\nতিনটি ধরন আছে, এবং সেগুলো আলাদা:\n• টিন — সরু (8 EU/t) কিন্তু প্রায় ক্ষতিহীন: সৌর খামারের জন্য\n• তামা — সর্বজনীন কর্মী (12 EU/t)\n• সোনা — সবচেয়ে চওড়া (48 EU/t), তবে ক্ষতি বেশি\n\nএকই লাইনে ধরন মেশাবেন না: পুরো নেটওয়ার্ক তার ভেতরের সবচেয়ে শক্তিশালী কেবল অনুযায়ী চলে — তার ক্ষতিসহ।"
+              "text": "কেবল ব্লকগুলোকে বিদ্যুৎ নেটওয়ার্কে যুক্ত করে এবং EU বহন করে। প্রতিটি কেবলই দূরত্বে শক্তি হারায় — লাইন যত লম্বা, ক্ষতি তত বেশি।\n\nচারটি ধরন আছে, এবং সেগুলো আলাদা:\n• টিন — সরু (8 EU/t) কিন্তু প্রায় ক্ষতিহীন: সৌর খামারের জন্য\n• তামা — সর্বজনীন কর্মী (12 EU/t)\n• সোনা — আরও চওড়া (48 EU/t), তবে ক্ষতি বেশি\n• ইলেকট্রাম — সবচেয়ে চওড়া (192 EU/t), ক্ষতি সবচেয়ে কম: HV লাইনের জন্য, তবে দামি ক্রাফটের বিনিময়ে\n\nএকই লাইনে ধরন মেশাবেন না: পুরো নেটওয়ার্ক তার ভেতরের সবচেয়ে শক্তিশালী কেবল অনুযায়ী চলে — তার ক্ষতিসহ।"
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "খোলসের অংশ",
-              "text": "- রিঅ্যাক্টরের কাচ: জানালা, তবে দেয়ালের এক-তৃতীয়াংশের বেশি নয়\n- রিঅ্যাক্টরের এয়ারলক দরজা: এয়ারলক, রেডস্টোনে খোলে আর নিজেই বন্ধ হয়\n- রিঅ্যাক্টর প্রবেশপথ: এখান দিয়ে পানির পাইপ দেয়াল পেরোয়\n- রিঅ্যাক্টর নির্গমন: এখানে কেব্‌ল লাগে\n- রিঅ্যাক্টর বাতি: কেবল ঘরের ভেতরটাই আলোকিত করে, বাইরে কখনো নয়"
+              "text": "- রিঅ্যাক্টরের কাচ: জানালা, তবে খোলসের 30 %-এর বেশি নয়\n- রিঅ্যাক্টরের এয়ারলক দরজা: এয়ারলক, রেডস্টোনে খোলে আর নিজেই বন্ধ হয়\n- রিঅ্যাক্টর প্রবেশপথ: এখান দিয়ে পানির পাইপ দেয়াল পেরোয়\n- রিঅ্যাক্টর নির্গমন: এখানে কেব্‌ল লাগে\n- রিঅ্যাক্টর বাতি: কেবল ঘরের ভেতরটাই আলোকিত করে, বাইরে কখনো নয়"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "শক্তি",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "ব্রোঞ্জ চন্দ্র প্যানেল",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "ব্রোঞ্জ চন্দ্র প্যানেল",
+              "text": "রাতের শাখার তৃতীয় ধাপ — একটি পূর্ণ ব্লক, যার উৎপাদন চাঁদের কলা অনুসরণ করে, পূর্ণিমায় 10 EU/t, খারাপ আবহাওয়াতেও কাজ চালিয়ে যায়; কেবল বিবর্তনের মাধ্যমে পাওয়া যায়।"
+            },
+            {
+              "type": "stats",
+              "title": "পরিসংখ্যান",
+              "lines": [
+                "শক্তি: 10 EU/t (রাত)",
+                "বাফার: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "বায়ু টারবাইন",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "দর্পণ কনসেনট্রেটর",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "দর্পণ কনসেনট্রেটর",
-              "text": "দিনের শাখার তৃতীয় ধাপ — দিবালোক সোলার প্যানেলের দ্বিগুণ, দুপুরে তারও দেড় গুণ; সংগ্রহ করার কিছু না থাকলে দর্পণগুলো গুটিয়ে যায়।"
-            },
-            {
-              "type": "stats",
-              "title": "পরিসংখ্যান",
-              "lines": [
-                "শক্তি: 8 EU/t (দিন)",
-                "বাফার: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "রেসিপি",
-              "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "চাঁদনি সোলার প্যানেল",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "মজবুত সোলার প্যানেল",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "মজবুত সোলার প্যানেল",
+              "text": "দিনের শাখার তৃতীয় ধাপ — একটি পূর্ণ ব্লক, যার উৎপাদন সূর্যের উচ্চতা অনুসরণ করে, দুপুরে 12 EU/t; কেবল বিবর্তনের মাধ্যমে পাওয়া যায়।"
+            },
+            {
+              "type": "stats",
+              "title": "পরিসংখ্যান",
+              "lines": [
+                "শক্তি: 12 EU/t (দিন)",
+                "বাফার: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "লিফট কপিকল",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "লিফট কপিকল",
+              "text": "শক্তিচালিত খাড়া লিফট: ফ্রেম দিয়ে গড়া কাচের শ্যাফট, প্রতিটি তলায় দরজা ও কল প্যানেলসহ একটি স্টেশন, আর মাথায় ঢাকনার মতো একটি কপিকল; কেবিন রওনা দেওয়ার সময়েই প্রতিটি যাত্রার পুরো দাম কাটা হয়, আর শুধু কেবিন যেখানে দাঁড়িয়ে সেখানকার দরজাই খোলা থাকে।"
+            },
+            {
+              "type": "stats",
+              "title": "পরিসংখ্যান",
+              "lines": [
+                "শক্তি: 50 EU + প্রতি ব্লকে 8 EU",
+                "বাফার: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "রেসিপি",
+              "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "চার্জিং বিছানা",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "এসকেলেটর ড্রাইভ",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "এসকেলেটর ড্রাইভ",
+              "text": "রেলিংসহ ধাপ-অংশের একটি ঢালু বেল্ট: ড্রাইভে EU থাকা পর্যন্ত এটি খেলোয়াড়, মব ও আইটেমকে এক তলা ওপরে বা নিচে নিয়ে যায়। LV ড্রাইভ সর্বোচ্চ 8টি অংশ চালায়, MV ড্রাইভ সর্বোচ্চ 16টি এবং আরও দ্রুত।"
+            },
+            {
+              "type": "stats",
+              "title": "পরিসংখ্যান",
+              "lines": [
+                "শক্তি: 1 EU/t + প্রতি অংশে 0.5 EU/t (শুধু কেউ চড়লে)",
+                "বাফার: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "রেসিপি",
+              "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "সৌর বিবর্তন চিপ",
-              "text": "তিনটি বিবর্তন চিপ — সৌর (দিন), চান্দ্র (রাত) ও অনুরণন (তৃতীয় ধাপ) — যা মৌলিক সোলার প্যানেল ও বায়ু চক্রকে T2-তে এবং T2 দিবালোক সোলার প্যানেলকে তারও পরের ধাপে উন্নীত করে, জমা হওয়া NBT শক্তি বহন করে।"
+              "text": "তিনটি বিবর্তন চিপ — সৌর (দিন), চান্দ্র (রাত) ও অনুরণন (তৃতীয় ধাপ) — যা মৌলিক সোলার প্যানেল ও বায়ু চক্রকে T2-তে এবং দুটি T2 প্যানেলকেই তারও পরের ধাপে উন্নীত করে, জমা হওয়া NBT শক্তি বহন করে।"
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "আকৃতিসম্পন্ন ক্রাফটিং",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

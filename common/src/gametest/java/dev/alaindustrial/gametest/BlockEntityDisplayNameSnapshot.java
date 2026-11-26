@@ -29,6 +29,8 @@ final class BlockEntityDisplayNameSnapshot {
 			"moonlit_solar_panel @moonlit_solar_panel: block.alaindustrial.moonlit_solar_panel",
 			"daylight_solar_panel @daylight_solar_panel: block.alaindustrial.daylight_solar_panel",
 			"radiant_solar_panel @radiant_solar_panel: block.alaindustrial.radiant_solar_panel",
+			"reinforced_solar_panel @reinforced_solar_panel: block.alaindustrial.reinforced_solar_panel",
+			"bronze_lunar_panel @bronze_lunar_panel: block.alaindustrial.bronze_lunar_panel",
 			"water_mill @water_mill: block.alaindustrial.water_mill",
 			"wind_mill @wind_mill: block.alaindustrial.wind_mill",
 			"high_altitude_wind_mill @high_altitude_wind_mill:"

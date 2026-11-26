@@ -6,6 +6,7 @@ import dev.alaindustrial.gametest.CableEnergyScenarios;
 import dev.alaindustrial.gametest.IndustrialistScenarios;
 import dev.alaindustrial.gametest.ItemPipeScenarios;
 import dev.alaindustrial.gametest.PayloadRegistrationScenarios;
+import dev.alaindustrial.gametest.QuarryDigScenarios;
 import dev.alaindustrial.gametest.RosterEntry;
 import dev.alaindustrial.gametest.RosterReplayScenarios;
 import dev.alaindustrial.registry.ModContent;
@@ -112,6 +113,10 @@ public final class ForgeGameTests {
 		// exposes there — asked through BlockEntity.getCapability, the way a foreign mod would.
 		registerTest(event, "block_capabilities_match_ports", 40, true,
 				helper -> BlockCapabilityParityScenarios.capabilitiesMatchPorts(helper, CAPABILITY_PROBES));
+
+		// MOD-1025: the quarry's socket as another mod's pipe finds it, with this lane's probes.
+		registerTest(event, "quarry_socket_seen_by_other_mods", 40, true,
+				helper -> QuarryDigScenarios.theSocketIsSeenByAnotherModsPipe(helper, CAPABILITY_PROBES));
 
 		// MOD-706: every payload of ModPayloads.PAYLOADS registered in its direction, asked of Forge's channel.
 		registerTest(event, "payloads_registered_in_their_direction", 40, true,

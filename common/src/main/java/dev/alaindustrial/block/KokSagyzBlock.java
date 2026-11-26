@@ -160,6 +160,20 @@ public class KokSagyzBlock extends BushBlock {
 		return new ItemStack(ModContent.KOK_SAGYZ_SEEDS.get());
 	}
 
+	// --- bees (MOD-979) ---
+
+	/**
+	 * Whether a bee takes this state for a flower: only the mature seed head does (owner's decision
+	 * 2026-11-16). A tag cannot say that — tags name blocks, not states — so the stage is answered here and
+	 * {@code BeeKokSagyzFlowerMixin} hands it to vanilla's one flower test, {@code Bee.attractsBees}, which
+	 * both the search for a new flower and the check of a remembered one ask (verified by javap on 26.3 and
+	 * 26.2; NeoForge and Forge leave the method unpatched). A plant trodden back below maturity therefore
+	 * stops being a flower for a bee that had already picked it.
+	 */
+	public static boolean attractsBees(BlockState state) {
+		return state.getValue(AGE) == AGE_MATURE;
+	}
+
 	// --- trampling (MOD-584) ---
 
 	/**

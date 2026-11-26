@@ -1,0 +1,90 @@
+package dev.alaindustrial.registry;
+
+import java.util.List;
+
+/**
+ * The tail of the reviewed registration order of {@link ContentManifest} (MOD-711): the {@code menu <id>} lines,
+ * after {@link ContentManifestOrder}'s blocks, items and block entities. Split off by MOD-1031 to keep each file
+ * under the 1000-line limit of coding.md §10.
+ *
+ * <p>Written only by the explicit command in {@link ContentManifestOrder}'s javadoc, which rewrites both files.
+ */
+final class ContentManifestOrderTail {
+
+	private ContentManifestOrderTail() {}
+
+	static final List<String> LINES = List.of(
+			"menu generator",
+			"menu solar_panel",
+			"menu moonlit_solar_panel",
+			"menu daylight_solar_panel",
+			"menu reinforced_solar_panel",
+			"menu bronze_lunar_panel",
+			"menu geothermal_generator",
+			"menu water_mill",
+			"menu wind_mill",
+			"menu high_altitude_wind_mill",
+			"menu storm_wind_mill",
+			"menu lightning_rod_generator",
+			"menu creative_energy_source",
+			"menu mob_wheel_controller",
+			"menu thermoelectric_generator",
+			"menu macerator",
+			"menu electric_furnace",
+			"menu iron_furnace",
+			"menu extractor",
+			"menu compressor",
+			"menu recycler",
+			"menu component_repair_bench",
+			"menu upgrade_table",
+			"menu canning_machine",
+			"menu sawmill",
+			"menu assembler",
+			"menu polymerizer",
+			"menu vulcanizer",
+			"menu electric_heater",
+			"menu alloy_smelter",
+			"menu galvanic_bath",
+			"menu teleporter_station",
+			"menu thermal_centrifuge",
+			"menu block_breaker",
+			"menu quarry_controller",
+			"menu advanced_industrial_workbench",
+			"menu settlement_core",
+			"menu reception_capsule",
+			"menu town_dispatcher",
+			"menu distillation_column",
+			"menu fermenter",
+			"menu pump",
+			"menu honey_centrifuge",
+			"menu battery_box",
+			"menu energy_condenser",
+			"menu cesu",
+			"menu charge_pad",
+			"menu iron_chest",
+			"menu storage_module_3",
+			"menu storage_module_6",
+			"menu silver_chest",
+			"menu gold_chest",
+			"menu electrum_chest",
+			"menu diamond_chest",
+			"menu shielding_chest",
+			"menu double_chest",
+			"menu monitor_core",
+			"menu vacuum_collector",
+			"menu elevator_panel",
+			"menu reactor_controller",
+			"menu reactor_tablet",
+			"menu incubator",
+			"menu sprinkler",
+			"menu garden_drone_station",
+			"menu apiary_map",
+			"menu apiary_drone_station",
+			"menu teleporter_remote",
+			"menu magnet",
+			"menu mob_repeller",
+			"menu mob_repeller_mv",
+			"menu mob_repeller_hv",
+			"menu electric_mob_trap",
+			"menu todo_clipboard");
+}

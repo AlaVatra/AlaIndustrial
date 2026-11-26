@@ -4,7 +4,7 @@ package dev.alaindustrial.command.demo.energy;
 public enum ProbeKind {
 	/** A creative energy source dialled to a fixed rate: a deterministic generator. */
 	SOURCE,
-	/** A real generator (solar, concentrator): its output depends on the world. */
+	/** A real generator (a solar panel, a mill): its output depends on the world. */
 	GENERATOR,
 	/** A consumer that declares its per-tick need: planned first by the line (ADR-049, rule 1). */
 	MACHINE,

@@ -78,14 +78,22 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 	 * kept in the framework's own per-level state rather than in a second map on the energy side
 	 * <b>because a second map keyed by level is exactly the defect this class was written to close</b>.
 	 */
-	public record Telemetry(int ticked, long movedLastTick, long movedTotal) {
-		static final Telemetry EMPTY = new Telemetry(0, 0L, 0L);
+	public record Telemetry(int ticked, long movedLastTick, long movedTotal, long rebuilds) {
+		static final Telemetry EMPTY = new Telemetry(0, 0L, 0L, 0L);
 	}
 
 	/** Per-level state: pos→network index, the live networks, the round-robin cursor, telemetry. */
 	private static final class LevelState<N, P> {
 		final Map<P, N> byPos = new LinkedHashMap<>();
 		final Set<N> networks = new LinkedHashSet<>();
+		/**
+		 * Networks a removal may have cut in two (MOD-1029). {@link #unregister} only records them: it runs from
+		 * {@code BlockEntity.setRemoved}, which a chunk unload calls too, and the split reads the world. The split
+		 * runs once per network, at the next tick or the next question about the networks ({@link #flush}).
+		 */
+		final Set<N> pendingSplit = new LinkedHashSet<>();
+		/** Re-partitions run since the level loaded: what a test counts, never read by the game. */
+		long rebuilds;
 		int tickCursor;
 		int lastTicked;
 		long lastMoved;
@@ -166,11 +174,19 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 			st.byPos.put(pos, keep);
 		}
 		st.networks.remove(drop);
+		if (st.pendingSplit.remove(drop)) {
+			st.pendingSplit.add(keep); // the cut the loser was waiting on is now inside the survivor
+		}
 		ops.markDirty(keep);
 		return keep;
 	}
 
-	/** Unregister a node on removal/unload. Splits the network if the removal disconnected it. */
+	/**
+	 * Unregister a node on removal/unload. A removal that may have disconnected the network leaves it for {@link
+	 * #flush}: this runs from {@code setRemoved}, on a chunk unload too, where reading the world is what hangs the
+	 * server on "Saving worlds"; and K nodes of one network unloaded in one tick are one split, not K (MOD-1029).
+	 * Nothing here asks {@link NetworkOps#connected}.
+	 */
 	public void unregister(L level, P pos) {
 		LevelState<N, P> st = levels.get(level);
 		if (st == null) {
@@ -184,6 +200,7 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 		if (ops.nodes(net).isEmpty()) {
 			// Drop the empty network: this is what stops a chunk unload from leaking one per cable run.
 			st.networks.remove(net);
+			st.pendingSplit.remove(net);
 			return;
 		}
 		// Grid adjacency, NOT connectivity: the block is already gone from the world, so asking it what
@@ -200,7 +217,24 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 			ops.markDirty(net);
 			return;
 		}
-		rebuild(st, level, net);
+		st.pendingSplit.add(net);
+		ops.markDirty(net);
+	}
+
+	/**
+	 * Split every network a removal left waiting ({@link #unregister}), once each. Called before a tick and before any
+	 * answer about the networks, so nobody sees a network that is really two; never from a removal.
+	 */
+	private void flush(LevelState<N, P> st, L level) {
+		if (st.pendingSplit.isEmpty()) {
+			return;
+		}
+		for (N net : new ArrayList<>(st.pendingSplit)) {
+			if (st.networks.contains(net)) {
+				rebuild(st, level, net);
+			}
+		}
+		st.pendingSplit.clear();
 	}
 
 	/**
@@ -212,6 +246,7 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 		if (st == null) {
 			return;
 		}
+		flush(st, level);
 		N net = st.byPos.get(pos);
 		if (net == null) {
 			return;
@@ -226,6 +261,7 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 		if (st == null) {
 			return;
 		}
+		flush(st, level);
 		N net = st.byPos.get(pos);
 		if (net == null) {
 			return;
@@ -254,6 +290,8 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 	private void rebuild(LevelState<N, P> st, L level, N old) {
 		Set<P> remaining = new LinkedHashSet<>(ops.nodes(old));
 		st.networks.remove(old);
+		st.pendingSplit.remove(old);
+		st.rebuilds++;
 		List<Set<P>> components = GraphComponents.components(remaining, p -> ops.connected(level, p));
 		boolean first = true;
 		for (Set<P> component : components) {
@@ -297,6 +335,7 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 		if (st == null || st.networks.isEmpty()) {
 			return;
 		}
+		flush(st, level);
 		List<N> all = new ArrayList<>(st.networks);
 		int size = all.size();
 		int budget = Math.min(tickBudget.getAsInt(), size);
@@ -323,19 +362,31 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 	/** The network owning {@code pos}, or null. */
 	public N networkAt(L level, P pos) {
 		LevelState<N, P> st = levels.get(level);
-		return st == null ? null : st.byPos.get(pos);
+		if (st == null) {
+			return null;
+		}
+		flush(st, level);
+		return st.byPos.get(pos);
 	}
 
 	/** Live network count in one level. */
 	public int networkCount(L level) {
 		LevelState<N, P> st = levels.get(level);
-		return st == null ? 0 : st.networks.size();
+		if (st == null) {
+			return 0;
+		}
+		flush(st, level);
+		return st.networks.size();
 	}
 
 	/** Snapshot of one level's networks, for the telemetry command. Not for the tick path. */
 	public Collection<N> networks(L level) {
 		LevelState<N, P> st = levels.get(level);
-		return st == null ? List.of() : List.copyOf(st.networks);
+		if (st == null) {
+			return List.of();
+		}
+		flush(st, level);
+		return List.copyOf(st.networks);
 	}
 
 	/**
@@ -345,7 +396,8 @@ public final class GraphNetworkManager<L, N, P> implements LevelStateHolder {
 	 */
 	public Telemetry telemetry(L level) {
 		LevelState<N, P> st = levels.get(level);
-		return st == null ? Telemetry.EMPTY : new Telemetry(st.lastTicked, st.lastMoved, st.totalMoved);
+		return st == null ? Telemetry.EMPTY : new Telemetry(st.lastTicked, st.lastMoved, st.totalMoved,
+				st.rebuilds);
 	}
 
 	// --- LevelStateHolder: the cleanup the loaders drive through LevelStateRegistry ---

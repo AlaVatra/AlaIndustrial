@@ -20,8 +20,8 @@ import net.minecraft.server.level.ServerLevel;
  *   <li><b>no tick budget</b> — every awake network ticks every tick, which is why the round-robin
  *       cursor advances by one instead of by the visited window: two item networks can feed the same
  *       chest, and rotating the order is what keeps them fair;</li>
- *   <li><b>a neighbour change re-partitions</b> rather than merely waking the network, unlike energy
- *       and fluid.</li>
+ *   <li>a neighbour change only wakes the network, as for energy and fluid (MOD-1028; it used to
+ *       re-partition).</li>
  * </ul>
  */
 public final class ItemNetworkManager {
@@ -43,9 +43,15 @@ public final class ItemNetworkManager {
 	/** The positions a pipe is joined to through a connecting face right now. */
 	private static List<BlockPos> connected(ServerLevel level, BlockPos pos) {
 		List<BlockPos> result = new ArrayList<>(6);
+		// The block entity once, not once per face; a face into an unloaded chunk joins nothing, since no node of
+		// the graph stands there, and asking would load the chunk (MOD-1029).
+		if (!level.isLoaded(pos) || !(level.getBlockEntity(pos) instanceof ItemPipeNode pipe)) {
+			return result;
+		}
 		for (Direction dir : Direction.values()) {
-			if (level.getBlockEntity(pos) instanceof ItemPipeNode pipe && pipe.connects(dir)) {
-				result.add(pos.relative(dir).immutable());
+			BlockPos next = pos.relative(dir);
+			if (level.isLoaded(next) && pipe.connects(dir)) {
+				result.add(next.immutable());
 			}
 		}
 		return result;
@@ -80,8 +86,19 @@ public final class ItemNetworkManager {
 		return GRAPH.networkAt(level, pos);
 	}
 
+	/**
+	 * A neighbouring block changed: an inventory may have come or gone, so the endpoints are read again on the next
+	 * tick. Pipe-to-pipe links cannot change this way — they follow placing or breaking a pipe ({@link #register},
+	 * {@link #unregister}) and a face mode ({@link #topologyChanged}) — so the network is woken, not re-partitioned
+	 * (MOD-1028; it walked every pipe of the line on each neighbour update).
+	 */
 	public static void onNeighbourChanged(ServerLevel level, BlockPos pos) {
-		GRAPH.rebuildAt(level, pos);
+		GRAPH.markDirtyAt(level, pos);
+	}
+
+	/** Re-partitions run in this level since it loaded; for tests (MOD-1028). */
+	public static long rebuilds(ServerLevel level) {
+		return GRAPH.telemetry(level).rebuilds();
 	}
 
 	public static void tickAll(ServerLevel level) {

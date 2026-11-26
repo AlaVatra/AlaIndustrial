@@ -228,6 +228,11 @@ public final class EnergyNetwork implements GraphNetwork<EnergyNetwork, BlockPos
 	 */
 	@Override
 	public boolean isAwake() {
+		// A role filed from a dry run is probed again on a clock (MOD-1026), here because a network that filed a
+		// foreign battery as a pure consumer may have no producer left, and then this is all that still runs.
+		if (topology.provisionalRolesDue(topology.level().getGameTime())) {
+			markDirty();
+		}
 		List<EnergyTopologyCache.Endpoint> producers = topology.producers();
 		if (producers.isEmpty()) {
 			return false;

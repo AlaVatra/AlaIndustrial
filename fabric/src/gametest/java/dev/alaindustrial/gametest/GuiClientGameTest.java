@@ -63,6 +63,10 @@ import net.minecraft.world.level.gamerules.GameRules;
  *       order: the Energy Pack readout stays legible over the teleport fade (a picture for review)
  *   <li>MOD-832  — {@link ShiftWorkerStand#check}                      — four shift workers from the front and from
  *       behind: body per look, hair, window glass, the number on the balloon (frames for review)
+ *   <li>MOD-934  — {@link BlueprintScreenStand#shoot}                  — the blueprint sheet of every catalogue
+ *       group on its first and last step and two "this is wrong" steps, held still (R-GUI-16, frames for review)
+ *   <li>MOD-569  — {@link CowSuitStand#check}                          — cows of every model in the shielding
+ *       suit from the side and turned to the camera, one in the helmet alone (frames for review)
  * </ul>
  *
  * <p>Screenshots land in {@code build/run/clientGameTest/screenshots/}.
@@ -140,6 +144,7 @@ public class GuiClientGameTest implements FabricClientGameTest {
                 DrillBoreZoneStand.check(context, singleplayer);                 // MOD-967 drill bore zone frames
                 TeleporterCapsuleStand.checkGlassFromInside(context, singleplayer); // MOD-632 door glass from inside
                 ShiftWorkerStand.check(context, singleplayer);                   // MOD-832 shift workers
+                CowSuitStand.check(context, singleplayer);                       // MOD-569 cows in the suit
                 HallSchematicStand.check(context, singleplayer);                 // MOD-857 town hall schematic
                 QuarryFrameStand.check(context, singleplayer);                   // MOD-950 formed quarry frame
                 StorageModuleStands.checkStorageModuleSeams(context, singleplayer); // MOD-287 connected textures
@@ -162,6 +167,9 @@ public class GuiClientGameTest implements FabricClientGameTest {
 
             // ── MOD-854: the shift worker's card, three tabs and two dead records. Not a menu either ──
             ShiftWorkerCardGuiStand.shootCards(context);
+
+            // ── MOD-934: the blueprint sheet (the I key), one sheet per catalogue group, first and last step ──
+            BlueprintScreenStand.shoot(context);
 
             // ── MOD-513: the archive record on the book's first page, from this lane's own login ──
             // Before the RTL and Thai stands, so it reads the English book the lane starts in.

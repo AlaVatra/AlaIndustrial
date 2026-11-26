@@ -14,7 +14,8 @@
     "TargetGoalAccessor",
     "TrapDoorBlockAccessor",
     "FenceGateBlockAccessor",
-    "ServerPlayerDataCarryOverMixin"
+    "ServerPlayerDataCarryOverMixin",
+    "BlockStateBlockEntityByStateMixin"
   ],
   "client": [
     "client.RootInspectionStateMixin",

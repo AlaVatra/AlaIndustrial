@@ -6,6 +6,7 @@ import dev.alaindustrial.client.blueprint.BlueprintDef.Placement;
 import dev.alaindustrial.client.blueprint.BlueprintDef.Step;
 import dev.alaindustrial.mixin.client.GuiGraphicsExtractorAccessor;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -46,6 +47,10 @@ public final class BlueprintScreen extends Screen {
 	private float zoom = 1f;
 	/** When the player last turned the scene; the idle sway waits a while after that. */
 	private long lastTurned = Long.MIN_VALUE / 2;
+	/** Where the left button went down on the scene, or -1; a release there without a drag is a click on a block. */
+	private double pressX = -1;
+	private double pressY = -1;
+	private boolean dragged;
 
 	public BlueprintScreen(BlueprintDef def, @Nullable Screen parent) {
 		super(Component.translatable(def.titleKey()));
@@ -110,6 +115,27 @@ public final class BlueprintScreen extends Screen {
 		if (pausedAt >= 0) {
 			pausedAt = stepStarted;
 		}
+	}
+
+	/**
+	 * Holds the sheet on step {@code index} (0-based) as it looks once the step has fully played, paused and
+	 * without the idle sway: the still frame of an L3 shot (MOD-934). A player pausing the sheet gets the same
+	 * picture.
+	 */
+	public void holdStill(int index) {
+		goTo(index);
+		pausedAt = System.currentTimeMillis();
+		stepStarted = pausedAt - STEP_MS;
+	}
+
+	/** The step on the sheet now, 0-based. */
+	public int step() {
+		return step;
+	}
+
+	/** The blueprint this sheet shows. */
+	public BlueprintDef blueprint() {
+		return def;
 	}
 
 	private void togglePause() {
@@ -351,6 +377,7 @@ public final class BlueprintScreen extends Screen {
 
 	@Override
 	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+		pressX = -1;
 		if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
 			int y = height - STRIP_H + 4;
 			for (int i = 0; i < 3; i++) {
@@ -370,13 +397,44 @@ public final class BlueprintScreen extends Screen {
 				goTo((int) ((event.x() - left) / (right - left) * def.steps().size()));
 				return true;
 			}
+			if (event.y() < sceneBottom()) {
+				pressX = event.x();
+				pressY = event.y();
+				dragged = false;
+			}
 		}
 		return super.mouseClicked(event, doubleClick);
+	}
+
+	/**
+	 * A click on a block of the scene (MOD-933) opens that block's own blueprint, and closing it comes back to
+	 * this sheet. A block with no blueprint of its own, or one shown on this sheet, does not take the click; a
+	 * press that turned the scene is a drag, not a click.
+	 */
+	@Override
+	public boolean mouseReleased(MouseButtonEvent event) {
+		boolean click = event.button() == InputConstants.MOUSE_BUTTON_LEFT && pressX >= 0 && !dragged;
+		pressX = -1;
+		if (click) {
+			List<Placement> blocks = def.steps().get(step).blocks();
+			int index = BlueprintPicker.pick(blocks, bounds, viewCamera(), pixelsPerBlock(),
+					event.x() - pictureCenterX(), event.y() - pictureCenterY());
+			if (index >= 0) {
+				Optional<BlueprintDef> other = BlueprintCatalog.forSubject(blocks.get(index).blockId())
+						.filter(found -> !found.id().equals(def.id()));
+				if (other.isPresent()) {
+					Minecraft.getInstance().gui.setScreen(new BlueprintScreen(other.get(), this));
+					return true;
+				}
+			}
+		}
+		return super.mouseReleased(event);
 	}
 
 	@Override
 	public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
 		if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && event.y() < sceneBottom()) {
+			dragged |= Math.abs(event.x() - pressX) + Math.abs(event.y() - pressY) > 3;
 			camera = viewCamera().turned((float) dragX * 0.8f).withPitch(camera.pitchDegrees() + (float) dragY * 0.6f);
 			lastTurned = System.currentTimeMillis();
 			return true;

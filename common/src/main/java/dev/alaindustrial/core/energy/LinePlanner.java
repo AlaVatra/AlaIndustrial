@@ -54,6 +54,12 @@ final class LinePlanner<P> {
 	private EnergyBuffer[] buffers = new EnergyBuffer[0];
 	private final List<PlanEnds.Sink<P>> sinks = new ArrayList<>();
 	private final List<PlanEnds.Source<P>> sources = new ArrayList<>();
+	/**
+	 * The receiver and the generator of each host this tick (MOD-1027): one lookup instead of a pass over the ones
+	 * collected so far, which cost a line of n consumers n²/2 compares a tick. Lookups only — the order is the lists'.
+	 */
+	private final Map<P, PlanEnds.Sink<P>> sinkByHost = new LinkedHashMap<>();
+	private final Map<P, Integer> sourceByHost = new LinkedHashMap<>();
 	private int[] group = new int[8];
 	private boolean[] stockHop = new boolean[0];
 	private long[] pulled = new long[8];
@@ -185,18 +191,19 @@ final class LinePlanner<P> {
 			producerDistance[i] = d == null ? Integer.MAX_VALUE / 2 : d;
 		}
 		sinks.clear();
+		sinkByHost.clear();
 		addSinks(view, machines, PlanEnds.MACHINE, packetCap, lossPerBlock);
 		addSinks(view, stores, PlanEnds.STORE, packetCap, lossPerBlock);
 		addSinks(view, takers, PlanEnds.TAKER, packetCap, lossPerBlock);
 		sources.clear();
+		sourceByHost.clear();
 		addSources(view, generators, packetCap);
 		for (PlanEnds.Sink<P> s : sinks) {
-			s.self = -1;
-			for (int g = 0; g < sources.size(); g++) {
-				if (sources.get(g).producer.host().equals(s.consumer.host())) {
-					s.self = g;
-					sources.get(g).alsoSink = true;
-				}
+			// One generator per host (addSources), so a host that also receives has at most one (ADR-055).
+			Integer g = sourceByHost.get(s.consumer.host());
+			s.self = g == null ? -1 : g;
+			if (g != null) {
+				sources.get(g).alsoSink = true;
 			}
 		}
 		route(packetCap);
@@ -356,7 +363,7 @@ final class LinePlanner<P> {
 	private void addSinks(LineView<P> view, List<EnergyLineDistributor.LiveConsumer<P>> list, int kind,
 			long packetCap, double lossPerBlock) {
 		for (EnergyLineDistributor.LiveConsumer<P> lc : list) {
-			PlanEnds.Sink<P> s = sinkOf(lc.host());
+			PlanEnds.Sink<P> s = sinkByHost.get(lc.host()); // a multiblock's cells are one receiver (ADR-027)
 			if (s == null) {
 				long room = Math.min(lc.room(), packetCap);
 				if (room <= 0) {
@@ -368,6 +375,7 @@ final class LinePlanner<P> {
 						view.consumerDistance().apply(lc.pos())), room) : 0L;
 				s = new PlanEnds.Sink<>(lc, k, room, need, kind != PlanEnds.MACHINE);
 				sinks.add(s);
+				sinkByHost.put(lc.host(), s);
 			}
 			for (int f = 0; f < view.faces().size(); f++) {
 				Integer j = index.get(view.faces().get(f).apply(lc.pos()));
@@ -378,27 +386,14 @@ final class LinePlanner<P> {
 		}
 	}
 
-	/** The receiver already planned for this host: a multiblock's cells are one (ADR-027). */
-	private PlanEnds.Sink<P> sinkOf(P host) {
-		for (PlanEnds.Sink<P> s : sinks) {
-			if (s.consumer.host().equals(host)) {
-				return s;
-			}
-		}
-		return null;
-	}
-
 	private void addSources(LineView<P> view, List<EnergyLineDistributor.LiveProducer<P>> list, long packetCap) {
 		for (EnergyLineDistributor.LiveProducer<P> lp : list) {
-			PlanEnds.Source<P> s = null;
-			for (PlanEnds.Source<P> other : sources) {
-				if (other.producer.host().equals(lp.host())) {
-					s = other; // MOD-608: one packet per host, whatever number of cells lends its port
-					break;
-				}
-			}
+			// MOD-608: one packet per host, whatever number of cells lends its port
+			Integer known = sourceByHost.get(lp.host());
+			PlanEnds.Source<P> s = known == null ? null : sources.get(known);
 			if (s == null) {
 				s = new PlanEnds.Source<>(lp, Math.min(packetCap, Math.max(0L, lp.storage().getAmount())));
+				sourceByHost.put(lp.host(), sources.size());
 				sources.add(s);
 			}
 			int cell = s.cells.size();

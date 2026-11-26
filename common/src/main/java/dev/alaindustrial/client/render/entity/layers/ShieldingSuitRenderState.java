@@ -3,7 +3,8 @@ package dev.alaindustrial.client.render.entity.layers;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * The worn shielding pieces, carried on {@code VillagerRenderState} via a mixin (MOD-536).
+ * The worn shielding pieces, carried on {@code VillagerRenderState} (MOD-536) and {@code CowRenderState}
+ * (MOD-569) via mixins.
  *
  * <p>Villagers are not humanoid: {@code VillagerRenderState} has none of the four armor fields
  * {@code HumanoidRenderState} carries, and no vanilla layer would consume them anyway. The duck

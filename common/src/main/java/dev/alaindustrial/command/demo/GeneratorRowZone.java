@@ -1,7 +1,5 @@
 package dev.alaindustrial.command.demo;
 
-import dev.alaindustrial.block.ConcentratorPart;
-import dev.alaindustrial.block.ConcentratorStructure;
 import dev.alaindustrial.block.MobWheelStructure;
 import dev.alaindustrial.block.HorizontalMachineBlock;
 import dev.alaindustrial.registry.ModContent;
@@ -20,8 +18,8 @@ import net.minecraft.world.level.block.Blocks;
  *
  * <p>The row is laid out at a pitch of six cells (MOD-659), so every generator has its own bay and a
  * free aisle on each side: coal x=4, geothermal x=10, the four solar panels x=16..34, a row of three
- * thermoelectric generators x=40, z=6..8 (MOD-811), then the water mill's channel (x=44..48), the
- * concentrator (x=54..55), the mob wheel (x=57..59, z=8..10, MOD-763), and the wind row of the next method.
+ * thermoelectric generators x=40, z=6..8 (MOD-811), then the water mill's channel (x=44..48), the Bronze Lunar
+ * Panel (x=54, MOD-1031), the mob wheel (x=57..59, z=8..10, MOD-763), and the wind row of the next method.
  *
  * <p>Domain (coding standard, section 1): EnergyGeneration.
  */
@@ -41,12 +39,12 @@ final class GeneratorRowZone implements DemoZone {
 	static final int MOB_WHEEL_X = 57;
 	static final int MOB_WHEEL_Z = GEN_Z + 2;
 
-	/** Camera of {@code /ala demo tp concentrator}. */
-	static final DemoStand.TpPoint CONCENTRATOR_CAMERA =
-			new DemoStand.TpPoint("concentrator", 54.0, 5.0, 3.0, 0.0f, 25.0f, false);
+	/** Camera of {@code /ala demo tp lunar}: the Bronze Lunar Panel in the bay after the water mill (MOD-1031). */
+	static final DemoStand.TpPoint LUNAR_CAMERA =
+			new DemoStand.TpPoint("lunar", 54.0, 5.0, 3.0, 0.0f, 25.0f, false);
 
 	// size-justified: the row is read left to right as the player walks it — one bay after another, each with the
-	// reason it stands where it does; the larger builds (mill, concentrator, wheel, piezo path) are already methods.
+	// reason it stands where it does; the larger builds (mill, wheel, piezo path) are already methods.
 	@Override
 	public void build(StandWriter w) {
 		// MOD-479 — the creative source, at the head of the generator row: the instrument you reach for
@@ -64,13 +62,14 @@ final class GeneratorRowZone implements DemoZone {
 
 		buildPiezoPath(w);
 
-		// Four solar panels, one bay each. Under open sky by construction: nothing on this row is taller
-		// than the wind pillars at the far end, and the channel's dam (MOD-597 — it once roofed the fourth
-		// panel, a panel that produces nothing and says nothing) starts east of x=44.
+		// Four solar panels, one bay each: the base panel, the two T2 branches and the day branch's full-block
+		// third rung (MOD-1031). Under open sky by construction: nothing on this row is taller than the wind
+		// pillars at the far end, and the channel's dam (MOD-597 — it once roofed the fourth panel, a panel that
+		// produces nothing and says nothing) starts east of x=44.
 		int x = 16;
 		for (Block solar : new Block[] {ModContent.SOLAR_PANEL.get(),
 				ModContent.DAYLIGHT_SOLAR_PANEL.get(), ModContent.MOONLIT_SOLAR_PANEL.get(),
-				ModContent.RADIANT_SOLAR_PANEL.get()}) {
+				ModContent.REINFORCED_SOLAR_PANEL.get()}) {
 			w.set(x, 1, GEN_Z, solar);
 			w.set(x, 1, GEN_Z + 1, ModContent.BATTERY_BOX.get());
 			x += 6;
@@ -124,32 +123,32 @@ final class GeneratorRowZone implements DemoZone {
 		w.set(mx, -1, GEN_Z + 1, FLOOR);
 		w.set(mx, 0, GEN_Z + 1, ModContent.BATTERY_BOX.get());
 
-		buildConcentrator(w);
+		// MOD-1031 — the night branch's full-block third rung, in the bay the Mirror Concentrator used to fill, with
+		// its battery box behind it like every bay of the row.
+		w.set(54, 1, GEN_Z, ModContent.BRONZE_LUNAR_PANEL.get());
+		w.set(54, 1, GEN_Z + 1, ModContent.BATTERY_BOX.get());
+		buildPlannedSolarRungs(w);
 		buildMobWheel(w);
 	}
 
 	/**
-	 * MOD-603: the concentrator grown out into its two-by-two-by-two form — the next bay of the
-	 * generator row after the water mill, its 2x2x2 at x=54..55 / z=8..9.
-	 * Built the way a player builds it — a grown panel plus seven loose sections — and then handed
-	 * to the real assembler, so the stand cannot show a structure the game could not produce.
+	 * MOD-1031: the ten planned solar rungs, T4 to T8 of the day branch then of the night branch, in a row behind
+	 * the solar bays' battery boxes, one free cell apart. They have no function yet: the row shows their look and
+	 * proves they are registered, nothing more.
 	 */
-	private static void buildConcentrator(StandWriter w) {
-		BlockPos structureCore = w.origin().offset(54, 1, GEN_Z);
-		w.place(structureCore,
-				ModContent.RADIANT_SOLAR_PANEL.get().defaultBlockState());
-		for (ConcentratorPart part : ConcentratorPart.CELLS) {
-			if (part == ConcentratorPart.CORE) {
-				continue;
-			}
-			w.place(structureCore.offset(part.worldOffset(Direction.NORTH)),
-					ModContent.CONCENTRATOR_SECTION.get().defaultBlockState());
+	private static void buildPlannedSolarRungs(StandWriter w) {
+		Block[] rungs = {ModContent.ELECTRUM_SOLAR_PANEL.get(), ModContent.PALLADIUM_SOLAR_PANEL.get(),
+				ModContent.HYBRID_SOLAR_PANEL.get(), ModContent.QUANTUM_SOLAR_PANEL.get(),
+				ModContent.ULTIMATE_SOLAR_PANEL.get(), ModContent.SILVER_LUNAR_PANEL.get(),
+				ModContent.PALLADIUM_LUNAR_PANEL.get(), ModContent.HYBRID_LUNAR_PANEL.get(),
+				ModContent.QUANTUM_LUNAR_PANEL.get(), ModContent.ULTIMATE_LUNAR_PANEL.get()};
+		for (int i = 0; i < rungs.length; i++) {
+			w.set(16 + 2 * i, 1, GEN_Z + 3, rungs[i]);
 		}
-		ConcentratorStructure.tryAssemble(w.level(), structureCore);
 	}
 
 	/**
-	 * MOD-763: the mob wheel, assembled, in the bay after the concentrator — its gate on the north side, toward
+	 * MOD-763: the mob wheel, assembled, in the bay after the lunar panel — its gate on the north side, toward
 	 * the camera. Built the way a player builds it — the fourteen parts with the thirteen free cells left as air
 	 * — and then handed to the real assembler, which fills those cells with its invisible members. The free
 	 * cells are claimed through the ledger FIRST: the last part placed may already set the assembly off through

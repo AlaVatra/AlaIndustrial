@@ -14,6 +14,11 @@ import java.util.Map;
 /** Blueprints about making, moving and storing energy (MOD-797). Listed in {@link BlueprintCatalog#ALL}. */
 public final class EnergyBlueprints {
 
+	private static final String THERMO = "alaindustrial:thermoelectric_generator";
+	private static final String BLUE_ICE = "minecraft:blue_ice";
+	private static final String SHAVINGS = "alaindustrial:obsidian_shavings";
+	private static final String OBSIDIAN_DUST = "alaindustrial:obsidian_dust";
+
 	/** Generator → copper cable → electric furnace, then the cable is taken out and the furnace stops. */
 	public static final BlueprintDef ENERGY_BASICS = new BlueprintDef("energy_basics",
 			List.of(GENERATOR, COPPER_CABLE, ELECTRIC_FURNACE),
@@ -98,11 +103,11 @@ public final class EnergyBlueprints {
 
 	/**
 	 * The solar panel grows into the daylight panel with a chip, a solid block over it stops it, the moonlit
-	 * panel grows with the other chip, and a resonance chip turns the daylight panel into the concentrator
-	 * (its mirrors are drawn by a block-entity renderer, so the sheet shows the collector only).
+	 * panel grows with the other chip, and a resonance chip in each grows them into the full-block third rungs
+	 * of both branches, the Reinforced Solar Panel and the Bronze Lunar Panel (MOD-1031).
 	 */
 	public static final BlueprintDef SOLAR_TIERS = new BlueprintDef("solar_tiers",
-			List.of(DAYLIGHT_SOLAR_PANEL, MOONLIT_SOLAR_PANEL, RADIANT_SOLAR_PANEL),
+			List.of(DAYLIGHT_SOLAR_PANEL, MOONLIT_SOLAR_PANEL, REINFORCED_SOLAR_PANEL, BRONZE_LUNAR_PANEL),
 			List.of(
 					new Step(List.of(solarPanel()), 0, 1, -1, -1, Verdict.NONE,
 							List.of(new ItemMotion("alaindustrial:alignment_chip_day", 0, true))),
@@ -113,9 +118,10 @@ public final class EnergyBlueprints {
 							1, 3, -1, -1, Verdict.NONE),
 					new Step(List.of(panelAt(DAYLIGHT_SOLAR_PANEL, 0), panelAt(MOONLIT_SOLAR_PANEL, 2)),
 							0, 2, -1, -1, Verdict.NONE,
-							List.of(new ItemMotion("alaindustrial:resonance_chip", 0, true))),
-					new Step(List.of(new Placement(RADIANT_SOLAR_PANEL, 0, 0, 0,
-							Map.of("assembled", "false", "facing", "south")), panelAt(MOONLIT_SOLAR_PANEL, 2)),
+							List.of(new ItemMotion("alaindustrial:resonance_chip", 0, true),
+									new ItemMotion("alaindustrial:resonance_chip", 1, true))),
+					new Step(List.of(new Placement(REINFORCED_SOLAR_PANEL, 0, 0, 0, Map.of()),
+							new Placement(BRONZE_LUNAR_PANEL, 2, 0, 0, Map.of())),
 							0, 4, -1, -1, Verdict.GOOD)));
 
 	/**
@@ -236,6 +242,80 @@ public final class EnergyBlueprints {
 					new Step(repellerLine(repeller(MOB_REPELLER_HV, false, true), ELECTRUM_CABLE), 0, 1,
 							List.of(Flow.energy(2, 0)), Verdict.GOOD, List.of())));
 
+	/**
+	 * The thermoelectric generator (MOD-935) alone; lava on one side only, nothing (bad); blue ice on the other
+	 * side and a cable to a battery box (good); a row of three between the lava and the ice sharing that one
+	 * cable; magma above and ice below the first adding a second pair. Indices: 0 generator, 1 lava, 2 ice,
+	 * 3 cable, 4 box, then the row (5..7 and 8..10) or the second pair (5 magma, 6 ice).
+	 */
+	public static final BlueprintDef THERMOELECTRIC = new BlueprintDef("thermoelectric",
+			List.of(THERMO),
+			List.of(
+					new Step(List.of(thermo(0, "off", "off")), 0, 1, -1, -1, Verdict.NONE),
+					new Step(List.of(thermo(0, "off", "off"), lavaAt(-1, 0, 0)), 0, 1, -1, -1, Verdict.BAD),
+					new Step(thermoLine(false), 0, 1, 0, 4, Verdict.GOOD),
+					new Step(thermoRow(), 8, 2, 8, 4, Verdict.GOOD),
+					new Step(join(thermoLine(true), List.of(new Placement("minecraft:magma_block", 0, 1, 0, Map.of()),
+							new Placement(BLUE_ICE, 0, -1, 0, Map.of()))), 0, 1, 0, 4, Verdict.GOOD)));
+
+	/**
+	 * Upkeep of the geothermal generator (MOD-935): the cistern chip going in; lava burning and leaving
+	 * obsidian shavings; nine shavings into obsidian dust at the crafting table; the dust pressed into
+	 * obsidian by a compressor (good). Indices: 0 generator or table; 0 generator, 1 cable, 2 compressor.
+	 */
+	public static final BlueprintDef GEOTHERMAL_UPKEEP = new BlueprintDef("geothermal_upkeep",
+			List.of("alaindustrial:cistern_chip", SHAVINGS, OBSIDIAN_DUST),
+			List.of(
+					new Step(List.of(geothermal(0, true, false)), 0, 1, -1, -1, Verdict.NONE,
+							List.of(new ItemMotion("alaindustrial:cistern_chip", 0, true))),
+					new Step(List.of(geothermal(0, true, false)), 0, 1, -1, -1, Verdict.NONE,
+							List.of(new ItemMotion("minecraft:lava_bucket", 0, true),
+									new ItemMotion(SHAVINGS, 0, false))),
+					new Step(List.of(new Placement("minecraft:crafting_table", 0, 0, 0, Map.of())), 0, 2, -1, -1,
+							Verdict.NONE, shavingsToDust()),
+					new Step(List.of(generatorAt(0), cableOf(COPPER_CABLE, 1, 0, 0, "west", "east"),
+							machine(COMPRESSOR, 2, 0, false, true)), 2, 3, 0, 2, Verdict.GOOD,
+							List.of(new ItemMotion(OBSIDIAN_DUST, 2, true),
+									new ItemMotion("minecraft:obsidian", 2, false)))));
+
 	private EnergyBlueprints() {
+	}
+
+
+	/** A thermoelectric generator at (0, 0, {@code z}) showing its west-east and vertical hot sides. */
+	private static Placement thermo(int z, String axisX, String axisY) {
+		return new Placement(THERMO, 0, 0, z, Map.of("axis_x", axisX, "axis_y", axisY, "axis_z", "off"));
+	}
+
+	private static Placement lavaAt(int x, int y, int z) {
+		return new Placement("minecraft:lava", x, y, z, Map.of());
+	}
+
+	/** 0 generator, 1 lava west, 2 blue ice east, 3 cable toward the viewer, 4 battery box taking it. */
+	private static List<Placement> thermoLine(boolean secondPair) {
+		return List.of(thermo(0, "hot_negative", secondPair ? "hot_positive" : "off"), lavaAt(-1, 0, 0),
+				new Placement(BLUE_ICE, 1, 0, 0, Map.of()), cableOf(COPPER_CABLE, 0, 0, 1, "north", "south"),
+				new Placement(BATTERY_BOX, 0, 0, 2, Map.of("facing", "north")));
+	}
+
+	/** {@link #thermoLine} and two more generators behind it, each between lava and ice (5..7, 8..10). */
+	private static List<Placement> thermoRow() {
+		List<Placement> all = new java.util.ArrayList<>(thermoLine(false));
+		for (int z = -1; z >= -2; z--) {
+			all.add(thermo(z, "hot_negative", "off"));
+			all.add(lavaAt(-1, 0, z));
+			all.add(new Placement(BLUE_ICE, 1, 0, z, Map.of()));
+		}
+		return all;
+	}
+
+	/** Nine obsidian shavings into the table (block 0), one obsidian dust out. */
+	private static List<ItemMotion> shavingsToDust() {
+		List<ItemMotion> all = new java.util.ArrayList<>();
+		for (int i = 0; i < 9; i++) {
+			all.add(new ItemMotion(SHAVINGS, 0, true));
+		}
+		all.add(new ItemMotion(OBSIDIAN_DUST, 0, false));
+		return all;
 	}
 }

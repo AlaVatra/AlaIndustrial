@@ -18,26 +18,11 @@
       ],
       "reason": "MOD-518: a creative-only tool that survival cannot obtain; the book is a survival walkthrough, while the wiki keeps the page as a reference (gen_guide_book.BOOK_EXCLUDE)."
     },
-    "elevator_shaft": {
+    "guide_book": {
       "surfaces": [
-        "book",
-        "wiki"
+        "blueprint"
       ],
-      "reason": "MOD-769: the spec is written (docs/blocks/utility/elevator.md) but stays at status spec until the owner has ridden the elevator in game (owner decision 2026-11-22: an early in-game check first). Remove the row when the spec turns implemented."
-    },
-    "elevator_station": {
-      "surfaces": [
-        "book",
-        "wiki"
-      ],
-      "reason": "MOD-769: the spec is written (docs/blocks/utility/elevator.md) but stays at status spec until the owner has ridden the elevator in game (owner decision 2026-11-22: an early in-game check first). Remove the row when the spec turns implemented."
-    },
-    "elevator_winch": {
-      "surfaces": [
-        "book",
-        "wiki"
-      ],
-      "reason": "MOD-769: the spec is written (docs/blocks/utility/elevator.md) but stays at status spec until the owner has ridden the elevator in game (owner decision 2026-11-22: an early in-game check first). Remove the row when the spec turns implemented."
+      "reason": "MOD-935: the guide book is where the blueprints are opened from (the Blueprint button of each page); a sheet about the book itself would have nothing to build or connect."
     },
     "high_altitude_wind_mill": {
       "surfaces": [
@@ -45,40 +30,51 @@
       ],
       "reason": "A hidden evolution of the wind mill (T2): the book does not announce it before the player meets it; the wiki keeps the page (gen_guide_book.BOOK_EXCLUDE)."
     },
+    "oil_slime_spawn_egg": {
+      "surfaces": [
+        "blueprint"
+      ],
+      "reason": "MOD-935: a creative-only spawn egg that survival cannot obtain; there is nothing to build or connect, and the oil slime is described on the oil pages."
+    },
     "quarry_bridge_beam": {
       "surfaces": [
         "book",
-        "wiki"
+        "wiki",
+        "blueprint"
       ],
-      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written. The blueprint (MOD-935) waits for the same decision."
     },
     "quarry_cart": {
       "surfaces": [
         "book",
-        "wiki"
+        "wiki",
+        "blueprint"
       ],
-      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written. The blueprint (MOD-935) waits for the same decision."
     },
     "quarry_controller": {
       "surfaces": [
         "book",
-        "wiki"
+        "wiki",
+        "blueprint"
       ],
-      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written. The blueprint (MOD-935) waits for the same decision."
     },
     "quarry_drill_bit": {
       "surfaces": [
         "book",
-        "wiki"
+        "wiki",
+        "blueprint"
       ],
-      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written. The blueprint (MOD-935) waits for the same decision."
     },
     "quarry_head": {
       "surfaces": [
         "book",
-        "wiki"
+        "wiki",
+        "blueprint"
       ],
-      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written. The blueprint (MOD-935) waits for the same decision."
     },
     "storm_wind_mill": {
       "surfaces": [
@@ -89,9 +85,10 @@
     "warehouse_shelf": {
       "surfaces": [
         "book",
-        "wiki"
+        "wiki",
+        "blueprint"
       ],
-      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written."
+      "reason": "MOD-963, owner decision 2026-11-13: the mechanic is not yet open to the player, so it has no OKF spec and no book or wiki page yet. Remove the row when its spec is written. The blueprint (MOD-935) waits for the same decision."
     }
   }
 }

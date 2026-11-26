@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "Cables",
-              "text": "Los cables unen bloques en una red eléctrica y transportan EU. Todo cable pierde energía con la distancia: cuanto más largo el tendido, más se pierde.\n\nHay tres tipos, y son distintos:\n• Estaño: estrecho (8 EU/t) pero casi sin pérdidas, para granjas solares\n• Cobre: el universal de trabajo (12 EU/t)\n• Oro: el más ancho (48 EU/t), con mayores pérdidas\n\nNo mezcles tipos en una misma línea: toda la red funciona según el cable más fuerte que contenga, incluidas sus pérdidas."
+              "text": "Los cables unen bloques en una red eléctrica y transportan EU. Todo cable pierde energía con la distancia: cuanto más largo el tendido, más se pierde.\n\nHay cuatro tipos, y son distintos:\n• Estaño: estrecho (8 EU/t) pero casi sin pérdidas, para granjas solares\n• Cobre: el universal de trabajo (12 EU/t)\n• Oro: más ancho (48 EU/t), con mayores pérdidas\n• Electro: el más ancho (192 EU/t) y con las menores pérdidas, para líneas HV, a cambio de una fabricación cara\n\nNo mezcles tipos en una misma línea: toda la red funciona según el cable más fuerte que contenga, incluidas sus pérdidas."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "Piezas del blindaje",
-              "text": "- Vidrio de reactor: una ventana, pero no más de un tercio de los muros\n- Puerta de esclusa del reactor: una esclusa, se abre con redstone y se cierra sola\n- Entrada del reactor: por aquí cruza el muro la tubería de agua\n- Salida del reactor: aquí se enchufa el cable\n- Lámpara de reactor: alumbra solo la sala, nunca el exterior"
+              "text": "- Vidrio de reactor: una ventana, pero no más del 30 % de la carcasa\n- Puerta de esclusa del reactor: una esclusa, se abre con redstone y se cierra sola\n- Entrada del reactor: por aquí cruza el muro la tubería de agua\n- Salida del reactor: aquí se enchufa el cable\n- Lámpara de reactor: alumbra solo la sala, nunca el exterior"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "Energía",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "Panel lunar de bronce",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Panel lunar de bronce",
+              "text": "El tercer peldaño de la rama nocturna: un bloque completo cuya producción sigue la fase de la luna, 10 EU/t con luna llena, y que sigue funcionando con mal tiempo; solo se obtiene por evolución."
+            },
+            {
+              "type": "stats",
+              "title": "Estadísticas",
+              "lines": [
+                "Energía: 10 EU/t (noche)",
+                "Búfer: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "Aerogenerador",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "Concentrador de espejos",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Concentrador de espejos",
-              "text": "El tercer peldaño de la rama diurna: el doble que el panel solar diurno y la mitad más al mediodía; los espejos se pliegan cuando no hay nada que captar."
-            },
-            {
-              "type": "stats",
-              "title": "Estadísticas",
-              "lines": [
-                "Energía: 8 EU/t (día)",
-                "Búfer: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "Receta",
-              "recipe_type": "Fabricación con forma",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "Panel solar lunar",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "Panel solar reforzado",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Panel solar reforzado",
+              "text": "El tercer peldaño de la rama diurna: un bloque completo cuya producción sigue la altura del sol, 12 EU/t al mediodía; solo se obtiene por evolución."
+            },
+            {
+              "type": "stats",
+              "title": "Estadísticas",
+              "lines": [
+                "Energía: 12 EU/t (día)",
+                "Búfer: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "Torno de ascensor",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Torno de ascensor",
+              "text": "Un ascensor vertical con energía: un hueco de cristal hecho de marcos, una estación con puertas y panel de llamada en cada planta y un torno como tapa arriba; cada viaje se paga entero al salir la cabina, y solo están abiertas las puertas donde está la cabina."
+            },
+            {
+              "type": "stats",
+              "title": "Estadísticas",
+              "lines": [
+                "Energía: 50 EU + 8 EU/bloque",
+                "Búfer: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Receta",
+              "recipe_type": "Fabricación con forma",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "Fabricación con forma",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabricación con forma",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabricación con forma",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "Cama de carga",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "Motor de escalera mecánica",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Motor de escalera mecánica",
+              "text": "Una banda inclinada de tramos con peldaños y pasamanos: lleva jugadores, mobs y objetos una planta arriba o abajo mientras su motor tenga EU. El motor LV mueve hasta 8 tramos; el MV, hasta 16 y más rápido."
+            },
+            {
+              "type": "stats",
+              "title": "Estadísticas",
+              "lines": [
+                "Energía: 1 EU/t + 0.5 EU/t por tramo (solo mientras alguien viaja)",
+                "Búfer: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Receta",
+              "recipe_type": "Fabricación con forma",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabricación con forma",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Fabricación con forma",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabricación con forma",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabricación con forma",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "Chip de evolución solar",
-              "text": "Tres chips de evolución —solar (día), lunar (noche) y de resonancia (el tercer peldaño)— que evolucionan los paneles solares y aerogeneradores básicos a T2 y el panel diurno T2 más allá, conservando la energía acumulada."
+              "text": "Tres chips de evolución —solar (día), lunar (noche) y de resonancia (el tercer peldaño)— que evolucionan los paneles solares y aerogeneradores básicos a T2 y los dos paneles T2 más allá, conservando la energía acumulada."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Fabricación con forma",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

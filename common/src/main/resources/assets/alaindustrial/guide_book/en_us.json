@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "Cables",
-              "text": "Cables join blocks into a power grid and carry EU. Every cable loses energy over distance — the longer the run, the more is lost.\n\nThere are three grades, and they differ:\n• Tin — narrow (8 EU/t) but nearly lossless: for solar farms\n• Copper — the universal workhorse (12 EU/t)\n• Gold — the widest (48 EU/t), at a higher loss\n\nDo not mix grades on one line: the whole network runs on the strongest cable in it, including its loss."
+              "text": "Cables join blocks into a power grid and carry EU. Every cable loses energy over distance — the longer the run, the more is lost.\n\nThere are four grades, and they differ:\n• Tin — narrow (8 EU/t) but nearly lossless: for solar farms\n• Copper — the universal workhorse (12 EU/t)\n• Gold — wider (48 EU/t), at a higher loss\n• Electrum — the widest (192 EU/t) with the lowest loss: for HV lines, at the price of an expensive craft\n\nDo not mix grades on one line: the whole network runs on the strongest cable in it, including its loss."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "Shell parts",
-              "text": "- Reactor Glass: a window, but no more than a third of the walls\n- Reactor Door: an airlock, opens on redstone and shuts itself\n- Reactor Inlet: where the water pipe crosses the wall\n- Reactor Outlet: where the cable plugs in\n- Reactor Lamp: lights the room only, never the outside"
+              "text": "- Reactor Glass: a window, but no more than 30 % of the shell\n- Reactor Door: an airlock, opens on redstone and shuts itself\n- Reactor Inlet: where the water pipe crosses the wall\n- Reactor Outlet: where the cable plugs in\n- Reactor Lamp: lights the room only, never the outside"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "Energy",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "Bronze Lunar Panel",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Bronze Lunar Panel",
+              "text": "The night branch's third rung — a full block whose output follows the phase of the moon, 10 EU/t under a full moon, and keeps working in bad weather; obtained only by evolution."
+            },
+            {
+              "type": "stats",
+              "title": "Stats",
+              "lines": [
+                "Energy: 10 EU/t (night)",
+                "Buffer: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "Wind Turbine",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "Mirror Concentrator",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Mirror Concentrator",
-              "text": "The day branch's third rung — twice the daylight panel, half again as much at noon; the mirrors fold away when there is nothing to collect."
-            },
-            {
-              "type": "stats",
-              "title": "Stats",
-              "lines": [
-                "Energy: 8 EU/t (day)",
-                "Buffer: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "Recipe",
-              "recipe_type": "Shaped Crafting",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "Moonlit Solar Panel",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "Reinforced Solar Panel",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Reinforced Solar Panel",
+              "text": "The day branch's third rung — a full block whose output follows the height of the sun, 12 EU/t at noon; obtained only by evolution."
+            },
+            {
+              "type": "stats",
+              "title": "Stats",
+              "lines": [
+                "Energy: 12 EU/t (day)",
+                "Buffer: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "Elevator Winch",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Elevator Winch",
+              "text": "A powered vertical elevator: a glass shaft of frames, a station with doors and a call panel on every floor and a winch as the lid on top; each trip is paid in full when the cabin sets off, and only the doors where the cabin stands are open."
+            },
+            {
+              "type": "stats",
+              "title": "Stats",
+              "lines": [
+                "Energy: 50 EU + 8 EU/block",
+                "Buffer: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recipe",
+              "recipe_type": "Shaped Crafting",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "Shaped Crafting",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Shaped Crafting",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Shaped Crafting",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "Charging Bed",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "Escalator Drive",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Escalator Drive",
+              "text": "An inclined band of step sections with handrails: it carries players, mobs and items one floor up or down while its drive has EU. The LV drive runs up to 8 sections, the MV drive up to 16 and faster."
+            },
+            {
+              "type": "stats",
+              "title": "Stats",
+              "lines": [
+                "Energy: 1 EU/t + 0.5 EU/t per section (only while someone rides)",
+                "Buffer: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recipe",
+              "recipe_type": "Shaped Crafting",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Shaped Crafting",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Shaped Crafting",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Shaped Crafting",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Shaped Crafting",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "Solar Evolution Chip",
-              "text": "Three evolution chips — solar (day), lunar (night) and resonance (the third rung) — that evolve basic panels and wind mills into T2 and the T2 day panel onward, carrying accumulated NBT energy over."
+              "text": "Three evolution chips — solar (day), lunar (night) and resonance (the third rung) — that evolve basic panels and wind mills into T2 and both T2 panels onward, carrying accumulated NBT energy over."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Shaped Crafting",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

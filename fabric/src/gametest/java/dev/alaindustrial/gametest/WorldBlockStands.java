@@ -100,6 +100,21 @@ public final class WorldBlockStands {
         L3Chunks.waitRender(singleplayer);
         context.waitTicks(10);
         LOG.info("[GUITEST] panel-neighbour top -> {}", takeCleanScreenshot(context, "panel_neighbour_top").toAbsolutePath());
+
+        // MOD-1031: the full-block third rungs, the designer's model. Two of each branch side by side and a stone
+        // beside the row, so the frame between touching panels and the neighbour's face beside the recess both
+        // show; looked at from above at an angle, where the glass over the cell grid and the corner bolts read.
+        server.runCommand("fill 50 99 40 56 99 46 minecraft:dirt");
+        server.runCommand("setblock 51 100 42 minecraft:stone");
+        server.runCommand("setblock 52 100 42 alaindustrial:reinforced_solar_panel");
+        server.runCommand("setblock 53 100 42 alaindustrial:reinforced_solar_panel");
+        server.runCommand("setblock 54 100 42 alaindustrial:bronze_lunar_panel");
+        server.runCommand("setblock 55 100 42 alaindustrial:bronze_lunar_panel");
+        server.runCommand("tp @p 53.5 103 46 180 40");
+        L3Chunks.waitRender(singleplayer);
+        context.waitTicks(10);
+        LOG.info("[GUITEST] full solar panels -> {}",
+                takeCleanScreenshot(context, "world_full_solar_panels").toAbsolutePath());
     }
 
     // ────────────────────────────────────────────────────────────────────────────────

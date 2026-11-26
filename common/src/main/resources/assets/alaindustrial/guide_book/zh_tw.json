@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "纜線",
-              "text": "纜線將方塊連成電網並輸送 EU。任何纜線都會隨距離損耗——線路越長，損失越多。\n\n共有三種，各不相同：\n• 錫纜——較窄（8 EU/t）但幾乎無損耗，適合太陽能農場\n• 銅纜——萬用主力（12 EU/t）\n• 金纜——最寬（48 EU/t），但損耗更高\n\n同一條線路不要混用：整個電網都按其中最強的纜線運行，損耗也一樣。"
+              "text": "纜線將方塊連成電網並輸送 EU。任何纜線都會隨距離損耗——線路越長，損失越多。\n\n共有四種，各不相同：\n• 錫纜——較窄（8 EU/t）但幾乎無損耗，適合太陽能農場\n• 銅纜——萬用主力（12 EU/t）\n• 金纜——較寬（48 EU/t），但損耗更高\n• 琥珀金纜——最寬（192 EU/t），損耗最低，適合 HV 線路，代價是合成昂貴\n\n同一條線路不要混用：整個電網都按其中最強的纜線運行，損耗也一樣。"
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "外殼部件",
-              "text": "- 反應爐玻璃：可以當窗戶，但別超過牆面的三分之一\n- 反應爐氣閘門：氣閘，紅石一給就開，自己會關上\n- 反應爐入口：水管從這裡穿牆進來\n- 反應爐輸出端：電纜插在這裡\n- 反應爐燈：只照亮房間內部，絕不外漏"
+              "text": "- 反應爐玻璃：可以當窗戶，但別超過外殼的 30%\n- 反應爐氣閘門：氣閘，紅石一給就開，自己會關上\n- 反應爐入口：水管從這裡穿牆進來\n- 反應爐輸出端：電纜插在這裡\n- 反應爐燈：只照亮房間內部，絕不外漏"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "能源",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "青銅月能板",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "青銅月能板",
+              "text": "夜間分支的第三階——一個完整方塊，產量隨月相變化，滿月時 10 EU/t，惡劣天氣下仍能運作；只能透過進化取得。"
+            },
+            {
+              "type": "stats",
+              "title": "數據",
+              "lines": [
+                "能量：10 EU/t（夜晚）",
+                "緩衝：16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "風力渦輪機",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "鏡面聚光器",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "鏡面聚光器",
-              "text": "白天分支的第三級——發電量是日光太陽能板的兩倍，正午時再多一半；沒有光可收集時，鏡面會摺疊收起。"
-            },
-            {
-              "type": "stats",
-              "title": "數據",
-              "lines": [
-                "能量：8 EU/t（白天）",
-                "緩衝：16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "配方",
-              "recipe_type": "有序合成",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "月光太陽能板",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "強化太陽能板",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "強化太陽能板",
+              "text": "晝間分支的第三階——一個完整方塊，產量隨太陽高度變化，正午 12 EU/t；只能透過進化取得。"
+            },
+            {
+              "type": "stats",
+              "title": "數據",
+              "lines": [
+                "能量：12 EU/t（白天）",
+                "緩衝：16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "電梯捲揚機",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "電梯捲揚機",
+              "text": "用電驅動的垂直電梯：由框架組成的玻璃井道，每層一個帶門和呼叫面板的層站，頂上是作為蓋子的捲揚機；每趟行程在車廂出發時一次付清，只有車廂所在樓層的門是開著的。"
+            },
+            {
+              "type": "stats",
+              "title": "數據",
+              "lines": [
+                "能量：50 EU + 8 EU/格",
+                "緩衝：10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "配方",
+              "recipe_type": "有序合成",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "有序合成",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "有序合成",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "有序合成",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "充電床",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "電扶梯驅動器",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "電扶梯驅動器",
+              "text": "由帶扶手的階梯段組成的傾斜電扶梯帶：只要驅動器裡有 EU，就能把玩家、生物和物品往上或往下送一層。LV 驅動器最多帶動 8 段，MV 驅動器最多 16 段，而且更快。"
+            },
+            {
+              "type": "stats",
+              "title": "數據",
+              "lines": [
+                "能量：1 EU/t + 每段 0.5 EU/t（僅在有人乘坐時）",
+                "緩衝：2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "配方",
+              "recipe_type": "有序合成",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "有序合成",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "有序合成",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "有序合成",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "有序合成",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "日光進化晶片",
-              "text": "三種進化晶片——太陽（白天）、月亮（夜晚）與共振（第三級）——將基礎太陽能板與風力渦輪機進化為 T2，並將 T2 日光太陽能板繼續向上進化，同時保留已累積的 NBT 能量。"
+              "text": "三種進化晶片——太陽（白天）、月亮（夜晚）與共振（第三級）——將基礎太陽能板與風力渦輪機進化為 T2，並將兩種 T2 面板繼續向上進化，同時保留已累積的 NBT 能量。"
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "有序合成",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

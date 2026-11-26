@@ -51,9 +51,15 @@ public final class FluidNetworkManager {
 	/** The positions a pipe is joined to through a connecting face right now. */
 	private static List<BlockPos> connected(ServerLevel level, BlockPos pos) {
 		List<BlockPos> result = new ArrayList<>(6);
+		// The block entity once, not once per face; a face into an unloaded chunk joins nothing, since no node of
+		// the graph stands there, and asking would load the chunk (MOD-1029).
+		if (!level.isLoaded(pos) || !(level.getBlockEntity(pos) instanceof FluidPipeNode pipe)) {
+			return result;
+		}
 		for (Direction dir : Direction.values()) {
-			if (level.getBlockEntity(pos) instanceof FluidPipeNode pipe && pipe.connects(dir)) {
-				result.add(pos.relative(dir).immutable());
+			BlockPos next = pos.relative(dir);
+			if (level.isLoaded(next) && pipe.connects(dir)) {
+				result.add(next.immutable());
 			}
 		}
 		return result;

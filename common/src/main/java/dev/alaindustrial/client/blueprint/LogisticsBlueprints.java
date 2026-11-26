@@ -116,6 +116,26 @@ public final class LogisticsBlueprints {
 							List.of(new ItemMotion("minecraft:diamond", 4, true)))));
 
 	/**
+	 * The chest upgrades (MOD-935): a vanilla copper chest taking the copper-to-iron upgrade; the same cell
+	 * an iron chest with its contents in place (good); the row of mod chests, each taking the upgrade to the
+	 * next tier, the diamond chest last.
+	 */
+	public static final BlueprintDef CHEST_UPGRADES = new BlueprintDef("chest_upgrades",
+			List.of(upgrade("copper", "iron"), upgrade("iron", "silver"), upgrade("silver", "gold"),
+					upgrade("gold", "electrum"), upgrade("electrum", "diamond")),
+			List.of(
+					new Step(List.of(new Placement("minecraft:copper_chest", 0, 0, 0,
+							Map.of("facing", "south", "type", "single"))), 0, 1, List.of(), Verdict.NONE,
+							List.of(new ItemMotion(upgrade("copper", "iron"), 0, true))),
+					new Step(chestRow(1), 0, 1, List.of(), Verdict.GOOD,
+							List.of(new ItemMotion("minecraft:raw_iron", 0, true))),
+					new Step(chestRow(5), 4, 2, List.of(), Verdict.NONE,
+							List.of(new ItemMotion(upgrade("iron", "silver"), 0, true),
+									new ItemMotion(upgrade("silver", "gold"), 1, true),
+									new ItemMotion(upgrade("gold", "electrum"), 2, true),
+									new ItemMotion(upgrade("electrum", "diamond"), 3, true)))));
+
+	/**
 	 * The wrench setting one pipe side per click, then taking a machine apart, and the network analyzer on a
 	 * broken line and a mended one.
 	 */
@@ -143,5 +163,10 @@ public final class LogisticsBlueprints {
 							List.of(new ItemMotion(NETWORK_ANALYZER, 1, true)))));
 
 	private LogisticsBlueprints() {
+	}
+
+	/** The chest upgrade item from tier {@code from} to tier {@code to}. */
+	private static String upgrade(String from, String to) {
+		return "alaindustrial:" + from + "_to_" + to + "_chest_upgrade";
 	}
 }

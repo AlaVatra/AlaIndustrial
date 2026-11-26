@@ -27,6 +27,7 @@ public final class WorkshopBlueprints {
 	private static final String ELECTRIC_DRILL = "alaindustrial:electric_drill";
 	private static final String STATION_BLOCK = "alaindustrial:workstation";
 	private static final String WORKBENCH_BLOCK = "alaindustrial:industrial_workbench";
+	private static final String ADVANCED_BENCH = "alaindustrial:advanced_industrial_workbench";
 	private static final String REACTOR_LAMP = "alaindustrial:reactor_lamp";
 	private static final String REACTOR_DOOR = "alaindustrial:reactor_door";
 	private static final String REACTOR_BUTTON = "alaindustrial:reactor_button";
@@ -105,7 +106,7 @@ public final class WorkshopBlueprints {
 	 * Indices: 0 the bench (air once broken), 1 the second bench.
 	 */
 	public static final BlueprintDef INDUSTRIAL_WORKBENCH = new BlueprintDef("industrial_workbench",
-			List.of(WORKBENCH_BLOCK),
+			List.of(WORKBENCH_BLOCK, ADVANCED_BENCH),
 			List.of(
 					new Step(List.of(bench(0)), 0, 1, List.of(), Verdict.NONE,
 							List.of(new ItemMotion("minecraft:crafting_table", 0, true),
@@ -121,7 +122,14 @@ public final class WorkshopBlueprints {
 							List.of(new ItemMotion("minecraft:oak_planks", 0, true),
 									new ItemMotion("minecraft:stick", 0, false),
 									new ItemMotion("minecraft:oak_planks", 1, true),
-									new ItemMotion("minecraft:oak_door", 1, false)))));
+									new ItemMotion("minecraft:oak_door", 1, false))),
+					new Step(List.of(advancedBench()), 0, 2, List.of(), Verdict.NONE,
+							List.of(new ItemMotion(WORKBENCH_BLOCK, 0, true),
+									new ItemMotion("alaindustrial:electronic_circuit", 0, true),
+									new ItemMotion("alaindustrial:tempered_iron", 0, true),
+									new ItemMotion("minecraft:chest", 0, true))),
+					new Step(advancedLine(), 0, 2, List.of(Flow.item(1, 0, "minecraft:oak_planks"),
+							Flow.item(0, 3, "minecraft:stick")), Verdict.GOOD, List.of())));
 
 	/**
 	 * Inside the reactor room: fuel rods into a column on a casing block; the rods wearing out and the spent
@@ -218,6 +226,16 @@ public final class WorkshopBlueprints {
 
 	private static Placement bench(int x) {
 		return new Placement(WORKBENCH_BLOCK, x, 0, 0, Map.of());
+	}
+
+	private static Placement advancedBench() {
+		return new Placement(ADVANCED_BENCH, 0, 0, 0, Map.of());
+	}
+
+	/** 0 the advanced bench, 1 a hopper over it, 2 a pipe at its east side taking the result to 3 a chest. */
+	private static List<Placement> advancedLine() {
+		return List.of(advancedBench(), new Placement("minecraft:hopper", 0, 1, 0, Map.of("facing", "down")),
+				pipe(ITEM_PIPE, 1, "extract", "insert"), chest(2));
 	}
 
 	/** The reactor column at its room cell (1, 1, 2), dry, with {@code late} laid over late in the step. */

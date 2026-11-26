@@ -33,14 +33,20 @@ final class MachineCapabilitySnapshot {
 					+ " oc=0/0 rate=2 dur=200 evolve=37/1",
 			"solar_panel keys: all",
 			"moonlit_solar_panel: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=1 mute=1"
-					+ " stats=1 oc=0/0 rate=2 dur=200 evolve=-1/-1",
-			"moonlit_solar_panel keys: -EvolveProgress -EvolveChip",
+					+ " stats=1 oc=0/0 rate=2 dur=200 evolve=37/1",
+			"moonlit_solar_panel keys: all",
 			"daylight_solar_panel: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=1 mute=1"
 					+ " stats=1 oc=0/0 rate=2 dur=200 evolve=37/1",
 			"daylight_solar_panel keys: all",
 			"radiant_solar_panel: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=1 mute=1"
 					+ " stats=1 oc=0/0 rate=2 dur=200 evolve=-1/-1",
 			"radiant_solar_panel keys: -EvolveProgress -EvolveChip",
+			"reinforced_solar_panel: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=1 mute=1"
+					+ " stats=1 oc=0/0 rate=2 dur=200 evolve=-1/-1",
+			"reinforced_solar_panel keys: -EvolveProgress -EvolveChip",
+			"bronze_lunar_panel: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=1 mute=1"
+					+ " stats=1 oc=0/0 rate=2 dur=200 evolve=-1/-1",
+			"bronze_lunar_panel keys: -EvolveProgress -EvolveChip",
 			"water_mill: owner=Characterizer active=3 items=5 eu=11/13/17/19 panel=1 mute=1 stats=1"
 					+ " oc=0/0 rate=2 dur=200 evolve=-1/-1",
 			"water_mill keys: -EvolveProgress -EvolveChip",

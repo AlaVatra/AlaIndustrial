@@ -14,6 +14,7 @@ import dev.alaindustrial.core.forge.ForeignFluidPort;
 import dev.alaindustrial.core.forge.ForgeTransferLosses;
 import dev.alaindustrial.core.item.ItemLookup;
 import dev.alaindustrial.core.item.ItemMover;
+import dev.alaindustrial.gametest.BlockCapabilityParityScenarios;
 import dev.alaindustrial.item.fluid.ItemFluid;
 import dev.alaindustrial.item.fluid.ItemFluidBridge;
 import dev.alaindustrial.registry.BlockCapabilityRoster;
@@ -101,7 +102,7 @@ public final class ForgeBridgeScenarios {
 		for (ContentManifest.BlockEntityDef<?> def : ContentManifest.BLOCK_ENTITIES) {
 			for (String blockId : def.blocks()) {
 				Block block = BuiltInRegistries.BLOCK.getValue(Industrialization.id(blockId));
-				level.setBlock(origin, block.defaultBlockState(), Block.UPDATE_ALL);
+				level.setBlock(origin, BlockCapabilityParityScenarios.stateWithBlockEntity(block), Block.UPDATE_ALL);
 				BlockEntity be = level.getBlockEntity(origin);
 				if (be == null || !def.type().isInstance(be)) {
 					bad.add(blockId + ": no " + def.type().getSimpleName() + " after placing");

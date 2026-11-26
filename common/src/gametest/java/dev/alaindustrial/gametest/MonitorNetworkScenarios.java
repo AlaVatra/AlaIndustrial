@@ -44,7 +44,9 @@ public final class MonitorNetworkScenarios {
 				RosterEntry.of(MonitorNetworkScenarios::aPanelBetweenTwoWallsMergesThem,
 						"mod715_monitor_panel_merges_two_walls"),
 				RosterEntry.of(MonitorNetworkScenarios::theScreenGlowsOnlyWhileTheWallWorks,
-						"mod1013_monitor_screen_glows_only_while_working"));
+						"mod1013_monitor_screen_glows_only_while_working"),
+				RosterEntry.of(MonitorNetworkScenarios::aChestPlacedBesideTheWireIsReadWithoutRePartition,
+						"mod1028_monitor_new_chest_read_without_repartition"));
 
 		private Roster() {}
 	}
@@ -195,6 +197,28 @@ public final class MonitorNetworkScenarios {
 		}
 		if (expect(helper, PANEL, MonitorReadout.OK, 37, "first scan")
 				&& expect(helper, PANEL_2, MonitorReadout.OK, 5, "first scan")) {
+			helper.succeed();
+		}
+	}
+
+	/**
+	 * MOD-1028: a second chest placed beside the wire reaches the wall as a neighbour update that only wakes it — the
+	 * wall is not re-partitioned — and the very next tick scans it.
+	 */
+	public static void aChestPlacedBesideTheWireIsReadWithoutRePartition(GameTestHelper helper) {
+		buildWall(helper);
+		tickAt(helper, CORE);
+		long before = MonitorNetworkManager.rebuilds(helper.getLevel());
+		BlockPos second = WIRE.south();
+		helper.setBlock(second, Blocks.CHEST);
+		helper.getBlockEntity(second, ChestBlockEntity.class).setItem(0, new ItemStack(Items.COBBLESTONE, 10));
+		long rebuilt = MonitorNetworkManager.rebuilds(helper.getLevel()) - before;
+		if (rebuilt != 0) {
+			helper.fail("a chest placed beside the wire re-partitioned the wall " + rebuilt + " time(s)");
+			return;
+		}
+		tickAt(helper, CORE);
+		if (expect(helper, PANEL, MonitorReadout.OK, 47, "second chest beside the wire")) {
 			helper.succeed();
 		}
 	}

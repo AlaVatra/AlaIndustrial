@@ -79,7 +79,8 @@ public final class MenuDataWidthScenarios {
 	/** The one machine menu opened by an item (MOD-941): it has no block of its own to place and read. */
 	private static final String TABLET_VIEW = "reactor_tablet";
 
-	private static final int EXPECTED_MACHINE_MENUS = 53;
+	// 53 -> 54 (MOD-1031): the Mirror Concentrator's menu withdrawn, the two full-block T3 solar panels' added.
+	private static final int EXPECTED_MACHINE_MENUS = 54;
 
 	/** Reused single cell inside the test region; each machine is placed here, read, then cleared. */
 	private static final BlockPos PROBE = new BlockPos(1, 2, 1);

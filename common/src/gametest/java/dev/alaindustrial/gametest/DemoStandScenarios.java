@@ -77,6 +77,13 @@ import net.minecraft.world.phys.AABB;
  */
 public final class DemoStandScenarios {
 
+	/**
+	 * MOD-1031: the withdrawn Mirror Concentrator and its section turn into their successors the moment the world
+	 * touches them, so the stand cannot show them; their successors stand in the generator row.
+	 */
+	private static final Set<Identifier> WITHDRAWN = Set.of(Industrialization.id("radiant_solar_panel"),
+			Industrialization.id("concentrator_section"));
+
 	/** This class's world gametests for both loaders (ADR-038); nested so reading them does not initialise it. */
 	public static final class Roster {
 		public static final List<RosterEntry> ENTRIES = List.of(
@@ -204,6 +211,7 @@ public final class DemoStandScenarios {
 				}
 			}
 		}
+		missing.removeAll(WITHDRAWN);
 		if (!missing.isEmpty()) {
 			helper.fail("demo stand does not showcase every mod block; missing: " + missing
 					+ " — add them to a DemoStand zone");

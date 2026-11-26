@@ -77,6 +77,10 @@ final class EnergyTopologyCache {
 	 * rate — is O(1) and does not rescan every cable's block entity every tick.
 	 */
 	private CableType cachedStrongestCable = CableType.COPPER;
+	/** The last endpoint scan filed a port whose role came from a dry run ({@link EnergyPort#roleIsProvisional()}). */
+	private boolean provisionalRoles;
+	/** When those roles are probed again (MOD-1026). */
+	private final ProvisionalRoleClock roleClock = new ProvisionalRoleClock();
 
 	EnergyTopologyCache(ServerLevel level) {
 		this.level = level;
@@ -122,6 +126,15 @@ final class EnergyTopologyCache {
 
 	boolean endpointsDirty() {
 		return nodes.isDirty();
+	}
+
+	/**
+	 * Whether the endpoints should be scanned again because a role among them was a guess from a dry run and
+	 * {@link ProvisionalRoleClock#RECHECK_TICKS} ticks have passed since the scan (MOD-1026). The caller marks the
+	 * network dirty; this method only keeps the clock.
+	 */
+	boolean provisionalRolesDue(long now) {
+		return roleClock.due(provisionalRoles && !nodes.isDirty(), now);
 	}
 
 	/**
@@ -248,6 +261,7 @@ final class EnergyTopologyCache {
 		// whole change exists to kill. CableType.strongerThan also resolves equal-cap insulation ties
 		// deterministically. Only a network with no loadable cable at all falls back to copper.
 		CableType strongest = null;
+		provisionalRoles = false;
 		Set<BlockPos> seenProducer = new LinkedHashSet<>();
 		Set<BlockPos> seenConsumer = new LinkedHashSet<>();
 		EnergyLookup lookup = EnergyLookup.get();
@@ -278,6 +292,7 @@ final class EnergyTopologyCache {
 				if (storage == null) {
 					continue;
 				}
+				provisionalRoles |= storage.roleIsProvisional();
 				// The lookup already resolved the same host to find this port, so this is non-null here;
 				// the fallback only keeps a racing block change from turning into a null key downstream.
 				BlockPos host = EnergyHostRedirect.hostOf(level, np, dir.getOpposite());

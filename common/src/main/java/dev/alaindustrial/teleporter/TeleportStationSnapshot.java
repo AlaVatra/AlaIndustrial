@@ -4,6 +4,7 @@ import dev.alaindustrial.Config;
 import dev.alaindustrial.block.entity.TeleporterBlockEntity;
 import dev.alaindustrial.item.teleport.TeleportPoint;
 import dev.alaindustrial.item.teleport.TeleportPoints;
+import dev.alaindustrial.network.PayloadBudget;
 import dev.alaindustrial.network.TeleportStationsPayload;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +28,12 @@ public final class TeleportStationSnapshot {
 
 	public static TeleportStationsPayload build(ServerPlayer player, TeleportPoints points, int containerId) {
 		int cooldown = TeleportWarmupManager.isOnCooldown(player) ? TeleportWarmupManager.cooldownSecondsLeft(player) : 0;
-		List<TeleportStationsPayload.Station> stations = new ArrayList<>(points.size());
+		// At most what the payload carries (PayloadBudget, MOD-1030); the screen shows the rest as unknown.
+		int shown = Math.min(points.size(), PayloadBudget.MAX_TELEPORT_STATIONS);
+		List<TeleportStationsPayload.Station> stations = new ArrayList<>(shown);
 		if (player.level() instanceof ServerLevel here) {
 			TeleporterRegistry registry = TeleporterRegistry.get(here.getServer());
-			for (int i = 0; i < points.size(); i++) {
+			for (int i = 0; i < shown; i++) {
 				stations.add(station(player, here, registry, points.get(i)));
 			}
 		}

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "alaindustrial:radiant_solar_panel"
+          "name": "alaindustrial:reinforced_solar_panel"
         }
       ],
       "condition": {

@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "ケーブル",
-              "text": "ケーブルはブロックをつないで送電網を作り、EUを運びます。どのケーブルも距離に応じて損失が出ます——線が長いほど失われる量は増えます。\n\n種類は3つあり、それぞれ異なります：\n• スズ——細い（8 EU/t）がほぼ無損失。ソーラーファーム向け\n• 銅——万能の主力（12 EU/t）\n• 金——最も太い（48 EU/t）が、損失も大きい\n\n1本の線で種類を混ぜないでください。ネットワーク全体が、その中で最も強いケーブルに従います——損失も含めて。"
+              "text": "ケーブルはブロックをつないで送電網を作り、EUを運びます。どのケーブルも距離に応じて損失が出ます——線が長いほど失われる量は増えます。\n\n種類は4つあり、それぞれ異なります：\n• スズ——細い（8 EU/t）がほぼ無損失。ソーラーファーム向け\n• 銅——万能の主力（12 EU/t）\n• 金——より太い（48 EU/t）が、損失も大きい\n• エレクトラム——最も太く（192 EU/t）損失も最小。HVライン向けだが、クラフトが高くつく\n\n1本の線で種類を混ぜないでください。ネットワーク全体が、その中で最も強いケーブルに従います——損失も含めて。"
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "外殻の部品",
-              "text": "- 原子炉ガラス: 窓になるが、壁の3分の1まで\n- 原子炉エアロックドア: エアロック。レッドストーンで開き、自動で閉じる\n- 原子炉入口: 水のパイプが壁を貫く場所\n- 原子炉出力端子: ケーブルを挿す場所\n- 原子炉ランプ: 部屋の中だけを照らし、外へは漏らさない"
+              "text": "- 原子炉ガラス: 窓になるが、外殻の30 %まで\n- 原子炉エアロックドア: エアロック。レッドストーンで開き、自動で閉じる\n- 原子炉入口: 水のパイプが壁を貫く場所\n- 原子炉出力端子: ケーブルを挿す場所\n- 原子炉ランプ: 部屋の中だけを照らし、外へは漏らさない"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "エネルギー",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "青銅ルナーパネル",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "青銅ルナーパネル",
+              "text": "夜用ブランチの第3段 — 月相に合わせて発電量が変わるフルブロック。満月で10 EU/t、悪天候でも動き続けます。進化でのみ入手できます。"
+            },
+            {
+              "type": "stats",
+              "title": "ステータス",
+              "lines": [
+                "エネルギー: 10 EU/t（夜）",
+                "バッファ: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "風力タービン",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "ミラー集光器",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "ミラー集光器",
-              "text": "昼ブランチの第3段 — 日光ソーラーパネルの2倍、正午にはさらにその半分増し。集めるものがないときはミラーが折りたたまれます。"
-            },
-            {
-              "type": "stats",
-              "title": "ステータス",
-              "lines": [
-                "エネルギー: 8 EU/t（昼）",
-                "バッファ: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "レシピ",
-              "recipe_type": "定形クラフト",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "月光ソーラーパネル",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "強化ソーラーパネル",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "強化ソーラーパネル",
+              "text": "昼用ブランチの第3段 — 太陽の高さに合わせて発電量が変わるフルブロック。正午に12 EU/t。進化でのみ入手できます。"
+            },
+            {
+              "type": "stats",
+              "title": "ステータス",
+              "lines": [
+                "エネルギー: 12 EU/t（昼）",
+                "バッファ: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "エレベーター巻上機",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "エレベーター巻上機",
+              "text": "電力で動く縦のエレベーター：フレームでできたガラスの昇降路、各階にドアと呼び出しパネル付きの乗り場、いちばん上にふたとなる巻上機。移動の料金はかごの発車時に全額支払われ、開くのはかごがいる階のドアだけです。"
+            },
+            {
+              "type": "stats",
+              "title": "ステータス",
+              "lines": [
+                "エネルギー: 50 EU + 8 EU/ブロック",
+                "バッファ: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "レシピ",
+              "recipe_type": "定形クラフト",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "定形クラフト",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "定形クラフト",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "定形クラフト",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "充電ベッド",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "エスカレーター駆動装置",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "エスカレーター駆動装置",
+              "text": "手すり付きの段セクションでできた傾斜ベルト：駆動装置に EU がある間、プレイヤー、モブ、アイテムを 1 階分上または下へ運びます。LV 駆動装置は最大 8 セクション、MV 駆動装置は最大 16 セクションをより速く動かします。"
+            },
+            {
+              "type": "stats",
+              "title": "ステータス",
+              "lines": [
+                "エネルギー: 1 EU/t + セクションごとに 0.5 EU/t（誰かが乗っている間だけ）",
+                "バッファ: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "レシピ",
+              "recipe_type": "定形クラフト",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "定形クラフト",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "定形クラフト",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "定形クラフト",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "定形クラフト",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "ソーラー進化チップ",
-              "text": "3種の進化チップ — ソーラー（昼）、ルナ（夜）、共振（第3段）。基本のソーラーパネルや風力タービンをT2に、さらにT2の日光ソーラーパネルをその先へ進化させ、蓄積されたNBTエネルギーを引き継ぎます。"
+              "text": "3種の進化チップ — ソーラー（昼）、ルナ（夜）、共振（第3段）。基本のソーラーパネルや風力タービンをT2に、さらに両方のT2パネルをその先へ進化させ、蓄積されたNBTエネルギーを引き継ぎます。"
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "定形クラフト",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

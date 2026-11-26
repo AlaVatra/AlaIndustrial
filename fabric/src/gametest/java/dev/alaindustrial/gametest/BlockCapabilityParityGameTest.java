@@ -24,4 +24,10 @@ public class BlockCapabilityParityGameTest {
 	public void mod433_capabilitiesMatchPorts(GameTestHelper helper) {
 		BlockCapabilityParityScenarios.capabilitiesMatchPorts(helper, PROBES);
 	}
+
+	/** MOD-1025: the quarry's socket as another mod's pipe finds it, with this lane's probes. */
+	@GameTest
+	public void mod1025_quarrySocketSeenByOtherMods(GameTestHelper helper) {
+		QuarryDigScenarios.theSocketIsSeenByAnotherModsPipe(helper, PROBES);
+	}
 }

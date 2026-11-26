@@ -58,7 +58,9 @@ public final class TeleporterRegistryScenarios {
 				RosterEntry.of(TeleporterRegistryScenarios::tcTele006Brk01_removedStationIsForgotten,
 								"tc_tele006_brk01_removed_station_is_forgotten")
 						.fabricId("TeleporterRegistryGameTest", "tcTele006Brk01_removedStationIsForgotten")
-						.ticks(20, 40));
+						.ticks(20, 40),
+				RosterEntry.of(TeleporterRegistryScenarios::mod1030SnapshotStaysWithinThePayloadBudget,
+						"mod1030_teleport_snapshot_within_payload_budget").ticks(20, 40));
 
 		private Roster() {}
 	}
@@ -289,6 +291,29 @@ public final class TeleporterRegistryScenarios {
 				|| !own.has(dev.alaindustrial.network.TeleportStationsPayload.CHIP)
 				|| own.energy() != station.getEnergyStorage().getCapacity() || own.cost() <= 0) {
 			helper.fail("control: the owner's snapshot of the same station is incomplete: " + own);
+			return;
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * MOD-1030: the remote's list is as long as a server setting with no ceiling allows; the screen's payload carries
+	 * at most {@link dev.alaindustrial.network.PayloadBudget#MAX_TELEPORT_STATIONS} of them, so a remote past it does
+	 * not build a packet the client would refuse. Points one past the budget, all far and unloaded (nothing is read).
+	 */
+	public static void mod1030SnapshotStaysWithinThePayloadBudget(GameTestHelper helper) {
+		ServerPlayer viewer = AlaGameTestHelper.mockPlayerInLevel(helper);
+		int budget = dev.alaindustrial.network.PayloadBudget.MAX_TELEPORT_STATIONS;
+		List<TeleportPoint> many = new java.util.ArrayList<>(budget + 1);
+		BlockPos far = helper.absolutePos(STATION).offset(20_000, 0, 20_000);
+		for (int i = 0; i <= budget; i++) {
+			many.add(new TeleportPoint(helper.getLevel().dimension(), far.offset(i, 0, 0), "p" + i));
+		}
+		dev.alaindustrial.item.teleport.TeleportPoints points =
+				new dev.alaindustrial.item.teleport.TeleportPoints(many);
+		int sent = dev.alaindustrial.teleporter.TeleportStationSnapshot.build(viewer, points, 1).stations().size();
+		if (sent != budget) {
+			helper.fail(points.size() + " points: the payload carries " + sent + " stations, the budget is " + budget);
 			return;
 		}
 		helper.succeed();

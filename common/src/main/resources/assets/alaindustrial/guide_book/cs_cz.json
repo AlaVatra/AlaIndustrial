@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "Kabely",
-              "text": "Kabely spojují bloky do energetické sítě a vedou EU. Každý kabel ztrácí energii se vzdáleností — čím delší vedení, tím větší ztráta.\n\nExistují tři druhy a liší se:\n• Cínový — úzký (8 EU/t), ale téměř bez ztrát: pro solární farmy\n• Měděný — univerzální tahoun (12 EU/t)\n• Zlatý — nejširší (48 EU/t), za cenu vyšší ztráty\n\nNemíchej druhy na jednom vedení: celá síť jede podle nejsilnějšího kabelu v ní, včetně jeho ztráty."
+              "text": "Kabely spojují bloky do energetické sítě a vedou EU. Každý kabel ztrácí energii se vzdáleností — čím delší vedení, tím větší ztráta.\n\nExistují čtyři druhy a liší se:\n• Cínový — úzký (8 EU/t), ale téměř bez ztrát: pro solární farmy\n• Měděný — univerzální tahoun (12 EU/t)\n• Zlatý — širší (48 EU/t), za cenu vyšší ztráty\n• Elektrumový — nejširší (192 EU/t) s nejnižší ztrátou: pro vedení HV, za cenu drahé výroby\n\nNemíchej druhy na jednom vedení: celá síť jede podle nejsilnějšího kabelu v ní, včetně jeho ztráty."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "Části pláště",
-              "text": "- Sklo reaktoru: okno, ale nanejvýš třetina stěn\n- Přechodové dveře reaktoru: přechodová komora, otevírá se redstonem a sama se zavírá\n- Vstup reaktoru: místo, kde trubka s vodou prochází stěnou\n- Výstup reaktoru: místo, kam se připojuje kabel\n- Lampa reaktoru: svítí jen do komory, nikdy ven"
+              "text": "- Sklo reaktoru: okno, ale nanejvýš 30 % pláště\n- Přechodové dveře reaktoru: přechodová komora, otevírá se redstonem a sama se zavírá\n- Vstup reaktoru: místo, kde trubka s vodou prochází stěnou\n- Výstup reaktoru: místo, kam se připojuje kabel\n- Lampa reaktoru: svítí jen do komory, nikdy ven"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "Energie",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "Bronzový lunární panel",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Bronzový lunární panel",
+              "text": "Třetí stupeň noční větve — plný blok, jehož výkon sleduje fázi měsíce, 10 EU/t při úplňku, a pracuje i za špatného počasí; získá se jen evolucí."
+            },
+            {
+              "type": "stats",
+              "title": "Parametry",
+              "lines": [
+                "Energie: 10 EU/t (noc)",
+                "Zásobník: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "Větrná turbína",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "Zrcadlový koncentrátor",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Zrcadlový koncentrátor",
-              "text": "Třetí stupeň denní větve — dvakrát víc než denní solární panel, v poledne ještě o polovinu víc; zrcadla se složí, když není co sbírat."
-            },
-            {
-              "type": "stats",
-              "title": "Parametry",
-              "lines": [
-                "Energie: 8 EU/t (den)",
-                "Zásobník: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "Recept",
-              "recipe_type": "Výroba podle vzoru",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "Měsíční solární panel",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "Zesílený solární panel",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Zesílený solární panel",
+              "text": "Třetí stupeň denní větve — plný blok, jehož výkon sleduje výšku slunce, 12 EU/t v poledne; získá se jen evolucí."
+            },
+            {
+              "type": "stats",
+              "title": "Parametry",
+              "lines": [
+                "Energie: 12 EU/t (den)",
+                "Zásobník: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "Výtahový naviják",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Výtahový naviják",
+              "text": "Elektrický svislý výtah: skleněná šachta z rámů, na každém patře stanice s dveřmi a přivolávacím panelem a nahoře naviják jako víko; každá jízda se platí celá při odjezdu kabiny a otevřené jsou jen dveře tam, kde kabina stojí."
+            },
+            {
+              "type": "stats",
+              "title": "Parametry",
+              "lines": [
+                "Energie: 50 EU + 8 EU/blok",
+                "Zásobník: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Výroba podle vzoru",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "Nabíjecí lůžko",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "Pohon eskalátoru",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Pohon eskalátoru",
+              "text": "Šikmý pás ze schodových sekcí se zábradlím: veze hráče, moby i předměty o patro nahoru nebo dolů, dokud má pohon EU. Pohon LV utáhne až 8 sekcí, pohon MV až 16 a rychleji."
+            },
+            {
+              "type": "stats",
+              "title": "Parametry",
+              "lines": [
+                "Energie: 1 EU/t + 0.5 EU/t za sekci (jen když někdo jede)",
+                "Zásobník: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Výroba podle vzoru",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "Sluneční evoluční čip",
-              "text": "Trojice evolučních čipů — sluneční (den), měsíční (noc) a rezonanční (třetí stupeň) — které evolucí převedou základní solární panely a větrné turbíny na T2 a denní panel T2 ještě dál a přenesou nahromaděnou energii v NBT."
+              "text": "Trojice evolučních čipů — sluneční (den), měsíční (noc) a rezonanční (třetí stupeň) — které evolucí převedou základní solární panely a větrné turbíny na T2 a oba panely T2 ještě dál a přenesou nahromaděnou energii v NBT."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Výroba podle vzoru",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

@@ -136,6 +136,64 @@ class GraphNetworkManagerTest {
 		assertEquals(addedBefore, net.added, "a leaf removal must not re-partition the network");
 	}
 
+	/**
+	 * MOD-1029: a removal runs from {@code setRemoved}, chunk unload included, and must not read the world — the
+	 * production {@code connected} does. The split waits for the next question about the networks.
+	 */
+	@Test
+	void aRemovalAsksNoConnectivityAndTheSplitWaitsForTheNextQuestion() {
+		GraphNetworkManager<Level, Net, Integer> mgr = manager();
+		for (int n = 1; n <= 10; n++) {
+			mgr.register(level, n);
+		}
+		ops.connectedCalls = 0;
+
+		mgr.unregister(level, 5);
+
+		assertEquals(0, ops.connectedCalls, "unregister must not ask what a node connects to");
+		assertEquals(2, mgr.networkCount(level), "the next question sees the split");
+		assertNotSame(mgr.networkAt(level, 4), mgr.networkAt(level, 6));
+	}
+
+	/** MOD-1029: K nodes of one network removed in one tick cost one split of it, not K (O(K·N) before). */
+	@Test
+	void manyRemovalsInOneTickSplitTheNetworkOnce() {
+		GraphNetworkManager<Level, Net, Integer> mgr = manager();
+		for (int n = 1; n <= 100; n++) {
+			mgr.register(level, n);
+		}
+		ops.connectedCalls = 0;
+		long rebuildsBefore = mgr.telemetry(level).rebuilds();
+
+		for (int n = 10; n <= 90; n += 10) {
+			mgr.unregister(level, n);
+		}
+		mgr.tickAll(level);
+
+		assertEquals(1, mgr.telemetry(level).rebuilds() - rebuildsBefore, "one split for nine removals");
+		assertTrue(ops.connectedCalls <= 91, "one pass over the 91 nodes left: " + ops.connectedCalls);
+		assertEquals(10, mgr.networkCount(level));
+	}
+
+	/** MOD-1029: a network waiting for its split that a new node merges into a bigger one passes the wait on. */
+	@Test
+	void aMergeCarriesAWaitingSplitIntoTheSurvivor() {
+		GraphNetworkManager<Level, Net, Integer> mgr = manager();
+		for (int n = 1; n <= 5; n++) {
+			mgr.register(level, n);
+		}
+		for (int n = 7; n <= 12; n++) {
+			mgr.register(level, n);
+		}
+		mgr.unregister(level, 3); // {1,2} and {4,5} wait to be split apart
+
+		mgr.register(level, 6); // joins {1,2,4,5} into the bigger {7..12}
+
+		assertEquals(2, mgr.networkCount(level), "the cut at 3 must survive the merge");
+		assertNotSame(mgr.networkAt(level, 1), mgr.networkAt(level, 12));
+		assertSame(mgr.networkAt(level, 4), mgr.networkAt(level, 12));
+	}
+
 	@Test
 	void removingTheLastNodeDropsTheNetwork() {
 		GraphNetworkManager<Level, Net, Integer> mgr = manager();
@@ -322,9 +380,9 @@ class GraphNetworkManagerTest {
 		mgr.networkAt(level, 1).movesPerTick = 7L;
 
 		mgr.tickAll(level);
-		assertEquals(new GraphNetworkManager.Telemetry(1, 7L, 7L), mgr.telemetry(level));
+		assertEquals(new GraphNetworkManager.Telemetry(1, 7L, 7L, 0L), mgr.telemetry(level));
 		mgr.tickAll(level);
-		assertEquals(new GraphNetworkManager.Telemetry(1, 7L, 14L), mgr.telemetry(level));
+		assertEquals(new GraphNetworkManager.Telemetry(1, 7L, 14L, 0L), mgr.telemetry(level));
 	}
 
 	@Test
@@ -337,13 +395,13 @@ class GraphNetworkManagerTest {
 
 		mgr.tickAll(level);
 
-		assertEquals(new GraphNetworkManager.Telemetry(1, 0L, 0L), mgr.telemetry(level));
+		assertEquals(new GraphNetworkManager.Telemetry(1, 0L, 0L, 0L), mgr.telemetry(level));
 	}
 
 	@Test
 	void telemetryOfAnUnknownLevelIsZeroAndAnEmptyLevelKeepsItsLastFigures() {
 		GraphNetworkManager<Level, Net, Integer> mgr = manager();
-		assertEquals(new GraphNetworkManager.Telemetry(0, 0L, 0L), mgr.telemetry(new Level("never seen")));
+		assertEquals(new GraphNetworkManager.Telemetry(0, 0L, 0L, 0L), mgr.telemetry(new Level("never seen")));
 
 		mgr.register(level, 1);
 		mgr.networkAt(level, 1).movesPerTick = 5L;
@@ -353,7 +411,7 @@ class GraphNetworkManagerTest {
 
 		// Deliberate: /ala net keeps showing the last real throughput instead of blanking to zero the
 		// moment the last cable is broken.
-		assertEquals(new GraphNetworkManager.Telemetry(1, 5L, 5L), mgr.telemetry(level));
+		assertEquals(new GraphNetworkManager.Telemetry(1, 5L, 5L, 0L), mgr.telemetry(level));
 	}
 
 	// --- the cursor policy itself ---------------------------------------------------------------

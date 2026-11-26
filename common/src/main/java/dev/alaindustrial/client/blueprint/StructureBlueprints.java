@@ -12,9 +12,9 @@ import java.util.Map;
 
 /**
  * Blueprints about multiblock structures (MOD-797): the teleporter capsule, the mob wheel, the distillation
- * tower, the crystal greenhouse and the assembled mirror concentrator. Listed in {@link BlueprintCatalog#ALL}.
+ * tower and the crystal greenhouse. Listed in {@link BlueprintCatalog#ALL}.
  *
- * <p>A block whose look comes from its block-entity renderer (the mob wheel drive, the concentrator core) is
+ * <p>A block whose look comes from its block-entity renderer (the mob wheel drive) is
  * declared formed outright, never through late props: the scene keeps one block entity per placement, made
  * from the state it was first drawn with.
  */
@@ -36,8 +36,6 @@ public final class StructureBlueprints {
 	private static final String FARM_GLASS = "alaindustrial:crystal_farm_glass";
 	private static final String FARM_DOOR = "alaindustrial:crystal_farm_door";
 	private static final String SEEDBED = "alaindustrial:crystal_seedbed";
-	private static final String RADIANT = "alaindustrial:radiant_solar_panel";
-	private static final String SECTION = "alaindustrial:concentrator_section";
 	private static final String SHARD = "minecraft:amethyst_shard";
 
 	/** The far corner of the smallest greenhouse (a 5x5x5 shell around 27 cells of air). */
@@ -118,37 +116,12 @@ public final class StructureBlueprints {
 					new Step(greenhouse(true, false, false, List.of(seedbed(-2, 0, 2, false, false))), 12, 3,
 							List.of(), Verdict.BAD, List.of(new ItemMotion(SHARD, 12, true)))));
 
-	/**
-	 * The grown concentrator alone, three bottom sections around it, six of seven (nothing assembles), the
-	 * seventh assembling the machine, a cable at the top tier (no energy), then a cable at the bottom tier
-	 * feeding a battery box. Indices: 0 core, 1 right, 2 back, 3 back right, 4 top, 5 top right, 6 top back,
-	 * 7 top back right (step 3 lacks the top, so its later cells shift down by one); 8.. the cable rig.
-	 */
-	public static final BlueprintDef MIRROR_CONCENTRATOR = new BlueprintDef("mirror_concentrator",
-			List.of(SECTION),
-			List.of(
-					new Step(List.of(core(false)), 0, 1, -1, -1, Verdict.NONE),
-					new Step(List.of(core(false), cell(0, 0, 1, null), cell(1, 0, 0, null), cell(0, 0, 0, null)),
-							1, 2, -1, -1, Verdict.NONE),
-					new Step(List.of(core(false), cell(0, 0, 1, null), cell(1, 0, 0, null), cell(0, 0, 0, null),
-							cell(0, 1, 1, null), cell(1, 1, 0, null), cell(0, 1, 0, null)), 0, 1, -1, -1, Verdict.BAD),
-					new Step(concentrator(), 4, 2, -1, -1, Verdict.GOOD),
-					new Step(join(concentrator(), List.of(stone(-2, 0, 1), boxFacingEast(-2, 1, 1),
-							cableOf(COPPER_CABLE, -1, 1, 1, "west"))), 10, 3, -1, -1, Verdict.BAD),
-					new Step(join(concentrator(), List.of(cableOf(COPPER_CABLE, -1, 0, 1, "west", "east"),
-							boxFacingEast(-2, 0, 1))), 8, 3, 1, 9, Verdict.GOOD)));
-
 	private StructureBlueprints() {
 	}
 
 	/** A burning coal generator at ({@code x}, {@code y}, {@code z}). */
 	private static Placement gen(int x, int y, int z) {
 		return new Placement(GENERATOR, x, y, z, Map.of("facing", "south", "lit", "true"));
-	}
-
-	/** A battery box at ({@code x}, {@code y}, {@code z}) taking energy on its east face. */
-	private static Placement boxFacingEast(int x, int y, int z) {
-		return new Placement(BATTERY_BOX, x, y, z, Map.of("facing", "east"));
 	}
 
 	/** A teleporter station at ({@code x}, 0, 0), door side toward the viewer. */
@@ -303,22 +276,5 @@ public final class StructureBlueprints {
 		return fed
 				? new Placement(SEEDBED, x, y, z, Map.of("charges", "0", "tended", t), Map.of("charges", "4"))
 				: new Placement(SEEDBED, x, y, z, Map.of("charges", "4", "tended", t));
-	}
-
-	/** The mirror concentrator core at (1, 0, 1), its structure facing the viewer. */
-	private static Placement core(boolean assembled) {
-		return new Placement(RADIANT, 1, 0, 1, Map.of("assembled", Boolean.toString(assembled), "facing", "south"));
-	}
-
-	/** A concentrator section at its cell, loose when {@code part} is null. */
-	private static Placement cell(int x, int y, int z, String part) {
-		return new Placement(SECTION, x, y, z, Map.of("part", part == null ? "loose" : part, "facing", "south"));
-	}
-
-	/** The assembled 2x2x2 concentrator: 0 core, 1 right, 2 back, 3 back right, 4..7 the top tier. */
-	private static List<Placement> concentrator() {
-		return List.of(core(true), cell(0, 0, 1, "right"), cell(1, 0, 0, "back"), cell(0, 0, 0, "back_right"),
-				cell(1, 1, 1, "top"), cell(0, 1, 1, "top_right"), cell(1, 1, 0, "top_back"),
-				cell(0, 1, 0, "top_back_right"));
 	}
 }

@@ -3,6 +3,7 @@ package dev.alaindustrial.client.screen;
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.block.entity.MoonlitSolarPanelBlockEntity;
 import dev.alaindustrial.menu.MoonlitSolarPanelMenu;
+import dev.alaindustrial.registry.ModContent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -14,7 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
  *
  * <p>Mirrors {@link DaylightSolarPanelScreen} but inverts the active-sky check:
  * the sun indicator lights up when the moon is visible (MODE_NIGHT / MODE_NIGHT_PARTIAL).
- * No chip slot and no evolution bar (panel is already evolved).
+ * Since MOD-1031 it carries an evolution-chip slot and an evolution bar, the bar in the blue night tile.
  */
 public class MoonlitSolarPanelScreen extends LayoutMachineScreen<MoonlitSolarPanelMenu> {
 
@@ -28,6 +29,14 @@ public class MoonlitSolarPanelScreen extends LayoutMachineScreen<MoonlitSolarPan
     private static final int   SUN_FRAME_H = 7;
     private static final float SUN_UV_X    = 176.0F;
     private static final float SUN_UV_Y    = 65.0F;
+
+    // Evolution bar — same geometry as the daylight panel's, the blue night tile of the service area (MOD-1031).
+    private static final int   EVO_X          = 55;
+    private static final int   EVO_Y          = 58;
+    private static final int   EVO_MAX_W      = 75;
+    private static final int   EVO_H          = 7;
+    private static final float EVO_UV_X       = 176.0F;
+    private static final float EVO_UV_Y_NIGHT = 57.0F;
 
     /** Atlas and energy bar (MOD-716, CLI-3). */
     private static final MachineLayout LAYOUT = MachineLayout.of(TEXTURE, EnergyBarSpec.LEFT);
@@ -61,6 +70,18 @@ public class MoonlitSolarPanelScreen extends LayoutMachineScreen<MoonlitSolarPan
                     TEX_SIZE, TEX_SIZE);
         }
 
+        // Evolution bar fill (left to right), blitted from the service area; at least one pixel once it counts.
+        int evoMax  = this.menu.getEvolveMax();
+        int evoProg = this.menu.getEvolveProgress();
+        if (evoMax > 0 && evoProg > 0) {
+            int evoFill = Math.max(1, Math.min(evoProg * EVO_MAX_W / evoMax, EVO_MAX_W));
+            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE,
+                    x + EVO_X, y + EVO_Y,
+                    EVO_UV_X, EVO_UV_Y_NIGHT,
+                    evoFill, EVO_H,
+                    TEX_SIZE, TEX_SIZE);
+        }
+
         // Text overlay
         graphics.text(this.font, Component.translatable("gui.alaindustrial.energy", energy, capacity),
                 x + 30, y + 22, GuiStyle.TEXT, false);
@@ -68,6 +89,16 @@ public class MoonlitSolarPanelScreen extends LayoutMachineScreen<MoonlitSolarPan
                 x + 30, y + 34, GuiStyle.TEXT, false);
         graphics.text(this.font, Component.translatable("gui.alaindustrial.mode", modeLabel(mode)),
                 x + 30, y + 46, GuiStyle.TEXT_DIM, false);
+    }
+
+    /**
+     * The empty chip slot shows a translucent lunar evolution chip (MOD-1033): the night branch's own chip, blue like
+     * the panel. The resonance chip is taken too, but its gold face read as a day chip on a night panel.
+     */
+    @Override
+    protected void drawGhostHints(GuiGraphicsExtractor graphics) {
+        ghostHint(graphics, MoonlitSolarPanelBlockEntity.CHIP_SLOT,
+                ModContent.ALIGNMENT_CHIP_NIGHT.get().getDefaultInstance());
     }
 
     private static Component modeLabel(int mode) {

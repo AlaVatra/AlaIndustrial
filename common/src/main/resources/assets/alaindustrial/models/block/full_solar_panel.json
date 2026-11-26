@@ -1,0 +1,562 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        15,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            1,
+            16,
+            16
+          ],
+          "texture": "#side",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            16,
+            16
+          ],
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "south": {
+          "uv": [
+            0,
+            1,
+            16,
+            16
+          ],
+          "texture": "#side",
+          "cullface": "south"
+        },
+        "west": {
+          "uv": [
+            0,
+            1,
+            16,
+            16
+          ],
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#top"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bottom",
+          "cullface": "down"
+        }
+      },
+      "name": "housing"
+    },
+    {
+      "from": [
+        0,
+        15,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#side",
+          "cullface": "north"
+        },
+        "east": {
+          "uv": [
+            14,
+            0,
+            16,
+            1
+          ],
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ],
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#glass"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "texture": "#frame",
+          "cullface": "up"
+        }
+      },
+      "name": "frame, north plank"
+    },
+    {
+      "from": [
+        0,
+        15,
+        14
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#side",
+          "cullface": "south"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ],
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            14,
+            0,
+            16,
+            1
+          ],
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "north": {
+          "uv": [
+            0,
+            1,
+            16,
+            2
+          ],
+          "texture": "#glass"
+        },
+        "up": {
+          "uv": [
+            0,
+            14,
+            16,
+            16
+          ],
+          "texture": "#frame",
+          "cullface": "up"
+        }
+      },
+      "name": "frame, south plank"
+    },
+    {
+      "from": [
+        0,
+        15,
+        2
+      ],
+      "to": [
+        2,
+        16,
+        14
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            2,
+            0,
+            14,
+            1
+          ],
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "east": {
+          "uv": [
+            2,
+            14,
+            14,
+            15
+          ],
+          "texture": "#glass"
+        },
+        "up": {
+          "uv": [
+            0,
+            2,
+            2,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "up"
+        }
+      },
+      "name": "frame, west plank"
+    },
+    {
+      "from": [
+        14,
+        15,
+        2
+      ],
+      "to": [
+        16,
+        16,
+        14
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2,
+            0,
+            14,
+            1
+          ],
+          "texture": "#side",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            2,
+            15,
+            14,
+            16
+          ],
+          "texture": "#glass"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "up"
+        }
+      },
+      "name": "frame, east plank"
+    },
+    {
+      "from": [
+        2,
+        15.5,
+        2
+      ],
+      "to": [
+        14,
+        15.5,
+        14
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#glass"
+        }
+      },
+      "name": "glass, half a pixel over the housing and under the frame's top"
+    },
+    {
+      "from": [
+        0.5,
+        15.25,
+        0.5
+      ],
+      "to": [
+        1.5,
+        16.25,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            3,
+            3
+          ],
+          "texture": "#frame"
+        },
+        "east": {
+          "uv": [
+            3,
+            2,
+            4,
+            3
+          ],
+          "texture": "#frame"
+        },
+        "south": {
+          "uv": [
+            4,
+            2,
+            5,
+            3
+          ],
+          "texture": "#frame"
+        },
+        "west": {
+          "uv": [
+            5,
+            2,
+            6,
+            3
+          ],
+          "texture": "#frame"
+        },
+        "up": {
+          "uv": [
+            6,
+            2,
+            7,
+            3
+          ],
+          "texture": "#frame"
+        }
+      },
+      "name": "bolt north-west, a quarter pixel above the frame as the designer drew it"
+    },
+    {
+      "from": [
+        14.5,
+        15.25,
+        0.5
+      ],
+      "to": [
+        15.5,
+        16.25,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            2,
+            9,
+            3
+          ],
+          "texture": "#frame"
+        },
+        "east": {
+          "uv": [
+            9,
+            2,
+            10,
+            3
+          ],
+          "texture": "#frame"
+        },
+        "south": {
+          "uv": [
+            10,
+            2,
+            11,
+            3
+          ],
+          "texture": "#frame"
+        },
+        "west": {
+          "uv": [
+            11,
+            2,
+            12,
+            3
+          ],
+          "texture": "#frame"
+        },
+        "up": {
+          "uv": [
+            12,
+            2,
+            13,
+            3
+          ],
+          "texture": "#frame"
+        }
+      },
+      "name": "bolt north-east, a quarter pixel above the frame as the designer drew it"
+    },
+    {
+      "from": [
+        0.5,
+        15.25,
+        14.5
+      ],
+      "to": [
+        1.5,
+        16.25,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            3,
+            3,
+            4
+          ],
+          "texture": "#frame"
+        },
+        "east": {
+          "uv": [
+            3,
+            3,
+            4,
+            4
+          ],
+          "texture": "#frame"
+        },
+        "south": {
+          "uv": [
+            4,
+            3,
+            5,
+            4
+          ],
+          "texture": "#frame"
+        },
+        "west": {
+          "uv": [
+            5,
+            3,
+            6,
+            4
+          ],
+          "texture": "#frame"
+        },
+        "up": {
+          "uv": [
+            6,
+            3,
+            7,
+            4
+          ],
+          "texture": "#frame"
+        }
+      },
+      "name": "bolt south-west, a quarter pixel above the frame as the designer drew it"
+    },
+    {
+      "from": [
+        14.5,
+        15.25,
+        14.5
+      ],
+      "to": [
+        15.5,
+        16.25,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            3,
+            9,
+            4
+          ],
+          "texture": "#frame"
+        },
+        "east": {
+          "uv": [
+            9,
+            3,
+            10,
+            4
+          ],
+          "texture": "#frame"
+        },
+        "south": {
+          "uv": [
+            10,
+            3,
+            11,
+            4
+          ],
+          "texture": "#frame"
+        },
+        "west": {
+          "uv": [
+            11,
+            3,
+            12,
+            4
+          ],
+          "texture": "#frame"
+        },
+        "up": {
+          "uv": [
+            12,
+            3,
+            13,
+            4
+          ],
+          "texture": "#frame"
+        }
+      },
+      "name": "bolt south-east, a quarter pixel above the frame as the designer drew it"
+    }
+  ]
+}

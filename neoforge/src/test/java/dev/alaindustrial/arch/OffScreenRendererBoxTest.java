@@ -66,7 +66,6 @@ class OffScreenRendererBoxTest {
 			"dev.alaindustrial.client.render.HallSchematicRenderer",
 			"dev.alaindustrial.client.render.IncubatorBlockEntityRenderer",
 			"dev.alaindustrial.client.render.MobWheelBlockEntityRenderer",
-			"dev.alaindustrial.client.render.RadiantSolarPanelBlockEntityRenderer",
 			"dev.alaindustrial.client.render.TeleporterCapsuleDoorRenderer",
 			"dev.alaindustrial.client.render.WaterMillWheelBlockEntityRenderer",
 			"dev.alaindustrial.client.render.WindMillRotorBlockEntityRenderer");

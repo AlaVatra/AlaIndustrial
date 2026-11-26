@@ -320,6 +320,17 @@ final class ContentDeclarations {
 		return new ItemDef(id, p -> factory.apply(p.useBlockDescriptionPrefix()), blockItemSlot(bind), null);
 	}
 
+	/** A block item under its own {@code BlockItem} subclass that no creative tab shows (MOD-1031). */
+	static ItemDef blockItem(String id, Function<Item.Properties, ? extends BlockItem> factory,
+			Consumer<Supplier<BlockItem>> bind, HiddenFromPlayers hidden) {
+		return new ItemDef(id, p -> factory.apply(p.useBlockDescriptionPrefix()), blockItemSlot(bind), hidden);
+	}
+
+	/** A plain block item, under the block's own id, that no creative tab shows (MOD-1031). */
+	static ItemDef blockItem(String id, Consumer<Supplier<BlockItem>> bind, HiddenFromPlayers hidden) {
+		return blockItem(id, p -> new BlockItem(registeredBlock(id), p), bind, hidden);
+	}
+
 	/**
 	 * Adapts a {@code Supplier<BlockItem>} {@link ModContent} slot to the {@code Supplier<Item>} the
 	 * replay hands out. The cast cannot lie: only {@link #blockItem} reaches this, and every one of its

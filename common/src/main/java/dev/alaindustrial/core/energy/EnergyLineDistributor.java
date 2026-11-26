@@ -39,6 +39,23 @@ final class EnergyLineDistributor<P> {
 	}
 
 	/**
+	 * What the generators can give this tick, each host counted ONCE (MOD-608, ADR-027): the cells of one multiblock
+	 * are separate endpoints over one buffer, and summing each of them would promise the storage stage energy that
+	 * exists once — batteries would then sit idle while machines go short. The first endpoint of a host speaks for
+	 * it: every cell's dry run reads the same buffer.
+	 */
+	static <P> long supplyOncePerHost(List<LiveProducer<P>> generators) {
+		Set<P> counted = new LinkedHashSet<>();
+		long supply = 0;
+		for (LiveProducer<P> generator : generators) {
+			if (counted.add(generator.host())) {
+				supply += generator.perCall();
+			}
+		}
+		return supply;
+	}
+
+	/**
 	 * A live consumer endpoint resolved for this tick: its pos, storage, free room and per-tick need — what it
 	 * draws per tick while it works ({@link PerTickDemand}, MOD-789). A store's need is its room; {@code need <= 0}
 	 * means the consumer cannot tell (no {@link PerTickDemand} — a foreign mod's block): its need is unknown, and

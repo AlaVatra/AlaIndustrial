@@ -28,11 +28,11 @@ import net.minecraft.world.level.storage.ValueOutput;
  * {@link GeneratorConfig#daylightEuPerTick}; rain/thunder: 0, snow: a floored trickle (MOD-003). Buffer
  * {@link GeneratorConfig#solarBuffer}, LV output.
  *
- * <p>Evolution (MOD-602): with a {@linkplain ModContent#RESONANCE_CHIP resonance chip} in its slot,
- * the panel banks active day-time and, at {@link GeneratorConfig#solarEvolveTicks}, becomes the Mirror
- * Concentrator — carrying its stored energy and consuming one chip. The same chip serves the night
- * branch: by this rung the panel already knows which branch it is, so a second line of crafting
- * would buy the player nothing.
+ * <p>Evolution (MOD-602, MOD-1031): with a {@linkplain ModContent#RESONANCE_CHIP resonance chip} in its
+ * slot, the panel banks active day-time and, at {@link GeneratorConfig#solarEvolveTicks}, becomes the
+ * Reinforced Solar Panel — carrying its stored energy and owner and consuming one chip. The same chip serves the
+ * night branch: by this rung the panel already knows which branch it is, so a second chip would buy the player
+ * nothing.
  *
  * <p>Sync channels: 0 energy, 1 capacity, 2 production (EU/t), 3 mode, 4 evolution progress
  * (permille 0..1000), 5 denominator (constant 1000). Permille, not raw ticks, for the reason
@@ -103,7 +103,7 @@ public class DaylightSolarPanelBlockEntity extends AbstractGeneratorBlockEntity 
 		if (resonanceChip && overworldSky && bright) {
 			evolveProgress++;
 			if (evolveProgress >= GeneratorConfig.solarEvolveTicks) {
-				evolveInto(level, pos, ModContent.RADIANT_SOLAR_PANEL.get());
+				evolveInto(level, pos, ModContent.REINFORCED_SOLAR_PANEL.get());
 				return 0; // this block entity is gone after the transform
 			}
 			setChanged();
@@ -154,12 +154,14 @@ public class DaylightSolarPanelBlockEntity extends AbstractGeneratorBlockEntity 
 		this.progress = effectiveEuPerTick;
 	}
 
-	/** Replace this panel with the concentrator, carrying stored energy; ONE chip is consumed. */
+	/** Replace this panel with the Reinforced Solar Panel, carrying stored energy; ONE chip is consumed. */
 	private void evolveInto(Level level, BlockPos pos, Block target) {
 		// Consume a single chip and carry the rest over (MOD-211), the way the T1 panel does.
 		ItemStack remainder = items.get(CHIP_SLOT).copy();
 		remainder.shrink(1);
-		EvolutionHelper.evolveInto(this, items, level, pos, target, java.util.Map.of(CHIP_SLOT, remainder));
+		// The upgrade chips move to the same arms of the T3 panel (MOD-1031): its panel starts at slot 0.
+		EvolutionHelper.evolveIntoCarryingUpgrades(this, items, level, pos, target,
+				java.util.Map.of(CHIP_SLOT, remainder));
 	}
 
 	@Override

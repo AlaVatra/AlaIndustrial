@@ -113,7 +113,7 @@ public final class DemoStand {
 			BenchZone.BENCH_CAMERA,
 			GeneratorRowZone.GENERATORS_CAMERA,
 			GeneratorRowZone.WATERMILL_CAMERA,
-			GeneratorRowZone.CONCENTRATOR_CAMERA,
+			GeneratorRowZone.LUNAR_CAMERA,
 			WindMillsZone.WINDMILLS_CAMERA,
 			LossLaneZone.LOSS_CAMERA,
 			OreWallZone.ORES_CAMERA,

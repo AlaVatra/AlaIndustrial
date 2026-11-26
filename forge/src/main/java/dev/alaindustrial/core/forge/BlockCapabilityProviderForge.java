@@ -1,10 +1,15 @@
 package dev.alaindustrial.core.forge;
 
 import dev.alaindustrial.core.energy.EnergyPortHost;
+import dev.alaindustrial.core.fluid.FluidHostRedirect;
 import dev.alaindustrial.core.fluid.FluidPortHost;
+import dev.alaindustrial.core.item.ItemHostRedirect;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -60,6 +65,9 @@ public final class BlockCapabilityProviderForge implements ICapabilityProvider {
 		if (cap == SELF) {
 			return self.cast();
 		}
+		if (flags.lender()) {
+			return lent(cap, side);
+		}
 		if (cap == ForgeCapabilities.ENERGY && flags.energy()) {
 			EnergyPortHost host = (EnergyPortHost) be;
 			return energy.get(side, host.energyPortForLookup(side) != null ? Boolean.TRUE : null,
@@ -72,6 +80,29 @@ public final class BlockCapabilityProviderForge implements ICapabilityProvider {
 		}
 		if (cap == ForgeCapabilities.ITEM_HANDLER && flags.item()) {
 			return item(side).cast();
+		}
+		return LazyOptional.empty();
+	}
+
+	/**
+	 * A lender's block entity (MOD-1025): the inventory and the tank its block lends from {@code side}, read from the
+	 * block on every query — the same {@link ItemHostRedirect#lent} and {@link FluidHostRedirect#lent} Fabric and
+	 * NeoForge publish as a block capability, so another mod's pipe sees the same thing on all three.
+	 */
+	private <T> LazyOptional<T> lent(Capability<T> cap, @Nullable Direction side) {
+		Level level = be.getLevel();
+		if (level == null || be.isRemoved()) {
+			return LazyOptional.empty();
+		}
+		BlockPos pos = be.getBlockPos();
+		if (cap == ForgeCapabilities.ITEM_HANDLER) {
+			WorldlyContainer lent = ItemHostRedirect.lent(level, pos, be.getBlockState(), side);
+			return item.get(side, lent, () -> new LiveItemHandler(be, ForgeItemLookup.wrap(lent, side))).cast();
+		}
+		if (cap == ForgeCapabilities.FLUID_HANDLER) {
+			boolean lends = FluidHostRedirect.lent(level, pos, be.getBlockState(), side) != null;
+			return fluid.get(side, lends ? Boolean.TRUE : null, () -> new TankAsFluidHandler(() -> be.isRemoved()
+					? null : FluidHostRedirect.lent(level, pos, be.getBlockState(), side))).cast();
 		}
 		return LazyOptional.empty();
 	}
