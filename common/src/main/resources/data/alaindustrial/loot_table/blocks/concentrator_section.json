@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "alaindustrial:concentrator_section"
+          "name": "alaindustrial:machine_casing"
         }
       ],
       "conditions": [

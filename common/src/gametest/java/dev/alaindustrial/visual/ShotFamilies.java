@@ -121,6 +121,12 @@ public final class ShotFamilies {
             new Object[] {"gui_storage_warehouse_", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
                     "Warehouse capacity grows with the module count: the slot grid and the capacity line "
                             + "both follow the number of modules attached")},
+            new Object[] {"gui_blueprint_sheet_", new Family(ShotGroup.GUI, List.of("R-GUI-16"),
+                    "Blueprint sheet (MOD-934), held still on one step: the blue sheet fills the frame, the title "
+                            + "stamp in its corner, the scene's blocks upright with their faces toward the camera, "
+                            + "the numbered callout over the block it names with its text inside the balloon, the "
+                            + "step strip at the bottom marking this step; _wrong frames show the callout red with "
+                            + "a cross, and no area of the sheet is empty or drawn over another")},
             new Object[] {"gui_blueprint_icon_", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
                     "A recorded blueprint's icon shows its PRODUCT, not a generic blueprint sprite")},
             new Object[] {"gui_assembler_", new Family(ShotGroup.GUI, List.of("R-GUI-03"),
@@ -246,6 +252,14 @@ public final class ShotFamilies {
                             + " glass over the face; from behind the balloon with the number in two lines readable,"
                             + " the curls above the plate and not over it, no z-fighting on the back; _empty is the"
                             + " same view without them")},
+            new Object[] {"cow_suit_", new Family(ShotGroup.WORLD, List.of("R-VIS-13"),
+                    "Cows in the shielding suit (MOD-569), left to right temperate, warm, cold, a calf, all in the"
+                            + " full suit, and a temperate cow in the helmet alone: on every model the gas mask with"
+                            + " two goggle lenses over the face and the filter on the snout, a yellow blanket over the"
+                            + " back with two dark belly straps, yellow gaiters and dark boots; on the cold cow the"
+                            + " blanket lies on its fur; the last cow shows the mask and nothing else; no z-fighting;"
+                            + " _bare is the same side view with the suits taken off, _empty the same view without"
+                            + " the cows")},
             new Object[] {"capsule_", new Family(ShotGroup.BER, List.of("R-VIS-04"),
                     "Teleporter capsule: the glass of the door and of the fixed facets is drawn, seen from "
                             + "inside looking ahead and looking down, and from outside")},

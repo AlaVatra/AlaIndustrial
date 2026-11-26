@@ -142,23 +142,4 @@ public final class SolarSky {
 	public static boolean isClockDaytime(Level level) {
 		return Math.floorMod(level.getOverworldClockTime(), DAY_LENGTH) < DUSK;
 	}
-
-	/**
-	 * Whether the Mirror Concentrator (day branch, third rung) is currently producing (MOD-602).
-	 *
-	 * <p>Stricter than {@link #isDaylitActive} in exactly one place: <b>snow silences it</b>. The two
-	 * panels below spread their cells flat and keep a floored trickle under a dusting; this one focuses
-	 * light with mirrors, and a snowed-over mirror reflects nothing. The same verdict drives both the
-	 * ambient hum and the folding wings, so the block never hums with its optics shut or sits open
-	 * earning nothing.
-	 */
-	public static boolean isConcentratorActive(Level level, BlockPos pos) {
-		if (!level.dimension().equals(Level.OVERWORLD) || !level.isBrightOutside()) {
-			return false;
-		}
-		if (classify(level, pos) == Access.BLOCKED) {
-			return false;
-		}
-		return classifyWeather(level, pos) == Weather.NONE;
-	}
 }

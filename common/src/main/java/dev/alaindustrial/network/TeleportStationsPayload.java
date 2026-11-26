@@ -81,7 +81,8 @@ public record TeleportStationsPayload(int containerId, int cooldownSeconds, int 
 			ByteBufCodecs.VAR_INT, Station::updatedAgoSeconds,
 			Station::new);
 
-	// No size cap: the list is as long as the remote's, and that limit is a server setting with no ceiling.
+	// Capped at PayloadBudget.MAX_TELEPORT_STATIONS (MOD-1030): the remote's own limit is a server setting with no
+	// ceiling, and TeleportStationSnapshot.build sends no more than this.
 	public static final StreamCodec<RegistryFriendlyByteBuf, TeleportStationsPayload> CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, TeleportStationsPayload::containerId,
 			ByteBufCodecs.VAR_INT, TeleportStationsPayload::cooldownSeconds,
@@ -91,7 +92,7 @@ public record TeleportStationsPayload(int containerId, int cooldownSeconds, int 
 			ByteBufCodecs.VAR_INT, TeleportStationsPayload::rtpMaxRadius,
 			ByteBufCodecs.VAR_INT, TeleportStationsPayload::rtpCost,
 			ByteBufCodecs.VAR_INT, TeleportStationsPayload::warmupSeconds,
-			STATION.apply(ByteBufCodecs.list()), TeleportStationsPayload::stations,
+			STATION.apply(ByteBufCodecs.list(PayloadBudget.MAX_TELEPORT_STATIONS)), TeleportStationsPayload::stations,
 			TeleportStationsPayload::new);
 
 	public TeleportStationsPayload {

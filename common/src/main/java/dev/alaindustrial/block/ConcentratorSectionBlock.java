@@ -1,66 +1,44 @@
 package dev.alaindustrial.block;
 
 import com.mojang.serialization.MapCodec;
-import dev.alaindustrial.core.energy.EnergyHostRedirect;
-import java.util.List;
+import dev.alaindustrial.registry.ModContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.redstone.Orientation;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Concentrator Section (MOD-603) — the block a player crafts seven of to grow a Mirror Concentrator
- * from one block into a two-by-two-by-two machine.
+ * The withdrawn Concentrator Section (MOD-603, withdrawn by MOD-1031): kept registered only so a world saved before
+ * the withdrawal loads, and hidden from players and recipe viewers.
  *
- * <p>Loose, it is an inert casing: no block entity, no energy, no inventory. Claimed by a structure,
- * it becomes one of seven eighths of the concentrator's model — and still holds nothing: the machine's
- * buffer and its ticking stay on the core. That is why there is no block entity here at all: seven of
- * them would be seven objects with nothing to remember.
+ * <p>It is refunded as one machine casing the first time the world touches it ({@link
+ * WithdrawnSolarBlocks#convertSection}): a loose section turns into the casing block, a cell of an assembled
+ * structure leaves air and drops the casing item, so the Reinforced Solar Panel that replaces the core sees the sky.
+ * The paths: any neighbour update (the concentrator it surrounded turning into the panel sets off a chain through
+ * every cell of the old structure), a scheduled tick after it is set by a command or a structure, or a random tick
+ * for a section no update reaches — a loose one, or a cell whose core sat in a chunk that was not loaded. Its item
+ * places a machine casing. A casing costs a little more than a section did; the player keeps every block.
  *
- * <p><b>But the structure answers as one machine (MOD-608).</b> A right-click on any cell opens the
- * core's screen, and every outward face of the bottom tier lends the core's energy port, so a cable
- * attaches along the whole base instead of at the one cell the panel used to occupy. Neither needs a
- * block entity: the click and the port both find the core by offset, from the block state alone.
- *
- * <p>Assembly and the rule that takes it apart both live in {@link ConcentratorStructure}; this
- * class only wires the hooks every way of changing the world arrives through.
+ * <p>The {@code part} and {@code facing} properties stay because the chunk palette stores them.
  */
-public class ConcentratorSectionBlock extends Block implements EnergyHostRedirect, CableArmReach {
+public class ConcentratorSectionBlock extends Block {
 	public static final MapCodec<ConcentratorSectionBlock> CODEC =
 			simpleCodec(ConcentratorSectionBlock::new);
 
-	/**
-	 * Which cell of a structure this block is, {@link ConcentratorPart#LOOSE} when none.
-	 *
-	 * <p>{@link ConcentratorPart#CORE} is filtered out rather than merely unused: the core cell is
-	 * the grown panel itself, so a section carrying that value would be a second, energy-less copy of
-	 * the machine's heart. Excluding it here makes that state impossible instead of merely wrong.
-	 */
+	/** Saved by worlds with the section; frozen, see {@link ConcentratorPart}. */
 	public static final EnumProperty<ConcentratorPart> PART = EnumProperty.create(
 			"part", ConcentratorPart.class, part -> part != ConcentratorPart.CORE);
-
-	/** Which way the structure this cell belongs to faces; meaningless while loose. */
+	/** Saved by worlds with the section; frozen. */
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
 	public ConcentratorSectionBlock(Properties properties) {
@@ -80,117 +58,43 @@ public class ConcentratorSectionBlock extends Block implements EnergyHostRedirec
 		builder.add(PART, FACING);
 	}
 
-	/**
-	 * A freshly placed section is always loose and always faces north.
-	 *
-	 * <p>Deliberately NOT the player's facing. A loose section looks the same from every side, and
-	 * the facing it will really carry is decided by assembly, from the box the player filled — taking
-	 * it from the placer here would put a value in the world that the very next tick overwrites, and
-	 * anyone reading the state mid-build would believe it meant something.
-	 */
+	/** An old item placed from a chest puts down a machine casing straight away. */
 	@Override
-	@Nullable
-	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return defaultBlockState();
-	}
-
-	@Override
-	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos,
-			CollisionContext context) {
-		return state.getValue(PART).shape(state.getValue(FACING));
-	}
-
-	/** The cell's whole footprint, not the model-hugging {@link #getShape} (MOD-803). */
-	@Override
-	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
-			CollisionContext context) {
-		return state.getValue(PART).collisionShape(state.getValue(FACING));
+	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+		return ModContent.MACHINE_CASING.get().defaultBlockState();
 	}
 
 	/**
-	 * Any cell of an assembled machine opens the core's screen (MOD-608) — the structure has no screen
-	 * of its own, so this is the only screen there is, reachable from wherever the player happens to be
-	 * looking. The Workstation's upper half does the same for its lower half.
-	 *
-	 * <p><b>A loose section passes the click through, and that is load-bearing.</b> Consuming it would
-	 * stop vanilla from falling through to block placement (MOD-039), and building this machine is
-	 * nothing but placing sections against sections.
-	 */
-	@Override
-	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
-			Player player, BlockHitResult hit) {
-		BlockPos core = ConcentratorStructure.coreOf(state, pos);
-		if (core == null) {
-			return InteractionResult.PASS;
-		}
-		if (level.getBlockEntity(core) instanceof MenuProvider provider) {
-			if (!level.isClientSide()) {
-				player.openMenu(provider);
-			}
-			return InteractionResult.SUCCESS;
-		}
-		return InteractionResult.PASS;
-	}
-
-	/** Every outward face of the bottom tier lends the core's port; see {@link ConcentratorStructure#energyHostThrough}. */
-	@Override
-	@Nullable
-	public BlockPos energyHost(BlockState state, BlockPos pos, Direction face) {
-		return ConcentratorStructure.energyHostThrough(state, pos, face);
-	}
-
-	/** A cable meets the bottom tier low and reaches in to the housing; see {@link ConcentratorStructure#cableArmReach}. */
-	@Override
-	public List<CableArmReach.Band> cableArmReach(BlockState state) {
-		return ConcentratorStructure.cableArmReach(state);
-	}
-
-	@Override
-	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer,
-			ItemStack stack) {
-		super.setPlacedBy(level, pos, state, placer, stack);
-		ConcentratorStructure.tryAssemble(level, pos);
-	}
-
-	/**
-	 * A neighbour changed — the section that completes the box may just have arrived, or the grown
-	 * panel next door may just have finished evolving. {@link ConcentratorStructure#tryAssemble}
-	 * returns immediately unless this block is still loose, which is what stops this recursing
-	 * through the neighbour updates assembly itself sets off.
-	 */
-	@Override
-	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
-			@Nullable Orientation orientation, boolean movedByPiston) {
-		super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston);
-		ConcentratorStructure.tryAssemble(level, pos);
-	}
-
-	/**
-	 * A cell that has lost a neighbour it needed becomes a loose section again, and the loss travels:
-	 * the eight cells are face-connected, so one broken cell reaches all seven others through
-	 * ordinary neighbour updates. Nothing is dropped here — each block is left standing in the form
-	 * the player originally put down.
+	 * A loose section turns into the casing on the spot. A cell of an assembled structure waits for its scheduled
+	 * tick: returning air here would let vanilla destroy the block through its loot table, and the refund belongs
+	 * to {@link WithdrawnSolarBlocks#convertSection} alone.
 	 */
 	@Override
 	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks,
 			BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos,
 			BlockState neighbourState, RandomSource random) {
-		BlockState answer = ConcentratorStructure.afterNeighbourChange(state, directionToNeighbour,
-				neighbourState);
-		if (answer != state) {
-			return answer;
+		if (!WithdrawnSolarBlocks.wasAssembled(state)) {
+			return ModContent.MACHINE_CASING.get().defaultBlockState();
 		}
-		return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos,
-				neighbourState, random);
+		ticks.scheduleTick(pos, this, 1);
+		return state;
 	}
 
 	@Override
-	protected BlockState rotate(BlockState state, Rotation rotation) {
-		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+		super.onPlace(state, level, pos, oldState, movedByPiston);
+		if (!level.isClientSide()) {
+			level.scheduleTick(pos, this, 1);
+		}
 	}
 
 	@Override
-	protected BlockState mirror(BlockState state, Mirror mirror) {
-		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		WithdrawnSolarBlocks.convertSection(level, pos);
+	}
+
+	@Override
+	protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		WithdrawnSolarBlocks.convertSection(level, pos);
 	}
 }

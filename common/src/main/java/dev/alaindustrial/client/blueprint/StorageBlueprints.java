@@ -140,6 +140,23 @@ public final class StorageBlueprints {
 							then(batch(4, TEMPERED_IRON_PLATE, 0, true),
 									List.of(new ItemMotion(TEMPERED_IRON_PLATE_BLOCK, 0, false))))));
 
+	/**
+	 * Labels for a store (MOD-935): the stock display frame hung on a chest; a diamond in the frame and the
+	 * chest counting diamonds (good); the to-do clipboard on a brick wall; a stack of logs dragged onto the
+	 * list as an item (good). Indices: 0 chest; 0 and 1..4 the clipboard and its wall.
+	 */
+	public static final BlueprintDef STORAGE_LABELS = new BlueprintDef("storage_labels",
+			List.of(MOD + "stock_display_frame", MOD + "todo_clipboard"),
+			List.of(
+					new Step(List.of(chest(0)), 0, 1, List.of(), Verdict.NONE,
+							List.of(new ItemMotion(MOD + "stock_display_frame", 0, true))),
+					new Step(List.of(chest(0)), 0, 1, List.of(), Verdict.GOOD,
+							List.of(new ItemMotion("minecraft:diamond", 0, true),
+									new ItemMotion("minecraft:diamond", 0, true))),
+					new Step(clipboardWall(), 0, 2, -1, -1, Verdict.NONE),
+					new Step(clipboardWall(), 0, 2, List.of(), Verdict.GOOD,
+							List.of(new ItemMotion("minecraft:oak_log", 0, true)))));
+
 	private StorageBlueprints() {
 	}
 
@@ -257,6 +274,18 @@ public final class StorageBlueprints {
 			all.add(MOD + metal + "_wall");
 		}
 		all.add(TEMPERED_IRON_FENCE);
+		return all;
+	}
+
+	/** 0 the clipboard hung on the wall's front, then the brick wall behind it (x 0..2, y 0..1). */
+	private static List<Placement> clipboardWall() {
+		List<Placement> all = new ArrayList<>(List.of(new Placement(MOD + "todo_clipboard", 1, 1, 1,
+				Map.of("face", "wall", "facing", "south"))));
+		for (int x = 0; x <= 2; x++) {
+			for (int y = 0; y <= 1; y++) {
+				all.add(new Placement("minecraft:stone_bricks", x, y, 0, Map.of()));
+			}
+		}
 		return all;
 	}
 }

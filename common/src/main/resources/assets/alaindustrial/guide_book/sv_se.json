@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "Kablar",
-              "text": "Kablar binder samman block till ett elnät och för EU. Varje kabel förlorar energi över avstånd — ju längre ledning, desto mer går förlorat.\n\nDet finns tre sorter, och de skiljer sig åt:\n• Tenn — smal (8 EU/t) men nästan förlustfri: för solfarmer\n• Koppar — den universella arbetshästen (12 EU/t)\n• Guld — den bredaste (48 EU/t), med högre förlust\n\nBlanda inte sorter på samma ledning: hela nätet följer den starkaste kabeln i det, inklusive dess förlust."
+              "text": "Kablar binder samman block till ett elnät och för EU. Varje kabel förlorar energi över avstånd — ju längre ledning, desto mer går förlorat.\n\nDet finns fyra sorter, och de skiljer sig åt:\n• Tenn — smal (8 EU/t) men nästan förlustfri: för solfarmer\n• Koppar — den universella arbetshästen (12 EU/t)\n• Guld — bredare (48 EU/t), med högre förlust\n• Elektrum — den bredaste (192 EU/t) med lägst förlust: för HV-ledningar, till priset av ett dyrt recept\n\nBlanda inte sorter på samma ledning: hela nätet följer den starkaste kabeln i det, inklusive dess förlust."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "Skalets delar",
-              "text": "- Reaktorglas: ett fönster, men högst en tredjedel av väggarna\n- Reaktorslussdörr: en sluss, öppnas med rödsten och stänger sig själv\n- Reaktorinlopp: här korsar vattenröret väggen\n- Reaktoruttag: här kopplas kabeln in\n- Reaktorlampa: lyser bara upp rummet, aldrig utsidan"
+              "text": "- Reaktorglas: ett fönster, men högst 30 % av skalet\n- Reaktorslussdörr: en sluss, öppnas med rödsten och stänger sig själv\n- Reaktorinlopp: här korsar vattenröret väggen\n- Reaktoruttag: här kopplas kabeln in\n- Reaktorlampa: lyser bara upp rummet, aldrig utsidan"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "Energi",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "Bronsmånpanel",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Bronsmånpanel",
+              "text": "Nattgrenens tredje steg — ett helt block vars effekt följer månens fas, 10 EU/t vid fullmåne, och som fortsätter arbeta i dåligt väder; fås bara genom utveckling."
+            },
+            {
+              "type": "stats",
+              "title": "Statistik",
+              "lines": [
+                "Energi: 10 EU/t (natt)",
+                "Buffert: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "Vindkvarn",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "Spegelkoncentrator",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Spegelkoncentrator",
-              "text": "Dagsgrenens tredje steg — dubbelt så mycket som dagsljussolpanelen och vid middagstid hälften till; speglarna fälls ihop när det inte finns något att samla."
-            },
-            {
-              "type": "stats",
-              "title": "Statistik",
-              "lines": [
-                "Energi: 8 EU/t (dag)",
-                "Buffert: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "Recept",
-              "recipe_type": "Formad tillverkning",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "Månbelyst solpanel",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "Förstärkt solpanel",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Förstärkt solpanel",
+              "text": "Dagsgrenens tredje steg — ett helt block vars effekt följer solens höjd, 12 EU/t vid middag; fås bara genom utveckling."
+            },
+            {
+              "type": "stats",
+              "title": "Statistik",
+              "lines": [
+                "Energi: 12 EU/t (dag)",
+                "Buffert: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "Hissvinsch",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Hissvinsch",
+              "text": "En eldriven vertikal hiss: ett glasschakt av ramar, en station med dörrar och anropspanel på varje våning och en vinsch som lock överst; varje resa betalas i sin helhet när hytten startar, och bara dörrarna där hytten står är öppna."
+            },
+            {
+              "type": "stats",
+              "title": "Statistik",
+              "lines": [
+                "Energi: 50 EU + 8 EU/block",
+                "Buffert: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Formad tillverkning",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "Formad tillverkning",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Formad tillverkning",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Formad tillverkning",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "Laddbädd",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "Rulltrappsdrivning",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Rulltrappsdrivning",
+              "text": "Ett lutande band av stegsektioner med ledstänger: det bär spelare, mobs och föremål en våning upp eller ner så länge drivningen har EU. LV-drivningen klarar upp till 8 sektioner, MV-drivningen upp till 16 och snabbare."
+            },
+            {
+              "type": "stats",
+              "title": "Statistik",
+              "lines": [
+                "Energi: 1 EU/t + 0.5 EU/t per sektion (bara medan någon åker)",
+                "Buffert: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Formad tillverkning",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Formad tillverkning",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Formad tillverkning",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Formad tillverkning",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Formad tillverkning",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "Solutvecklingschip",
-              "text": "Tre utvecklingschip — sol (dag), måne (natt) och resonans (tredje steget) — som utvecklar grundläggande solpaneler och vindkvarnar till T2 och T2-dagpanelen vidare genom utveckling, och för över ackumulerad NBT-energi."
+              "text": "Tre utvecklingschip — sol (dag), måne (natt) och resonans (tredje steget) — som utvecklar grundläggande solpaneler och vindkvarnar till T2 och båda T2-panelerna vidare genom utveckling, och för över ackumulerad NBT-energi."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Formad tillverkning",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

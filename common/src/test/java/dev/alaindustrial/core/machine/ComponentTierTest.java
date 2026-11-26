@@ -201,4 +201,23 @@ class ComponentTierTest {
 			GeneratorConfig.windMillRotorReinforcedEuPerDamage = original;
 		}
 	}
+
+	/**
+	 * A repair is priced by the grade's materials (MOD-384): every base grade costs the tier-1 knob, every
+	 * reinforced one tier 2, every advanced one tier 3 — rotor, wheel and conductor tip alike — and the ladder
+	 * climbs.
+	 */
+	@Test
+	void repairCostFollowsTheGradeNotTheFamily() {
+		for (ComponentTier tier : ComponentTier.values()) {
+			String path = tier.itemPath();
+			int expected = path.endsWith("_advanced") ? Config.repairBenchTier3EuCost
+					: path.endsWith("_reinforced") ? Config.repairBenchTier2EuCost
+					: Config.repairBenchTier1EuCost;
+			assertEquals(expected, tier.repairEuCost(), path);
+		}
+		assertTrue(Config.repairBenchTier1EuCost < Config.repairBenchTier2EuCost
+				&& Config.repairBenchTier2EuCost < Config.repairBenchTier3EuCost,
+				"the defaults climb, so a grade wired to the wrong knob cannot hide behind an equal number");
+	}
 }

@@ -1,6 +1,7 @@
 package dev.alaindustrial.block;
 
 import dev.alaindustrial.block.entity.QuarryControllerBlockEntity;
+import dev.alaindustrial.block.entity.QuarrySocketBlockEntity;
 import dev.alaindustrial.core.energy.EnergyHostRedirect;
 import dev.alaindustrial.core.energy.EnergyTransactions;
 import dev.alaindustrial.core.fluid.FluidAmounts;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -51,9 +53,14 @@ import org.jspecify.annotations.Nullable;
  * foot of the main tower takes the haul out of the controller's buffer and brings a fresh drill bit, through the same
  * faces and on the same {@link #PORT} ({@link ItemHostRedirect}; {@link WorldlyContainerHolder} for the vanilla
  * hopper).
+ *
+ * <p><b>The socket alone carries a block entity</b> (MOD-1025, {@link BlockEntityByState}): Forge hangs capabilities
+ * on block entities only, so a {@link QuarrySocketBlockEntity} is where another mod's pipe finds the lent inventory
+ * and tank there. Every other foundation still has none, on every loader — pistons, the quarry's digger and the town
+ * drones see what they saw before.
  */
 public class QuarryFoundationBlock extends Block
-		implements EnergyHostRedirect, ItemHostRedirect, FluidHostRedirect, WorldlyContainerHolder {
+		implements EnergyHostRedirect, ItemHostRedirect, FluidHostRedirect, WorldlyContainerHolder, BlockEntityByState {
 
 	/** Whether this foundation stands under the controller of a formed frame and lends its energy port. */
 	public static final BooleanProperty PORT = BooleanProperty.create("port");
@@ -64,6 +71,28 @@ public class QuarryFoundationBlock extends Block
 		super(properties);
 		this.tier = tier;
 		registerDefaultState(defaultBlockState().setValue(PORT, false).setValue(QuarryFramePart.FORMED, false));
+	}
+
+	@Override
+	public boolean hasBlockEntity(BlockState state) {
+		return state.getValue(PORT);
+	}
+
+	@Override
+	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return state.getValue(PORT) ? new QuarrySocketBlockEntity(pos, state) : null;
+	}
+
+	/**
+	 * The socket closing (the frame came apart) takes its block entity with it: the chunk drops a block entity only
+	 * when the block changes, and here only {@link #PORT} does ({@link BlockEntityByState}).
+	 */
+	@Override
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+		super.onPlace(state, level, pos, oldState, movedByPiston);
+		if (oldState.is(this) && oldState.getValue(PORT) && !state.getValue(PORT)) {
+			level.removeBlockEntity(pos);
+		}
 	}
 
 	/** The foundation's tier, 1 to 3. */

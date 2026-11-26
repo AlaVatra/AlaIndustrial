@@ -6,6 +6,7 @@ import dev.alaindustrial.gametest.CableEnergyScenarios;
 import dev.alaindustrial.gametest.ItemPipeScenarios;
 import dev.alaindustrial.gametest.BlockCapabilityParityScenarios;
 import dev.alaindustrial.gametest.PayloadRegistrationScenarios;
+import dev.alaindustrial.gametest.QuarryDigScenarios;
 import dev.alaindustrial.gametest.RosterEntry;
 import dev.alaindustrial.gametest.RosterReplayScenarios;
 import dev.alaindustrial.registry.ModContent;
@@ -141,6 +142,10 @@ public final class NeoForgeGameTests {
 		// this loader alone until this sweep existed.
 		registerTest(event, "block_capabilities_match_ports", 40, true,
 				helper -> BlockCapabilityParityScenarios.capabilitiesMatchPorts(helper, CAPABILITY_PROBES));
+
+		// MOD-1025: the quarry's socket as another mod's pipe finds it, with this lane's probes.
+		registerTest(event, "quarry_socket_seen_by_other_mods", 40, true,
+				helper -> QuarryDigScenarios.theSocketIsSeenByAnotherModsPipe(helper, CAPABILITY_PROBES));
 
 		// MOD-706: every payload of ModPayloads.PAYLOADS registered in its direction, asked of NeoForge's
 		// NetworkRegistry through the loader probe — the same body as the Fabric PayloadRegistrationGameTest.

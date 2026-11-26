@@ -37,7 +37,8 @@ final class BlueprintParts {
 	static final String INSULATED_ELECTRUM_CABLE = "alaindustrial:insulated_electrum_cable";
 	static final String DAYLIGHT_SOLAR_PANEL = "alaindustrial:daylight_solar_panel";
 	static final String MOONLIT_SOLAR_PANEL = "alaindustrial:moonlit_solar_panel";
-	static final String RADIANT_SOLAR_PANEL = "alaindustrial:radiant_solar_panel";
+	static final String REINFORCED_SOLAR_PANEL = "alaindustrial:reinforced_solar_panel";
+	static final String BRONZE_LUNAR_PANEL = "alaindustrial:bronze_lunar_panel";
 	static final String TIN_BLOCK = "alaindustrial:tin_block";
 	static final String ITEM_PIPE = "alaindustrial:item_pipe";
 	static final String ITEM_PIPE_ADVANCED = "alaindustrial:item_pipe_advanced";

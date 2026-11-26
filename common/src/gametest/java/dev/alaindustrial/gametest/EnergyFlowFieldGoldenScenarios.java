@@ -1,9 +1,6 @@
 package dev.alaindustrial.gametest;
 
 import dev.alaindustrial.Config;
-import dev.alaindustrial.block.ConcentratorPart;
-import dev.alaindustrial.block.ConcentratorStructure;
-import dev.alaindustrial.block.entity.EnergyBlockEntity;
 import dev.alaindustrial.registry.ModContent;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +13,10 @@ import net.minecraft.world.item.Items;
 /**
  * World golden master of the energy network (MOD-715, batch 0): the real topology cache, the real
  * discharge channels and the real distribution kernel, on the reference circuits — a straight line, a fork
- * to a machine and a store (MOD-254), a dead-end spur (MOD-318), a ring, a multiblock lending one buffer
- * through two cells (MOD-608), and the storage channels (backup, closed backup, cascade, cascade beside a
- * fund, feed; ADR-004).
+ * to a machine and a store (MOD-254), a dead-end spur (MOD-318), a ring, and the storage channels (backup,
+ * closed backup, cascade, cascade beside a fund, feed; ADR-004). The multiblock that lent one buffer through two
+ * cells (MOD-608) was the Mirror Concentrator, withdrawn by MOD-1031; the rule that cells count their host once
+ * is pinned on the kernel by {@code EnergyLineDistributorCoreTest} and {@code HostSupplyTest} (ADR-027).
  *
  * <p>Each tick records every cable and endpoint buffer and the network's telemetry; the first tick also
  * records the endpoint order the cache discovered, and chosen ticks the flow faces the cache's fields give
@@ -71,7 +69,6 @@ public final class EnergyFlowFieldGoldenScenarios {
 		lines.addAll(fork(helper));
 		lines.addAll(spur(helper));
 		lines.addAll(ring(helper));
-		lines.addAll(host(helper));
 		lines.addAll(storageChannels(helper));
 		EnergyGoldenRig.clear(helper);
 		GoldenLines.check(helper, "EnergyNetworkGolden", WRITE_TO_PROPERTY, "*:mod715_energy_network_golden",
@@ -118,41 +115,6 @@ public final class EnergyFlowFieldGoldenScenarios {
 		rig.run(p(2, 3), p(1, 3));
 		rig.cable(p(1, 2));
 		rig.machine(p(4, 3), ModContent.MACERATOR.get(), Direction.EAST, ore());
-		return rig.drive(TICKS, FLOW_AT);
-	}
-
-	/**
-	 * MOD-608: an assembled concentrator whose core is charged by hand and never ticked (no daylight
-	 * enters the golden), cabled through two of its bottom cells — one host behind two endpoints.
-	 */
-	private static List<String> host(GameTestHelper helper) {
-		EnergyGoldenRig.clear(helper);
-		BlockPos core = p(3, 3);
-		Direction facing = Direction.NORTH;
-		helper.setBlock(core, ModContent.RADIANT_SOLAR_PANEL.get().defaultBlockState());
-		for (ConcentratorPart part : ConcentratorPart.CELLS) {
-			if (part != ConcentratorPart.CORE) {
-				helper.setBlock(core.offset(part.worldOffset(facing)),
-						ModContent.CONCENTRATOR_SECTION.get().defaultBlockState());
-			}
-		}
-		ConcentratorStructure.tryAssemble(helper.getLevel(), helper.absolutePos(core));
-		Direction out = facing.getOpposite();
-		BlockPos back = core.offset(ConcentratorPart.BACK.worldOffset(facing));
-		BlockPos backRight = core.offset(ConcentratorPart.BACK_RIGHT.worldOffset(facing));
-		if (ConcentratorStructure.neighbourPart(ConcentratorPart.BACK, facing, out) != null
-				|| ConcentratorStructure.neighbourPart(ConcentratorPart.BACK_RIGHT, facing, out) != null
-				|| !(EnergyScenarioSupport.be(helper, core) instanceof EnergyBlockEntity panel)) {
-			throw new IllegalStateException("host rig: the concentrator did not assemble as expected");
-		}
-		panel.getEnergyStorage().setAmountUntracked(panel.getEnergyStorage().getCapacity());
-		EnergyGoldenRig rig = new EnergyGoldenRig(helper, "host");
-		rig.passive(core);
-		rig.cable(back.relative(out));
-		rig.cable(backRight.relative(out));
-		Direction along = facing.getClockWise();
-		rig.cable(backRight.relative(out).relative(along));
-		rig.machine(backRight.relative(out).relative(along, 2), ModContent.MACERATOR.get(), along, ore());
 		return rig.drive(TICKS, FLOW_AT);
 	}
 

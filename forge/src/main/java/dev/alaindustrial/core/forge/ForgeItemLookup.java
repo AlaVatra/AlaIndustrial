@@ -22,9 +22,10 @@ import org.jspecify.annotations.Nullable;
  * everyone else's, as on NeoForge, so our pipes see exactly what other mods see.
  *
  * <p>Two kinds of block have no block entity to carry a capability on Forge, and are read here directly: a block
- * that lends another block's inventory ({@link ItemHostRedirect}, the quarry's socket; other mods do not see it on
- * Forge) and a vanilla {@link WorldlyContainerHolder} such as the composter, which Fabric and NeoForge publish as a
- * block capability and which Forge's own hopper reads the same way.
+ * that lends another block's inventory ({@link ItemHostRedirect}, the quarry's socket; other mods find it through the
+ * socket's block entity, {@code BlockCapabilitiesForge}, MOD-1025) and a vanilla {@link WorldlyContainerHolder} such
+ * as the composter, which Fabric and NeoForge publish as a block capability and which Forge's own hopper reads the
+ * same way.
  */
 public final class ForgeItemLookup implements ItemLookup {
 

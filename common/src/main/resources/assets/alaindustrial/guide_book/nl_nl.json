@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "Kabels",
-              "text": "Kabels verbinden blokken tot een stroomnet en vervoeren EU. Elke kabel verliest energie over afstand — hoe langer de lijn, hoe meer verloren gaat.\n\nEr zijn drie soorten, en ze verschillen:\n• Tin — smal (8 EU/t) maar vrijwel verliesvrij: voor zonneparken\n• Koper — het universele werkpaard (12 EU/t)\n• Goud — de breedste (48 EU/t), met meer verlies\n\nMeng geen soorten in één lijn: het hele netwerk volgt de sterkste kabel erin, inclusief diens verlies."
+              "text": "Kabels verbinden blokken tot een stroomnet en vervoeren EU. Elke kabel verliest energie over afstand — hoe langer de lijn, hoe meer verloren gaat.\n\nEr zijn vier soorten, en ze verschillen:\n• Tin — smal (8 EU/t) maar vrijwel verliesvrij: voor zonneparken\n• Koper — het universele werkpaard (12 EU/t)\n• Goud — breder (48 EU/t), met meer verlies\n• Elektrum — de breedste (192 EU/t) met het minste verlies: voor HV-lijnen, ten koste van een duur recept\n\nMeng geen soorten in één lijn: het hele netwerk volgt de sterkste kabel erin, inclusief diens verlies."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "Onderdelen van de mantel",
-              "text": "- Reactorglas: een raam, maar niet meer dan een derde van de muren\n- Reactorsluisdeur: een sluis, gaat open op redstone en sluit zichzelf\n- Reactorinlaat: hier gaat de waterleiding door de muur\n- Reactoruitlaat: hier prik je de kabel in\n- Reactorlamp: verlicht alleen de ruimte, nooit de buitenkant"
+              "text": "- Reactorglas: een raam, maar niet meer dan 30 % van de mantel\n- Reactorsluisdeur: een sluis, gaat open op redstone en sluit zichzelf\n- Reactorinlaat: hier gaat de waterleiding door de muur\n- Reactoruitlaat: hier prik je de kabel in\n- Reactorlamp: verlicht alleen de ruimte, nooit de buitenkant"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "Energie",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "Bronzen maanpaneel",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Bronzen maanpaneel",
+              "text": "De derde trede van de nachttak — een volledig blok waarvan de opbrengst de maanfase volgt, 10 EU/t bij volle maan, en dat bij slecht weer blijft werken; alleen via evolutie te krijgen."
+            },
+            {
+              "type": "stats",
+              "title": "Statistieken",
+              "lines": [
+                "Energie: 10 EU/t (nacht)",
+                "Buffer: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "Windturbine",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "Spiegelconcentrator",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Spiegelconcentrator",
-              "text": "De derde trede van de dagtak — twee keer het Daglichtzonnepaneel, rond het middaguur nog de helft meer; de spiegels klappen in als er niets te verzamelen valt."
-            },
-            {
-              "type": "stats",
-              "title": "Statistieken",
-              "lines": [
-                "Energie: 8 EU/t (dag)",
-                "Buffer: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "Recept",
-              "recipe_type": "Gevormd vervaardigen",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "Maanverlicht zonnepaneel",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "Versterkt zonnepaneel",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Versterkt zonnepaneel",
+              "text": "De derde trede van de dagtak — een volledig blok waarvan de opbrengst de hoogte van de zon volgt, 12 EU/t om 12 uur ’s middags; alleen via evolutie te krijgen."
+            },
+            {
+              "type": "stats",
+              "title": "Statistieken",
+              "lines": [
+                "Energie: 12 EU/t (dag)",
+                "Buffer: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "Liftlier",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Liftlier",
+              "text": "Een elektrische verticale lift: een glazen schacht van frames, op elke verdieping een station met deuren en een oproeppaneel en bovenop een lier als deksel; elke rit wordt volledig betaald als de cabine vertrekt, en alleen de deuren waar de cabine staat zijn open."
+            },
+            {
+              "type": "stats",
+              "title": "Statistieken",
+              "lines": [
+                "Energie: 50 EU + 8 EU/blok",
+                "Buffer: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Gevormd vervaardigen",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "Gevormd vervaardigen",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Gevormd vervaardigen",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Gevormd vervaardigen",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "Laadbed",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "Roltrapaandrijving",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Roltrapaandrijving",
+              "text": "Een schuine band van tredesecties met leuningen: hij vervoert spelers, mobs en voorwerpen een verdieping omhoog of omlaag zolang de aandrijving EU heeft. De LV-aandrijving trekt tot 8 secties, de MV-aandrijving tot 16 en sneller."
+            },
+            {
+              "type": "stats",
+              "title": "Statistieken",
+              "lines": [
+                "Energie: 1 EU/t + 0.5 EU/t per sectie (alleen zolang er iemand meerijdt)",
+                "Buffer: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Recept",
+              "recipe_type": "Gevormd vervaardigen",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Gevormd vervaardigen",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Gevormd vervaardigen",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Gevormd vervaardigen",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Gevormd vervaardigen",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "Zonne-evolutiechip",
-              "text": "Drie evolutiechips — zonne (dag), maan (nacht) en resonantie (de derde trede) — die basiszonnepanelen en -windmolens via evolutie tot T2 laten evolueren en het T2-dagpaneel nog verder, waarbij de opgeslagen energie behouden blijft."
+              "text": "Drie evolutiechips — zonne (dag), maan (nacht) en resonantie (de derde trede) — die basiszonnepanelen en -windmolens via evolutie tot T2 laten evolueren en beide T2-panelen nog verder, waarbij de opgeslagen energie behouden blijft."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Gevormd vervaardigen",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

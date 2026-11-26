@@ -1,7 +1,6 @@
 package dev.alaindustrial.client;
 
 import dev.alaindustrial.Industrialization;
-import dev.alaindustrial.block.ConcentratorOutline;
 import dev.alaindustrial.block.DistillationColumnOutline;
 import dev.alaindustrial.block.TeleporterCapsuleOutline;
 import dev.alaindustrial.block.entity.AdvancedIndustrialWorkbenchBlockEntity;
@@ -23,7 +22,6 @@ import dev.alaindustrial.block.entity.IronChestBlockEntity;
 import dev.alaindustrial.block.entity.MobWheelBlockEntity;
 import dev.alaindustrial.block.entity.ElevatorWinchBlockEntity;
 import dev.alaindustrial.block.entity.QuarryControllerBlockEntity;
-import dev.alaindustrial.block.entity.RadiantSolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.ReactorDoorBlockEntity;
 import dev.alaindustrial.block.entity.SettlementCoreBlockEntity;
 import dev.alaindustrial.block.entity.ShieldingChestBlockEntity;
@@ -46,7 +44,6 @@ import dev.alaindustrial.client.render.BlockBreakerBlockEntityRenderer;
 import dev.alaindustrial.client.render.CableAccessoryBlockEntityRenderer;
 import dev.alaindustrial.client.render.CableSleeveTint;
 import dev.alaindustrial.client.render.ChestBlockEntityRenderer;
-import dev.alaindustrial.client.render.ConcentratorSchematicRenderer;
 import dev.alaindustrial.client.render.ConstructionDroneRenderer;
 import dev.alaindustrial.client.render.DrillBoreOutline;
 import dev.alaindustrial.client.render.ElectricMobTrapBlockEntityRenderer;
@@ -69,7 +66,6 @@ import dev.alaindustrial.client.render.PiezoPlateTint;
 import dev.alaindustrial.client.render.PiezoPlateXray;
 import dev.alaindustrial.client.render.ElevatorWinchRenderer;
 import dev.alaindustrial.client.render.QuarryFrameRenderer;
-import dev.alaindustrial.client.render.RadiantSolarPanelBlockEntityRenderer;
 import dev.alaindustrial.client.render.ReactorDoorBlockEntityRenderer;
 import dev.alaindustrial.client.render.RootInspection;
 import dev.alaindustrial.client.render.SettlementBorderOverlay;
@@ -324,10 +320,6 @@ public final class ClientContentManifest {
 			// which clot the block is holding.
 			renderer(ContentManifest.blockEntity("energy_condenser", EnergyCondenserBlockEntity.class),
 					EnergyCondenserBlockEntityRenderer::new),
-			// MOD-602: the concentrator's two mirror wings, which fold over the collector when the
-			// block cannot work. Everything else about it stands still and lives in the chunk mesh.
-			renderer(ContentManifest.blockEntity("radiant_solar_panel", RadiantSolarPanelBlockEntity.class),
-					RadiantSolarPanelBlockEntityRenderer::new),
 			// MOD-483: the workstation's fans and the screens that fold out. One renderer for all
 			// three parts of the block — the lower half draws the fans, the upper the screens, a
 			// loose casing nothing.
@@ -588,8 +580,6 @@ public final class ClientContentManifest {
 			hudLayer("piezo_plate_xray", PiezoPlateXray::renderHud, HudPlacement.LAST),
 			// MOD-804: the focused sound absorber's group.
 			hudLayer("sound_absorber_group", SoundAbsorberOverlay::renderHud, HudPlacement.LAST),
-			// MOD-603: the concentrator's assembly hint.
-			hudLayer("concentrator_assembly", ConcentratorSchematicRenderer::renderHud, HudPlacement.LAST),
 			// MOD-106: the screen going dark as a jump lands.
 			hudLayer("teleport_fade", TeleportFadeHud::render, HudPlacement.LAST),
 			// MOD-065: the worn Energy Pack's charge readout.
@@ -722,8 +712,6 @@ public final class ClientContentManifest {
 	public static final List<BlockOutline> BLOCK_OUTLINES = List.of(
 			// MOD-778: any storey of an assembled distillation column outlines the whole tower.
 			blockOutline(DistillationColumnOutline::shape),
-			// MOD-803: any cell of an assembled Mirror Concentrator outlines the whole machine.
-			blockOutline(ConcentratorOutline::shape),
 			// MOD-803: the station or either glass cell of an assembled teleporter outlines the whole capsule.
 			blockOutline(TeleporterCapsuleOutline::shape),
 			// MOD-967: a drill with bore modules outlines every extra block it will take, as the game outlines the
@@ -750,8 +738,6 @@ public final class ClientContentManifest {
 			NetworkOverlayRenderer::submitFrame,
 			// MOD-278: the personal repeller dome (see ZonePreviewRenderer).
 			ZonePreviewRenderer::submitFrame,
-			// MOD-603: the concentrator's assembly schematic, a per-frame read of the world in front of the player.
-			ConcentratorSchematicRenderer::submitFrame,
 			// MOD-764: the wrench's x-ray of piezo plates.
 			PiezoPlateXray::submitFrame,
 			// MOD-804: the sound absorbers' zones under the wrench, and the focused group's HUD line.

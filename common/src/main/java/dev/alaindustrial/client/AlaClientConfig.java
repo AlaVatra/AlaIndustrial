@@ -3,6 +3,7 @@ package dev.alaindustrial.client;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.client.blueprint.BlueprintProgress;
 import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,12 +53,6 @@ public final class AlaClientConfig {
 	 */
 	public static int rootInspectionDim = 85;
 
-	/**
-	 * Whether the Mirror Concentrator's assembly schematic is drawn (MOD-603). On by default: it is
-	 * how a player finds out the machine can be grown at all, and it only appears while the crosshair
-	 * is on the machine itself.
-	 */
-	public static boolean concentratorSchematicEnabled = true;
 	/** Dragged offset of the upgrade panel from its docked position (MOD-080). Persisted between sessions. */
 	public static int upgradePanelDX = 0;
 	public static int upgradePanelDY = 0;
@@ -73,6 +68,8 @@ public final class AlaClientConfig {
 	public static void init(Path configDir) {
 		path = configDir.resolve("alaindustrial-client.json");
 		load();
+		// The blueprints the player has opened (MOD-933) live beside this file, in a record of their own.
+		BlueprintProgress.init(configDir);
 	}
 
 	public static Snapshot snapshot() {
@@ -124,8 +121,6 @@ public final class AlaClientConfig {
 					energyHudEnabled = GsonHelper.getAsBoolean(o, "energyHudEnabled", energyHudEnabled);
 					drillHudEnabled = GsonHelper.getAsBoolean(o, "drillHudEnabled", drillHudEnabled);
 					rootInspectionDim = clamp(GsonHelper.getAsInt(o, "rootInspectionDim", rootInspectionDim), 10, 95);
-					concentratorSchematicEnabled = GsonHelper.getAsBoolean(o, "concentratorSchematicEnabled",
-							concentratorSchematicEnabled);
 					upgradePanelDX = GsonHelper.getAsInt(o, "upgradePanelDX", upgradePanelDX);
 					upgradePanelDY = GsonHelper.getAsInt(o, "upgradePanelDY", upgradePanelDY);
 					statsPanelDX = GsonHelper.getAsInt(o, "statsPanelDX", statsPanelDX);
@@ -164,7 +159,6 @@ public final class AlaClientConfig {
 		o.addProperty("energyHudEnabled", snapshot.energyHudEnabled());
 		o.addProperty("drillHudEnabled", snapshot.drillHudEnabled());
 		o.addProperty("rootInspectionDim", rootInspectionDim);
-		o.addProperty("concentratorSchematicEnabled", concentratorSchematicEnabled);
 		o.addProperty("upgradePanelDX", upgradePanelDX);
 		o.addProperty("upgradePanelDY", upgradePanelDY);
 		o.addProperty("statsPanelDX", statsPanelDX);

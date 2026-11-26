@@ -76,15 +76,10 @@ final class LineEndpoints {
 	/** Resolve the producers' live ports and dry-run what each can give this tick. */
 	static Supply supply(List<EnergyTopologyCache.Endpoint> producers,
 			Function<EnergyTopologyCache.Endpoint, EnergyPort> portAt, Predicate<BlockPos> isStorageSink) {
-		long genSupply = 0;
 		Set<BlockPos> supplying = new LinkedHashSet<>();
 		List<EnergyLineDistributor.LiveProducer<BlockPos>> generators = new ArrayList<>(producers.size());
 		List<EnergyLineDistributor.LiveProducer<BlockPos>> storageSources = new ArrayList<>();
 		Set<BlockPos> storagePositions = new LinkedHashSet<>();
-		// Hosts whose supply is already in genSupply (MOD-608): the cells of one multiblock are separate
-		// endpoints over ONE buffer, and summing each of them would promise the storage stage energy that
-		// exists once — batteries would then sit idle while machines go short.
-		Set<BlockPos> countedHosts = new LinkedHashSet<>();
 		for (EnergyTopologyCache.Endpoint ep : producers) {
 			EnergyPort st = portAt.apply(ep);
 			if (st == null || !st.supportsExtraction()) {
@@ -97,14 +92,13 @@ final class LineEndpoints {
 				long supply = EnergyTransactions.get().simulate(sim -> st.extract(Long.MAX_VALUE, sim));
 				// what one extract gives (a port's per-call cap): the plan routes at most that through each face
 				generators.add(new EnergyLineDistributor.LiveProducer<>(ep.pos(), st, ep.host(), supply));
-				if (countedHosts.add(ep.host())) {
-					genSupply += supply;
-				}
 				if (supply > 0) {
 					supplying.add(ep.pos());
 				}
 			}
 		}
+		// Each host once (MOD-608, ADR-027): the cells of one multiblock are separate endpoints over ONE buffer.
+		long genSupply = EnergyLineDistributor.supplyOncePerHost(generators);
 		return new Supply(generators, storageSources, storagePositions, supplying, genSupply);
 	}
 

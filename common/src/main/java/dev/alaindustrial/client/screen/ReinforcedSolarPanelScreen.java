@@ -1,0 +1,80 @@
+package dev.alaindustrial.client.screen;
+
+import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.block.entity.ReinforcedSolarPanelBlockEntity;
+import dev.alaindustrial.menu.ReinforcedSolarPanelMenu;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+
+/**
+ * Reinforced Solar Panel GUI (MOD-1031) — the day branch's third rung. No chip slot and no evolution bar: the
+ * next rung has no function yet.
+ *
+ * <p>Same service-area blit model as {@link DaylightSolarPanelScreen}: the static background gives
+ * borders and tick marks, dynamic fills come from UV x≥176 so the marks show through.
+ */
+public class ReinforcedSolarPanelScreen extends LayoutMachineScreen<ReinforcedSolarPanelMenu> {
+
+    private static final Identifier TEXTURE =
+            Industrialization.id("textures/gui/container/reinforced_solar_panel.png");
+
+    // Sun indicator — same position and service-area UV as the two panels below it.
+    private static final int   SUN_FRAME_X = 153;
+    private static final int   SUN_FRAME_Y = 17;
+    private static final int   SUN_FRAME_W = 7;
+    private static final int   SUN_FRAME_H = 7;
+    private static final float SUN_UV_X    = 176.0F;
+    private static final float SUN_UV_Y    = 65.0F;
+
+    /** Atlas and energy bar (MOD-716, CLI-3). */
+    private static final MachineLayout LAYOUT = MachineLayout.of(TEXTURE, EnergyBarSpec.LEFT);
+
+    public ReinforcedSolarPanelScreen(ReinforcedSolarPanelMenu menu, Inventory inventory, Component title) {
+        super(menu, inventory, title, LAYOUT);
+    }
+
+    @Override
+    protected void drawMachineFrame(GuiGraphicsExtractor graphics, int mouseX, int mouseY,
+                                  float partialTick) {
+        int x = this.leftPos;
+        int y = this.topPos;
+
+        blitStaticFrame(graphics);
+
+        int capacity = this.menu.getCapacity();
+        int energy   = this.menu.getEnergy();
+
+        int mode = this.menu.getMode();
+        boolean sunActive = mode == ReinforcedSolarPanelBlockEntity.MODE_DAY
+                         || mode == ReinforcedSolarPanelBlockEntity.MODE_DAY_PARTIAL;
+        if (sunActive) {
+            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE,
+                    x + SUN_FRAME_X, y + SUN_FRAME_Y,
+                    SUN_UV_X, SUN_UV_Y,
+                    SUN_FRAME_W, SUN_FRAME_H,
+                    TEX_SIZE, TEX_SIZE);
+        }
+
+        graphics.text(this.font, Component.translatable("gui.alaindustrial.energy", energy, capacity),
+                x + 30, y + 22, GuiStyle.TEXT, false);
+        graphics.text(this.font, outputLine(this.menu.getProductionRate()),
+                x + 30, y + 34, GuiStyle.TEXT, false);
+        graphics.text(this.font, Component.translatable("gui.alaindustrial.mode", modeLabel(mode)),
+                x + 30, y + 46, GuiStyle.TEXT_DIM, false);
+    }
+
+    private static Component modeLabel(int mode) {
+        String key = switch (mode) {
+            case ReinforcedSolarPanelBlockEntity.MODE_DAY         -> "day";
+            case ReinforcedSolarPanelBlockEntity.MODE_DAY_WEATHER -> "weather";
+            case ReinforcedSolarPanelBlockEntity.MODE_DAY_PARTIAL -> "partial";
+            case ReinforcedSolarPanelBlockEntity.MODE_DAY_SNOW    -> "snow";
+            default                                             -> "night";
+        };
+        return Component.translatable("gui.alaindustrial.solar_panel.mode." + key);
+    }
+
+}

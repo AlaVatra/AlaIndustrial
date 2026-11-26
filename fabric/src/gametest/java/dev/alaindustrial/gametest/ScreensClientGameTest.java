@@ -36,8 +36,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Vector2i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,11 +153,11 @@ public class ScreensClientGameTest implements FabricClientGameTest {
             // strip; captureDispatcherTabs photographs the other three tabs.
             new Screen("town_dispatcher", "town_dispatcher", "Town Dispatcher"),
             new Screen("teleporter_station", "teleporter", "Teleporter Station"),
-            // Already had frames before MOD-362, but only under the historical name gui_geothermal_*
-            // and only through data injection. Listed here so it is opened the real way like the rest.
+            // Framed before MOD-362 only as gui_geothermal_* by data injection; listed so it opens the real way.
             new Screen("geothermal_generator", "geothermal_generator", "Geothermal Generator"),
             new Screen("daylight_solar_panel", "daylight_solar_panel", "Daylight Solar Panel"),
-            new Screen("radiant_solar_panel", "radiant_solar_panel", "Mirror Concentrator"),
+            new Screen("reinforced_solar_panel", "reinforced_solar_panel", "Reinforced Solar Panel"),
+            new Screen("bronze_lunar_panel", "bronze_lunar_panel", "Bronze Lunar Panel"),
             new Screen("pump", "pump", "Pump"),
             new Screen("garden_drone_station", "garden_drone_station", "Garden Drone Station"),
             // MOD-923: the apiary station's casing alone (the hive is not stacked): the frame captures «no hive» in
@@ -575,10 +573,8 @@ public class ScreensClientGameTest implements FabricClientGameTest {
         // the honest path: useItemOn sends the ServerboundUseItemOnPacket, the SERVER decides to open a
         // menu, and the client receives a real menu-open packet with real synced data. What is skipped
         // is only the mouse-button plumbing, which is Minecraft's code, not ours.
-        context.runOnClient(mc -> {
-            BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(pos), Direction.SOUTH, pos, false);
-            mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND, hit);
-        });
+        context.runOnClient(mc -> mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND,
+                ScreenClicks.hitFor(screen.menuId(), pos)));
         VisualWorld.awaitContainerScreen(context, screen.label() + " (" + screen.menuId() + ")");
         LOG.info("[SCREENS] {} opened by block interaction at {}", screen.menuId(), pos);
     }

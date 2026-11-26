@@ -12,6 +12,7 @@ import static dev.alaindustrial.registry.content.ContentDeclarations.menu;
 import static dev.alaindustrial.registry.content.ContentDeclarations.registeredBlock;
 import static dev.alaindustrial.registry.content.TabEntries.show;
 
+import dev.alaindustrial.block.BronzeLunarPanelBlock;
 import dev.alaindustrial.block.ConcentratorSectionBlock;
 import dev.alaindustrial.block.CreativeEnergySourceBlock;
 import dev.alaindustrial.block.DaylightSolarPanelBlock;
@@ -26,12 +27,15 @@ import dev.alaindustrial.block.MobWheelGateBlock;
 import dev.alaindustrial.block.MobWheelRotorBlock;
 import dev.alaindustrial.block.MoonlitSolarPanelBlock;
 import dev.alaindustrial.block.PiezoPlateBlock;
+import dev.alaindustrial.block.PlannedSolarPanelBlock;
 import dev.alaindustrial.block.RadiantSolarPanelBlock;
+import dev.alaindustrial.block.ReinforcedSolarPanelBlock;
 import dev.alaindustrial.block.SolarPanelBlock;
 import dev.alaindustrial.block.StormWindMillBlock;
 import dev.alaindustrial.block.ThermoelectricGeneratorBlock;
 import dev.alaindustrial.block.WaterMillBlock;
 import dev.alaindustrial.block.WindMillBlock;
+import dev.alaindustrial.block.entity.BronzeLunarPanelBlockEntity;
 import dev.alaindustrial.block.entity.CreativeEnergySourceBlockEntity;
 import dev.alaindustrial.block.entity.DaylightSolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.GeneratorBlockEntity;
@@ -42,13 +46,16 @@ import dev.alaindustrial.block.entity.MobWheelBlockEntity;
 import dev.alaindustrial.block.entity.MoonlitSolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.PiezoPlateBlockEntity;
 import dev.alaindustrial.block.entity.RadiantSolarPanelBlockEntity;
+import dev.alaindustrial.block.entity.ReinforcedSolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.SolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.StormWindMillBlockEntity;
 import dev.alaindustrial.block.entity.ThermoelectricGeneratorBlockEntity;
 import dev.alaindustrial.block.entity.WaterMillBlockEntity;
 import dev.alaindustrial.block.entity.WindMillBlockEntity;
 import dev.alaindustrial.compat.LineBlockProps;
+import dev.alaindustrial.item.WithdrawnBlockItem;
 import dev.alaindustrial.item.energy.GeothermalGeneratorBlockItem;
+import dev.alaindustrial.menu.BronzeLunarPanelMenu;
 import dev.alaindustrial.menu.CreativeEnergySourceMenu;
 import dev.alaindustrial.menu.DaylightSolarPanelMenu;
 import dev.alaindustrial.menu.GeneratorMenu;
@@ -57,7 +64,7 @@ import dev.alaindustrial.menu.HighAltitudeWindMillMenu;
 import dev.alaindustrial.menu.LightningRodGeneratorMenu;
 import dev.alaindustrial.menu.MobWheelMenu;
 import dev.alaindustrial.menu.MoonlitSolarPanelMenu;
-import dev.alaindustrial.menu.RadiantSolarPanelMenu;
+import dev.alaindustrial.menu.ReinforcedSolarPanelMenu;
 import dev.alaindustrial.menu.SolarPanelMenu;
 import dev.alaindustrial.menu.StormWindMillMenu;
 import dev.alaindustrial.menu.ThermoelectricGeneratorMenu;
@@ -111,21 +118,82 @@ public final class EnergyGenerationContent {
 					machine(MapColor.TERRACOTTA_ORANGE,
 							p -> p.strength(5.0f, 6.0f).sound(SoundType.GLASS).noOcclusion()),
 					s -> ModContent.DAYLIGHT_SOLAR_PANEL = s);
-	/** MOD-602 — the day branch's third rung, grown from the daylight panel. */
+	/**
+	 * MOD-602, withdrawn by MOD-1031 — the Mirror Concentrator. Kept registered so old worlds load; it turns into
+	 * the Reinforced Solar Panel the first time the world touches it. Random ticks reach a copy whose save lost its
+	 * block entity.
+	 */
 	public static final BlockDef<RadiantSolarPanelBlock> RADIANT_SOLAR_PANEL =
 			block("radiant_solar_panel", RadiantSolarPanelBlock::new,
-					// MOD-602 — a raised collector with folding wings, nowhere near a full cube, so noOcclusion is
-					// mandatory (R-PHY-05). Metal rather than glass: most of what you touch is the chassis.
-					machine(MapColor.WARPED_HYPHAE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL).noOcclusion()),
-					s -> ModContent.RADIANT_SOLAR_PANEL = s);
+					machine(MapColor.WARPED_HYPHAE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL).noOcclusion()
+							.randomTicks()),
+					s -> ModContent.RADIANT_SOLAR_PANEL = s,
+					hiddenFromPlayers("withdrawn, MOD-1031: turns into the Reinforced Solar Panel"));
 
-	/** Filler cell of the assembled Mirror Concentrator (MOD-603) — inert on its own. */
+	/**
+	 * MOD-603, withdrawn by MOD-1031 — the Concentrator Section. Kept registered so old worlds load; it turns into
+	 * a machine casing the first time the world touches it. Random ticks reach a loose one no update ever reaches.
+	 */
 	public static final BlockDef<ConcentratorSectionBlock> CONCENTRATOR_SECTION =
 			block("concentrator_section", ConcentratorSectionBlock::new,
-					// Seven of its eight states are thin slices of the structure, so it must not occlude; the
-					// loose state is inset by a pixel for the same reason (R-PHY-05 wants the two to agree).
-					machine(p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL).noOcclusion()),
-					s -> ModContent.CONCENTRATOR_SECTION = s);
+					// A full cube drawn as the machine casing it turns into, so it occludes like one (R-PHY-05).
+					machine(p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL).randomTicks()),
+					s -> ModContent.CONCENTRATOR_SECTION = s,
+					hiddenFromPlayers("withdrawn, MOD-1031: turns into a machine casing"));
+
+	/** MOD-1031 — the day branch's third rung, grown from the daylight panel: a full block. */
+	public static final BlockDef<ReinforcedSolarPanelBlock> REINFORCED_SOLAR_PANEL =
+			block("reinforced_solar_panel", ReinforcedSolarPanelBlock::new,
+					machine(MapColor.TERRACOTTA_ORANGE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+					s -> ModContent.REINFORCED_SOLAR_PANEL = s);
+	/** MOD-1031 — the night branch's third rung, grown from the moonlit panel: a full block. */
+	public static final BlockDef<BronzeLunarPanelBlock> BRONZE_LUNAR_PANEL =
+			block("bronze_lunar_panel", BronzeLunarPanelBlock::new,
+					machine(MapColor.TERRACOTTA_BLUE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+					s -> ModContent.BRONZE_LUNAR_PANEL = s);
+
+	// MOD-1031 — rungs T4 to T8 of both branches: ids, names and look fixed now, no function or recipe yet.
+	public static final BlockDef<PlannedSolarPanelBlock> ELECTRUM_SOLAR_PANEL =
+			block("electrum_solar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_ORANGE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.ELECTRUM_SOLAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> PALLADIUM_SOLAR_PANEL =
+			block("palladium_solar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_ORANGE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.PALLADIUM_SOLAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> HYBRID_SOLAR_PANEL =
+			block("hybrid_solar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_ORANGE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.HYBRID_SOLAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> QUANTUM_SOLAR_PANEL =
+			block("quantum_solar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_ORANGE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.QUANTUM_SOLAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> ULTIMATE_SOLAR_PANEL =
+			block("ultimate_solar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_ORANGE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.ULTIMATE_SOLAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> SILVER_LUNAR_PANEL =
+			block("silver_lunar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_BLUE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.SILVER_LUNAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> PALLADIUM_LUNAR_PANEL =
+			block("palladium_lunar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_BLUE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.PALLADIUM_LUNAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> HYBRID_LUNAR_PANEL =
+			block("hybrid_lunar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_BLUE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.HYBRID_LUNAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> QUANTUM_LUNAR_PANEL =
+			block("quantum_lunar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_BLUE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.QUANTUM_LUNAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+	public static final BlockDef<PlannedSolarPanelBlock> ULTIMATE_LUNAR_PANEL =
+			block("ultimate_lunar_panel", PlannedSolarPanelBlock::new,
+			machine(MapColor.TERRACOTTA_BLUE, p -> p.strength(5.0f, 6.0f).sound(SoundType.METAL)),
+			s -> ModContent.ULTIMATE_LUNAR_PANEL = s, hiddenFromPlayers("planned tier, MOD-1031"));
+
 	public static final BlockDef<GeothermalGeneratorBlock> GEOTHERMAL_GENERATOR =
 			block("geothermal_generator", GeothermalGeneratorBlock::new,
 					machine(p -> p.strength(3.0f, 6.0f).sound(SoundType.METAL)
@@ -197,8 +265,39 @@ public final class EnergyGenerationContent {
 			blockItem("solar_panel", s -> ModContent.SOLAR_PANEL_ITEM = s),
 			blockItem("moonlit_solar_panel", s -> ModContent.MOONLIT_SOLAR_PANEL_ITEM = s),
 			blockItem("daylight_solar_panel", s -> ModContent.DAYLIGHT_SOLAR_PANEL_ITEM = s),
-			blockItem("radiant_solar_panel", s -> ModContent.RADIANT_SOLAR_PANEL_ITEM = s),
-			blockItem("concentrator_section", s -> ModContent.CONCENTRATOR_SECTION_ITEM = s),
+			// MOD-1031 — the withdrawn pair: kept for old chests, turned into their successors in a player's hands.
+			blockItem("radiant_solar_panel",
+					p -> new WithdrawnBlockItem(registeredBlock("radiant_solar_panel"),
+							() -> ModContent.REINFORCED_SOLAR_PANEL_ITEM.get(), p),
+					s -> ModContent.RADIANT_SOLAR_PANEL_ITEM = s,
+					hiddenFromPlayers("withdrawn, MOD-1031: turns into the Reinforced Solar Panel")),
+			blockItem("concentrator_section",
+					p -> new WithdrawnBlockItem(registeredBlock("concentrator_section"),
+							() -> ModContent.MACHINE_CASING_ITEM.get(), p),
+					s -> ModContent.CONCENTRATOR_SECTION_ITEM = s,
+					hiddenFromPlayers("withdrawn, MOD-1031: turns into a machine casing")),
+			blockItem("reinforced_solar_panel", s -> ModContent.REINFORCED_SOLAR_PANEL_ITEM = s),
+			blockItem("bronze_lunar_panel", s -> ModContent.BRONZE_LUNAR_PANEL_ITEM = s),
+			blockItem("electrum_solar_panel", s -> ModContent.ELECTRUM_SOLAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("palladium_solar_panel", s -> ModContent.PALLADIUM_SOLAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("hybrid_solar_panel", s -> ModContent.HYBRID_SOLAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("quantum_solar_panel", s -> ModContent.QUANTUM_SOLAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("ultimate_solar_panel", s -> ModContent.ULTIMATE_SOLAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("silver_lunar_panel", s -> ModContent.SILVER_LUNAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("palladium_lunar_panel", s -> ModContent.PALLADIUM_LUNAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("hybrid_lunar_panel", s -> ModContent.HYBRID_LUNAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("quantum_lunar_panel", s -> ModContent.QUANTUM_LUNAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
+			blockItem("ultimate_lunar_panel", s -> ModContent.ULTIMATE_LUNAR_PANEL_ITEM = s,
+					hiddenFromPlayers("planned tier, MOD-1031")),
 			blockItem("water_mill", s -> ModContent.WATER_MILL_ITEM = s),
 			blockItem("wind_mill", s -> ModContent.WIND_MILL_ITEM = s),
 			blockItem("high_altitude_wind_mill", s -> ModContent.HIGH_ALTITUDE_WIND_MILL_ITEM = s),
@@ -228,6 +327,11 @@ public final class EnergyGenerationContent {
 					s -> ModContent.DAYLIGHT_SOLAR_PANEL_BE = s, DAYLIGHT_SOLAR_PANEL),
 			blockEntity("radiant_solar_panel", RadiantSolarPanelBlockEntity.class, RadiantSolarPanelBlockEntity::new,
 					s -> ModContent.RADIANT_SOLAR_PANEL_BE = s, RADIANT_SOLAR_PANEL),
+			blockEntity("reinforced_solar_panel", ReinforcedSolarPanelBlockEntity.class,
+					ReinforcedSolarPanelBlockEntity::new, s -> ModContent.REINFORCED_SOLAR_PANEL_BE = s,
+					REINFORCED_SOLAR_PANEL),
+			blockEntity("bronze_lunar_panel", BronzeLunarPanelBlockEntity.class, BronzeLunarPanelBlockEntity::new,
+					s -> ModContent.BRONZE_LUNAR_PANEL_BE = s, BRONZE_LUNAR_PANEL),
 			blockEntity("water_mill", WaterMillBlockEntity.class, WaterMillBlockEntity::new,
 					s -> ModContent.WATER_MILL_BE = s, WATER_MILL),
 			blockEntity("wind_mill", WindMillBlockEntity.class, WindMillBlockEntity::new,
@@ -256,7 +360,10 @@ public final class EnergyGenerationContent {
 			menu("solar_panel", SolarPanelMenu::new, s -> ModContent.SOLAR_PANEL_MENU = s),
 			menu("moonlit_solar_panel", MoonlitSolarPanelMenu::new, s -> ModContent.MOONLIT_SOLAR_PANEL_MENU = s),
 			menu("daylight_solar_panel", DaylightSolarPanelMenu::new, s -> ModContent.DAYLIGHT_SOLAR_PANEL_MENU = s),
-			menu("radiant_solar_panel", RadiantSolarPanelMenu::new, s -> ModContent.RADIANT_SOLAR_PANEL_MENU = s),
+			// MOD-1031 — the third rungs of both solar branches.
+			menu("reinforced_solar_panel", ReinforcedSolarPanelMenu::new,
+					s -> ModContent.REINFORCED_SOLAR_PANEL_MENU = s),
+			menu("bronze_lunar_panel", BronzeLunarPanelMenu::new, s -> ModContent.BRONZE_LUNAR_PANEL_MENU = s),
 			menu("geothermal_generator", GeothermalGeneratorMenu::new, s -> ModContent.GEOTHERMAL_GENERATOR_MENU = s),
 			menu("water_mill", WaterMillMenu::new, s -> ModContent.WATER_MILL_MENU = s),
 			menu("wind_mill", WindMillMenu::new, s -> ModContent.WIND_MILL_MENU = s),
@@ -300,9 +407,9 @@ public final class EnergyGenerationContent {
 		// --- shaped: the panels draw a flat GUI sprite of their own, the rod is a mast.
 		show(out, ModContent.SOLAR_PANEL_ITEM);
 		show(out, ModContent.DAYLIGHT_SOLAR_PANEL_ITEM);
-		show(out, ModContent.RADIANT_SOLAR_PANEL_ITEM);
-		show(out, ModContent.CONCENTRATOR_SECTION_ITEM);
+		show(out, ModContent.REINFORCED_SOLAR_PANEL_ITEM);
 		show(out, ModContent.MOONLIT_SOLAR_PANEL_ITEM);
+		show(out, ModContent.BRONZE_LUNAR_PANEL_ITEM);
 		show(out, ModContent.LIGHTNING_ROD_GENERATOR_ITEM);
 		// MOD-763 — the mob wheel's four parts, the drive first.
 		show(out, ModContent.MOB_WHEEL_CONTROLLER_ITEM);

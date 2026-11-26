@@ -42,6 +42,7 @@ public final class MiscBlueprints {
 
 	private static final String BROKEN_PLATE = "alaindustrial:broken_engraved_plate_";
 	private static final String PLATE = "alaindustrial:engraved_plate_";
+	private static final String LETTER_PLATE = "alaindustrial:engraved_letter_plate";
 	private static final String FRAME = "minecraft:polished_deepslate";
 
 	/**
@@ -101,7 +102,8 @@ public final class MiscBlueprints {
 					new Step(plaque(), 1, 2, List.of(), Verdict.GOOD,
 							List.of(new ItemMotion("minecraft:wooden_pickaxe", 1, true),
 									new ItemMotion(PLATE + "3", 1, false))),
-					new Step(houseNumber(), 0, 3, -1, -1, Verdict.NONE)));
+					new Step(houseNumber(), 0, 3, -1, -1, Verdict.NONE),
+					new Step(workerNumber(), 0, 4, -1, -1, Verdict.NONE)));
 
 	/**
 	 * A crafting table (0) making the spatial crystal and then the random jump chip; the chip going into a
@@ -192,6 +194,7 @@ public final class MiscBlueprints {
 		for (String letter : List.of("b", "d", "k", "m", "p", "r", "w")) {
 			all.add(BROKEN_PLATE + letter);
 		}
+		all.add(LETTER_PLATE);
 		return all;
 	}
 
@@ -218,6 +221,24 @@ public final class MiscBlueprints {
 		for (int x = 0; x <= 3; x++) {
 			for (int y = 0; y <= 2; y++) {
 				if (y != 1 || x == 0 || x == 3) {
+					all.add(at("minecraft:stone_bricks", x, y, 0));
+				}
+			}
+		}
+		return all;
+	}
+
+	/**
+	 * A shift worker's number E-102 (MOD-935): 0 the letter plate showing E (letter 4 of the number alphabet),
+	 * 1..3 the plates 1, 0 and 2, in a stone brick wall six blocks wide and three high.
+	 */
+	private static List<Placement> workerNumber() {
+		List<Placement> all = new ArrayList<>(List.of(new Placement(LETTER_PLATE, 1, 1, 0,
+				Map.of("facing", "south", "letter", "4", "broken", "false")), plate(PLATE + "1", 2),
+				plate(PLATE + "0", 3), plate(PLATE + "2", 4)));
+		for (int x = 0; x <= 5; x++) {
+			for (int y = 0; y <= 2; y++) {
+				if (y != 1 || x == 0 || x == 5) {
 					all.add(at("minecraft:stone_bricks", x, y, 0));
 				}
 			}

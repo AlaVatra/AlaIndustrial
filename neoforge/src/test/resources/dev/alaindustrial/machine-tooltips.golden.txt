@@ -366,6 +366,27 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:broken_engraved_plate_w plain : none
 == alaindustrial:bronze_block plain : none
 == alaindustrial:bronze_ingot plain : none
+== alaindustrial:bronze_lunar_panel plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.bronze_lunar_panel.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_output_max(<"10" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.capacity(<"16 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.bronze_lunar_panel.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_output_max(<"10" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.capacity(<"16 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.solar_day(<"0" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.solar_night(<"10" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.bronze_lunar_panel.purpose {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.bronze_lunar_panel.purpose {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:bronze_plate plain : none
 == alaindustrial:bronze_reinforced_plate plain : none
 == alaindustrial:bronze_slab plain : none
@@ -1800,6 +1821,7 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:electrum_plate plain : none
 == alaindustrial:electrum_reinforced_plate plain : none
 == alaindustrial:electrum_slab plain : none
+== alaindustrial:electrum_solar_panel plain : none
 == alaindustrial:electrum_stairs plain : none
 == alaindustrial:electrum_to_diamond_chest_upgrade plain
 -- plain eu
@@ -2524,6 +2546,8 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
 "ℹ " {#AAAAAA} + tooltip.alaindustrial.house_inlet.outer_face {#AAAAAA}
 tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:house_plan plain : none
+== alaindustrial:hybrid_lunar_panel plain : none
+== alaindustrial:hybrid_solar_panel plain : none
 == alaindustrial:incubator plain
 -- plain eu
 "ℹ " {#AAAAAA} + tooltip.alaindustrial.incubator.purpose {#AAAAAA}
@@ -3341,9 +3365,11 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:palladium_block plain : none
 == alaindustrial:palladium_dust plain : none
 == alaindustrial:palladium_ingot plain : none
+== alaindustrial:palladium_lunar_panel plain : none
 == alaindustrial:palladium_ore plain : none
 == alaindustrial:palladium_plate plain : none
 == alaindustrial:palladium_slab plain : none
+== alaindustrial:palladium_solar_panel plain : none
 == alaindustrial:palladium_stairs plain : none
 == alaindustrial:palladium_wall plain : none
 == alaindustrial:piezo_plate plain
@@ -3411,31 +3437,15 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
 "ℹ " {#AAAAAA} + tooltip.alaindustrial.pump.purpose {#AAAAAA}
 "■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
 tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:quantum_lunar_panel plain : none
+== alaindustrial:quantum_solar_panel plain : none
 == alaindustrial:quarry_bridge_beam plain : none
 == alaindustrial:quarry_cart plain : none
 == alaindustrial:quarry_controller plain : none
 == alaindustrial:quarry_drill_bit plain : none
 == alaindustrial:quarry_foundation plain : none
 == alaindustrial:quarry_head plain : none
-== alaindustrial:radiant_solar_panel plain
--- plain eu
-"ℹ " {#AAAAAA} + tooltip.alaindustrial.radiant_solar_panel.purpose {#AAAAAA}
-"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_output_day(<"8" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
-"⚡ " {#FF8A1E} + tooltip.alaindustrial.capacity(<"16 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
-tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
--- shift eu
-"ℹ " {#AAAAAA} + tooltip.alaindustrial.radiant_solar_panel.purpose {#AAAAAA}
-"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_output_day(<"8" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
-"⚡ " {#FF8A1E} + tooltip.alaindustrial.capacity(<"16 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
-"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
-tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
--- plain no-eu
-"ℹ " {#AAAAAA} + tooltip.alaindustrial.radiant_solar_panel.purpose {#AAAAAA}
-tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
--- shift no-eu
-"ℹ " {#AAAAAA} + tooltip.alaindustrial.radiant_solar_panel.purpose {#AAAAAA}
-"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
-tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+== alaindustrial:radiant_solar_panel plain : none
 == alaindustrial:raw_nickel plain : none
 == alaindustrial:raw_palladium plain : none
 == alaindustrial:raw_rubber plain : none
@@ -3633,6 +3643,27 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:reinforced_plate_block plain : none
 == alaindustrial:reinforced_plate_slab plain : none
 == alaindustrial:reinforced_plate_stairs plain : none
+== alaindustrial:reinforced_solar_panel plain
+-- plain eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.reinforced_solar_panel.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_output_max(<"12" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.capacity(<"16 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.reinforced_solar_panel.purpose {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.energy_output_max(<"12" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.capacity(<"16 000" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu {#B87333}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.solar_day(<"12" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+"⚡ " {#FF8A1E} + tooltip.alaindustrial.solar_night(<"0" {#FFFFFF}>) {#AAAAAA} + " " + tooltip.alaindustrial.unit.eu_per_tick {#B87333}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
+-- plain no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.reinforced_solar_panel.purpose {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
+-- shift no-eu
+"ℹ " {#AAAAAA} + tooltip.alaindustrial.reinforced_solar_panel.purpose {#AAAAAA}
+"■ " {#55FF55} + tooltip.alaindustrial.tier_lv(<"LV" {#55FF55}>) {#AAAAAA}
+tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:reinforced_steam_pipe plain
 -- plain eu
 "ℹ Carries steam from a reactor" {#AAAAAA}
@@ -3972,6 +4003,7 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:silver_dust plain : none
 == alaindustrial:silver_gear plain : none
 == alaindustrial:silver_ingot plain : none
+== alaindustrial:silver_lunar_panel plain : none
 == alaindustrial:silver_ore plain : none
 == alaindustrial:silver_plate plain : none
 == alaindustrial:silver_plate_block plain : none
@@ -4345,6 +4377,8 @@ tooltip.alaindustrial.hold_shift(<"Shift" {#AAAAAA}>) {#555555}
 "joins cables like a cable" {#AAAAAA}
 tooltip.alaindustrial.hold_shift(<"Shift" {#FFFFFF}>) {#555555}
 == alaindustrial:trellis plain : none
+== alaindustrial:ultimate_lunar_panel plain : none
+== alaindustrial:ultimate_solar_panel plain : none
 == alaindustrial:unstable_isotope plain : none
 == alaindustrial:upgrade_table plain
 -- plain eu

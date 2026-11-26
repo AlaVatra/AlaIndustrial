@@ -28,6 +28,7 @@ public final class UpgradeBlueprints {
 	private static final String TEMPERED_IRON_BARS = "alaindustrial:tempered_iron_bars";
 	private static final String TEMPERED_IRON_LADDER = "alaindustrial:tempered_iron_ladder";
 	private static final String TEMPERED_IRON_TRAPDOOR = "alaindustrial:tempered_iron_trapdoor";
+	private static final String GLASS_TRAPDOOR = "alaindustrial:reinforced_glass_trapdoor";
 	private static final String TEMPERED_IRON_CHAIN = "alaindustrial:tempered_iron_chain";
 
 	private static final String ROTOR = "alaindustrial:windmill_rotor";
@@ -93,7 +94,7 @@ public final class UpgradeBlueprints {
 	 */
 	public static final BlueprintDef BUILDING_BLOCKS = new BlueprintDef("building_blocks",
 			List.of(REINFORCED_GLASS, TEMPERED_IRON_BARS, TEMPERED_IRON_LADDER, TEMPERED_IRON_TRAPDOOR,
-					TEMPERED_IRON_CHAIN),
+					TEMPERED_IRON_CHAIN, GLASS_TRAPDOOR),
 			List.of(
 					new Step(window(REINFORCED_GLASS, false), 0, 1, List.of(), Verdict.NONE,
 							List.of(new ItemMotion("minecraft:glass", 0, true),
@@ -103,7 +104,10 @@ public final class UpgradeBlueprints {
 					new Step(barsRow(), 1, 2, -1, -1, Verdict.NONE),
 					new Step(List.of(stone(1, 3, 0), at(TEMPERED_IRON_CHAIN, 1, 2, 0, "axis", "y"),
 							at("minecraft:lantern", 1, 1, 0, "hanging", "true")), 1, 3, -1, -1, Verdict.NONE),
-					new Step(ladderAndTrapdoor(), 3, 4, -1, -1, Verdict.GOOD)));
+					new Step(ladderAndTrapdoor(), 3, 4, -1, -1, Verdict.GOOD),
+					new Step(List.of(stone(0, 0, 0), new Placement(GLASS_TRAPDOOR, 1, 0, 0,
+							Map.of("facing", "south", "half", "top", "open", "false"), Map.of("open", "true")),
+							stone(2, 0, 0)), 1, 5, -1, -1, Verdict.NONE)));
 
 	/**
 	 * The wind turbine (0) facing west with a cable and a battery box at its back: the wooden rotor going

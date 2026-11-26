@@ -34,6 +34,10 @@ class ContentManifestOrderTest {
 	static final String WRITE_TO_PROPERTY = "alaindustrial.manifestOrder.writeTo";
 
 	private static final String REFERENCE_FILE = "ContentManifestOrder.java";
+	/** The menus, split off to keep each file under coding.md's 1000 lines (MOD-1031). */
+	private static final String REFERENCE_TAIL_FILE = "ContentManifestOrderTail.java";
+	/** The first line that belongs to the tail file. */
+	private static final String TAIL_STARTS_WITH = "menu ";
 
 	/** The current order of the four lists, one line per entry. */
 	static List<String> capture() {
@@ -58,11 +62,14 @@ class ContentManifestOrderTest {
 		List<String> actual = capture();
 		String writeTo = System.getProperty(WRITE_TO_PROPERTY);
 		if (writeTo != null && !writeTo.isBlank()) {
-			rewrite(Path.of(writeTo).resolve(REFERENCE_FILE), actual);
+			int split = tailStart(actual);
+			rewrite(Path.of(writeTo).resolve(REFERENCE_FILE), actual.subList(0, split));
+			rewrite(Path.of(writeTo).resolve(REFERENCE_TAIL_FILE), actual.subList(split, actual.size()));
 			fail("ContentManifestOrder rewritten (" + actual.size() + " lines) — review the diff, then run again"
 					+ " without -D" + WRITE_TO_PROPERTY);
 		}
-		List<String> expected = ContentManifestOrder.LINES;
+		List<String> expected = new ArrayList<>(ContentManifestOrder.LINES);
+		expected.addAll(ContentManifestOrderTail.LINES);
 		int first = firstDifference(expected, actual);
 		if (first >= 0) {
 			fail("MOD-711: ContentManifest order differs from ContentManifestOrder at line " + (first + 1)
@@ -70,6 +77,16 @@ class ContentManifestOrderTest {
 					+ " be declared and the reference updated with the command in ContentManifestOrder's javadoc.");
 		}
 		assertEquals(expected.size(), actual.size(), "line count");
+	}
+
+	/** Index of the first menu line: where the tail file begins. */
+	private static int tailStart(List<String> lines) {
+		for (int i = 0; i < lines.size(); i++) {
+			if (lines.get(i).startsWith(TAIL_STARTS_WITH)) {
+				return i;
+			}
+		}
+		return lines.size();
 	}
 
 	static int firstDifference(List<String> expected, List<String> actual) {

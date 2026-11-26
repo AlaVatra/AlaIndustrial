@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "Kabel",
-              "text": "Kabel verbinden Blöcke zu einem Stromnetz und leiten EU. Jedes Kabel verliert Energie über die Strecke — je länger die Leitung, desto mehr geht verloren.\n\nEs gibt drei Sorten, und sie unterscheiden sich:\n• Zinn — schmal (8 EU/t), aber nahezu verlustfrei: für Solarfarmen\n• Kupfer — das universelle Arbeitstier (12 EU/t)\n• Gold — das breiteste (48 EU/t), bei höherem Verlust\n\nMische keine Sorten in einer Leitung: Das gesamte Netz richtet sich nach dem stärksten Kabel darin, samt dessen Verlust."
+              "text": "Kabel verbinden Blöcke zu einem Stromnetz und leiten EU. Jedes Kabel verliert Energie über die Strecke — je länger die Leitung, desto mehr geht verloren.\n\nEs gibt vier Sorten, und sie unterscheiden sich:\n• Zinn — schmal (8 EU/t), aber nahezu verlustfrei: für Solarfarmen\n• Kupfer — das universelle Arbeitstier (12 EU/t)\n• Gold — breiter (48 EU/t), bei höherem Verlust\n• Elektrum — das breiteste (192 EU/t) mit dem geringsten Verlust: für HV-Leitungen, um den Preis einer teuren Herstellung\n\nMische keine Sorten in einer Leitung: Das gesamte Netz richtet sich nach dem stärksten Kabel darin, samt dessen Verlust."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "Teile der Hülle",
-              "text": "- Reaktorglas: ein Fenster, aber höchstens ein Drittel der Wände\n- Reaktor-Schleusentür: eine Schleuse, öffnet auf Redstone und schließt von selbst\n- Reaktoreinlass: hier kreuzt das Wasserrohr die Wand\n- Reaktorauslass: hier wird das Kabel angesteckt\n- Reaktorlampe: leuchtet nur in den Raum, nie nach draußen"
+              "text": "- Reaktorglas: ein Fenster, aber höchstens 30 % der Hülle\n- Reaktor-Schleusentür: eine Schleuse, öffnet auf Redstone und schließt von selbst\n- Reaktoreinlass: hier kreuzt das Wasserrohr die Wand\n- Reaktorauslass: hier wird das Kabel angesteckt\n- Reaktorlampe: leuchtet nur in den Raum, nie nach draußen"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "Energie",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "Bronze-Mondpanel",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Bronze-Mondpanel",
+              "text": "Die dritte Sprosse des Nachtzweigs — ein voller Block, dessen Leistung der Mondphase folgt, 10 EU/t bei Vollmond, und der auch bei schlechtem Wetter weiterarbeitet; nur durch Evolution erhältlich."
+            },
+            {
+              "type": "stats",
+              "title": "Werte",
+              "lines": [
+                "Energie: 10 EU/t (Nacht)",
+                "Puffer: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "Windturbine",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "Spiegelkonzentrator",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Spiegelkonzentrator",
-              "text": "Die dritte Sprosse des Tageszweigs — doppelt so viel wie das Tageslicht-Solarpanel, zur Mittagszeit noch einmal die Hälfte mehr; die Spiegel klappen ein, wenn es nichts zu sammeln gibt."
-            },
-            {
-              "type": "stats",
-              "title": "Werte",
-              "lines": [
-                "Energie: 8 EU/t (Tag)",
-                "Puffer: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "Rezept",
-              "recipe_type": "Geformtes Handwerk",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "Mondlicht-Solarpanel",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "Verstärktes Solarpanel",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Verstärktes Solarpanel",
+              "text": "Die dritte Sprosse des Tageszweigs — ein voller Block, dessen Leistung dem Sonnenstand folgt, 12 EU/t zu Mittag; nur durch Evolution erhältlich."
+            },
+            {
+              "type": "stats",
+              "title": "Werte",
+              "lines": [
+                "Energie: 12 EU/t (Tag)",
+                "Puffer: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "Aufzugswinde",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Aufzugswinde",
+              "text": "Ein Aufzug mit Strom: ein Glasschacht aus Rahmen, auf jeder Etage eine Station mit Türen und Rufpanel und oben eine Winde als Deckel; jede Fahrt wird beim Losfahren der Kabine voll bezahlt, und offen sind nur die Türen, wo die Kabine steht."
+            },
+            {
+              "type": "stats",
+              "title": "Werte",
+              "lines": [
+                "Energie: 50 EU + 8 EU/Block",
+                "Puffer: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Rezept",
+              "recipe_type": "Geformtes Handwerk",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "Geformtes Handwerk",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Geformtes Handwerk",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Geformtes Handwerk",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "Ladebett",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "Rolltreppenantrieb",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Rolltreppenantrieb",
+              "text": "Ein schräges Band aus Stufensegmenten mit Handläufen: Es fährt Spieler, Mobs und Gegenstände ein Stockwerk hinauf oder hinab, solange sein Antrieb EU hat. Der LV-Antrieb schafft bis zu 8 Segmente, der MV-Antrieb bis zu 16 und ist schneller."
+            },
+            {
+              "type": "stats",
+              "title": "Werte",
+              "lines": [
+                "Energie: 1 EU/t + 0.5 EU/t pro Segment (nur solange jemand fährt)",
+                "Puffer: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Rezept",
+              "recipe_type": "Geformtes Handwerk",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Geformtes Handwerk",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Geformtes Handwerk",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Geformtes Handwerk",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Geformtes Handwerk",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "Solar-Evolutionschip",
-              "text": "Drei Evolutionschips — Solar (Tag), Mond (Nacht) und Resonanz (die dritte Sprosse) — die einfache Solarpanels und Windturbinen zu T2 und das T2-Tagespanel weiter entwickeln und die gespeicherte NBT-Energie übernehmen."
+              "text": "Drei Evolutionschips — Solar (Tag), Mond (Nacht) und Resonanz (die dritte Sprosse) — die einfache Solarpanels und Windturbinen zu T2 und beide T2-Panels weiter entwickeln und die gespeicherte NBT-Energie übernehmen."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Geformtes Handwerk",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

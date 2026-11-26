@@ -24,6 +24,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -98,7 +100,13 @@ public final class KokSagyzScenarios {
 				RosterEntry.of(KokSagyzScenarios::mod537ScytheHarvestsTip, "kok_sagyz_scythe_harvests_tip")
 						.fabricId("KokSagyzGameTest", "mod537_scytheHarvestsTip").ticks(20, 100),
 				RosterEntry.of(KokSagyzScenarios::mod537DroneCutsFlowerNotRoot, "kok_sagyz_drone_cuts_flower_not_root")
-						.fabricId("KokSagyzGameTest", "mod537_droneCutsFlowerNotRoot").ticks(200));
+						.fabricId("KokSagyzGameTest", "mod537_droneCutsFlowerNotRoot").ticks(200),
+				RosterEntry.of(KokSagyzScenarios::mod979BeeFlowerIsTheMatureStageOnly,
+								"kok_sagyz_bee_flower_is_the_mature_stage_only"),
+				// Own batch: the body pins the global weather, which no other scenario may share (MOD-976).
+				RosterEntry.of(KokSagyzScenarios::mod979BeeFindsTheMatureFlower,
+								"kok_sagyz_bee_finds_the_mature_flower")
+						.ticks(300).environment(Industrialization.id("own_weather")));
 
 		private Roster() {}
 	}
@@ -840,6 +848,71 @@ public final class KokSagyzScenarios {
 	// ── helpers ────────────────────────────────────────────────────────────────────────────────────
 
 	/** The flower's blockstate at a given age (placement checks are the scenario's own business). */
+	// ── bees (MOD-979) ──────────────────────────────────────────────────────────────────────────────
+
+	/**
+	 * A bee takes the kok sagyz for a flower in the mature stage only (owner's decision 2026-11-16), asked
+	 * through vanilla's own flower test {@code Bee.attractsBees} — the symbol both the search for a new flower
+	 * and the check of a remembered one call (javap, 26.3). The vanilla dandelion is the control that the test
+	 * itself works; the kok sagyz root and dirt are the plain negatives. Red before MOD-979: the mature
+	 * plant answered {@code false}, as it was in no bee tag.
+	 *
+	 * @implements MOD-979 — bees take the mature kok sagyz for a flower, and no other stage.
+	 */
+	public static void mod979BeeFlowerIsTheMatureStageOnly(GameTestHelper helper) {
+		if (!Bee.attractsBees(Blocks.DANDELION.defaultBlockState())) {
+			helper.fail("control: the vanilla dandelion must attract bees, or this test proves nothing");
+			return;
+		}
+		if (!Bee.attractsBees(flower(KokSagyzBlock.AGE_MATURE))) {
+			helper.fail("the mature kok sagyz (seed head) must attract bees like a vanilla flower");
+			return;
+		}
+		for (int age = KokSagyzBlock.AGE_ROSETTE; age < KokSagyzBlock.AGE_MATURE; age++) {
+			if (Bee.attractsBees(flower(age))) {
+				helper.fail("kok sagyz at age " + age + " must not attract bees: only the mature stage does");
+				return;
+			}
+		}
+		if (Bee.attractsBees(ModContent.KOK_SAGYZ_ROOT.get().defaultBlockState())
+				|| Bee.attractsBees(Blocks.DIRT.defaultBlockState())) {
+			helper.fail("the kok sagyz root and plain dirt must not attract bees");
+			return;
+		}
+		helper.succeed();
+	}
+
+	/**
+	 * The live half: a bee beside a mature kok sagyz picks it as its flower by itself, through its own
+	 * pollination goal — no saved position is handed to it. The flower stands one block from the bee and is
+	 * the only flower in the rig, so the nearest-first search lands on it before anything a neighbouring rig
+	 * holds. Red before MOD-979: the bee never chose it and the test ran out of time.
+	 *
+	 * <p>Weather is pinned clear first: a bee does not look for a flower while {@code Level.isRaining()} (vanilla
+	 * {@code BeePollinateGoal.canBeeUse}), and the weather is one global state that the rain and storm scenarios
+	 * leave on behind them, so the outcome hung on the batch order (MOD-976). The scenario runs in an environment
+	 * of its own, so pinning the weather cannot disturb a scenario that needs rain.
+	 *
+	 * @implements MOD-979 — a bee finds the mature kok sagyz and remembers it as its flower.
+	 */
+	public static void mod979BeeFindsTheMatureFlower(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		// clear for longer than the test runs, so the weather cycle cannot start rain half-way through
+		level.getServer().setWeatherParameters(6000, 0, false, false);
+		level.setRainLevel(0.0f); // isRaining() reads the interpolated level, not the WeatherData flag
+		level.setThunderLevel(0.0f);
+		soilColumn(helper, Blocks.DIRT, Blocks.DIRT);
+		helper.setBlock(POS, flower(KokSagyzBlock.AGE_MATURE));
+		Bee bee = helper.spawn(EntityTypes.BEE, POS.east());
+		BlockPos flower = helper.absolutePos(POS);
+		helper.succeedWhen(() -> {
+			if (!flower.equals(bee.getSavedFlowerPos())) {
+				helper.fail("the bee has not taken the mature kok sagyz for its flower (saved: "
+						+ bee.getSavedFlowerPos() + ", raining: " + level.isRaining() + ")");
+			}
+		});
+	}
+
 	private static BlockState flower(int age) {
 		return ModContent.KOK_SAGYZ.get().defaultBlockState().setValue(KokSagyzBlock.AGE, age);
 	}

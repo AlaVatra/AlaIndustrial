@@ -3,7 +3,6 @@ package dev.alaindustrial.gametest;
 import dev.alaindustrial.block.entity.AbstractGeneratorBlockEntity;
 import dev.alaindustrial.block.entity.DaylightSolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.MoonlitSolarPanelBlockEntity;
-import dev.alaindustrial.block.entity.RadiantSolarPanelBlockEntity;
 import dev.alaindustrial.block.entity.SolarPanelBlockEntity;
 import dev.alaindustrial.core.energy.EnergyPort;
 import dev.alaindustrial.core.energy.EnergyPortHost;
@@ -102,13 +101,6 @@ final class SolarPanelRig {
 				helper.fail(label + " face " + d + " must emit EU");
 			}
 		}
-	}
-
-	// --- Mirror Concentrator, the day branch's third rung (MOD-602) ---
-
-	static RadiantSolarPanelBlockEntity concentratorAt(GameTestHelper helper) {
-		return helper.getLevel().getBlockEntity(helper.absolutePos(POS))
-				instanceof RadiantSolarPanelBlockEntity p ? p : null;
 	}
 
 	static DaylightSolarPanelBlockEntity daylightAt(GameTestHelper helper) {

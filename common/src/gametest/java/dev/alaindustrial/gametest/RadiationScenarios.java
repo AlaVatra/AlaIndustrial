@@ -23,6 +23,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -92,6 +93,8 @@ public final class RadiationScenarios {
 								"rad_dispenser_refuses_to_dress_anyone_but_convertible_mobs")
 						.fabricId("RadiationGameTest", "radDispenserRefusesToDressAnyoneButConvertibleMobs")
 						.ticks(20, 40),
+				RosterEntry.of(RadiationScenarios::dispenserDressesTheCowForRadiation,
+								"rad_dispenser_dresses_the_cow_for_radiation").ticks(40),
 				RosterEntry.of(RadiationScenarios::liveTickChainShieldsTheSuitedVillager,
 								"rad_live_tick_chain_shields_the_suited_villager")
 						.fabricId("RadiationGameTest", "radLiveTickChainShieldsTheSuitedVillager").ticks(200),
@@ -486,6 +489,74 @@ public final class RadiationScenarios {
 						}
 						if (villager.isRemoved() || !villager.isAlive()) {
 							helper.fail("the dispenser-suited villager should still be standing");
+						}
+					});
+				})
+				.thenSucceed();
+	}
+
+	/**
+	 * The livestock half of the dispenser (MOD-569): a dispenser fires the helmet at a COW, the cow wears
+	 * it, a second helmet does not replace the first, and the fully suited cow takes no dose from the
+	 * exposure that turns a bare one into a mooshroom.
+	 *
+	 * <p>Red before MOD-569: the behaviour filtered its targets with vanilla's {@code canEquipWithDispenser},
+	 * whose last step {@code Mob.canDispenserEquipIntoSlot} returns {@code canPickUpLoot()} — set by a
+	 * villager's constructor, never by a cow's — so the helmet fell on the floor in front of the cow, as the
+	 * player reported (NotYuno, 2026-09-04). The villager rig could not show it, and the pig rig expects
+	 * exactly that refusal.
+	 *
+	 * @implements R-RAD-39 — see docs/testing/RULES.md
+	 */
+	public static void dispenserDressesTheCowForRadiation(GameTestHelper helper) {
+		helper.setBlock(WALL, Blocks.DISPENSER.defaultBlockState()
+				.setValue(DispenserBlock.FACING, Direction.SOUTH));
+		DispenserBlockEntity dispenser = helper.getBlockEntity(WALL, DispenserBlockEntity.class);
+		ItemStack first = new ItemStack(ModContent.SHIELDING_HELMET.get());
+		first.set(DataComponents.CUSTOM_NAME, Component.literal("first"));
+		dispenser.setItem(0, first);
+		Cow cow = helper.spawn(EntityTypes.COW, BYSTANDER);
+		helper.setBlock(RACK, Blocks.REDSTONE_BLOCK);
+
+		helper.startSequence()
+				.thenExecuteFor(6, () -> { })
+				.thenExecute(() -> {
+					ItemStack worn = cow.getItemBySlot(EquipmentSlot.HEAD);
+					if (!worn.is(ModContent.SHIELDING_HELMET.get())) {
+						helper.fail("the dispenser must put the helmet on the cow in front of it; HEAD holds "
+								+ worn + (dispenser.getItem(0).isEmpty() ? " (the piece left the dispenser)" : ""));
+						return;
+					}
+					// A second helmet: the occupied slot must not be overwritten — the piece is spat out.
+					helper.setBlock(RACK, Blocks.AIR);
+					dispenser.setItem(0, new ItemStack(ModContent.SHIELDING_HELMET.get()));
+				})
+				.thenExecuteFor(2, () -> { })
+				.thenExecute(() -> helper.setBlock(RACK, Blocks.REDSTONE_BLOCK))
+				.thenExecuteFor(6, () -> { })
+				.thenExecute(() -> {
+					if (!dispenser.getItem(0).isEmpty()) {
+						helper.fail("rig is wrong: the second helmet never left the dispenser");
+						return;
+					}
+					ItemStack worn = cow.getItemBySlot(EquipmentSlot.HEAD);
+					if (!"first".equals(worn.getHoverName().getString())) {
+						helper.fail("an occupied slot must never be overwritten; HEAD now holds " + worn);
+						return;
+					}
+					cow.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModContent.SHIELDING_CHESTPLATE.get()));
+					cow.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModContent.SHIELDING_LEGGINGS.get()));
+					cow.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModContent.SHIELDING_BOOTS.get()));
+					withIsolatedField(() -> {
+						sweepWithCarried(helper.getLevel(), cow, RadiationConfig.radiationDoseCapacity);
+						int dose = RadiationDose.of(cow);
+						if (dose != 0) {
+							helper.fail("a dispenser-suited cow must take no dose from a converting exposure; leaked "
+									+ dose);
+							return;
+						}
+						if (cow.isRemoved() || !cow.isAlive()) {
+							helper.fail("the dispenser-suited cow should still be a cow, not a mooshroom");
 						}
 					});
 				})

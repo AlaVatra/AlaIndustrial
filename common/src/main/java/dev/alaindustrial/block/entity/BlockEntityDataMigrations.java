@@ -59,7 +59,7 @@ public final class BlockEntityDataMigrations {
 	 * {@link #DATA_VERSION_KEY}. Bumped when the SHAPE or the MEANING of stored data changes — never
 	 * for adding a key, which is absent-safe and needs no rung. See the class doc for the recipe.
 	 */
-	public static final int DATA_VERSION = 3;
+	public static final int DATA_VERSION = 4;
 
 	/**
 	 * NBT key holding {@link #DATA_VERSION}. Absent means "written before MOD-556", i.e. version 0 —
@@ -86,7 +86,8 @@ public final class BlockEntityDataMigrations {
 	private static final List<Step> STEPS = List.of(
 			new Step(0, BlockEntityDataMigrations::v0ToV1RenumberBatteryBoxSlots),
 			new Step(1, BlockEntityDataMigrations::v1ToV2ShiftGeneratorUpgradeSlots),
-			new Step(2, BlockEntityDataMigrations::v2ToV3ShiftGeothermalUpgradeSlots));
+			new Step(2, BlockEntityDataMigrations::v2ToV3ShiftGeothermalUpgradeSlots),
+			new Step(3, BlockEntityDataMigrations::v3ToV4ShiftMoonlitUpgradeSlots));
 
 	/** Number of rungs on the ladder — the oracle the version pin compares against. */
 	public static int stepCount() {
@@ -209,5 +210,33 @@ public final class BlockEntityDataMigrations {
 		for (int slot = first; slot < GeothermalGeneratorBlockEntity.SLOT_COUNT; slot++) {
 			geo.setItem(slot, ItemStack.EMPTY);
 		}
+	}
+
+	/**
+	 * v3 → v4: a moonlit solar panel saved before MOD-1031 holds its upgrade chips one slot too low.
+	 *
+	 * <p>The evolution-chip slot went in as slot 0, and the upgrade block follows the machine slots, so the chips
+	 * moved from 0…3 to 1…4. The arms are typed by position, so the whole run moves one slot up; the container grew
+	 * by one, so the chip of the old last arm lands in the new last slot.
+	 *
+	 * <p>Shapes left alone, as in {@link #v1ToV2ShiftGeneratorUpgradeSlots}: an evolution chip (resonance or, since
+	 * MOD-1033, lunar) in slot 0 is a save of the new layout an older jar opened and wrote back (an upgrade arm never
+	 * holds one), and a filled last slot is a layout the old one cannot be — shifting would overwrite it, so nothing
+	 * is ever lost. The one shape both layouts share (an empty chip slot, an empty last arm) is decided by the version
+	 * rather than by the content.
+	 */
+	private static void v3ToV4ShiftMoonlitUpgradeSlots(EnergyBlockEntity be) {
+		if (!(be instanceof MoonlitSolarPanelBlockEntity moonlit)) {
+			return;
+		}
+		int last = moonlit.getContainerSize() - 1;
+		ItemStack chip = moonlit.getItem(MoonlitSolarPanelBlockEntity.CHIP_SLOT);
+		if (MoonlitSolarPanelBlockEntity.isEvolutionChip(chip) || !moonlit.getItem(last).isEmpty()) {
+			return;
+		}
+		for (int slot = last; slot > MoonlitSolarPanelBlockEntity.CHIP_SLOT; slot--) {
+			moonlit.setItem(slot, moonlit.getItem(slot - 1));
+		}
+		moonlit.setItem(MoonlitSolarPanelBlockEntity.CHIP_SLOT, ItemStack.EMPTY);
 	}
 }

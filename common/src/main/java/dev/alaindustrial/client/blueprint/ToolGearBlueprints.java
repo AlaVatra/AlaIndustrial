@@ -127,7 +127,12 @@ public final class ToolGearBlueprints {
 					new Step(chargingLine(), 2, 4, List.of(Flow.energy(0, 2)), Verdict.NONE,
 							List.of(new ItemMotion(SHIELDING_POUCH, 2, true))),
 					new Step(chargingLine(), 2, 5, List.of(Flow.energy(0, 2)), Verdict.GOOD,
-							suitInto("fluxweave", 2))));
+							suitInto("fluxweave", 2)),
+					new Step(List.of(at(CRAFTING_TABLE, 0)), 0, 6, List.of(), Verdict.NONE,
+							List.of(new ItemMotion(MOD + "fluxweave_helmet", 0, true),
+									new ItemMotion(SOLAR_PANEL, 0, true),
+									new ItemMotion(INSULATED_COPPER_CABLE, 0, true),
+									new ItemMotion(MOD + "fluxweave_solar_helmet", 0, false)))));
 
 	/**
 	 * The electromagnet crafted at a crafting table (0); a battery box (0) with nothing feeding it, so the
@@ -189,7 +194,33 @@ public final class ToolGearBlueprints {
 									new ItemMotion(MOD + "nickel_ingot", 0, true),
 									new ItemMotion(MOD + "nickel_plate", 0, false)))));
 
+	/**
+	 * The slingshot (MOD-935) made from sticks and string at the crafting table; a torch shot from a ledge across
+	 * a gap at a cave wall; the torch standing on the wall where it hit (good). Indices: 0 ledge, 1..3 the wall
+	 * bottom up, 4 the torch.
+	 */
+	public static final BlueprintDef SLINGSHOT = new BlueprintDef("slingshot",
+			List.of(MOD + "slingshot"),
+			List.of(
+					new Step(List.of(at(CRAFTING_TABLE, 0)), 0, 1, List.of(), Verdict.NONE,
+							List.of(new ItemMotion("minecraft:stick", 0, true),
+									new ItemMotion("minecraft:string", 0, true),
+									new ItemMotion(MOD + "slingshot", 0, false))),
+					new Step(caveWall(false), 3, 2, List.of(Flow.item(0, 3, "minecraft:torch")), Verdict.NONE,
+							List.of()),
+					new Step(caveWall(true), 4, 2, -1, -1, Verdict.GOOD)));
+
 	private ToolGearBlueprints() {
+	}
+
+	/** 0 the ledge, 1..3 a three-high wall four blocks east, and, when {@code lit}, 4 a torch on its face. */
+	private static List<Placement> caveWall(boolean lit) {
+		List<Placement> all = new ArrayList<>(List.of(stone(0, 0, 0), stone(4, 0, 0), stone(4, 1, 0),
+				stone(4, 2, 0)));
+		if (lit) {
+			all.add(new Placement("minecraft:wall_torch", 3, 2, 0, Map.of("facing", "west")));
+		}
+		return all;
 	}
 
 	private static Placement at(String id, int x) {
@@ -283,6 +314,7 @@ public final class ToolGearBlueprints {
 			}
 		}
 		all.add(SHIELDING_POUCH);
+		all.add(MOD + "fluxweave_solar_helmet");
 		return all;
 	}
 }

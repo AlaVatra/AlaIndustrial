@@ -199,6 +199,12 @@ public final class AlaCommonScenarios {
 			if (id.getPath().equals("oil_fire") || id.getPath().equals("soot_layer")) {
 				continue;
 			}
+			// MOD-1031: the withdrawn Mirror Concentrator and its section drop their successors — the Reinforced
+			// Solar Panel and a machine casing — never themselves, so no old block comes back into a player's
+			// hands. Both drops are asserted in WithdrawnConcentratorScenarios.
+			if (id.getPath().equals("radiant_solar_panel") || id.getPath().equals("concentrator_section")) {
+				continue;
+			}
 			Block block = BuiltInRegistries.BLOCK.getValue(id);
 			// Liquid blocks (MOD-238 oil): like vanilla water/lava, the in-world block form of a fluid
 			// has no item and no loot — it is scooped with a bucket, never mined (LiquidBlock#getDrops
@@ -385,13 +391,9 @@ public final class AlaCommonScenarios {
 			//
 			// MOD-505 adds the greenhouse's glazing on identical grounds: a farm walled in glass that
 			// occluded would cull away the very crystals it exists to show.
-			// MOD-603 joins them: the concentrator section is a metal cage round a glass core. It fills
-			// its block (the bars reach the boundary, so the shape has to), and it must not occlude —
-			// a section that did would cull away the sections next to it while the player is still
-			// building the machine, and the glass core would show nothing.
 			// MOD-795: reinforced glass is a building window — vanilla glass in a steel frame, the same pairing.
 			if (id.getPath().equals("reactor_glass") || id.getPath().equals("crystal_farm_glass")
-					|| id.getPath().equals("concentrator_section") || id.getPath().equals("reinforced_glass")) {
+					|| id.getPath().equals("reinforced_glass")) {
 				continue;
 			}
 			Block block = BuiltInRegistries.BLOCK.getValue(id);

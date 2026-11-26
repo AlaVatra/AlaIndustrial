@@ -4,6 +4,7 @@
   "package": "dev.alaindustrial.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "BeeKokSagyzFlowerMixin",
     "ColumnBoreCrackMixin",
     "FuelValuesMixin",
     "FurnaceFuelSlotMixin",
@@ -16,6 +17,8 @@
   ],
   "client": [
     "client.ClientLevelCrackMixin",
+    "client.CowRenderStateMixin",
+    "client.CowRendererMixin",
     "client.FogRendererAccessor",
     "client.GuiGraphicsExtractorReactorTabletTooltipMixin",
     "client.ItemInHandRendererElectricBowMixin",

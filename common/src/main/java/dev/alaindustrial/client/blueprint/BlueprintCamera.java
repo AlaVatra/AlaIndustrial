@@ -54,4 +54,16 @@ public record BlueprintCamera(float yawDegrees, float pitchDegrees) {
 		double y2 = y * Math.cos(pitch) + z1 * Math.sin(pitch);
 		return new double[] {-x1, -y2};
 	}
+
+	/**
+	 * How near scene point ({@code x}, {@code y}, {@code z}), relative to the scene centre, is to the viewer:
+	 * the larger, the nearer (MOD-933, a click on the scene picks the front block of those under the cursor).
+	 * At the default camera a point above or south of the centre is nearer than the centre.
+	 */
+	public double depth(double x, double y, double z) {
+		double yaw = Math.toRadians(yawDegrees);
+		double pitch = Math.toRadians(pitchDegrees);
+		double z1 = -x * Math.sin(yaw) + z * Math.cos(yaw);
+		return y * Math.sin(pitch) - z1 * Math.cos(pitch);
+	}
 }

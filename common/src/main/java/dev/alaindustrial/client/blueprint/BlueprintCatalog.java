@@ -51,7 +51,6 @@ public final class BlueprintCatalog {
 			StructureBlueprints.MOB_WHEEL,
 			StructureBlueprints.OIL_REFINING,
 			StructureBlueprints.CRYSTAL_FARM,
-			StructureBlueprints.MIRROR_CONCENTRATOR,
 			WorkshopBlueprints.MONITORING,
 			WorkshopBlueprints.UPGRADE_TABLE,
 			WorkshopBlueprints.WORKSTATION,
@@ -112,7 +111,25 @@ public final class BlueprintCatalog {
 			FieldToolsBlueprints.WIND_GAUGE,
 			FieldToolsBlueprints.GARDEN_DRONE,
 			FieldToolsBlueprints.SOUL_VESSEL,
-			FieldToolsBlueprints.APIARY);
+			FieldToolsBlueprints.APIARY,
+			TransportBlueprints.ELEVATOR,
+			TransportBlueprints.ESCALATOR,
+			SettlementBlueprints.SETTLEMENT,
+			SettlementBlueprints.TOWN_REBUILD,
+			ConstructionBlueprints.CONCRETE_SET,
+			ConstructionBlueprints.QUARRY_BLOCKS,
+			SupplyBlueprints.RADIATION_CARE,
+			SupplyBlueprints.HONEY,
+			SupplyBlueprints.REINFORCED_BONE_MEAL,
+			UtilityBlueprints.MOB_BEACONS,
+			UtilityBlueprints.MOB_TRAP,
+			UtilityBlueprints.QUIET_BASE,
+			LogisticsBlueprints.CHEST_UPGRADES,
+			StorageBlueprints.STORAGE_LABELS,
+			EnergyBlueprints.THERMOELECTRIC,
+			EnergyBlueprints.GEOTHERMAL_UPKEEP,
+			ReactorBuildBlueprints.REACTOR_WATCH,
+			ToolGearBlueprints.SLINGSHOT);
 
 	private BlueprintCatalog() {
 	}

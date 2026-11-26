@@ -3,10 +3,12 @@ package dev.alaindustrial.block.entity.machine;
 import dev.alaindustrial.block.HorizontalMachineBlock;
 import dev.alaindustrial.block.entity.MachineBlockEntity;
 import dev.alaindustrial.registry.ModContent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +21,7 @@ import net.minecraft.world.level.storage.ValueOutput;
  * belongs to, saved under {@code EvolveProgress} and {@code EvolveChip}, and the swap of a block for its
  * grown branch.
  *
- * <p>Four machines evolve — the solar panel, the daylight solar panel, the wind mill and the mob
+ * <p>Five machines evolve — the solar panel, the daylight and moonlit solar panels, the wind mill and the mob
  * repeller — and they call this class by name (MOD-712, BE-1); the machine base no longer carries code
  * that thirty-odd other machines never run.
  */
@@ -33,7 +35,8 @@ public final class EvolutionHelper {
 	public static final int EVOLVE_CHIP_NIGHT = 2;
 	/**
 	 * The counter belongs to a resonance chip (MOD-602) — the one chip that serves BOTH branches on the
-	 * second rung, since by then the panel already knows which branch it is.
+	 * second rung, since by then the panel already knows which branch it is (the moonlit panel takes it too since
+	 * MOD-1031).
 	 */
 	public static final int EVOLVE_CHIP_RESONANCE = 3;
 
@@ -100,6 +103,70 @@ public final class EvolutionHelper {
 	 */
 	public static void evolveInto(MachineBlockEntity machine, List<ItemStack> items, Level level, BlockPos pos,
 			Block target, Map<Integer, ItemStack> slotOverrides) {
+		for (Integer slot : slotOverrides.keySet()) {
+			// Caller has already snapshotted these into the overrides map; clear the source slot so the
+			// block's inventory reads empty before the swap (the chip slot is always cleared here too —
+			// see callers).
+			items.set(slot, ItemStack.EMPTY);
+		}
+		swap(machine, level, pos, target, slotOverrides);
+	}
+
+	/**
+	 * {@link #evolveInto(MachineBlockEntity, List, Level, BlockPos, Block, Map)} that also moves the upgrade panel:
+	 * the chip in upgrade arm {@code i} of the old block goes to upgrade arm {@code i} of the new one, wherever each
+	 * block's panel starts in its inventory (MOD-1031: a T2 solar panel has a chip slot before its panel, the T3
+	 * panel it grows into has none, so the container indices differ). Without it the swap broke the old block entity
+	 * with the chips still inside and they fell on the ground. A chip that finds no free arm on the new block drops
+	 * at {@code pos}; nothing is lost.
+	 */
+	public static void evolveIntoCarryingUpgrades(MachineBlockEntity machine, List<ItemStack> items, Level level,
+			BlockPos pos, Block target, Map<Integer, ItemStack> slotOverrides) {
+		List<ItemStack> upgrades = new ArrayList<>();
+		if (machine.hasUpgradeSlots()) {
+			for (int arm = 0; arm < MachineBlockEntity.UPGRADE_SLOT_COUNT; arm++) {
+				int slot = machine.upgradeSlotStart() + arm;
+				ItemStack chip = machine.getUpgradeStack(arm);
+				upgrades.add(chip.copy());
+				if (!chip.isEmpty()) {
+					items.set(slot, ItemStack.EMPTY);
+				}
+			}
+		}
+		evolveInto(machine, items, level, pos, target, slotOverrides);
+		MachineBlockEntity evolved = level.getBlockEntity(pos) instanceof MachineBlockEntity m ? m : null;
+		for (int arm = 0; arm < upgrades.size(); arm++) {
+			ItemStack chip = upgrades.get(arm);
+			if (chip.isEmpty()) {
+				continue;
+			}
+			int slot = evolved != null && evolved.hasUpgradeSlots() ? evolved.upgradeSlotStart() + arm : -1;
+			if (slot >= 0 && slot < evolved.getContainerSize() && evolved.getItem(slot).isEmpty()) {
+				evolved.setItem(slot, chip);
+			} else {
+				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), chip);
+			}
+		}
+		if (evolved != null) {
+			evolved.setChanged();
+		}
+	}
+
+	/**
+	 * {@link #evolveInto(MachineBlockEntity, List, Level, BlockPos, Block, Map)} for a caller outside the machine,
+	 * which empties the override slots through the machine's own container (MOD-1031: a withdrawn block turning
+	 * into its successor carries every slot it holds).
+	 */
+	public static void evolveInto(MachineBlockEntity machine, Level level, BlockPos pos, Block target,
+			Map<Integer, ItemStack> slotOverrides) {
+		for (Integer slot : slotOverrides.keySet()) {
+			machine.removeItemNoUpdate(slot);
+		}
+		swap(machine, level, pos, target, slotOverrides);
+	}
+
+	private static void swap(MachineBlockEntity machine, Level level, BlockPos pos, Block target,
+			Map<Integer, ItemStack> slotOverrides) {
 		long saved = machine.getEnergyStorage().getAmount();
 		// Carry ownership across the evolution. The evolved block is created via setBlockAndUpdate — NOT a
 		// player placement — so setPlacedBy never runs and the new block entity would default to a null
@@ -107,12 +174,6 @@ public final class EvolutionHelper {
 		// production to the player: it silently vanished from the profile's per-generator breakdown (MOD-133).
 		UUID savedOwner = machine.getOwner();
 		String savedOwnerName = machine.getOwnerName();
-		for (Map.Entry<Integer, ItemStack> entry : slotOverrides.entrySet()) {
-			// Caller has already snapshotted these into the overrides map; clear the source slot so the
-			// block's inventory reads empty before the swap (the chip slot is always cleared here too —
-			// see callers).
-			items.set(entry.getKey(), ItemStack.EMPTY);
-		}
 		BlockState oldState = machine.getBlockState();
 		BlockState newState = target.defaultBlockState();
 		// Preserve FACING when both old and new blocks have it (wind mill family); the solar panels

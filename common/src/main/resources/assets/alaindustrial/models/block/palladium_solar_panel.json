@@ -1,0 +1,10 @@
+{
+  "parent": "alaindustrial:block/full_solar_panel",
+  "textures": {
+    "side": "alaindustrial:block/palladium_solar_panel_side",
+    "top": "alaindustrial:block/full_solar_panel_day_top",
+    "glass": "alaindustrial:block/full_solar_panel_day_glass",
+    "frame": "alaindustrial:block/full_solar_panel_frame",
+    "bottom": "alaindustrial:block/full_solar_panel_bottom"
+  }
+}

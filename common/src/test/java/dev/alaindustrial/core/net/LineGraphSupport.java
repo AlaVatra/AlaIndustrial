@@ -64,6 +64,8 @@ final class LineGraphSupport {
 		private final Set<String> cuts = new LinkedHashSet<>();
 		/** Networks created — a rebuild that splits shows up here, a shortcut does not. */
 		int created;
+		/** Calls to {@link #connected}: the production ops read the world there (MOD-1029). */
+		int connectedCalls;
 		/** The networks ticked, in order, across all calls: the round-robin cursor is observable here. */
 		final List<Net> tickOrder = new ArrayList<>();
 
@@ -137,6 +139,7 @@ final class LineGraphSupport {
 
 		@Override
 		public Iterable<Integer> connected(Level level, Integer pos) {
+			connectedCalls++;
 			List<Integer> result = new ArrayList<>(2);
 			for (int neighbour : candidates(pos)) {
 				if (!cuts.contains(key(pos, neighbour))) {

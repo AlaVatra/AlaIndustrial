@@ -23,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public final class ItemPipeScenarios {
 	/** This class's world gametests for both loaders (ADR-038); nested so reading them does not initialise it. */
 	public static final class Roster {
 		public static final List<RosterEntry> ENTRIES = List.of(
+				RosterEntry.of(ItemPipeScenarios::neighbourChestIsFoundWithoutRePartition,
+						"mod1028_item_pipe_neighbour_chest_found_without_repartition").ticks(20, 40),
 				RosterEntry.of(ItemPipeScenarios::transfersBetweenChests, "item_pipe_transfers_between_chests")
 						.fabricId("ItemPipeGameTest", "mod104TransfersBetweenChests").ticks(20, 40),
 				RosterEntry.of(ItemPipeScenarios::disabledFaceBlocksTransfer, "item_pipe_disabled_face_blocks_transfer")
@@ -143,6 +146,45 @@ public final class ItemPipeScenarios {
 		a.serverTick(helper.getLevel(), a.getBlockPos(), a.getBlockState());
 		b.serverTick(helper.getLevel(), b.getBlockPos(), b.getBlockState());
 		return true;
+	}
+
+	/**
+	 * MOD-1028: a chest placed beside a pipe line, and then taken away, reaches the network as a neighbour update
+	 * that only wakes it: the line is not re-partitioned, yet the next tick feeds the new chest, and once it is gone
+	 * nothing moves.
+	 */
+	public static void neighbourChestIsFoundWithoutRePartition(GameTestHelper helper) {
+		if (!build(helper)) return;
+		helper.setBlock(TARGET, Blocks.AIR);
+		ItemNetworkManager.tickAll(helper.getLevel());
+		long before = ItemNetworkManager.rebuilds(helper.getLevel());
+
+		helper.setBlock(TARGET, ModContent.IRON_CHEST.get());
+		long rebuilt = ItemNetworkManager.rebuilds(helper.getLevel()) - before;
+		ItemNetworkManager.tickAll(helper.getLevel());
+		Container source = container(helper, SOURCE);
+		Container target = container(helper, TARGET);
+		int expected = Math.min(16, Config.itemPipeItemsPerTransfer);
+		int moved = target == null ? -1 : target.getItem(0).getCount();
+		if (rebuilt != 0) {
+			helper.fail("a chest placed beside the line re-partitioned the pipe network " + rebuilt + " time(s)");
+			return;
+		}
+		if (moved != expected) {
+			helper.fail("the chest placed beside the line got " + moved + " ingots, expected " + expected);
+			return;
+		}
+		int left = source == null ? -1 : source.getItem(0).getCount();
+		helper.setBlock(TARGET, Blocks.AIR);
+		for (int t = 0; t < Math.max(1, Config.itemPipeTransferIntervalTicks) + 1; t++) {
+			ItemNetworkManager.tickAll(helper.getLevel());
+		}
+		int after = source == null ? -1 : source.getItem(0).getCount();
+		if (after != left) {
+			helper.fail("with the chest gone the source still lost items: " + left + " -> " + after);
+			return;
+		}
+		helper.succeed();
 	}
 
 	/** MOD-104: EXTRACT -> pipe graph -> INSERT preserves the exact transferred stack. */

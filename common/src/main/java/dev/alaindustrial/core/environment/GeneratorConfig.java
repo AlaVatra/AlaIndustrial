@@ -23,20 +23,6 @@ public final class GeneratorConfig {
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
 			doc = "Evolved daylight-panel output in EU/t during the day.")
 	public static int daylightEuPerTick = 4;
-	/**
-	 * Mirror Concentrator output in EU/t by day, before the noon window lifts it by half (MOD-602): twice the
-	 * daylight panel, under the water mill over a full day.
-	 */
-	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
-			doc = "Mirror Concentrator output in EU/t during the day, before the noon peak.")
-	public static int radiantEuPerTick = 8;
-	/**
-	 * Assembled Mirror Concentrator output in EU/t (MOD-603). Equal to the one-block form by design — the
-	 * structure buys shape, not power; a separate knob so a balance pass can change that alone.
-	 */
-	@Knob(section = Section.GENERATORS, min = 0,
-			doc = "Assembled Mirror Concentrator output in EU/t during the day, before the noon peak.")
-	public static int radiantAssembledEuPerTick = 8;
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
 			doc = "Evolved moonlit-panel output in EU/t at night under clear sky.")
 	public static int moonlitEuPerTick = 3;
@@ -44,6 +30,40 @@ public final class GeneratorConfig {
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
 			doc = "Moonlit-panel EU/t at night during rain/thunder (a weather trickle).")
 	public static int moonlitWeatherEuPerTick = 1;
+	/**
+	 * Reinforced Solar Panel output at noon in EU/t (MOD-1031). The rest of the day follows the height of the
+	 * sun: {@link #reinforcedSolarEdgeFactor} of this at sunrise and sunset, the whole of it at noon.
+	 */
+	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
+			doc = "Reinforced Solar Panel output in EU/t at noon; the rest of the day follows the height of the sun.")
+	public static int reinforcedSolarPeakEuPerTick = 12;
+	/** Share of the noon output the Reinforced Solar Panel keeps at sunrise and sunset (MOD-1031). */
+	@Knob(section = Section.GENERATORS, min = 0.0,
+			doc = "Reinforced Solar Panel: share of the noon output at sunrise and sunset (0.5 = half).")
+	public static float reinforcedSolarEdgeFactor = 0.5f;
+	/**
+	 * Bronze Lunar Panel output under a full moon in EU/t (MOD-1031). Other nights follow the phase of the
+	 * moon, down to {@link #bronzeLunarNewMoonFactor} of this at the new moon.
+	 */
+	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
+			doc = "Bronze Lunar Panel output in EU/t under a full moon; other nights follow the moon's phase.")
+	public static int bronzeLunarPeakEuPerTick = 10;
+	/** Share of the full-moon output the Bronze Lunar Panel keeps at the new moon (MOD-1031). */
+	@Knob(section = Section.GENERATORS, min = 0.0,
+			doc = "Bronze Lunar Panel: share of the full-moon output at the new moon (0.5 = half).")
+	public static float bronzeLunarNewMoonFactor = 0.5f;
+	/** Share of its current output the Bronze Lunar Panel keeps in rain and thunder (MOD-1031). */
+	@Knob(section = Section.GENERATORS, min = 0.0,
+			doc = "Bronze Lunar Panel: share of its current output kept in rain and thunder.")
+	public static float bronzeLunarWeatherFactor = 0.5f;
+	/** The least the Bronze Lunar Panel makes in rain and thunder, in EU/t (MOD-1031). */
+	@Knob(section = Section.GENERATORS, min = 0,
+			doc = "Bronze Lunar Panel: the least it makes in rain and thunder, in EU/t.")
+	public static int bronzeLunarWeatherMinEuPerTick = 2;
+	/** Share of its current output the Bronze Lunar Panel keeps under snow (MOD-1031). */
+	@Knob(section = Section.GENERATORS, min = 0.0,
+			doc = "Bronze Lunar Panel: share of its current output kept under snow.")
+	public static float bronzeLunarSnowFactor = 0.5f;
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 0,
 			doc = "Fuel (solid-burnable) generator output in EU/t while burning.")
 	public static int fuelEuPerTick = 8;
@@ -527,10 +547,14 @@ public final class GeneratorConfig {
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 1,
 			doc = "Solar panel EU buffer. Applies to newly placed blocks.")
 	public static int solarBuffer = 8000;
-	/** Mirror Concentrator buffer (MOD-602) — twice the panels below it. */
+	/** Reinforced Solar Panel buffer (MOD-1031): the day branch's third rung, twice the panels below it. */
 	@Knob(section = Section.GENERATORS, clientVisible = true, min = 1,
-			doc = "Mirror Concentrator EU buffer. Applies to newly placed blocks.")
-	public static int radiantBuffer = 16000;
+			doc = "Reinforced Solar Panel EU buffer. Applies to newly placed blocks.")
+	public static int reinforcedSolarBuffer = 16000;
+	/** Bronze Lunar Panel buffer (MOD-1031): the night branch's third rung, the same as its day twin. */
+	@Knob(section = Section.GENERATORS, clientVisible = true, min = 1,
+			doc = "Bronze Lunar Panel EU buffer. Applies to newly placed blocks.")
+	public static int bronzeLunarBuffer = 16000;
 
 	// --- Piezo plate (MOD-764): a pressure plate that gives a small EU pulse on every new press ---
 	// One press per plate per release cycle; a held plate earns nothing, so traffic, not plates, sets output.

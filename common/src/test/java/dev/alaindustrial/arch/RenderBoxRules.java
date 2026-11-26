@@ -57,7 +57,6 @@ public class RenderBoxRules {
 			RENDER + "HallSchematicRenderer",
 			RENDER + "IncubatorBlockEntityRenderer",
 			RENDER + "MobWheelBlockEntityRenderer",
-			RENDER + "RadiantSolarPanelBlockEntityRenderer",
 			RENDER + "TeleporterCapsuleDoorRenderer",
 			RENDER + "WaterMillWheelBlockEntityRenderer",
 			RENDER + "WindMillRotorBlockEntityRenderer");

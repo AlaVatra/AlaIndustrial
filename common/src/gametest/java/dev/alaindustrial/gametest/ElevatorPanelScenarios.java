@@ -40,7 +40,9 @@ public final class ElevatorPanelScenarios {
 				RosterEntry.of(ElevatorPanelScenarios::panelShutsWhatTheCabinCannotReach,
 						"elevator_panel_shuts_unreachable").ticks(20),
 				RosterEntry.of(ElevatorPanelScenarios::stationWithoutTheCabinCallsIt,
-						"elevator_station_calls_without_panel").ticks(20));
+						"elevator_station_calls_without_panel").ticks(20),
+				RosterEntry.of(ElevatorPanelScenarios::aPressThatCannotBeTakenScansNoShaft,
+						"mod1030_elevator_refused_press_scans_no_shaft").ticks(20));
 
 		private Roster() {}
 	}
@@ -187,6 +189,32 @@ public final class ElevatorPanelScenarios {
 			helper.assertTrue(menu.state(2) == ElevatorPanel.FloorState.GAP && menu.value(2) == gap,
 					"floor 3 is shut as cut off at the gap's height " + gap + ", got " + menu.state(2) + " "
 							+ menu.value(2));
+			helper.succeed();
+		});
+	}
+
+	/**
+	 * MOD-1030: a press comes from the client, so a press that cannot be taken — the cabin is not at the panel's floor,
+	 * or the button is past the floors — is refused before the shaft is scanned; a press that can be taken scans it.
+	 */
+	public static void aPressThatCannotBeTakenScansNoShaft(GameTestHelper helper) {
+		for (int floor : FLOORS) {
+			station(helper, floor);
+		}
+		ElevatorWinchBlockEntity winch = winch(helper, FULL);
+		helper.runAfterDelay(SETTLE, () -> {
+			int bottom = abs(helper, FLOORS[0]);
+			int top = abs(helper, FLOORS[2]);
+			helper.assertTrue(winch.standsAt(bottom), "the cabin starts at floor 1");
+			ServerPlayer player = playerBefore(helper, FLOORS[0]);
+			int before = winch.scans();
+			helper.assertTrue(!winch.choose(player, top, 0), "a press at floor 3 while the cabin is at floor 1");
+			helper.assertTrue(!winch.choose(player, bottom, 7), "a press past the last floor");
+			helper.assertTrue(!winch.choose(player, bottom, -1), "a press before the first floor");
+			helper.assertTrue(winch.scans() == before, "refused presses scanned the shaft " + (winch.scans() - before)
+					+ " time(s)");
+			helper.assertTrue(winch.choose(player, bottom, 1), "a press on floor 2 is taken");
+			helper.assertTrue(winch.scans() == before + 1, "a press that is taken reads the shaft once");
 			helper.succeed();
 		});
 	}

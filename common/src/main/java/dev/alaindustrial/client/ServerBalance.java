@@ -147,6 +147,14 @@ public final class ServerBalance {
 		return current.intValue("blockBreakerEuPerTick", Config.blockBreakerEuPerTick);
 	}
 
+	public static int bronzeLunarBuffer() {
+		return current.intValue("bronzeLunarBuffer", GeneratorConfig.bronzeLunarBuffer);
+	}
+
+	public static int bronzeLunarPeakEuPerTick() {
+		return current.intValue("bronzeLunarPeakEuPerTick", GeneratorConfig.bronzeLunarPeakEuPerTick);
+	}
+
 	public static int cableBuffer() {
 		return current.intValue("cableBuffer", Config.cableBuffer);
 	}
@@ -703,14 +711,6 @@ public final class ServerBalance {
 		return current.intValue("pumpEuPerBucket", Config.pumpEuPerBucket);
 	}
 
-	public static int radiantBuffer() {
-		return current.intValue("radiantBuffer", GeneratorConfig.radiantBuffer);
-	}
-
-	public static int radiantEuPerTick() {
-		return current.intValue("radiantEuPerTick", GeneratorConfig.radiantEuPerTick);
-	}
-
 	public static int reactorTabletBuffer() {
 		return current.intValue("reactorTabletBuffer", ToolConfig.reactorTabletBuffer);
 	}
@@ -725,6 +725,14 @@ public final class ServerBalance {
 
 	public static int recyclerEuPerTick() {
 		return current.intValue("recyclerEuPerTick", Config.recyclerEuPerTick);
+	}
+
+	public static int reinforcedSolarBuffer() {
+		return current.intValue("reinforcedSolarBuffer", GeneratorConfig.reinforcedSolarBuffer);
+	}
+
+	public static int reinforcedSolarPeakEuPerTick() {
+		return current.intValue("reinforcedSolarPeakEuPerTick", GeneratorConfig.reinforcedSolarPeakEuPerTick);
 	}
 
 	public static int repairBenchEuPerTick() {

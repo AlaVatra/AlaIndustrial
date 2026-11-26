@@ -2,8 +2,6 @@ package dev.alaindustrial.gametest;
 
 import dev.alaindustrial.Industrialization;
 import dev.alaindustrial.block.CableBlock;
-import dev.alaindustrial.block.ConcentratorPart;
-import dev.alaindustrial.block.ConcentratorStructure;
 import dev.alaindustrial.core.energy.EnergyLookup;
 import dev.alaindustrial.core.energy.EnergyPort;
 import dev.alaindustrial.registry.ContentManifest;
@@ -25,7 +23,7 @@ import net.minecraft.world.level.block.Blocks;
  * two disagree the player sees a joint that carries nothing, or energy flowing through a face with no arm.
  *
  * <p>Pinned before the arm rule moves from {@code instanceof ReactorOutletBlock} to an interface: the arm
- * toward the reactor outlet and toward a concentrator's bottom cell (neither a machine block), and a sweep
+ * toward the reactor outlet (not a machine block), and a sweep
  * of every block of the mod in its default state, every face — with today's disagreements written down by
  * name in {@link #KNOWN_DISAGREEMENTS}, so the sweep fails on a new one and on one that went away alike.
  */
@@ -36,8 +34,6 @@ public final class CableArmEndpointParityScenarios {
 		public static final List<RosterEntry> ENTRIES = List.of(
 				RosterEntry.of(CableArmEndpointParityScenarios::reactorOutletDrawsAnArmOnEveryFace,
 						"mod715_cable_arm_reactor_outlet"),
-				RosterEntry.of(CableArmEndpointParityScenarios::concentratorBottomCellDrawsAnArm,
-						"mod715_cable_arm_concentrator_cell"),
 				RosterEntry.of(CableArmEndpointParityScenarios::everyBlockArmMatchesItsEndpoint,
 						"mod715_cable_arm_matches_endpoint_for_every_block"));
 
@@ -93,40 +89,6 @@ public final class CableArmEndpointParityScenarios {
 				helper.fail("no cable arm toward the reactor outlet's " + face + " face");
 				return;
 			}
-		}
-		helper.succeed();
-	}
-
-	/**
-	 * An assembled concentrator's bottom cell lends the core's port, and the arm reads the same rule; the
-	 * cell above it lends nothing and draws no arm.
-	 *
-	 * @implements MOD-715-CA02 — the cable arm is drawn toward a concentrator's bottom cell
-	 */
-	public static void concentratorBottomCellDrawsAnArm(GameTestHelper helper) {
-		BlockPos core = PROBE;
-		Direction facing = Direction.NORTH;
-		helper.setBlock(core, ModContent.RADIANT_SOLAR_PANEL.get().defaultBlockState());
-		for (ConcentratorPart part : ConcentratorPart.CELLS) {
-			if (part != ConcentratorPart.CORE) {
-				helper.setBlock(core.offset(part.worldOffset(facing)),
-						ModContent.CONCENTRATOR_SECTION.get().defaultBlockState());
-			}
-		}
-		ConcentratorStructure.tryAssemble(helper.getLevel(), helper.absolutePos(core));
-		Level level = helper.getLevel();
-		Direction out = facing.getOpposite();
-		BlockPos bottom = helper.absolutePos(core.offset(ConcentratorPart.BACK.worldOffset(facing)));
-		BlockPos top = helper.absolutePos(core.offset(ConcentratorPart.TOP_BACK.worldOffset(facing)));
-		if (!arm(level, bottom, out) || !endpoint(level, bottom, out)) {
-			helper.fail("the bottom back cell's " + out + " face: arm " + arm(level, bottom, out) + ", endpoint "
-					+ endpoint(level, bottom, out) + " — both must be true");
-			return;
-		}
-		if (arm(level, top, out) || endpoint(level, top, out)) {
-			helper.fail("the top back cell's " + out + " face: arm " + arm(level, top, out) + ", endpoint "
-					+ endpoint(level, top, out) + " — both must be false");
-			return;
 		}
 		helper.succeed();
 	}

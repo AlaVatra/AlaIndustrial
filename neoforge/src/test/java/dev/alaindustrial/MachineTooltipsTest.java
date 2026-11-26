@@ -268,7 +268,8 @@ class MachineTooltipsTest {
 	private static final List<Supplier<Block>> CATALOG_BLOCKS = List.of(
 			ModContent.CESU, ModContent.CANNING_MACHINE, ModContent.ASSEMBLER, ModContent.DISTILLATION_COLUMN,
 			ModContent.CHARGE_PAD, ModContent.ENERGY_CONDENSER, ModContent.WIND_MILL, ModContent.WATER_MILL,
-			ModContent.LIGHTNING_ROD_GENERATOR, ModContent.RADIANT_SOLAR_PANEL, ModContent.SPRINKLER,
+			ModContent.LIGHTNING_ROD_GENERATOR, ModContent.REINFORCED_SOLAR_PANEL, ModContent.BRONZE_LUNAR_PANEL,
+			ModContent.SPRINKLER,
 			ModContent.MOB_REPELLER, ModContent.ALLOY_SMELTER);
 
 	private static List<String> keysOf(List<MachineTooltipSpec.Line> stats) {
@@ -287,9 +288,10 @@ class MachineTooltipsTest {
 
 	@Test
 	void catalogBlocks_tooltipsMatchTheCatalog(MinecraftServer server) {
-		// MOD-716: the rows moved onto the blocks, so there is no catalog left to count; the thirteen stay
-		// listed here, and MachineTooltipsGoldenTest pins every item of the mod.
-		assertEquals(13, CATALOG_BLOCKS.size());
+		// MOD-716: the rows moved onto the blocks, so there is no catalog left to count; the fourteen stay
+		// listed here (MOD-1031: the two full-block T3 panels in place of the withdrawn concentrator), and
+		// MachineTooltipsGoldenTest pins every item of the mod.
+		assertEquals(14, CATALOG_BLOCKS.size());
 		for (Supplier<Block> handle : CATALOG_BLOCKS) {
 			Block block = handle.get();
 			MachineTooltipSpec entry = spec(block);

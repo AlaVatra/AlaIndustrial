@@ -50,6 +50,8 @@ final class EnergyRoleForFaceSnapshot {
 			"radiant_solar_panel[assembled=false,facing=south] DUNSWE=ONOOOO",
 			"radiant_solar_panel[assembled=false,facing=west] DUNSWE=ONOOOO",
 			"radiant_solar_panel[assembled=false,facing=east] DUNSWE=ONOOOO",
+			"reinforced_solar_panel[] DUNSWE=ONOOOO",
+			"bronze_lunar_panel[] DUNSWE=ONOOOO",
 			"water_mill[facing=north] DUNSWE=NNNONN",
 			"water_mill[facing=south] DUNSWE=NNONNN",
 			"water_mill[facing=west] DUNSWE=NNNNNO",

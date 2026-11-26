@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "케이블",
-              "text": "케이블은 블록을 전력망으로 연결하고 EU를 운반합니다. 모든 케이블은 거리에 따라 에너지를 잃습니다 — 선이 길수록 손실이 커집니다.\n\n등급은 세 가지이며 서로 다릅니다:\n• 주석 — 좁지만(8 EU/t) 손실이 거의 없음: 태양광 농장용\n• 구리 — 만능 주력(12 EU/t)\n• 금 — 가장 넓지만(48 EU/t) 손실이 더 큼\n\n한 라인에 등급을 섞지 마세요: 네트워크 전체가 그 안의 가장 강한 케이블을 따릅니다 — 손실까지 포함해서."
+              "text": "케이블은 블록을 전력망으로 연결하고 EU를 운반합니다. 모든 케이블은 거리에 따라 에너지를 잃습니다 — 선이 길수록 손실이 커집니다.\n\n등급은 네 가지이며 서로 다릅니다:\n• 주석 — 좁지만(8 EU/t) 손실이 거의 없음: 태양광 농장용\n• 구리 — 만능 주력(12 EU/t)\n• 금 — 더 넓지만(48 EU/t) 손실이 더 큼\n• 호박금 — 가장 넓고(192 EU/t) 손실이 가장 적음: HV 라인용, 대신 제작 비용이 비쌈\n\n한 라인에 등급을 섞지 마세요: 네트워크 전체가 그 안의 가장 강한 케이블을 따릅니다 — 손실까지 포함해서."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "외벽 부품",
-              "text": "- 원자로 유리: 창문이지만 벽의 3분의 1을 넘기지 마세요\n- 원자로 에어록 문: 에어록입니다. 레드스톤에 열리고 스스로 닫힙니다\n- 원자로 입구: 물 배관이 벽을 통과하는 자리\n- 원자로 출력 단자: 케이블을 꽂는 자리\n- 원자로 조명: 방 안만 밝히고 바깥은 절대 밝히지 않습니다"
+              "text": "- 원자로 유리: 창문이지만 외벽의 30 %를 넘기지 마세요\n- 원자로 에어록 문: 에어록입니다. 레드스톤에 열리고 스스로 닫힙니다\n- 원자로 입구: 물 배관이 벽을 통과하는 자리\n- 원자로 출력 단자: 케이블을 꽂는 자리\n- 원자로 조명: 방 안만 밝히고 바깥은 절대 밝히지 않습니다"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "에너지",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "청동 달빛 패널",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "청동 달빛 패널",
+              "text": "밤 가지의 세 번째 단계 — 달의 위상을 따라 출력이 달라지는 완전한 블록, 보름달에 10 EU/t이며 궂은 날씨에도 계속 작동한다; 진화로만 얻을 수 있다."
+            },
+            {
+              "type": "stats",
+              "title": "정보",
+              "lines": [
+                "에너지: 10 EU/t (밤)",
+                "버퍼: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "풍력 터빈",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "거울 집광기",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "거울 집광기",
-              "text": "낮 계열의 세 번째 단계 — 햇빛 태양광 패널의 두 배, 정오에는 거기서 절반을 더 냅니다. 모을 것이 없으면 거울이 접힙니다."
-            },
-            {
-              "type": "stats",
-              "title": "정보",
-              "lines": [
-                "에너지: 8 EU/t (낮)",
-                "버퍼: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "레시피",
-              "recipe_type": "정형 제작",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "달빛 태양광 패널",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "강화 태양광 패널",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "강화 태양광 패널",
+              "text": "낮 가지의 세 번째 단계 — 태양의 높이를 따라 출력이 달라지는 완전한 블록, 정오에 12 EU/t; 진화로만 얻을 수 있다."
+            },
+            {
+              "type": "stats",
+              "title": "정보",
+              "lines": [
+                "에너지: 12 EU/t (낮)",
+                "버퍼: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "엘리베이터 권상기",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "엘리베이터 권상기",
+              "text": "전기로 움직이는 수직 엘리베이터: 프레임으로 만든 유리 승강로, 층마다 문과 호출 패널이 있는 승강장, 맨 위에 뚜껑 역할을 하는 권상기. 운행 요금은 카가 출발할 때 한 번에 전부 내며, 카가 서 있는 층의 문만 열립니다."
+            },
+            {
+              "type": "stats",
+              "title": "정보",
+              "lines": [
+                "에너지: 50 EU + 8 EU/블록",
+                "버퍼: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "레시피",
+              "recipe_type": "정형 제작",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "정형 제작",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "정형 제작",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "정형 제작",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "충전 침대",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "에스컬레이터 구동기",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "에스컬레이터 구동기",
+              "text": "손잡이가 달린 계단 구간으로 이루어진 경사 벨트: 구동기에 EU가 있는 동안 플레이어, 몹, 아이템을 한 층 위나 아래로 실어 나릅니다. LV 구동기는 최대 8구간, MV 구동기는 최대 16구간을 더 빠르게 움직입니다."
+            },
+            {
+              "type": "stats",
+              "title": "정보",
+              "lines": [
+                "에너지: 1 EU/t + 구간당 0.5 EU/t (누군가 타고 있을 때만)",
+                "버퍼: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "레시피",
+              "recipe_type": "정형 제작",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "정형 제작",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "정형 제작",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "정형 제작",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "정형 제작",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "태양광 진화 칩",
-              "text": "진화 칩 세 종류 — 태양(낮), 달(밤), 공명(세 번째 단계) — 기본 태양광 패널과 풍력 터빈을 T2로, T2 햇빛 태양광 패널을 그 다음 단계로 진화시키며, 축적된 NBT 에너지를 그대로 이어받습니다."
+              "text": "진화 칩 세 종류 — 태양(낮), 달(밤), 공명(세 번째 단계) — 기본 태양광 패널과 풍력 터빈을 T2로, 두 T2 패널을 그 다음 단계로 진화시키며, 축적된 NBT 에너지를 그대로 이어받습니다."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "정형 제작",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

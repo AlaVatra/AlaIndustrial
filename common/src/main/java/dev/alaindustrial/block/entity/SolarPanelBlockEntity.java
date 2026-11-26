@@ -165,7 +165,9 @@ public class SolarPanelBlockEntity extends AbstractGeneratorBlockEntity implemen
 		// hold up to 64 chips here, so the remainder has to survive the transform.
 		ItemStack remainder = items.get(CHIP_SLOT).copy();
 		remainder.shrink(1);
-		EvolutionHelper.evolveInto(this, items, level, pos, target, java.util.Map.of(CHIP_SLOT, remainder));
+		// The upgrade chips move to the same arms of the T2 panel (MOD-1031): its panel starts after its chip slot.
+		EvolutionHelper.evolveIntoCarryingUpgrades(this, items, level, pos, target,
+				java.util.Map.of(CHIP_SLOT, remainder));
 	}
 
 	@Override

@@ -25,6 +25,14 @@ public final class PayloadBudget {
 	 */
 	public static final int MAX_CONFIG_SNAPSHOT_BYTES = 32_768;
 
+	/**
+	 * Most stations one remote's screen payload carries (MOD-1030). The list is as long as the remote's, and that
+	 * length is a server setting with no upper bound ({@code teleporterMaxPoints}, 16 by default); a station costs
+	 * at most 31 bytes, so 1024 of them stay under 32 KiB, a 32nd of the vanilla limit. Stations past it are not
+	 * sent, and the screen shows them as unknown.
+	 */
+	public static final int MAX_TELEPORT_STATIONS = 1024;
+
 	private PayloadBudget() {
 	}
 

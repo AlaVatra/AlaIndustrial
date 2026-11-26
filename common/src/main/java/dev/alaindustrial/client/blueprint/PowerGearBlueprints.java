@@ -34,6 +34,7 @@ public final class PowerGearBlueprints {
 	private static final String BATTERY_POUCH = "alaindustrial:battery_pouch";
 	private static final String ENERGY_PACK = "alaindustrial:energy_pack";
 	private static final String JETPACK = "alaindustrial:jetpack";
+	private static final String JETPACK_MK2 = "alaindustrial:jetpack_mk2";
 	private static final String ELECTRIC_BOW = "alaindustrial:electric_bow";
 	private static final String ELECTRIC_SABER = "alaindustrial:electric_saber";
 
@@ -129,7 +130,7 @@ public final class PowerGearBlueprints {
 	 * 2 cable, 3..5 the pillar bottom to top, 6 the grass it lands on.
 	 */
 	public static final BlueprintDef JETPACK_FLIGHT = new BlueprintDef("jetpack",
-			List.of(JETPACK),
+			List.of(JETPACK, JETPACK_MK2),
 			List.of(
 					new Step(List.of(table(0, 0)), 0, 1, List.of(), Verdict.NONE,
 							List.of(new ItemMotion(ENERGY_PACK, 0, true), new ItemMotion(BATTERY, 0, true),
@@ -142,7 +143,13 @@ public final class PowerGearBlueprints {
 					new Step(flightField(false), 5, 3, List.of(Flow.energy(1, 0), Flow.item(0, 5, JETPACK)),
 							Verdict.GOOD, List.of()),
 					new Step(flightField(true), 6, 4, List.of(Flow.item(5, 6, JETPACK)), Verdict.NONE,
-							List.of())));
+							List.of()),
+					new Step(List.of(table(0, 0)), 0, 5, List.of(), Verdict.GOOD,
+							List.of(new ItemMotion(JETPACK, 0, true),
+									new ItemMotion("alaindustrial:electrum_reinforced_plate", 0, true),
+									new ItemMotion("alaindustrial:reinforced_bearing", 0, true),
+									new ItemMotion("alaindustrial:energy_crystal", 0, true),
+									new ItemMotion(JETPACK_MK2, 0, false)))));
 
 	/**
 	 * The electric bow and then the electric saber crafted on a table (3, number 1); the battery box fed by

@@ -33,10 +33,17 @@ import dev.alaindustrial.core.energy.EnergyBuffer;
 public final class NeoForgeEnergyPort implements EnergyPort {
 	private final EnergyHandler delegate;
 	private final EnergyRole role;
+	/** The role came from a dry run on another mod's handler ({@link NeoForgeEnergyLookup#foreign}, MOD-1026). */
+	private final boolean provisional;
 
 	public NeoForgeEnergyPort(EnergyHandler delegate, EnergyRole role) {
+		this(delegate, role, false);
+	}
+
+	NeoForgeEnergyPort(EnergyHandler delegate, EnergyRole role, boolean provisional) {
 		this.delegate = delegate;
 		this.role = role;
+		this.provisional = provisional;
 	}
 
 	/** Wrap an {@link EnergyHandler} as a neutral {@link EnergyPort} with the given face role. */
@@ -87,6 +94,11 @@ public final class NeoForgeEnergyPort implements EnergyPort {
 	@Override
 	public boolean supportsExtraction() {
 		return role.canExtract();
+	}
+
+	@Override
+	public boolean roleIsProvisional() {
+		return provisional;
 	}
 
 	static TransactionContext unwrap(Txn txn) {

@@ -53,7 +53,8 @@ public final class RecipeViewerInfo {
 	 * they have no {@code output.accept(...)} entry). They are also removed from the recipe viewer
 	 * (REI on Fabric, JEI on NeoForge) so the player never sees them before they ship.
 	 *
-	 * <p>Today: only the recipe-less filled vacuum capsule. The base
+	 * <p>Today: the recipe-less filled vacuum capsule, the two withdrawn concentrator blocks and the ten planned
+	 * solar rungs (MOD-1031). The base
 	 * {@code water_mill}, {@code wind_mill}, both T2 wind mills (restored in MOD-172 — recipe-less,
 	 * obtained by evolution) and every shipped cable grade — {@code tin_cable}, {@code copper_cable},
 	 * {@code gold_cable} (MOD-219), {@code electrum_cable} (MOD-358) and all four insulated variants
@@ -65,13 +66,22 @@ public final class RecipeViewerInfo {
 		return List.of(
 				// Filled capsule (MOD-063) has no recipe — it is obtained by filling an empty capsule, so it
 				// would otherwise show as a recipe-less entry. Empty vacuum_capsule stays visible (craftable).
-				ModContent.FILLED_VACUUM_CAPSULE);
+				ModContent.FILLED_VACUUM_CAPSULE,
+				// MOD-1031: the withdrawn Mirror Concentrator and its section, kept only for old worlds.
+				ModContent.RADIANT_SOLAR_PANEL_ITEM, ModContent.CONCENTRATOR_SECTION_ITEM,
+				// MOD-1031: the T4 to T8 solar rungs, registered with their look but no function or recipe yet.
+				ModContent.ELECTRUM_SOLAR_PANEL_ITEM, ModContent.PALLADIUM_SOLAR_PANEL_ITEM,
+				ModContent.HYBRID_SOLAR_PANEL_ITEM, ModContent.QUANTUM_SOLAR_PANEL_ITEM,
+				ModContent.ULTIMATE_SOLAR_PANEL_ITEM, ModContent.SILVER_LUNAR_PANEL_ITEM,
+				ModContent.PALLADIUM_LUNAR_PANEL_ITEM, ModContent.HYBRID_LUNAR_PANEL_ITEM,
+				ModContent.QUANTUM_LUNAR_PANEL_ITEM, ModContent.ULTIMATE_LUNAR_PANEL_ITEM);
 	}
 
 	/**
-	 * The two solar T2 branches that have no crafting recipe and are obtained only by evolving the
-	 * base panel. The base {@code solar_panel} itself is craftable (see {@code solar_panel.json}) and is
-	 * intentionally left out — it does not need an informational page.
+	 * The solar rungs that have no crafting recipe and are obtained only by evolution: the two T2 branches grown
+	 * from the base panel, and the two full-block T3 panels grown from them with a resonance chip (MOD-1031). The
+	 * base {@code solar_panel} itself is craftable (see {@code solar_panel.json}) and is intentionally left out —
+	 * it does not need an informational page.
 	 */
 	public static List<Entry> solarEvolutionEntries() {
 		return List.of(
@@ -86,7 +96,19 @@ public final class RecipeViewerInfo {
 						Line.of("jei.alaindustrial.moonlit_solar_panel.line1"),
 						new Line("jei.alaindustrial.moonlit_solar_panel.line2", List.of(
 								() -> ServerBalance.moonlitEuPerTick(), () -> ServerBalance.moonlitWeatherEuPerTick())),
-						Line.of("jei.alaindustrial.moonlit_solar_panel.line3"))));
+						Line.of("jei.alaindustrial.moonlit_solar_panel.line3"))),
+				// Day branch, third rung — grown from the daylight panel with a resonance chip (MOD-1031).
+				new Entry(ModContent.REINFORCED_SOLAR_PANEL, "jei.alaindustrial.reinforced_solar_panel.title", List.of(
+						Line.of("jei.alaindustrial.reinforced_solar_panel.line1"),
+						new Line("jei.alaindustrial.reinforced_solar_panel.line2", List.of(
+								() -> ServerBalance.reinforcedSolarPeakEuPerTick())),
+						Line.of("jei.alaindustrial.reinforced_solar_panel.line3"))),
+				// Night branch, third rung — grown from the moonlit panel with a resonance chip (MOD-1031).
+				new Entry(ModContent.BRONZE_LUNAR_PANEL, "jei.alaindustrial.bronze_lunar_panel.title", List.of(
+						Line.of("jei.alaindustrial.bronze_lunar_panel.line1"),
+						new Line("jei.alaindustrial.bronze_lunar_panel.line2", List.of(
+								() -> ServerBalance.bronzeLunarPeakEuPerTick())),
+						Line.of("jei.alaindustrial.bronze_lunar_panel.line3"))));
 	}
 
 	/**

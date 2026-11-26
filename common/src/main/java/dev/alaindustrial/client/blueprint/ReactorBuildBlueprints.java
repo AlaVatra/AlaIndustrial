@@ -28,6 +28,9 @@ public final class ReactorBuildBlueprints {
 	private static final String CONTROL_ROD_DRIVE = "alaindustrial:control_rod_drive";
 	private static final String REACTOR_DOOR = "alaindustrial:reactor_door";
 	private static final String REACTOR_BUTTON = "alaindustrial:reactor_button";
+	private static final String ANTENNA = "alaindustrial:reactor_antenna";
+	private static final String TABLET = "alaindustrial:reactor_tablet";
+	private static final String ALARM_LAMP = "alaindustrial:reactor_alarm_lamp";
 
 	/**
 	 * The casing craft on the table (0, position 1): six tempered iron plates, two shielding plates and a
@@ -71,6 +74,21 @@ public final class ReactorBuildBlueprints {
 					new Step(room(REACTOR_GLASS, true, false, doorway()), 11, 2, -1, -1, Verdict.GOOD),
 					new Step(room(REACTOR_GLASS, false, false, flatDoorway()), 11, 2, -1, -1,
 							Verdict.BAD)));
+
+	/**
+	 * Watching the reactor from afar (MOD-935): the antenna set into the formed room's front wall, unpowered,
+	 * the tablet getting only static (bad); a cable from a generator feeding it, the tablet linking (good);
+	 * an alarm lamp on the roof lighting up with the reactor's alarm. Indices: see {@link BlueprintRigs#room};
+	 * 11 antenna, 12 cable, 13 generator, 14 stone, 15 lamp.
+	 */
+	public static final BlueprintDef REACTOR_WATCH = new BlueprintDef("reactor_watch",
+			List.of(ANTENNA, TABLET, ALARM_LAMP),
+			List.of(
+					new Step(room(REACTOR_GLASS, true, false, List.of(antenna())), 11, 1, List.of(), Verdict.BAD,
+							List.of(new ItemMotion(TABLET, 11, true))),
+					new Step(room(REACTOR_GLASS, true, false, antennaFeed(false)), 11, 1, 13, 11, Verdict.GOOD,
+							List.of(new ItemMotion(TABLET, 11, true))),
+					new Step(room(REACTOR_GLASS, true, false, antennaFeed(true)), 15, 2, 13, 11, Verdict.NONE)));
 
 	private ReactorBuildBlueprints() {
 	}
@@ -137,5 +155,24 @@ public final class ReactorBuildBlueprints {
 	private static Placement reactorButton() {
 		return new Placement(REACTOR_BUTTON, 2, 1, 5,
 				Map.of("face", "wall", "facing", "south", "powered", "false"), Map.of("powered", "true"));
+	}
+
+	/** The antenna in the room's south wall beside the controller, facing out. */
+	private static Placement antenna() {
+		return new Placement(ANTENNA, 3, 2, 4, Map.of("facing", "south", "formed", "true", "edge", "false"));
+	}
+
+	/**
+	 * 11 the antenna, 12 a cable in front of it, 13 the generator feeding it, 14 the stone under the generator,
+	 * and, when {@code lamp}, 15 the alarm lamp on the roof, lighting up with the alarm.
+	 */
+	private static List<Placement> antennaFeed(boolean lamp) {
+		List<Placement> all = new ArrayList<>(List.of(antenna(), cableOf(COPPER_CABLE, 3, 2, 5, "north", "south"),
+				new Placement(GENERATOR, 3, 2, 6, Map.of("facing", "south", "lit", "true")), stone(3, 1, 6)));
+		if (lamp) {
+			all.add(new Placement(ALARM_LAMP, 2, 5, 2, Map.of("facing", "up", "lit", "false", "alarm", "false"),
+					Map.of("lit", "true", "alarm", "true")));
+		}
+		return all;
 	}
 }

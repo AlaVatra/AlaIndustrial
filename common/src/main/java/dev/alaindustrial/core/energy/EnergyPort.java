@@ -83,4 +83,16 @@ public interface EnergyPort {
 
 	/** Whether this port can currently emit energy (respects per-face {@link EnergyRole}). */
 	boolean supportsExtraction();
+
+	/**
+	 * Whether the two answers above are a guess from a dry run rather than a fixed property of the block. A loader
+	 * whose energy API has no "can it ever take / give" predicate (NeoForge's {@code EnergyHandler}) reads another
+	 * mod's block by trying, and a try taken while a battery has spent its per-tick limit, or a generator stands
+	 * switched off, answers for that moment only. A network holding such a port probes it again every {@link
+	 * ProvisionalRoleClock#RECHECK_TICKS} ticks instead of keeping the first answer until its cables change
+	 * (MOD-1026). Our own blocks and the other loaders' capabilities answer for good: {@code false}.
+	 */
+	default boolean roleIsProvisional() {
+		return false;
+	}
 }

@@ -15,9 +15,9 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
  * {@link FluidLookup} on MinecraftForge. Our own block entities are asked directly, as on the other two loaders;
  * anything else is reached through {@link ForgeCapabilities#FLUID_HANDLER}.
  *
- * <p>A block that lends another block's tank ({@link FluidHostRedirect}, the quarry's socket) has no block entity,
- * and Forge attaches capabilities to block entities only, so our lookup asks the lender itself. Other mods do not
- * see the lent tank on Forge; on Fabric and NeoForge it is a block capability.
+ * <p>A block that lends another block's tank ({@link FluidHostRedirect}, the quarry's socket) is asked by our lookup
+ * itself. Other mods find the lent tank through the socket's block entity, where {@code BlockCapabilitiesForge} hangs
+ * it (MOD-1025); on Fabric and NeoForge it is a block capability.
  */
 public final class ForgeFluidLookup implements FluidLookup {
 

@@ -5,6 +5,7 @@ import dev.alaindustrial.menu.AlloySmelterMenu;
 import dev.alaindustrial.menu.AssemblerMenu;
 import dev.alaindustrial.menu.BatteryBoxMenu;
 import dev.alaindustrial.menu.BlockBreakerMenu;
+import dev.alaindustrial.menu.BronzeLunarPanelMenu;
 import dev.alaindustrial.menu.CanningMachineMenu;
 import dev.alaindustrial.menu.CesuMenu;
 import dev.alaindustrial.menu.ChargePadMenu;
@@ -44,7 +45,7 @@ import dev.alaindustrial.menu.MoonlitSolarPanelMenu;
 import dev.alaindustrial.menu.PolymerizerMenu;
 import dev.alaindustrial.menu.PumpMenu;
 import dev.alaindustrial.menu.QuarryControllerMenu;
-import dev.alaindustrial.menu.RadiantSolarPanelMenu;
+import dev.alaindustrial.menu.ReinforcedSolarPanelMenu;
 import dev.alaindustrial.menu.ReactorControllerMenu;
 import dev.alaindustrial.menu.ReceptionCapsuleMenu;
 import dev.alaindustrial.menu.RecyclerMenu;
@@ -138,10 +139,26 @@ public final class ModContent {
 	public static Supplier<Block> SOLAR_PANEL = unbound("SOLAR_PANEL");
 	public static Supplier<Block> MOONLIT_SOLAR_PANEL = unbound("MOONLIT_SOLAR_PANEL");
 	public static Supplier<Block> DAYLIGHT_SOLAR_PANEL = unbound("DAYLIGHT_SOLAR_PANEL");
+	/** Withdrawn by MOD-1031: turns into {@link #REINFORCED_SOLAR_PANEL} when the world touches it. */
 	public static Supplier<Block> RADIANT_SOLAR_PANEL = unbound("RADIANT_SOLAR_PANEL");
 
-	/** Filler cell of the assembled Mirror Concentrator (MOD-603). */
+	/** Withdrawn by MOD-1031: turns into {@link #MACHINE_CASING} when the world touches it. */
 	public static Supplier<Block> CONCENTRATOR_SECTION = unbound("CONCENTRATOR_SECTION");
+	/** The day branch's third rung (MOD-1031). */
+	public static Supplier<Block> REINFORCED_SOLAR_PANEL = unbound("REINFORCED_SOLAR_PANEL");
+	/** The night branch's third rung (MOD-1031). */
+	public static Supplier<Block> BRONZE_LUNAR_PANEL = unbound("BRONZE_LUNAR_PANEL");
+	// Rungs T4 to T8 of both branches (MOD-1031): registered with their look, no function yet, hidden from players.
+	public static Supplier<Block> ELECTRUM_SOLAR_PANEL = unbound("ELECTRUM_SOLAR_PANEL");
+	public static Supplier<Block> PALLADIUM_SOLAR_PANEL = unbound("PALLADIUM_SOLAR_PANEL");
+	public static Supplier<Block> HYBRID_SOLAR_PANEL = unbound("HYBRID_SOLAR_PANEL");
+	public static Supplier<Block> QUANTUM_SOLAR_PANEL = unbound("QUANTUM_SOLAR_PANEL");
+	public static Supplier<Block> ULTIMATE_SOLAR_PANEL = unbound("ULTIMATE_SOLAR_PANEL");
+	public static Supplier<Block> SILVER_LUNAR_PANEL = unbound("SILVER_LUNAR_PANEL");
+	public static Supplier<Block> PALLADIUM_LUNAR_PANEL = unbound("PALLADIUM_LUNAR_PANEL");
+	public static Supplier<Block> HYBRID_LUNAR_PANEL = unbound("HYBRID_LUNAR_PANEL");
+	public static Supplier<Block> QUANTUM_LUNAR_PANEL = unbound("QUANTUM_LUNAR_PANEL");
+	public static Supplier<Block> ULTIMATE_LUNAR_PANEL = unbound("ULTIMATE_LUNAR_PANEL");
 	public static Supplier<Block> GEOTHERMAL_GENERATOR = unbound("GEOTHERMAL_GENERATOR");
 	public static Supplier<Block> WATER_MILL = unbound("WATER_MILL");
 	public static Supplier<Block> WIND_MILL = unbound("WIND_MILL");
@@ -974,10 +991,23 @@ public final class ModContent {
 	public static Supplier<BlockItem> SOLAR_PANEL_ITEM = unbound("SOLAR_PANEL_ITEM");
 	public static Supplier<BlockItem> MOONLIT_SOLAR_PANEL_ITEM = unbound("MOONLIT_SOLAR_PANEL_ITEM");
 	public static Supplier<BlockItem> DAYLIGHT_SOLAR_PANEL_ITEM = unbound("DAYLIGHT_SOLAR_PANEL_ITEM");
+	/** Withdrawn by MOD-1031: turns into {@link #REINFORCED_SOLAR_PANEL_ITEM} in a player's inventory. */
 	public static Supplier<BlockItem> RADIANT_SOLAR_PANEL_ITEM = unbound("RADIANT_SOLAR_PANEL_ITEM");
 
-	/** Block item of the Concentrator Section (MOD-603). */
+	/** Withdrawn by MOD-1031: turns into a machine casing in a player's inventory. */
 	public static Supplier<BlockItem> CONCENTRATOR_SECTION_ITEM = unbound("CONCENTRATOR_SECTION_ITEM");
+	public static Supplier<BlockItem> REINFORCED_SOLAR_PANEL_ITEM = unbound("REINFORCED_SOLAR_PANEL_ITEM");
+	public static Supplier<BlockItem> BRONZE_LUNAR_PANEL_ITEM = unbound("BRONZE_LUNAR_PANEL_ITEM");
+	public static Supplier<BlockItem> ELECTRUM_SOLAR_PANEL_ITEM = unbound("ELECTRUM_SOLAR_PANEL_ITEM");
+	public static Supplier<BlockItem> PALLADIUM_SOLAR_PANEL_ITEM = unbound("PALLADIUM_SOLAR_PANEL_ITEM");
+	public static Supplier<BlockItem> HYBRID_SOLAR_PANEL_ITEM = unbound("HYBRID_SOLAR_PANEL_ITEM");
+	public static Supplier<BlockItem> QUANTUM_SOLAR_PANEL_ITEM = unbound("QUANTUM_SOLAR_PANEL_ITEM");
+	public static Supplier<BlockItem> ULTIMATE_SOLAR_PANEL_ITEM = unbound("ULTIMATE_SOLAR_PANEL_ITEM");
+	public static Supplier<BlockItem> SILVER_LUNAR_PANEL_ITEM = unbound("SILVER_LUNAR_PANEL_ITEM");
+	public static Supplier<BlockItem> PALLADIUM_LUNAR_PANEL_ITEM = unbound("PALLADIUM_LUNAR_PANEL_ITEM");
+	public static Supplier<BlockItem> HYBRID_LUNAR_PANEL_ITEM = unbound("HYBRID_LUNAR_PANEL_ITEM");
+	public static Supplier<BlockItem> QUANTUM_LUNAR_PANEL_ITEM = unbound("QUANTUM_LUNAR_PANEL_ITEM");
+	public static Supplier<BlockItem> ULTIMATE_LUNAR_PANEL_ITEM = unbound("ULTIMATE_LUNAR_PANEL_ITEM");
 	public static Supplier<BlockItem> COPPER_CABLE_ITEM = unbound("COPPER_CABLE_ITEM");
 	public static Supplier<BlockItem> TIN_CABLE_ITEM = unbound("TIN_CABLE_ITEM");
 	public static Supplier<BlockItem> GOLD_CABLE_ITEM = unbound("GOLD_CABLE_ITEM");
@@ -1249,6 +1279,8 @@ public final class ModContent {
 	public static Supplier<BlockEntityType<?>> MOONLIT_SOLAR_PANEL_BE = unbound("MOONLIT_SOLAR_PANEL_BE");
 	public static Supplier<BlockEntityType<?>> DAYLIGHT_SOLAR_PANEL_BE = unbound("DAYLIGHT_SOLAR_PANEL_BE");
 	public static Supplier<BlockEntityType<?>> RADIANT_SOLAR_PANEL_BE = unbound("RADIANT_SOLAR_PANEL_BE");
+	public static Supplier<BlockEntityType<?>> REINFORCED_SOLAR_PANEL_BE = unbound("REINFORCED_SOLAR_PANEL_BE");
+	public static Supplier<BlockEntityType<?>> BRONZE_LUNAR_PANEL_BE = unbound("BRONZE_LUNAR_PANEL_BE");
 	public static Supplier<BlockEntityType<?>> COPPER_CABLE_BE = unbound("COPPER_CABLE_BE");
 	public static Supplier<BlockEntityType<?>> TOWN_ROAD_BE = unbound("TOWN_ROAD_BE");
 	public static Supplier<BlockEntityType<?>> ITEM_PIPE_BE = unbound("ITEM_PIPE_BE");
@@ -1323,6 +1355,7 @@ public final class ModContent {
 	public static Supplier<BlockEntityType<?>> ESCALATOR_DRIVE_BE = unbound("ESCALATOR_DRIVE_BE");
 	public static Supplier<BlockEntityType<?>> FLUID_TAP_BE = unbound("FLUID_TAP_BE");
 	public static Supplier<BlockEntityType<?>> TODO_CLIPBOARD_BE = unbound("TODO_CLIPBOARD_BE");
+	public static Supplier<BlockEntityType<?>> QUARRY_SOCKET_BE = unbound("QUARRY_SOCKET_BE");
 	public static Supplier<BlockEntityType<?>> INCUBATOR_BE = unbound("INCUBATOR_BE");
 	public static Supplier<BlockEntityType<?>> PUMP_BE = unbound("PUMP_BE");
 	public static Supplier<BlockEntityType<?>> GARDEN_DRONE_STATION_BE = unbound("GARDEN_DRONE_STATION_BE");
@@ -1422,8 +1455,10 @@ public final class ModContent {
 			unbound("TELEPORTER_REMOTE_MENU");
 	public static Supplier<MenuType<DaylightSolarPanelMenu>> DAYLIGHT_SOLAR_PANEL_MENU =
 			unbound("DAYLIGHT_SOLAR_PANEL_MENU");
-	public static Supplier<MenuType<RadiantSolarPanelMenu>> RADIANT_SOLAR_PANEL_MENU =
-			unbound("RADIANT_SOLAR_PANEL_MENU");
+	public static Supplier<MenuType<ReinforcedSolarPanelMenu>> REINFORCED_SOLAR_PANEL_MENU =
+			unbound("REINFORCED_SOLAR_PANEL_MENU");
+	public static Supplier<MenuType<BronzeLunarPanelMenu>> BRONZE_LUNAR_PANEL_MENU =
+			unbound("BRONZE_LUNAR_PANEL_MENU");
 	public static Supplier<MenuType<GeothermalGeneratorMenu>> GEOTHERMAL_GENERATOR_MENU =
 			unbound("GEOTHERMAL_GENERATOR_MENU");
 	public static Supplier<MenuType<PumpMenu>> PUMP_MENU = unbound("PUMP_MENU");

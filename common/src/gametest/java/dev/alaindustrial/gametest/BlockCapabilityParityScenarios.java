@@ -1,6 +1,7 @@
 package dev.alaindustrial.gametest;
 
 import dev.alaindustrial.Industrialization;
+import dev.alaindustrial.block.BlockEntityByState;
 import dev.alaindustrial.core.energy.EnergyPortHost;
 import dev.alaindustrial.core.fluid.FluidPortHost;
 import dev.alaindustrial.registry.BlockCapabilityRoster;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * MOD-433 — both-loader sweep: the capability a loader hands out on a block-entity face is exactly the
@@ -184,10 +186,25 @@ public final class BlockCapabilityParityScenarios {
 	 * Returns {@code false} after failing the test when the block could not be placed or produced the
 	 * wrong block entity — the sweep cannot vouch for that entry, so it stops.
 	 */
+	/**
+	 * The block's default state, or for a block whose block entity comes with some states only ({@link
+	 * BlockEntityByState}, MOD-1025: the quarry's socket foundation) its first state that carries one.
+	 */
+	public static BlockState stateWithBlockEntity(Block block) {
+		if (block instanceof BlockEntityByState byState && !byState.hasBlockEntity(block.defaultBlockState())) {
+			for (BlockState state : block.getStateDefinition().getPossibleStates()) {
+				if (byState.hasBlockEntity(state)) {
+					return state;
+				}
+			}
+		}
+		return block.defaultBlockState();
+	}
+
 	private static boolean sweepPlacedBlock(GameTestHelper helper, Probes probes,
 			ContentManifest.BlockEntityDef<?> def, String blockId, List<String> violations) {
 		Block block = BuiltInRegistries.BLOCK.getValue(Industrialization.id(blockId));
-		helper.setBlock(PROBE, block.defaultBlockState());
+		helper.setBlock(PROBE, stateWithBlockEntity(block));
 		BlockPos abs = helper.absolutePos(PROBE);
 		Level level = helper.getLevel();
 		if (level.getBlockState(abs).getBlock() != block) {

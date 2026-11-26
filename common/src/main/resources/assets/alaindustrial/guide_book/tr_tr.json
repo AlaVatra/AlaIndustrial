@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "Kablolar",
-              "text": "Kablolar blokları bir enerji ağına bağlar ve EU taşır. Her kablo mesafeyle enerji kaybeder — hat ne kadar uzunsa kayıp o kadar artar.\n\nÜç tür vardır ve birbirlerinden farklıdır:\n• Kalay — dar (8 EU/t) ama neredeyse kayıpsız: güneş çiftlikleri için\n• Bakır — evrensel iş gücü (12 EU/t)\n• Altın — en geniş (48 EU/t), daha yüksek kayıpla\n\nTürleri tek bir hatta karıştırmayın: tüm ağ, içindeki en güçlü kabloya göre çalışır, onun kaybı dahil."
+              "text": "Kablolar blokları bir enerji ağına bağlar ve EU taşır. Her kablo mesafeyle enerji kaybeder — hat ne kadar uzunsa kayıp o kadar artar.\n\nDört tür vardır ve birbirlerinden farklıdır:\n• Kalay — dar (8 EU/t) ama neredeyse kayıpsız: güneş çiftlikleri için\n• Bakır — evrensel iş gücü (12 EU/t)\n• Altın — daha geniş (48 EU/t), daha yüksek kayıpla\n• Elektrum — en geniş (192 EU/t) ve en düşük kayıplı: HV hatları için, pahalı bir üretim pahasına\n\nTürleri tek bir hatta karıştırmayın: tüm ağ, içindeki en güçlü kabloya göre çalışır, onun kaybı dahil."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "Kabuğun parçaları",
-              "text": "- Reaktör Camı: pencere, ama duvarların üçte birinden fazlası olmasın\n- Reaktör Hava Kilidi Kapısı: kilit odası, kırmızı taşla açılır ve kendi kapanır\n- Reaktör Girişi: su borusu duvarı buradan geçer\n- Reaktör Çıkışı: kablo buraya takılır\n- Reaktör Lambası: yalnızca odayı aydınlatır, dışarıyı asla"
+              "text": "- Reaktör Camı: pencere, ama kabuğun %30'undan fazlası olmasın\n- Reaktör Hava Kilidi Kapısı: kilit odası, kırmızı taşla açılır ve kendi kapanır\n- Reaktör Girişi: su borusu duvarı buradan geçer\n- Reaktör Çıkışı: kablo buraya takılır\n- Reaktör Lambası: yalnızca odayı aydınlatır, dışarıyı asla"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "Enerji",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "Bronz Ay Paneli",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Bronz Ay Paneli",
+              "text": "Gece dalının üçüncü basamağı — üretimi ayın evresini izleyen tam bir blok, dolunayda 10 EU/t, kötü havada da çalışmayı sürdürür; yalnızca evrimle elde edilir."
+            },
+            {
+              "type": "stats",
+              "title": "İstatistikler",
+              "lines": [
+                "Enerji: 10 EU/t (gece)",
+                "Tampon: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "Rüzgar Türbini",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "Ayna Yoğunlaştırıcısı",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Ayna Yoğunlaştırıcısı",
-              "text": "Gündüz dalının üçüncü basamağı — Gün Işığı Güneş Panelinin iki katı, öğlen buna yarısı kadar daha eklenir; toplanacak bir şey olmadığında aynalar katlanır."
-            },
-            {
-              "type": "stats",
-              "title": "İstatistikler",
-              "lines": [
-                "Enerji: 8 EU/t (gündüz)",
-                "Tampon: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "Tarif",
-              "recipe_type": "Şekilli Üretim",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "Ay Işığı Güneş Paneli",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "Güçlendirilmiş Güneş Paneli",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Güçlendirilmiş Güneş Paneli",
+              "text": "Gündüz dalının üçüncü basamağı — üretimi güneşin yüksekliğini izleyen tam bir blok, öğlen 12 EU/t; yalnızca evrimle elde edilir."
+            },
+            {
+              "type": "stats",
+              "title": "İstatistikler",
+              "lines": [
+                "Enerji: 12 EU/t (gündüz)",
+                "Tampon: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "Asansör Vinci",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Asansör Vinci",
+              "text": "Elektrikle çalışan dikey asansör: çerçevelerden cam bir kuyu, her katta kapılı ve çağırma panelli bir istasyon, tepede kapak gibi bir vinç; her yolculuğun bedeli kabin hareket ederken tamamen ödenir ve yalnızca kabinin durduğu kattaki kapılar açıktır."
+            },
+            {
+              "type": "stats",
+              "title": "İstatistikler",
+              "lines": [
+                "Enerji: 50 EU + blok başına 8 EU",
+                "Tampon: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Tarif",
+              "recipe_type": "Şekilli Üretim",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "Şekilli Üretim",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Şekilli Üretim",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Şekilli Üretim",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "Şarj Yatağı",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "Yürüyen Merdiven Motoru",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Yürüyen Merdiven Motoru",
+              "text": "Korkuluklu basamak bölümlerinden oluşan eğimli bir bant: motorunda EU olduğu sürece oyuncuları, mobları ve eşyaları bir kat yukarı ya da aşağı taşır. LV motor en fazla 8 bölüm, MV motor en fazla 16 bölüm ve daha hızlı çalıştırır."
+            },
+            {
+              "type": "stats",
+              "title": "İstatistikler",
+              "lines": [
+                "Enerji: 1 EU/t + bölüm başına 0.5 EU/t (yalnızca biri binerken)",
+                "Tampon: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Tarif",
+              "recipe_type": "Şekilli Üretim",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Şekilli Üretim",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Şekilli Üretim",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Şekilli Üretim",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Şekilli Üretim",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "Güneş Evrim Çipi",
-              "text": "Üç evrim çipi — güneş (gündüz), ay (gece) ve rezonans (üçüncü basamak) — temel güneş panellerini ve rüzgar türbinlerini evrimle T2'ye, T2 gündüz panelini de daha ileriye dönüştürür ve biriken NBT enerjisini aktarır."
+              "text": "Üç evrim çipi — güneş (gündüz), ay (gece) ve rezonans (üçüncü basamak) — temel güneş panellerini ve rüzgar türbinlerini evrimle T2'ye, iki T2 panelini de daha ileriye dönüştürür ve biriken NBT enerjisini aktarır."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Şekilli Üretim",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

@@ -50,7 +50,7 @@
             {
               "type": "text",
               "title": "Cavi",
-              "text": "I cavi collegano i blocchi in una rete elettrica e trasportano EU. Ogni cavo perde energia sulla distanza: più lunga è la linea, maggiore è la perdita.\n\nEsistono tre tipi, e sono diversi:\n• Stagno — stretto (8 EU/t) ma quasi senza perdite: per le fattorie solari\n• Rame — il tuttofare universale (12 EU/t)\n• Oro — il più largo (48 EU/t), con perdite maggiori\n\nNon mischiare i tipi su una stessa linea: l’intera rete segue il cavo più potente presente, perdite incluse."
+              "text": "I cavi collegano i blocchi in una rete elettrica e trasportano EU. Ogni cavo perde energia sulla distanza: più lunga è la linea, maggiore è la perdita.\n\nEsistono quattro tipi, e sono diversi:\n• Stagno — stretto (8 EU/t) ma quasi senza perdite: per le fattorie solari\n• Rame — il tuttofare universale (12 EU/t)\n• Oro — più largo (48 EU/t), con perdite maggiori\n• Elettro — il più largo (192 EU/t) con le perdite minori: per le linee HV, al prezzo di una fabbricazione costosa\n\nNon mischiare i tipi su una stessa linea: l’intera rete segue il cavo più potente presente, perdite incluse."
             }
           ]
         }
@@ -118,7 +118,7 @@
             {
               "type": "text",
               "title": "Le parti del guscio",
-              "text": "- Vetro del reattore: una finestra, ma non oltre un terzo delle pareti\n- Porta stagna del reattore: una camera stagna, si apre a redstone e si richiude da sola\n- Ingresso del reattore: qui il tubo dell'acqua attraversa la parete\n- Uscita del reattore: qui si attacca il cavo\n- Lampada del reattore: illumina solo la sala, mai l'esterno"
+              "text": "- Vetro del reattore: una finestra, ma non oltre il 30 % del guscio\n- Porta stagna del reattore: una camera stagna, si apre a redstone e si richiude da sola\n- Ingresso del reattore: qui il tubo dell'acqua attraversa la parete\n- Uscita del reattore: qui si attacca il cavo\n- Lampada del reattore: illumina solo la sala, mai l'esterno"
             }
           ]
         },
@@ -193,8 +193,28 @@
     {
       "id": "energy",
       "title": "Energia",
-      "icon": "alaindustrial:wind_mill",
+      "icon": "alaindustrial:bronze_lunar_panel",
       "entries": [
+        {
+          "id": "bronze_lunar_panel",
+          "title": "Pannello lunare di bronzo",
+          "icon": "alaindustrial:bronze_lunar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Pannello lunare di bronzo",
+              "text": "Il terzo gradino del ramo notturno: un blocco pieno la cui produzione segue la fase della luna, 10 EU/t con la luna piena, e che continua a funzionare col maltempo; si ottiene solo per evoluzione."
+            },
+            {
+              "type": "stats",
+              "title": "Statistiche",
+              "lines": [
+                "Energia: 10 EU/t (notte)",
+                "Buffer: 16 000 EU"
+              ]
+            }
+          ]
+        },
         {
           "id": "wind_mill",
           "title": "Turbina eolica",
@@ -516,44 +536,6 @@
           ]
         },
         {
-          "id": "radiant_solar_panel",
-          "title": "Concentratore a specchi",
-          "icon": "alaindustrial:radiant_solar_panel",
-          "pages": [
-            {
-              "type": "text",
-              "title": "Concentratore a specchi",
-              "text": "Il terzo gradino del ramo diurno — il doppio del pannello solare diurno, e metà in più a mezzogiorno; gli specchi si ripiegano quando non c'è nulla da raccogliere."
-            },
-            {
-              "type": "stats",
-              "title": "Statistiche",
-              "lines": [
-                "Energia: 8 EU/t (giorno)",
-                "Buffer: 16 000 EU"
-              ]
-            },
-            {
-              "type": "recipe",
-              "title": "Ricetta",
-              "recipe_type": "Fabbricazione sagomata",
-              "grid": [
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:machine_casing",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate",
-                "minecraft:glass",
-                "alaindustrial:tempered_iron_plate"
-              ],
-              "result_id": "alaindustrial:concentrator_section",
-              "result_count": 2
-            }
-          ]
-        },
-        {
           "id": "moonlit_solar_panel",
           "title": "Pannello solare al chiaro di luna",
           "icon": "alaindustrial:moonlit_solar_panel",
@@ -646,6 +628,26 @@
               ],
               "result_id": "alaindustrial:thermoelectric_generator",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "reinforced_solar_panel",
+          "title": "Pannello solare rinforzato",
+          "icon": "alaindustrial:reinforced_solar_panel",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Pannello solare rinforzato",
+              "text": "Il terzo gradino del ramo diurno: un blocco pieno la cui produzione segue l’altezza del sole, 12 EU/t a mezzogiorno; si ottiene solo per evoluzione."
+            },
+            {
+              "type": "stats",
+              "title": "Statistiche",
+              "lines": [
+                "Energia: 12 EU/t (giorno)",
+                "Buffer: 16 000 EU"
+              ]
             }
           ]
         },
@@ -6201,6 +6203,94 @@
           ]
         },
         {
+          "id": "elevator_winch",
+          "title": "Argano dell'ascensore",
+          "icon": "alaindustrial:elevator_winch",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Argano dell'ascensore",
+              "text": "Un ascensore verticale elettrico: un vano di vetro fatto di telai, una stazione con porte e pannello di chiamata a ogni piano e un argano come coperchio in cima; ogni corsa si paga per intero alla partenza della cabina, e sono aperte solo le porte dove si trova la cabina."
+            },
+            {
+              "type": "stats",
+              "title": "Statistiche",
+              "lines": [
+                "Energia: 50 EU + 8 EU/blocco",
+                "Buffer: 10 000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Ricetta",
+              "recipe_type": "Fabbricazione sagomata",
+              "grid": [
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_chain",
+                "alaindustrial:copper_coil",
+                "alaindustrial:machine_casing",
+                "alaindustrial:copper_coil",
+                "alaindustrial:reinforced_glass",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:reinforced_glass"
+              ],
+              "result_id": "alaindustrial:elevator_winch",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_chain",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:reinforced_glass"
+                  ],
+                  "recipe_type": "Fabbricazione sagomata",
+                  "result_id": "alaindustrial:elevator_winch",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabbricazione sagomata",
+                  "result_id": "alaindustrial:elevator_shaft",
+                  "result_count": 4
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:reinforced_glass",
+                    "minecraft:iron_door",
+                    "alaindustrial:reinforced_glass",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_cable",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabbricazione sagomata",
+                  "result_id": "alaindustrial:elevator_station",
+                  "result_count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "charging_bed",
           "title": "Letto di ricarica",
           "icon": "alaindustrial:charging_bed",
@@ -6829,6 +6919,110 @@
               ],
               "result_id": "alaindustrial:electrum_chest",
               "result_count": 1
+            }
+          ]
+        },
+        {
+          "id": "escalator_drive",
+          "title": "Motore della scala mobile",
+          "icon": "alaindustrial:escalator_drive",
+          "pages": [
+            {
+              "type": "text",
+              "title": "Motore della scala mobile",
+              "text": "Un nastro inclinato di sezioni a gradini con corrimano: trasporta giocatori, mob e oggetti di un piano in su o in giù finché il motore ha EU. Il motore LV muove fino a 8 sezioni, quello MV fino a 16 e più veloce."
+            },
+            {
+              "type": "stats",
+              "title": "Statistiche",
+              "lines": [
+                "Energia: 1 EU/t + 0.5 EU/t per sezione (solo mentre qualcuno viaggia)",
+                "Buffer: 2000 EU"
+              ]
+            },
+            {
+              "type": "recipe",
+              "title": "Ricetta",
+              "recipe_type": "Fabbricazione sagomata",
+              "grid": [
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:copper_coil",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:iron_gear",
+                "alaindustrial:machine_casing",
+                "alaindustrial:iron_gear",
+                "alaindustrial:tempered_iron_plate",
+                "alaindustrial:basic_bearing",
+                "alaindustrial:tempered_iron_plate"
+              ],
+              "result_id": "alaindustrial:escalator_drive",
+              "result_count": 1,
+              "variants": [
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:copper_coil",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:machine_casing",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:basic_bearing",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabbricazione sagomata",
+                  "result_id": "alaindustrial:escalator_drive",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:invar_plate",
+                    "alaindustrial:electronic_circuit",
+                    "alaindustrial:invar_plate",
+                    "",
+                    "alaindustrial:escalator_drive",
+                    "",
+                    "",
+                    "alaindustrial:reinforced_bearing",
+                    ""
+                  ],
+                  "recipe_type": "Fabbricazione sagomata",
+                  "result_id": "alaindustrial:escalator_drive_mv",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "minecraft:glass_pane",
+                    "alaindustrial:rubber",
+                    "minecraft:glass_pane",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:iron_gear",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "alaindustrial:tempered_iron_plate"
+                  ],
+                  "recipe_type": "Fabbricazione sagomata",
+                  "result_id": "alaindustrial:escalator_section",
+                  "result_count": 2
+                },
+                {
+                  "grid": [
+                    "alaindustrial:tempered_iron_plate",
+                    "alaindustrial:hazard_stripe_block",
+                    "alaindustrial:tempered_iron_plate",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  "recipe_type": "Fabbricazione sagomata",
+                  "result_id": "alaindustrial:escalator_landing",
+                  "result_count": 1
+                }
+              ]
             }
           ]
         },
@@ -8952,7 +9146,7 @@
             {
               "type": "text",
               "title": "Chip di evoluzione solare",
-              "text": "Tre chip di evoluzione — solare (giorno), lunare (notte) e di risonanza (il terzo gradino) — che fanno evolvere pannelli solari e turbine eoliche di base in T2 e il pannello diurno T2 ancora oltre, trasferendo l'energia NBT accumulata."
+              "text": "Tre chip di evoluzione — solare (giorno), lunare (notte) e di risonanza (il terzo gradino) — che fanno evolvere pannelli solari e turbine eoliche di base in T2 ed entrambi i pannelli T2 ancora oltre, trasferendo l'energia NBT accumulata."
             },
             {
               "type": "recipe",
@@ -9011,6 +9205,22 @@
                     "alaindustrial:resonant_shard",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:alignment_chip_day",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:silver_gear",
+                    "alaindustrial:energy_crystal",
+                    "alaindustrial:silver_gear"
+                  ],
+                  "recipe_type": "Fabbricazione sagomata",
+                  "result_id": "alaindustrial:resonance_chip",
+                  "result_count": 1
+                },
+                {
+                  "grid": [
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:spatial_crystal",
+                    "alaindustrial:resonant_shard",
+                    "alaindustrial:electrum_reinforced_plate",
+                    "alaindustrial:alignment_chip_night",
                     "alaindustrial:electrum_reinforced_plate",
                     "alaindustrial:silver_gear",
                     "alaindustrial:energy_crystal",

@@ -34,7 +34,8 @@ import net.minecraft.world.phys.Vec3;
  * where the player can see it: a silent fallback onto whoever else happened to be standing at the
  * rig (the player, usually) is how the first live round produced four equip sounds, a bare
  * villager and a "shielding is broken" report. Everything else mirrors vanilla: the slot must be
- * one {@code canEquipWithDispenser} accepts, the piece lands via {@code setItemSlot}, a {@code Mob}
+ * one {@link #takesFromDispenser} accepts (vanilla's {@code canEquipWithDispenser} without its
+ * loot-pickup gate, MOD-569), the piece lands via {@code setItemSlot}, a {@code Mob}
  * gets {@code setGuaranteedDrop} + {@code setPersistenceRequired}. The leather equip sound plays on
  * success — now meaning exactly one thing: a convertible mob got the piece.
  *
@@ -91,10 +92,32 @@ public class SuitDispenseBehavior extends DefaultDispenseItemBehavior {
 		Vec3 nozzle = Vec3.atCenterOf(source.pos());
 		return level.getEntitiesOfClass(Mob.class,
 						AABB.ofSize(centre, 3.0, 3.0, 3.0), RadiationMobs::isConvertible).stream()
-				.filter(mob -> mob.canEquipWithDispenser(dispensed))
+				.filter(mob -> takesFromDispenser(mob, dispensed))
 				.min(Comparator.comparingInt(SuitDispenseBehavior::preference)
 						.thenComparing(entity -> entity.distanceToSqr(nozzle)))
 				.orElse(null);
+	}
+
+	/**
+	 * Vanilla's {@code LivingEntity.canEquipWithDispenser} minus its last question (MOD-569): alive, not a
+	 * spectator, a dispensable piece the species may wear, and an EMPTY slot — an occupied one is never
+	 * overwritten. Vanilla then asks {@code canDispenserEquipIntoSlot}, which {@code Mob} answers with
+	 * {@code canPickUpLoot()}: a villager sets that flag in its constructor, a cow never does, so the vanilla
+	 * check refused the very livestock this behaviour exists for and the piece fell on the floor. Picking up
+	 * loot is not what a suit asks of its wearer, and the species gate is already {@link
+	 * RadiationMobs#isConvertible}. Same steps on 26.3 and 26.2 (javap).
+	 */
+	static boolean takesFromDispenser(Mob mob, ItemStack dispensed) {
+		if (!mob.isAlive() || mob.isSpectator()) {
+			return false;
+		}
+		Equippable equippable = dispensed.get(DataComponents.EQUIPPABLE);
+		if (equippable == null || !equippable.dispensable()) {
+			return false;
+		}
+		EquipmentSlot slot = equippable.slot();
+		return mob.canUseSlot(slot) && equippable.canBeEquippedBy(mob.typeHolder())
+				&& mob.getItemBySlot(slot).isEmpty();
 	}
 
 	/** Villagers and traders are what the feature is about; cows are the livestock half of it. */

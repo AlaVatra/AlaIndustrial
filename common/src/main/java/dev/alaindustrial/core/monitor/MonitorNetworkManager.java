@@ -39,9 +39,13 @@ public final class MonitorNetworkManager {
 	/** The neighbours a node is wired to right now ({@link MonitorNetwork#connects}). */
 	private static List<BlockPos> connected(ServerLevel level, BlockPos pos) {
 		List<BlockPos> result = new ArrayList<>(6);
+		if (!level.isLoaded(pos)) {
+			return result;
+		}
 		for (Direction dir : Direction.values()) {
 			BlockPos target = pos.relative(dir).immutable();
-			if (MonitorNetwork.connects(level, pos, target)) {
+			// A node in an unloaded chunk is no node of the graph; asking would load the chunk (MOD-1029).
+			if (level.isLoaded(target) && MonitorNetwork.connects(level, pos, target)) {
 				result.add(target);
 			}
 		}
@@ -72,8 +76,19 @@ public final class MonitorNetworkManager {
 		}
 	}
 
+	/**
+	 * A neighbouring block changed: a container may have come or gone, so the wall re-sorts its nodes and scans at
+	 * once ({@link MonitorNetwork#markDirty}). Links between wires, the core and the panels depend only on which of
+	 * them stand where, which {@link #register} and {@link #unregister} follow, so nothing is re-partitioned
+	 * (MOD-1028).
+	 */
 	public static void onNeighbourChanged(ServerLevel level, BlockPos pos) {
-		GRAPH.rebuildAt(level, pos);
+		GRAPH.markDirtyAt(level, pos);
+	}
+
+	/** Re-partitions run in this level since it loaded; for tests (MOD-1028). */
+	public static long rebuilds(ServerLevel level) {
+		return GRAPH.telemetry(level).rebuilds();
 	}
 
 	public static MonitorNetwork networkAt(ServerLevel level, BlockPos pos) {

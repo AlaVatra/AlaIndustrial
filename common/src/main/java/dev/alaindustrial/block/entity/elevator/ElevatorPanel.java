@@ -117,17 +117,21 @@ public final class ElevatorPanel implements ContainerData {
 		values[PROBLEM_AT] = clamp(shaft.gap());
 		values[ENERGY] = clamp(winch.getEnergyStorage().getAmount());
 		values[FIRST] = first;
+		// One count of the riders for every floor's fare and one gap search per floor (MOD-1030: the riders were
+		// counted, and the gap searched twice, for each of up to 32 floors every tick the panel is open).
+		int riders = winch.riders();
 		for (int row = 0; row < MAX_ROWS && first + row < floors.size(); row++) {
 			int floor = floors.get(first + row);
 			FloorState state;
 			long value = 0L;
+			int gap = floor == here ? Integer.MIN_VALUE : winch.gapOnTheWayTo(floor);
 			if (floor == here) {
 				state = FloorState.HERE;
-			} else if (winch.gapOnTheWayTo(floor) != Integer.MIN_VALUE) {
+			} else if (gap != Integer.MIN_VALUE) {
 				state = FloorState.GAP;
-				value = winch.gapOnTheWayTo(floor);
+				value = gap;
 			} else {
-				value = winch.fareTo(floor);
+				value = winch.fareTo(floor, riders);
 				state = winch.getEnergyStorage().getAmount() < value ? FloorState.NO_ENERGY : FloorState.OPEN;
 			}
 			values[stateSlot(row)] = state.ordinal();
