@@ -4,10 +4,8 @@
 # history is this file: one cumulative snapshot per day in data/stats.json, which
 # the site turns into the chart on its front page.
 #
-# data/stats.json deliberately lives OUTSIDE site/ — the wiki publish flow mirrors
-# site/ with `robocopy /MIR`, which deletes anything the private repo does not
-# have, and the site's stale gate treats extra files in site/ as drift.
-# pages-deploy.yml copies the file into the Pages artifact at deploy time.
+# data/stats.json is the only output. The guide site is hosted elsewhere and
+# reads the file from this repository.
 name: Stats
 
 on:
@@ -31,7 +29,6 @@ on:
 
 permissions:
   contents: write      # commit the snapshot
-  actions: write       # trigger the Pages deploy below
 
 concurrency:
   group: stats
@@ -98,31 +95,3 @@ jobs:
             echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Publish updated data to Pages
-        # A push made with GITHUB_TOKEN does not start other workflows, so the
-        # deploy has to be asked for explicitly — workflow_dispatch is one of the
-        # few events that token may raise.
-        if: steps.commit.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUSHED_SHA: ${{ steps.commit.outputs.sha }}
-        run: |
-          # `--ref main` is resolved on GitHub's side, and right after a push that
-          # can still answer with the PREVIOUS tip: the deploy then ships an older
-          # data/stats.json and the site sits a day stale until something else
-          # deploys. That is exactly what happened on 2026-08-14 (deploy #40 ran
-          # green on aabbf1c, the commit before the snapshot). So wait until the
-          # branch is visibly at the commit we just pushed.
-          for attempt in $(seq 1 15); do
-            head=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha)
-            if [ "$head" = "$PUSHED_SHA" ]; then
-              gh workflow run pages-deploy.yml --ref main
-              echo "dispatched deploy for $PUSHED_SHA"
-              exit 0
-            fi
-            echo "main still reads $head, waiting for $PUSHED_SHA ($attempt/15)"
-            sleep 4
-          done
-          echo "::error::main never caught up with $PUSHED_SHA — deploy not dispatched"
-          exit 1

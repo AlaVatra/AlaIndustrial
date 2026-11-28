@@ -18,8 +18,8 @@ The source on a branch may be ahead of the latest published file; tagged release
 
 - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/ala-industrial)
 - [Modrinth](https://modrinth.com/mod/ala-industrial)
-- [GitHub releases](https://github.com/AlaMine-Team-Org/AlaIndustrial/releases)
-- [Player guide](https://alamine-team-org.github.io/AlaIndustrial/)
+- [GitHub releases](https://github.com/AlaVatra/AlaIndustrial/releases)
+- [Player guide](https://wiki.alaindustrial.org/)
 
 ## Build and contribute
 
