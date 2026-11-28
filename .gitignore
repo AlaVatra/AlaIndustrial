@@ -9,7 +9,7 @@ runs/
 # 3D block render working dirs (per-face source textures + 1024px block render).
 tools/*_3d/
 # Unified 3D-render catalog (regenerated on demand by tools/gen_renders_3d.py).
-# Like site/ and build/, this is a derived artifact — the single source of truth
+# Like build/, this is a derived artifact — the single source of truth
 # is the 16x16 game textures + the gen_*_3d.py scripts. The README is tracked
 # so the catalog's purpose / regen command are visible in the repo.
 # NOTE: must override the `tools/*_3d/` rule above — `renders_3d` happens to
@@ -38,10 +38,6 @@ __pycache__/
 
 # Generated standalone distribution files (rebuild via: python tools/build_standalone.py)
 tools/AlaIndustrial_Guide.html
-
-# The guide site (site/) is NOT ignored here — it is what this repository publishes.
-# GitHub Pages serves it, so every page has to be tracked. Ignoring it made git skip newly
-# added pages in silence and stage renames as deletions with no replacement.
 
 # Sound generation tool (tools/tts/) — secrets + generated audio stay local.
 # The .env holds the ElevenLabs API key; output/ holds generated candidate sounds.
